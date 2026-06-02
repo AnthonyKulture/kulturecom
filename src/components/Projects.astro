@@ -1,6 +1,7 @@
 ---
 import type { Lang } from "~/i18n/ui";
 import { ui } from "~/i18n/ui";
+import Eyebrow from "~/components/Eyebrow.astro";
 
 interface Props {
   lang: Lang;
@@ -77,10 +78,7 @@ const projects = [
     <!-- Header : eyebrow + title + count -->
     <header class="flex items-end justify-between gap-6 shrink-0">
       <div>
-        <p class="font-mono mb-3 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[#5a5a5a]">
-          <span class="inline-block h-px w-6 bg-[var(--color-accent,#c14a1d)]"></span>
-          {t.projects.eyebrow}
-        </p>
+        <Eyebrow label={t.projects.eyebrow} class="mb-3" />
         <h2 class="font-display text-[clamp(24px,4vw,56px)] uppercase leading-[0.95] tracking-[-0.04em] text-[#0b0b0b]">
           <span class="block">{t.projects["title.line1"]}</span>
           <span class="block">{t.projects["title.line2"]}</span>

@@ -1,6 +1,7 @@
 ---
 import type { Lang } from "~/i18n/ui";
 import { ui } from "~/i18n/ui";
+import Eyebrow from "~/components/Eyebrow.astro";
 
 interface Props {
   lang: Lang;
@@ -25,12 +26,7 @@ const whatsappHref = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
 >
   <div class="mx-auto w-full max-w-[var(--container-wide)]">
     <!-- Eyebrow -->
-    <p
-      class="font-mono mb-8 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[#5a5a5a] sm:mb-12"
-    >
-      <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
-      {t.cta.eyebrow}
-    </p>
+    <Eyebrow label={t.cta.eyebrow} class="mb-8 sm:mb-12" />
 
     <!-- Display title — brutalist 2 lines, reasonable size -->
     <h2

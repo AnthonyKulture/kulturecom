@@ -45,8 +45,11 @@ export function initPreloader(): void {
     el.querySelectorAll<HTMLImageElement>("[data-preloader-slide]")
   );
 
-  // Preload all slides early
-  SLIDES.forEach((src) => {
+  // Preload only the first 3 slides early. Remaining slides load via the
+  // hero's `loading="lazy"` <img> tags as the carousel cycles. This frees
+  // ~2 MB of concurrent network bandwidth during LCP — the previous behavior
+  // preloaded all 20 slides eagerly via `new Image()`, racing the LCP image.
+  SLIDES.slice(0, 3).forEach((src) => {
     const img = new Image();
     img.src = src;
   });

@@ -1,6 +1,8 @@
 ---
 import type { Lang } from "~/i18n/ui";
 import { ui } from "~/i18n/ui";
+import { splitTitle } from "~/lib/text-split";
+import Eyebrow from "~/components/Eyebrow.astro";
 
 interface Props {
   lang: Lang;
@@ -27,16 +29,7 @@ const items = [
   },
 ];
 
-// Pre-split titles into per-word spans at SSR. Same .split-word utility as
-// About / Services desktop (defined in global.css).
-const splitTitle = (s: string) =>
-  s
-    .split(/\s+/)
-    .map(
-      (w) =>
-        `<span class="split-word"><span class="split-word-inner">${w}</span></span>`
-    )
-    .join(" ");
+// Per-word SSR splitter shared via `src/lib/text-split.ts`.
 
 const total = items.length;
 const pad = (n: number) => String(n).padStart(2, "0");
@@ -59,10 +52,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
         data-axis-panel-header={i}
         class="flex items-center justify-between"
       >
-        <p class="font-mono inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[#7a7a7a]">
-          <span class="inline-block h-px w-6 bg-[var(--color-accent)]" />
-          {t.services.eyebrow}
-        </p>
+        <Eyebrow label={t.services.eyebrow} />
         <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-[#7a7a7a]">
           {pad(i + 1)} / {pad(total)}
         </p>

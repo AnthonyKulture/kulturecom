@@ -1,6 +1,8 @@
 ---
 import type { Lang } from "~/i18n/ui";
 import { ui } from "~/i18n/ui";
+import { splitTitle } from "~/lib/text-split";
+import Eyebrow from "~/components/Eyebrow.astro";
 
 interface Props {
   lang: Lang;
@@ -47,23 +49,11 @@ const itemKey = (n: ItemNum, k: "title" | "desc") =>
 
     <!-- About text -->
     <div class="mx-auto w-full max-w-[var(--container-wide)]">
-      <p
-        data-about-line
-        class="font-mono mb-5 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)] sm:mb-12"
-      >
-        <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
-        {t.about.eyebrow}
-      </p>
+      <Eyebrow label={t.about.eyebrow} class="mb-5 sm:mb-12" data-about-line />
 
       <ol class="about-items flex flex-col gap-[1.1rem] text-[var(--color-ink)] sm:max-w-[clamp(28rem,80vw,60rem)] sm:gap-[clamp(1.5rem,3vw,2.75rem)]" role="list">
         {items.map((n) => {
-          const titleHtml = t.about[itemKey(n, "title")]
-            .split(/\s+/)
-            .map(
-              (w) =>
-                `<span class="about-word"><span class="about-word-inner">${w}</span></span>`
-            )
-            .join(" ");
+          const titleHtml = splitTitle(t.about[itemKey(n, "title")]);
           return (
             <li class="about-item flex flex-col gap-[0.65rem]">
               <span

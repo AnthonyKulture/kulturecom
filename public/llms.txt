@@ -1,0 +1,29 @@
+# Anthony Profit — Kulturecom
+
+> Designer & développeur freelance sur la Côte d'Azur. Sites sur-mesure pensés pour être visibles sur Google comme dans les réponses des IA (ChatGPT, Perplexity, Google AI Overviews). Trois axes : design, expérience digitale, SEO + GEO.
+
+## Services
+
+- **Design** — Direction artistique éditoriale, brand systems, design tokens. Identité conçue pour la marque, déclinable web/print/social. Pas de thème acheté, pas de template recyclé.
+- **Expérience digitale** — Astro, React, Lighthouse ≥ 95. Sites rapides, accessibles, performants. Core Web Vitals au vert.
+- **SEO + GEO** — Audit technique, content cluster, Schema.org, llms.txt. SEO classique pour Google + optimisation pour les moteurs génératifs : ChatGPT, Perplexity, Google AI Overviews.
+
+## Cases
+
+- [Surly](https://surly.fr) — Marketplace banque & assurance. Co-fondateur & CTO. Stack : React · Supabase. 1 600 consultants référencés, 8 entreprises clientes, projet toujours actif depuis 2022.
+- [Vaulk](https://vaulk.com) — Abris durcis NRBC conçus en France, livrables en 7 jours. Site éditorial cinématographique. Stack : Next.js · Strapi · intégration 3D au scroll. Livré en 3 mois.
+- [Sun Beach House](https://sun-beach-house.com) — Agence indépendante de villas de luxe à Saint-Barthélemy depuis 1996. Identité, site éditorial, SEO + GEO en continu. Stack : Next.js · Sanity Studio · vidéo Mux.
+- [Royal Yacht International](https://royalyachtinternational.com) — Courtier de superyachts basé à Monaco. Charter, vente, gestion, construction. Refonte d'identité + site WordPress + SEO.
+- [Eden Rock Yacht Rental](https://edenrockyachtrental.com) — Extension yachting d'Eden Rock – St Barths (hospitality icon depuis 1953). Identité + site WordPress + SEO.
+
+## Contact
+
+- Email : contact@kulturecom.fr
+- WhatsApp : +33 6 60 50 16 82
+- Réponse sous 48 h ouvrées
+
+## Optional
+
+- [Accueil FR](https://kulturecom.fr/) — page principale, présentation complète
+- [À propos](https://kulturecom.fr/a-propos/) — parcours, méthode, engagements
+- [Homepage EN](https://kulturecom.fr/en/) — English version

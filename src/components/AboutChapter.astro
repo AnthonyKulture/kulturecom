@@ -1,10 +1,10 @@
 ---
 import type { Lang } from "~/i18n/ui";
 import { ui } from "~/i18n/ui";
+import Eyebrow from "~/components/Eyebrow.astro";
 
 interface Props {
   lang: Lang;
-  variant: "light" | "dark";
   chapterKey: "about2";
 }
 
@@ -12,8 +12,9 @@ const { lang, chapterKey } = Astro.props;
 const t = ui[lang];
 const chapter = t[chapterKey] as Record<string, string>;
 // About 2 uses a full-bleed parallax photo background (Monte Carlo) with a
-// dark overlay. The `variant` prop is accepted for API stability but ignored
-// — text colour is fixed to cream to remain readable on the dark overlay.
+// dark overlay; text is fixed to cream to remain readable. The Eyebrow
+// component is rendered in `variant="dark"` mode (current color + opacity)
+// to harmonize with the surrounding cream-on-ink palette.
 ---
 
 <section
@@ -47,10 +48,7 @@ const chapter = t[chapterKey] as Record<string, string>;
 
   <!-- TOP : eyebrow left + accent echo right -->
   <header class="relative z-10 flex items-start justify-between gap-4 shrink-0">
-    <p class="font-mono inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] opacity-70">
-      <span class="inline-block h-px w-6 bg-current opacity-60"></span>
-      {chapter.eyebrow}
-    </p>
+    <Eyebrow label={chapter.eyebrow} variant="dark" />
     <p class="font-mono text-right text-[11px] uppercase tracking-[0.18em] opacity-60">
       — {chapter.accent}
     </p>

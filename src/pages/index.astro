@@ -17,7 +17,7 @@ const lang: Lang = "fr";
 
 <BaseLayout lang={lang} pathname="/">
   <Nav lang={lang} altLang="en" altLangPath="/en/" />
-  <main>
+  <main id="main-content">
     <div
       data-screen-stack
       class="relative isolate h-[100dvh] overflow-hidden"
@@ -33,7 +33,7 @@ const lang: Lang = "fr";
         class="absolute inset-0 z-[22]"
         style="clip-path: inset(50% 0 50% 0);"
       >
-        <AboutChapter lang={lang} variant="light" chapterKey="about2" />
+        <AboutChapter lang={lang} chapterKey="about2" />
       </div>
       <div
         data-screen-layer="services"

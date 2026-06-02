@@ -181,20 +181,18 @@
 }
 
 /* === Word-split scroll reveal utility (mask reveal) ===
-   Titles are split into per-word spans at SSR. Each wrapper is an
-   inline-block with `overflow: hidden` that acts as a clipping mask;
-   the inner span is translated below the wrapper at initial state
-   (yPercent: 110) and rises into view as the GSAP timeline progresses.
-   Used by both About manifesto items (.about-word) and Services items
-   (.split-word) — same behaviour, different parent contexts. Title
+   Titles are split into per-word spans at SSR via `src/lib/text-split.ts`.
+   The outer `.split-word` is an inline-block with `overflow: hidden` that
+   acts as a clipping mask; the inner `.split-word-inner` is translated below
+   the wrapper at initial state (yPercent: 110) and rises into view as the
+   GSAP timeline progresses. Used by About manifesto items, Services
+   (desktop + mobile), and any title that needs a mask reveal. Title
    line-height ≥ 1.15 gives enough vertical room for descenders (p, g, j). */
-.about-word,
 .split-word {
   display: inline-block;
   vertical-align: top;
   overflow: hidden;
 }
-.about-word-inner,
 .split-word-inner {
   display: inline-block;
   will-change: transform;

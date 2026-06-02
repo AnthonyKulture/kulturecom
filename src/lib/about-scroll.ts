@@ -52,7 +52,23 @@ const PATTERNS = Array.from(
   { length: 10 },
   (_, i) => `/patterns/pattern-${String(i + 1).padStart(2, "0")}.svg`
 );
-const PATTERN_INTERVAL = 240;
+const PATTERN_INTERVAL = 240; // ms between SVG pattern swaps in About corner.
+
+// === Timeline pin distances (ScrollTrigger `end` strings) ===
+// "+=N%" means: pin the section and let the user scroll N% of the viewport
+// height before unpinning. Tuned phase-by-phase to give each scroll-driven
+// reveal enough breathing room. Numbers were tuned through multiple
+// iterations; bump only if a phase feels rushed.
+const PIN_DISTANCE = {
+  mobile: { withProjects: "+=1490%", noProjects: "+=300%" },
+  desktop: { withProjects: "+=875%", noProjects: "+=370%" },
+} as const;
+
+// SVG circle r=46 → circumference = 2 × π × 46 ≈ 289.027.
+// Set as both stroke-dasharray and initial stroke-dashoffset on the
+// services progress ring so the line is fully hidden at scroll-start and
+// fully drawn at scroll-end (dashoffset → 0 across the Services phase).
+const PROGRESS_RING_CIRCUMFERENCE = 289.027;
 
 export function initAboutScroll(): void {
   if (typeof window === "undefined") return;
@@ -88,16 +104,17 @@ export function initAboutScroll(): void {
   const aboutLines = Array.from(
     document.querySelectorAll<HTMLElement>("[data-about-line]")
   );
-  // About manifesto items — word spans are pre-rendered server-side in
-  // About.astro (each title's words wrapped in `.about-word` > `.about-word-inner`).
-  // Doing the split at build time avoids the FOUC-style layout reflow that
-  // would otherwise happen when a runtime innerHTML mutation re-wraps the
-  // title between SSR paint and JS execution.
+  // About manifesto items — word spans are pre-rendered server-side via
+  // `splitTitle()` from `src/lib/text-split.ts` (each word wrapped in
+  // `.split-word` > `.split-word-inner`). Doing the split at build time
+  // avoids the FOUC-style layout reflow that would otherwise happen when
+  // a runtime innerHTML mutation re-wraps the title between SSR paint
+  // and JS execution.
   const aboutItemList = Array.from(
     document.querySelectorAll<HTMLElement>(".about-item")
   );
   const aboutItemWords = aboutItemList.map((item) =>
-    Array.from(item.querySelectorAll<HTMLElement>(".about-word-inner"))
+    Array.from(item.querySelectorAll<HTMLElement>(".split-word-inner"))
   );
   const aboutItemDescs = aboutItemList.map((item) =>
     item.querySelector<HTMLElement>(".about-item-desc")
@@ -273,11 +290,11 @@ export function initAboutScroll(): void {
 
   const pinDistance = isMobile
     ? hasMobileTransitions
-      ? "+=1490%"
-      : "+=300%"
+      ? PIN_DISTANCE.mobile.withProjects
+      : PIN_DISTANCE.mobile.noProjects
     : hasDesktopProjects
-      ? "+=875%"
-      : "+=370%";
+      ? PIN_DISTANCE.desktop.withProjects
+      : PIN_DISTANCE.desktop.noProjects;
 
   // Initial states
   gsap.set(aboutLayer, { yPercent: 100, opacity: 1 });
@@ -341,7 +358,7 @@ export function initAboutScroll(): void {
     gsap.set(axisCards[2], { filter: "blur(10px)" });
   }
   if (servicesProgressRing) {
-    gsap.set(servicesProgressRing, { strokeDashoffset: 289.027 });
+    gsap.set(servicesProgressRing, { strokeDashoffset: PROGRESS_RING_CIRCUMFERENCE });
   }
   if (about2Layer) {
     gsap.set(about2Layer, { clipPath: "inset(50% 0 50% 0)" });

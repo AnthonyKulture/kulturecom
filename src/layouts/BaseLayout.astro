@@ -93,6 +93,9 @@ const jsonLd = {
     <meta name="author" content="Anthony Profit" />
 
     <link rel="canonical" href={canonical} />
+    {/* hreflang: self + other lang + x-default. Google accepts just other+default,
+        but emitting self too is the safer pattern for SERP signal consistency. */}
+    <link rel="alternate" hreflang={lang} href={canonical} />
     <link rel="alternate" hreflang={altLang} href={new URL(altPath, Astro.site).toString()} />
     <link rel="alternate" hreflang="x-default" href={new URL("/", Astro.site).toString()} />
 
@@ -122,6 +125,16 @@ const jsonLd = {
     <!-- Fonts: Archivo Black (display) + Geist (body) + Instrument Serif italic + Geist Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Preload Archivo Black woff2 (LCP-critical: H1 Hero + section H2 displays).
+         The URL is from Google Fonts' current v23 — if Google rotates it, the
+         preload silently 404s and the CSS-loaded font kicks in as fallback. -->
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin
+      href="https://fonts.gstatic.com/s/archivoblack/v23/HTxqL289NzCGg4MzN6KJ7eW6OY6P-R7z.woff2"
+    />
     <link
       href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@1&display=swap"
       rel="stylesheet"
@@ -131,6 +144,14 @@ const jsonLd = {
     <link rel="preload" as="image" href="/hero-slides/slide-01.webp" type="image/webp" />
   </head>
   <body>
+    {/* Keyboard skip link (WCAG 2.4.1). Hidden until the user tabs to it.
+        The visible `<main id="main-content">` target lives in each page. */}
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:bg-[#0b0b0b] focus:px-4 focus:py-3 focus:font-mono focus:text-[12px] focus:uppercase focus:tracking-[0.18em] focus:text-[#efe9dc] focus:no-underline focus:outline-2 focus:outline-offset-2 focus:outline-[var(--color-accent)]"
+    >
+      {lang === "en" ? "Skip to content" : "Aller au contenu"}
+    </a>
     <Preloader lang={lang} />
     <slot />
     <Footer lang={lang} />

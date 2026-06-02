@@ -1,6 +1,8 @@
 ---
 import type { Lang } from "~/i18n/ui";
 import { ui } from "~/i18n/ui";
+import { splitTitle } from "~/lib/text-split";
+import Eyebrow from "~/components/Eyebrow.astro";
 import ServicesTrail from "~/components/ServicesTrail";
 
 interface Props {
@@ -28,18 +30,8 @@ const items = [
   },
 ];
 
-// Pre-split titles into per-word spans at SSR. Same pattern as About:
-// avoids runtime DOM mutation that would cause a layout reflow before the
-// mask-reveal animation starts. .split-word + .split-word-inner CSS classes
-// defined in global.css alongside .about-word (shared utility).
-const splitTitle = (s: string) =>
-  s
-    .split(/\s+/)
-    .map(
-      (w) =>
-        `<span class="split-word"><span class="split-word-inner">${w}</span></span>`
-    )
-    .join(" ");
+// Per-word SSR splitter is shared with About + ServicesMobile via
+// `src/lib/text-split.ts` (single source of truth).
 ---
 
 <section
@@ -48,12 +40,12 @@ const splitTitle = (s: string) =>
   aria-label={t.services.eyebrow}
 >
   <!-- Image trail effect (mouse-driven, behind text).
-       client:media gates the React island + framer-motion + uuid bundle
-       (~55 kB gz) to viewports ≥640px AND with a fine pointer (mouse, not
-       touch). Mobile + touch-only laptops never hydrate this island.
-       The component itself also bails early on mobile via matchMedia,
-       so this is belt-and-suspenders for both bundle size and runtime. -->
-  <ServicesTrail client:media="(min-width: 640px) and (pointer: fine)" />
+       client:idle defers hydration of the React island (framer-motion + uuid,
+       ~44 kB gz) until the browser is idle (~300–500ms post-load), so it
+       doesn't compete with the LCP image or block main-thread interactivity.
+       The component itself bails early on mobile + touch via matchMedia,
+       so this remains a desktop+mouse-only effect. -->
+  <ServicesTrail client:idle />
 
   <!-- Scroll progress indicator (top-right) : fills during the Services
        plateau, signaling that the next section (Projects, letter-masked by
@@ -101,13 +93,7 @@ const splitTitle = (s: string) =>
   </div>
 
   <div class="relative z-10 mx-auto w-full max-w-[var(--container-wide)]">
-    <p
-      data-services-line
-      class="font-mono mb-6 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[#5a5a5a] sm:mb-10"
-    >
-      <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
-      {t.services.eyebrow}
-    </p>
+    <Eyebrow label={t.services.eyebrow} class="mb-6 sm:mb-10" data-services-line />
 
     <h2
       class="font-display text-[clamp(34px,6.2vw,104px)] uppercase leading-[0.95] tracking-[-0.04em] text-[#0b0b0b]"
