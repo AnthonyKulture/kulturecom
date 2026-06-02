@@ -19,7 +19,7 @@ const LINE_DELAY = 130; // ms between line reveals (mobile + desktop)
 const BASELINE_DELAY = 60; // ms after a line before its baseline traces
 const INLINE_DELAY = 80; // ms between inline element reveals (desktop)
 const POST_LINES_DELAY = 350; // ms after all lines before figure/cue
-const CAROUSEL_INTERVAL = 200; // ms per slide
+const CAROUSEL_INTERVAL = 1000; // ms per slide — 1 sec/image (calm, editorial)
 
 export function initHero(): void {
   if (typeof window === "undefined") return;
@@ -73,6 +73,11 @@ export function initHero(): void {
     "[data-anim-inline][class*='top-1/2']"
   );
 
+  // Subtitle paragraph — sits under the H1 on both layouts. Without explicit
+  // reveal here it stays stuck in `.anim-hidden` (opacity 0) because it's
+  // outside the desktopTitle container that the `inlines` query scopes to.
+  const subtitle = hero.querySelector<HTMLElement>("[data-hero-subtitle]");
+
   // Preload all carousel slides
   slidesSources.forEach((src) => {
     const img = new Image();
@@ -86,6 +91,10 @@ export function initHero(): void {
     inlines.forEach(revealNow);
     if (figure) revealNow(figure);
     if (figcap) revealNow(figcap);
+    // Subtitle: bypass the per-word cascade; the global reduced-motion CSS
+    // rule already forces .word-animate to opacity:1 / no animation. Setting
+    // the attribute keeps state consistent with the non-reduced path.
+    if (subtitle) subtitle.setAttribute("data-words-revealed", "");
     if (bottomCue) revealNow(bottomCue);
     if (sideLabel) revealNow(sideLabel);
     if (carouselImgs[0] && slidesSources[0]) {
@@ -97,12 +106,16 @@ export function initHero(): void {
   const start = () => {
     if (isMobile) {
       runMobileSequence(lines, baselines, figure, figcap, bottomCue, () => {
+        // Trigger the per-word blur cascade via the parent attribute.
+        // The CSS animation-delay on each word handles the stagger.
+        if (subtitle) subtitle.setAttribute("data-words-revealed", "");
         if (carouselImgs.length && slidesSources.length) {
           startCarousel(carouselImgs, slidesSources);
         }
       });
     } else {
       runDesktopSequence(lines, inlines, sideLabel, bottomCue, () => {
+        if (subtitle) subtitle.setAttribute("data-words-revealed", "");
         if (carouselImgs.length && slidesSources.length) {
           startCarousel(carouselImgs, slidesSources);
         }

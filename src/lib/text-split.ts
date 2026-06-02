@@ -26,3 +26,30 @@ export const splitTitle = (
         `<span class="${wordClass}"><span class="${wordClass}-inner">${w}</span></span>`
     )
     .join(" ");
+
+/**
+ * SSR per-word splitter for the staggered blur-reveal animation (inspired by
+ * 21st.dev's digital-serenity word-appear effect). Each word becomes an
+ * inline-block `.word-animate` span with an inline `animation-delay` so the
+ * cascade runs without runtime JS scheduling — once the parent receives the
+ * `data-words-revealed` attribute, the CSS animations start in sequence.
+ *
+ * The CSS lives in `src/styles/global.css` (`.word-animate` + `@keyframes
+ * word-appear`).
+ *
+ * @param s        the text to split
+ * @param stepMs   delay between consecutive word starts (default 30 ms)
+ * @param baseMs   initial delay added to all words (default 0 ms)
+ */
+export const splitWordsWithDelay = (
+  s: string,
+  stepMs: number = 30,
+  baseMs: number = 0
+): string =>
+  s
+    .split(/\s+/)
+    .map((w, i) => {
+      const delay = baseMs + i * stepMs;
+      return `<span class="word-animate" style="animation-delay:${delay}ms">${w}</span>`;
+    })
+    .join(" ");

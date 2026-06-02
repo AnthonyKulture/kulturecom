@@ -28,7 +28,7 @@ const chapter = t[chapterKey] as Record<string, string>;
        traversal. object-cover crops gracefully on portrait viewports. -->
   <img
     data-about-parallax
-    src="/about/thom6740.webp"
+    src="/about/kulturecom-webdesign.webp"
     alt=""
     aria-hidden="true"
     width="2400"
@@ -63,16 +63,23 @@ const chapter = t[chapterKey] as Record<string, string>;
       >
         {chapter["body.lead"]}
       </p>
-      <p
+      {/* Clickable CTA wraps the entire "Ça commence par un clic" line —
+          smooth-scrolls to the next section (Services) when activated.
+          about-scroll.ts attaches the click handler at init and computes
+          the target scroll position from the pinned-timeline math. */}
+      <button
+        type="button"
         data-about-chapter-line
-        class="font-display mt-8 flex flex-wrap items-end gap-x-[0.35em] gap-y-2 text-[clamp(20px,2.8vw,44px)] uppercase leading-[1] tracking-[-0.025em] sm:mt-10 md:mt-12"
+        data-about-chapter-cta
+        aria-label={lang === "en" ? "Continue to services" : "Continuer vers les services"}
+        class="group font-display mt-8 flex flex-wrap items-end gap-x-[0.35em] gap-y-2 bg-transparent p-0 text-left text-[clamp(20px,2.8vw,44px)] uppercase leading-[1] tracking-[-0.025em] text-[inherit] cursor-pointer transition-colors duration-200 hover:text-[var(--color-accent)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-accent)] sm:mt-10 md:mt-12"
       >
         <span>{chapter["body.trail"]}</span>
         <span class="inline-flex items-end gap-[0.3em]">
           <span class="underline decoration-[0.06em] underline-offset-[0.18em]">{chapter["body.cta"]}</span>
           <svg
             role="img"
-            aria-label="souris d'ordinateur, action de clic"
+            aria-hidden="true"
             viewBox="0 0 32 44"
             width="0.85em"
             height="1.15em"
@@ -95,7 +102,7 @@ const chapter = t[chapterKey] as Record<string, string>;
             <line x1="16" y1="14" x2="16" y2="18" stroke-width="3" />
           </svg>
         </span>
-      </p>
+      </button>
     </div>
   </div>
 

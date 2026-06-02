@@ -48,12 +48,6 @@ gsap.registerPlugin(ScrollTrigger);
 // intentionally NOT enabled — it costs ~80ms of INP by replacing native scroll with
 // a JS handler, and the CSS-only fix already prevents Chrome's reverse-scroll bug.
 
-const PATTERNS = Array.from(
-  { length: 10 },
-  (_, i) => `/patterns/pattern-${String(i + 1).padStart(2, "0")}.svg`
-);
-const PATTERN_INTERVAL = 240; // ms between SVG pattern swaps in About corner.
-
 // === Timeline pin distances (ScrollTrigger `end` strings) ===
 // "+=N%" means: pin the section and let the user scroll N% of the viewport
 // height before unpinning. Tuned phase-by-phase to give each scroll-driven
@@ -155,9 +149,6 @@ export function initAboutScroll(): void {
   const cornerPhotos = Array.from(
     document.querySelectorAll<HTMLElement>("[data-parallax-corner]")
   );
-  const patternEl = document.querySelector<HTMLImageElement>(
-    "[data-about-pattern]"
-  );
   // Mobile axes carousel
   const axisCards = Array.from(
     document.querySelectorAll<HTMLElement>("[data-axis-card]")
@@ -200,21 +191,6 @@ export function initAboutScroll(): void {
     projectsMobileCoverLayer !== null &&
     axisCards.length >= 3;
   const hasAboutChapter = about2Layer !== null;
-
-  // Preload patterns
-  PATTERNS.forEach((src) => {
-    const img = new Image();
-    img.src = src;
-  });
-
-  // About pattern cycling (independent of scroll)
-  if (patternEl && !reduced) {
-    let idx = 0;
-    window.setInterval(() => {
-      idx = (idx + 1) % PATTERNS.length;
-      patternEl.src = PATTERNS[idx];
-    }, PATTERN_INTERVAL);
-  }
 
   if (reduced) {
     gsap.set(aboutLayer, { yPercent: 0, opacity: 1 });
@@ -709,7 +685,7 @@ export function initAboutScroll(): void {
     );
   }
 
-  ScrollTrigger.create({
+  const mainTrigger = ScrollTrigger.create({
     trigger: stack,
     start: "top top",
     end: pinDistance,
@@ -734,4 +710,30 @@ export function initAboutScroll(): void {
       }
     },
   });
+
+  // === About 2 "clic" CTA — smooth scroll to the Services reveal ===
+  // The pinned timeline maps scroll-position → timeline-time linearly. To
+  // jump to "Services just revealed" we resolve the scroll-position from the
+  // timeline-time where the services clip-circle reveal completes (mobile:
+  // 1.05 + 0.10 = 1.15 ; desktop: 1.17 + 0.20 = 1.37).
+  const chapterCta = document.querySelector<HTMLElement>(
+    "[data-about-chapter-cta]"
+  );
+  if (chapterCta) {
+    chapterCta.addEventListener("click", () => {
+      if (reduced) {
+        // Reduced motion: instant jump, no animated scroll
+        const target = isMobile ? 1.15 : 1.37;
+        const ratio = target / tl.duration();
+        const y = mainTrigger.start + ratio * (mainTrigger.end - mainTrigger.start);
+        window.scrollTo({ top: y, behavior: "auto" });
+        return;
+      }
+      const targetTime = isMobile ? 1.15 : 1.37;
+      const ratio = targetTime / tl.duration();
+      const y =
+        mainTrigger.start + ratio * (mainTrigger.end - mainTrigger.start);
+      window.scrollTo({ top: y, behavior: "smooth" });
+    });
+  }
 }

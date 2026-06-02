@@ -140,7 +140,8 @@ const jsonLd = {
       rel="stylesheet"
     />
 
-    <!-- Preload first carousel slide -->
+    {/* Preload first carousel slide — likely LCP on mobile (inline image
+        inside the H1, 180-260 px square, larger pixel area than the headline). */}
     <link rel="preload" as="image" href="/hero-slides/slide-01.webp" type="image/webp" />
   </head>
   <body>

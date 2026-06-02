@@ -11,34 +11,123 @@ interface Props {
 const { lang, altLangPath, altLang } = Astro.props;
 const t = ui[lang];
 const aboutHref = lang === "fr" ? "/a-propos/" : "/en/about/";
+const homeHref = lang === "fr" ? "/" : "/en/";
+
+// Lang switcher: both languages always visible. Current lang stays on the
+// current URL; the other lang switches via the `altLangPath` injected by
+// the parent page.
+const frHref = lang === "fr" ? "/" : altLangPath;
+const enHref = lang === "en" ? "/en/" : altLangPath;
 ---
 
+{/* Smart nav — `fixed` so it survives scroll. mix-blend-mode: difference
+    keeps the labels readable on any section bg (cream Hero, ink About 2,
+    cream Services, etc.) without a backdrop. Show on scroll-up, hide on
+    scroll-down via the inline script below. Slide + fade transition. */}
 <nav
-  class="absolute left-0 right-0 top-0 z-50 flex items-center justify-between px-4 py-4 sm:px-6 md:px-12 md:py-7"
+  data-nav-smart
+  data-hidden="false"
+  class="fixed left-0 right-0 top-0 z-50 flex items-center justify-between px-4 py-4 mix-blend-difference transition-[transform,opacity] duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] data-[hidden=true]:-translate-y-full data-[hidden=true]:opacity-0 sm:px-6 md:px-12 md:py-7"
   aria-label="Navigation principale"
 >
+  {/* Brand — "Anthony" in serif italic + "PROFIT" in display caps, collés.
+      Typographic contrast (editorial italic ↔ brutalist display) acts as
+      the logotype itself; no graphic mark needed. */}
   <a
-    href={lang === "fr" ? "/" : "/en/"}
-    class="font-mono text-[12px] lowercase tracking-[-0.01em] text-[var(--color-ink)] no-underline hover:underline underline-offset-4 sm:text-[13px]"
-    >{t.nav.brand}</a
+    href={homeHref}
+    aria-label="Anthony Profit"
+    class="inline-flex items-baseline gap-0 text-white no-underline hover:[&>span]:underline [&>span]:underline-offset-4"
   >
+    <span class="font-serif-italic text-[20px] leading-none sm:text-[24px] md:text-[28px]"
+      >Anthony</span
+    ><span class="font-display text-[20px] leading-none tracking-[-0.02em] sm:text-[24px] md:text-[28px]"
+      >PROFIT</span
+    >
+  </a>
 
-  <div class="flex items-center gap-4 sm:gap-6">
+  {/* Right cluster: about · contact · lang switcher */}
+  <div class="flex items-center gap-4 sm:gap-5">
+    {/* About — hidden on mobile to save horizontal space */}
     <a
       href={aboutHref}
-      class="font-mono hidden text-[12px] uppercase tracking-[0.04em] text-[var(--color-ink-muted)] transition-colors hover:text-[var(--color-ink)] sm:inline-block sm:text-[13px]"
+      class="font-mono hidden text-[12px] uppercase tracking-[0.04em] text-white no-underline hover:underline underline-offset-4 sm:inline-block sm:text-[13px]"
       >{t.nav.about}</a
     >
+    {/* Discutons / Let's talk — anchors to the homepage's #contact (CTA)
+        section. From any other page we navigate to homepage then scroll. */}
     <a
-      href={altLangPath}
-      hreflang={altLang}
-      class="font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--color-ink-muted)] transition-colors hover:text-[var(--color-ink)]"
-      >{altLang === "en" ? "EN" : "FR"}</a
+      href={`${homeHref}#contact`}
+      class="font-mono text-[12px] uppercase tracking-[0.04em] text-white no-underline hover:underline underline-offset-4 sm:text-[13px]"
+      >{t.nav.cta}</a
     >
-    <a
-      href={`mailto:${t.footer["contact.email"]}?subject=${encodeURIComponent(t.nav["cta.subject"])}`}
-      class="font-mono inline-flex items-center gap-1.5 text-[12px] uppercase tracking-[0.04em] text-[var(--color-ink)] no-underline hover:underline underline-offset-4 sm:text-[13px]"
-      ><span aria-hidden="true" class="inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]"></span>{t.nav.cta}</a
-    >
+
+    {/* Lang switcher — both EN and FR visible, current lang in bold for
+        clarity; alt lang slightly faded as a secondary affordance. */}
+    <span class="font-mono inline-flex items-center gap-1 text-[11px] uppercase tracking-[0.16em] text-white sm:text-[12px]">
+      <a
+        href={enHref}
+        hreflang="en"
+        aria-current={lang === "en" ? "page" : undefined}
+        class:list={[
+          "no-underline hover:underline underline-offset-4",
+          lang === "en" ? "font-bold" : "opacity-60 hover:opacity-100",
+        ]}
+        >EN</a
+      >
+      <span aria-hidden="true" class="opacity-60">/</span>
+      <a
+        href={frHref}
+        hreflang="fr"
+        aria-current={lang === "fr" ? "page" : undefined}
+        class:list={[
+          "no-underline hover:underline underline-offset-4",
+          lang === "fr" ? "font-bold" : "opacity-60 hover:opacity-100",
+        ]}
+        >FR</a
+      >
+    </span>
   </div>
 </nav>
+
+<script>
+  // Smart-nav scroll behavior — visible at top, hide on scroll-down, show
+  // on scroll-up. rAF-throttled. Respects prefers-reduced-motion.
+  (() => {
+    const nav = document.querySelector<HTMLElement>("[data-nav-smart]");
+    if (!nav) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const HIDE_AFTER = 80; // px scrolled before hide-on-down can fire
+    const DELTA = 6; // px change to commit a direction switch
+
+    let lastY = window.scrollY;
+    let ticking = false;
+
+    const update = () => {
+      const y = window.scrollY;
+      const delta = y - lastY;
+
+      if (y < HIDE_AFTER) {
+        nav.dataset.hidden = "false";
+      } else if (delta > DELTA) {
+        nav.dataset.hidden = "true";
+      } else if (delta < -DELTA) {
+        nav.dataset.hidden = "false";
+      }
+
+      lastY = y;
+      ticking = false;
+    };
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (!ticking) {
+          requestAnimationFrame(update);
+          ticking = true;
+        }
+      },
+      { passive: true }
+    );
+  })();
+</script>

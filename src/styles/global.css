@@ -37,6 +37,9 @@
        timeline backward (Projects letter-mask shrinks back, exposing the
        previous Services layer). Safari filters those events natively. */
     overscroll-behavior: none;
+    /* Smooth scroll for in-page anchor links (e.g. the nav's #contact CTA).
+       The reduced-motion block below disables it. */
+    scroll-behavior: smooth;
   }
 
   body {
@@ -198,7 +201,47 @@
   will-change: transform;
 }
 
+/* === Word-by-word blur-reveal utility ===
+   Inspired by 21st.dev's digital-serenity hero. Each word fades in from
+   below with a blur-out transition, staggered by an inline animation-delay
+   set in SSR (see `splitWordsWithDelay` in `src/lib/text-split.ts`). The
+   animation is paused until the parent element receives the
+   `data-words-revealed` attribute — once present, every child word starts
+   its own delay-then-animate cycle. The 50% keyframe carries the half-blur
+   "emerging from fog" feel that distinguishes this from a flat fade. */
+@keyframes word-appear {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.92);
+    filter: blur(8px);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateY(6px) scale(0.97);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+.word-animate {
+  display: inline-block;
+  opacity: 0;
+  margin: 0 0.1em;
+  animation: word-appear 0.8s ease-out forwards;
+  animation-play-state: paused;
+  will-change: opacity, transform, filter;
+}
+[data-words-revealed] .word-animate {
+  animation-play-state: running;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   *,
   *::before,
   *::after {
@@ -207,6 +250,13 @@
     transition-duration: 0.01ms !important;
   }
   .marquee__track {
+    animation: none !important;
+  }
+  /* Word-reveal: bypass the blur cascade and show all words instantly. */
+  .word-animate {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
     animation: none !important;
   }
 }

@@ -11,130 +11,234 @@ const t = ui[lang];
 
 const homeHref = lang === "fr" ? "/" : "/en/";
 const aboutHref = lang === "fr" ? "/a-propos/" : "/en/about/";
-const legalMentionsHref = lang === "fr" ? "/mentions-legales/" : "/en/legal-notice/";
-const privacyHref = lang === "fr" ? "/confidentialite/" : "/en/privacy/";
 
-// External profile URLs — replace with real ones once available.
 const linkedinUrl = "https://www.linkedin.com/in/anthony-profit/";
 const githubUrl = "https://github.com/anthony-profit";
 const behanceUrl = "https://www.behance.net/anthony-profit";
+
+// Wrap letters of `s` in mask spans with a SHUFFLED per-letter
+// transition-delay so the reveal cascades in a random order without any JS
+// at runtime. The shuffle happens once at SSR — same order on every page
+// load until the next build.
+const wrapLettersShuffled = (
+  s: string,
+  baseMs: number = 0,
+  stepMs: number = 70,
+  accentChars: Set<string> = new Set()
+): string => {
+  const chars = Array.from(s);
+  const delays = chars.map((_, i) => baseMs + i * stepMs);
+  // Fisher-Yates shuffle of the delays
+  for (let i = delays.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [delays[i], delays[j]] = [delays[j], delays[i]];
+  }
+  return chars
+    .map((c, i) => {
+      const isAccent = accentChars.has(c);
+      const innerClass = isAccent
+        ? "footer-letter-inner text-[var(--color-accent,#c14a1d)]"
+        : "footer-letter-inner";
+      const ch = c === " " ? "&nbsp;" : c;
+      return `<span class="footer-letter-mask"><span class="${innerClass}" style="transition-delay:${delays[i]}ms">${ch}</span></span>`;
+    })
+    .join("");
+};
+
+// First name letters cascade across ~0.5s (7 letters × 70ms ≈ 490ms span,
+// each with a 0.6s ease) = total ~1.1s for the whole word.
+const firstNameHtml = wrapLettersShuffled("Anthony", 0, 70);
+// Last name + period start AFTER the first name is mostly done. The dot
+// uses the accent color and is glued to the last letter (no space, same
+// flex item via the whitespace-nowrap parent span).
+const lastNameHtml = wrapLettersShuffled("PROFIT.", 500, 60, new Set(["."]));
+
+const currentYear = "2026";
+const navLabels = lang === "en"
+  ? { projects: "WORK", about: "ABOUT", contact: "CONTACT" }
+  : { projects: "PROJETS", about: "À PROPOS", contact: "CONTACT" };
 ---
 
 <footer
   data-site-footer
-  class="relative bg-[#0b0b0b] text-[#efe9dc] px-4 pt-16 pb-10 sm:px-6 sm:pt-20 sm:pb-12 md:px-12 md:pt-24 md:pb-14"
+  class="relative overflow-hidden bg-[#0b0b0b] text-[#efe9dc]"
   aria-label="Pied de page"
 >
-  <div class="mx-auto w-full max-w-[var(--container-wide)]">
-    <!-- Tagline / brand reminder -->
-    <p
-      class="font-display text-[clamp(28px,5vw,72px)] uppercase leading-[0.95] tracking-[-0.03em] max-w-[20ch]"
-    >
-      {t.footer.tagline}
-    </p>
+  <div class="relative mx-auto flex h-[100lvh] w-full max-w-[var(--container-wide)] flex-col px-4 pt-12 sm:px-6 sm:pt-16 md:px-12 md:pt-20">
 
-    <!-- Columns: site / contact / social / legal -->
-    <div class="mt-12 grid grid-cols-2 gap-8 sm:mt-16 sm:grid-cols-4 sm:gap-12">
-      <!-- Site -->
-      <section>
-        <p class="font-mono mb-3 text-[11px] uppercase tracking-[0.18em] text-[#8a8a8a]">
-          {t.footer["site.label"]}
-        </p>
-        <ul class="flex flex-col gap-2">
-          <li>
-            <a
-              href={homeHref}
-              class="font-sans inline-block py-3 text-[clamp(14px,1.2vw,16px)] text-[#efe9dc] no-underline hover:underline underline-offset-4"
-              >{t.footer["site.home"]}</a
-            >
-          </li>
-          <li>
-            <a
-              href={aboutHref}
-              class="font-sans inline-block py-3 text-[clamp(14px,1.2vw,16px)] text-[#efe9dc] no-underline hover:underline underline-offset-4"
-              >{t.footer["site.about"]}</a
-            >
-          </li>
-        </ul>
-      </section>
+    {/* TOP ROW — 3 columns: left = contact + year, center = social,
+        right = nav. Each item has an inline transition-delay for the
+        cascade reveal once `[data-top-revealed]` is set on the footer. */}
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-3 sm:gap-8 font-mono text-[11px] uppercase tracking-[0.18em] sm:text-[12px]">
 
-      <!-- Contact -->
-      <section>
-        <p class="font-mono mb-3 text-[11px] uppercase tracking-[0.18em] text-[#8a8a8a]">
-          {t.footer["contact.label"]}
-        </p>
+      {/* Left : email + copyright */}
+      <div class="flex flex-col gap-1.5">
         <a
+          data-footer-top
+          style="transition-delay:0ms"
           href={`mailto:${t.footer["contact.email"]}?subject=${encodeURIComponent(t.nav["cta.subject"])}`}
-          class="font-sans inline-block py-3 text-[clamp(15px,1.4vw,18px)] text-[#efe9dc] no-underline hover:underline underline-offset-4"
-          >{t.footer["contact.email"]}</a
-        >
-      </section>
+          class="lowercase tracking-[0.05em] text-[#efe9dc] no-underline hover:underline underline-offset-4"
+        >{t.footer["contact.email"]}</a>
+        <p
+          data-footer-top
+          style="transition-delay:120ms"
+          class="text-[#efe9dc]/70"
+        >© {currentYear}</p>
+      </div>
 
-      <!-- Social -->
-      <section>
-        <p class="font-mono mb-3 text-[11px] uppercase tracking-[0.18em] text-[#8a8a8a]">
-          {t.footer["social.label"]}
-        </p>
-        <ul class="flex flex-col gap-2">
-          <li>
-            <a
-              href={linkedinUrl}
-              rel="noopener"
-              target="_blank"
-              class="font-sans inline-block py-3 text-[clamp(14px,1.2vw,16px)] text-[#efe9dc] no-underline hover:underline underline-offset-4"
-              >{t.footer.linkedin} ↗</a
-            >
-          </li>
-          <li>
-            <a
-              href={githubUrl}
-              rel="noopener"
-              target="_blank"
-              class="font-sans inline-block py-3 text-[clamp(14px,1.2vw,16px)] text-[#efe9dc] no-underline hover:underline underline-offset-4"
-              >{t.footer.github} ↗</a
-            >
-          </li>
-          <li>
-            <a
-              href={behanceUrl}
-              rel="noopener"
-              target="_blank"
-              class="font-sans inline-block py-3 text-[clamp(14px,1.2vw,16px)] text-[#efe9dc] no-underline hover:underline underline-offset-4"
-              >{t.footer.behance} ↗</a
-            >
-          </li>
-        </ul>
-      </section>
+      {/* Center : social */}
+      <div class="flex flex-col gap-1.5 sm:items-center">
+        <a
+          data-footer-top
+          style="transition-delay:240ms"
+          href={githubUrl}
+          rel="noopener"
+          target="_blank"
+          class="text-[#efe9dc] no-underline hover:underline underline-offset-4"
+        >GITHUB</a>
+        <a
+          data-footer-top
+          style="transition-delay:360ms"
+          href={linkedinUrl}
+          rel="noopener"
+          target="_blank"
+          class="text-[#efe9dc] no-underline hover:underline underline-offset-4"
+        >LINKEDIN</a>
+        <a
+          data-footer-top
+          style="transition-delay:480ms"
+          href={behanceUrl}
+          rel="noopener"
+          target="_blank"
+          class="text-[#efe9dc] no-underline hover:underline underline-offset-4"
+        >BEHANCE</a>
+      </div>
 
-      <!-- Legal -->
-      <section>
-        <p class="font-mono mb-3 text-[11px] uppercase tracking-[0.18em] text-[#8a8a8a]">
-          {t.footer["legal.label"]}
-        </p>
-        <ul class="flex flex-col gap-2">
-          <li>
-            <a
-              href={legalMentionsHref}
-              class="font-sans inline-block py-3 text-[clamp(14px,1.2vw,16px)] text-[#efe9dc] no-underline hover:underline underline-offset-4"
-              >{t.footer["legal.mentions"]}</a
-            >
-          </li>
-          <li>
-            <a
-              href={privacyHref}
-              class="font-sans inline-block py-3 text-[clamp(14px,1.2vw,16px)] text-[#efe9dc] no-underline hover:underline underline-offset-4"
-              >{t.footer["legal.privacy"]}</a
-            >
-          </li>
-        </ul>
-      </section>
+      {/* Right : nav */}
+      <div class="flex flex-col gap-1.5 sm:items-end">
+        <a
+          data-footer-top
+          style="transition-delay:600ms"
+          href={`${homeHref}#projects`}
+          class="text-[#efe9dc] no-underline hover:underline underline-offset-4"
+        >{navLabels.projects}</a>
+        <a
+          data-footer-top
+          style="transition-delay:720ms"
+          href={aboutHref}
+          class="text-[#efe9dc] no-underline hover:underline underline-offset-4"
+        >{navLabels.about}</a>
+        <a
+          data-footer-top
+          style="transition-delay:840ms"
+          href={`${homeHref}#contact`}
+          class="text-[#efe9dc] no-underline hover:underline underline-offset-4"
+        >{navLabels.contact}</a>
+      </div>
     </div>
 
-    <!-- Bottom bar : copyright + horizontal rule -->
-    <div class="mt-12 border-t border-[#2a2a28] pt-6 sm:mt-16">
-      <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-[#6a6a64]">
-        {t.footer.copyright}
-      </p>
-    </div>
+    {/* SPACER */}
+    <div class="flex-1" />
+
+    {/* HUGE NAME */}
+    <h2 class="flex flex-wrap items-baseline justify-between gap-x-4 pb-6 leading-[0.85] sm:pb-8 md:pb-10">
+      <span
+        data-footer-name="first"
+        class="font-serif-italic text-[clamp(72px,22vw,320px)]"
+        set:html={firstNameHtml}
+      />
+      <span
+        data-footer-name="last"
+        class="font-display text-[clamp(72px,22vw,320px)] tracking-[-0.04em] whitespace-nowrap"
+        set:html={lastNameHtml}
+      />
+    </h2>
   </div>
 </footer>
+
+<style is:global>
+  /* Letter mask reveal — pure CSS transitions, no JS animation library.
+     The inner spans start translated below the mask (invisible), then
+     transition up to their natural position when the footer parent
+     receives `data-name-revealed="true"`. Per-letter transition-delay is
+     inlined on each span in SSR (shuffled for the random reveal order). */
+  .footer-letter-mask {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+  }
+  .footer-letter-inner {
+    display: inline-block;
+    transform: translateY(105%);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+  [data-site-footer][data-name-revealed="true"] .footer-letter-inner {
+    transform: translateY(0);
+  }
+
+  [data-footer-top] {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    will-change: opacity, transform;
+  }
+  [data-site-footer][data-top-revealed="true"] [data-footer-top] {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .footer-letter-inner,
+    [data-footer-top] {
+      transform: none !important;
+      opacity: 1 !important;
+      transition: none !important;
+    }
+  }
+</style>
+
+<noscript>
+  <style>
+    .footer-letter-inner { transform: none !important; }
+    [data-footer-top] { opacity: 1 !important; transform: none !important; }
+  </style>
+</noscript>
+
+<script>
+  // IntersectionObserver-driven reveal. Two-stage:
+  //   1. footer crosses ~50% visibility   → name letters reveal (Anthony +
+  //      PROFIT., each letter has its own SSR-shuffled transition-delay)
+  //   2. footer crosses ~95% visibility   → top items cascade reveal
+  // No GSAP, no ScrollTrigger, no pin. Pure DOM + CSS — no timing conflicts
+  // with the rest of the page's GSAP work.
+  const footer = document.querySelector<HTMLElement>("[data-site-footer]");
+  if (footer) {
+    let nameRevealed = false;
+    let topRevealed = false;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const ratio = entry.intersectionRatio;
+          if (!nameRevealed && ratio >= 0.5) {
+            footer.dataset.nameRevealed = "true";
+            nameRevealed = true;
+          }
+          if (!topRevealed && ratio >= 0.95) {
+            footer.dataset.topRevealed = "true";
+            topRevealed = true;
+          }
+          if (nameRevealed && topRevealed) {
+            observer.disconnect();
+          }
+        }
+      },
+      {
+        // Many thresholds so the callback fires at every meaningful step.
+        threshold: [0, 0.25, 0.5, 0.7, 0.85, 0.95, 1.0],
+      }
+    );
+    observer.observe(footer);
+  }
+</script>
