@@ -568,12 +568,18 @@ export function initAboutScroll(): void {
   // MOBILE BRANCH (<640px) — phases follow About 2 plateau
   // ════════════════════════════════════════════════════════════════════════
   if (hasMobileTransitions && servicesMobileLayer && projectsMobileCoverLayer) {
-    // Phase 4 — services-mobile clip-path circle (transition 1)
+    // Phase 4 — services-mobile clip-path circle (transition 1).
+    // Starts at 1.05 (vs 1.19 prior). The About 2 curtain reveal ends at
+    // 0.95, so user gets ~0.10 timeline-units (~1 mobile swipe) of "About 2
+    // fully visible" before Services arrives — was 0.24 units (~3 swipes)
+    // which read as "the site is over" with no visual signal of continuation.
+    // The parallax still runs through 1.17, briefly underlapping the services
+    // clip-circle reveal (invisible — services covers from bottom-right).
     tl.fromTo(
       servicesMobileLayer,
       { clipPath: "circle(0% at 100% 100%)" },
       { clipPath: "circle(150% at 100% 100%)", duration: 0.10 },
-      1.19
+      1.05
     );
 
     // Mobile Phase 4 (cont.) — Panel 0 elaborate reveal :
@@ -594,7 +600,7 @@ export function initAboutScroll(): void {
           duration: 0.22,
           ease: "power2.out",
         },
-        1.21
+        1.07
       );
     }
     if (servicesMobileFirstLabel) {
@@ -607,7 +613,7 @@ export function initAboutScroll(): void {
           duration: 0.32,
           ease: "power3.out",
         },
-        1.23
+        1.09
       );
     }
     if (servicesMobileFirstTitleWords.length > 0) {
@@ -619,7 +625,7 @@ export function initAboutScroll(): void {
           duration: 0.26,
           ease: "power3.out",
         },
-        1.27
+        1.13
       );
     }
     if (servicesMobileFirstBody) {
@@ -632,14 +638,14 @@ export function initAboutScroll(): void {
           duration: 0.24,
           ease: "power2.out",
         },
-        1.32
+        1.18
       );
     }
     if (servicesMobileFirstFooter) {
       tl.to(
         servicesMobileFirstFooter,
         { opacity: 1, y: 0, duration: 0.20, ease: "power2.out" },
-        1.35
+        1.21
       );
     }
 
@@ -651,9 +657,9 @@ export function initAboutScroll(): void {
     // to 0 lets the gaps reveal the body bg (cream) — matching services-mobile.
     const layersToHide: HTMLElement[] = [heroLayer, aboutLayer];
     if (about2Layer) layersToHide.push(about2Layer);
-    tl.to(layersToHide, { opacity: 0, duration: 0.05 }, 1.34);
+    tl.to(layersToHide, { opacity: 0, duration: 0.05 }, 1.20);
 
-    // --- Plateau 1.55 → 1.70 : Panel 0 fully revealed + still on screen ---
+    // --- Plateau 1.41 → 1.56 : Panel 0 fully revealed + still on screen ---
     // Gives the user ~95% of viewport scroll on mobile (~1 swipe) to read
     // the full label / title / body before the next crossfade starts.
 
@@ -664,42 +670,42 @@ export function initAboutScroll(): void {
     tl.to(
       axisCards[0],
       { opacity: 0, filter: "blur(10px)", duration: 0.06 },
-      1.70
+      1.56
     );
     tl.to(
       axisCards[1],
       { opacity: 1, filter: "blur(0px)", duration: 0.06 },
-      1.70
+      1.56
     );
 
-    // --- Plateau 1.76 → 1.91 : Panel 1 visible, reading breathing room ---
+    // --- Plateau 1.62 → 1.77 : Panel 1 visible, reading breathing room ---
 
     // Phase 8 — crossfade axis 1 → 2 (blur + opacity)
     tl.to(
       axisCards[1],
       { opacity: 0, filter: "blur(10px)", duration: 0.06 },
-      1.91
+      1.77
     );
     tl.to(
       axisCards[2],
       { opacity: 1, filter: "blur(0px)", duration: 0.06 },
-      1.91
+      1.77
     );
 
-    // --- Plateau 1.97 → 2.12 : Panel 2 visible, reading breathing room ---
+    // --- Plateau 1.83 → 1.98 : Panel 2 visible, reading breathing room ---
 
     // Phase 10 — push-stack (transition 2)
     // Services-mobile recedes (yPercent + scale), cover arrives from below.
     tl.to(
       servicesMobileLayer,
       { yPercent: -15, scale: 0.96, duration: 0.10, ease: "power2.in" },
-      2.12
+      1.98
     );
     tl.fromTo(
       projectsMobileCoverLayer,
       { yPercent: 100 },
       { yPercent: 0, duration: 0.10, ease: "power2.out" },
-      2.12
+      1.98
     );
   }
 
