@@ -1,0 +1,138 @@
+---
+import "~/styles/global.css";
+import Preloader from "~/components/Preloader.astro";
+import Footer from "~/components/Footer.astro";
+import type { Lang } from "~/i18n/ui";
+import { ui } from "~/i18n/ui";
+
+interface Props {
+  lang: Lang;
+  pathname?: string;
+}
+
+const { lang, pathname = "/" } = Astro.props;
+const dict = ui[lang];
+
+const altLang: Lang = lang === "fr" ? "en" : "fr";
+const altPath =
+  altLang === "fr"
+    ? pathname.replace(/^\/en/, "") || "/"
+    : `/en${pathname === "/" ? "" : pathname}`;
+
+const canonical = new URL(pathname, Astro.site).toString();
+// og.svg is a placeholder (supports Twitter/Discord/Slack). For best Facebook
+// + LinkedIn compatibility, export to PNG 1200×630 and update the reference.
+const ogImage = new URL("/og.svg", Astro.site).toString();
+
+// External profile URLs — replace with real ones once available (also referenced
+// in Footer.astro). These power the JSON-LD `sameAs` array for Knowledge Graph.
+const linkedinUrl = "https://www.linkedin.com/in/anthony-profit/";
+const githubUrl = "https://github.com/anthony-profit";
+
+// Structured data — Person + ProfessionalService + WebSite.
+// Serialized as a JSON-LD `@graph` so all three entities share the same script
+// block and can cross-reference each other via @id.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": `${Astro.site}#person`,
+      "name": "Anthony Profit",
+      "url": Astro.site?.toString(),
+      "image": ogImage,
+      "jobTitle": lang === "fr"
+        ? "Freelance développeur web, SEO & brand designer"
+        : "Freelance web developer, SEO & brand designer",
+      "description": dict.meta.description,
+      "knowsAbout": [
+        "Web development",
+        "Frontend engineering",
+        "SEO",
+        "Technical SEO",
+        "Brand design",
+        "Astro",
+        "React",
+        "TypeScript",
+      ],
+      "sameAs": [linkedinUrl, githubUrl],
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": `${Astro.site}#service`,
+      "name": "Anthony Profit",
+      "url": Astro.site?.toString(),
+      "image": ogImage,
+      "description": dict.meta.description,
+      "provider": { "@id": `${Astro.site}#person` },
+      "areaServed": { "@type": "Country", "name": "France" },
+      "serviceType": ["Web Development", "SEO", "Brand Design"],
+      "priceRange": "€€€",
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${Astro.site}#website`,
+      "url": Astro.site?.toString(),
+      "name": "Anthony Profit",
+      "inLanguage": [lang === "fr" ? "fr-FR" : "en-US"],
+      "publisher": { "@id": `${Astro.site}#person` },
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{dict.meta.title}</title>
+    <meta name="description" content={dict.meta.description} />
+
+    <meta name="keywords" content={dict.meta.keywords} />
+    <meta name="author" content="Anthony Profit" />
+
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang={altLang} href={new URL(altPath, Astro.site).toString()} />
+    <link rel="alternate" hreflang="x-default" href={new URL("/", Astro.site).toString()} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={dict.meta.siteName} />
+    <meta property="og:title" content={dict.meta.title} />
+    <meta property="og:description" content={dict.meta.description} />
+    <meta property="og:locale" content={lang === "fr" ? "fr_FR" : "en_US"} />
+    <meta property="og:locale:alternate" content={lang === "fr" ? "en_US" : "fr_FR"} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={dict.meta.ogImageAlt} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={dict.meta.title} />
+    <meta name="twitter:description" content={dict.meta.description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={dict.meta.ogImageAlt} />
+
+    <!-- Structured data (JSON-LD) — Person + ProfessionalService + WebSite -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+
+    <!-- Fonts: Archivo Black (display) + Geist (body) + Instrument Serif italic + Geist Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@1&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Preload first carousel slide -->
+    <link rel="preload" as="image" href="/hero-slides/slide-01.webp" type="image/webp" />
+  </head>
+  <body>
+    <Preloader lang={lang} />
+    <slot />
+    <Footer lang={lang} />
+  </body>
+</html>

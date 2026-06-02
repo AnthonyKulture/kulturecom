@@ -1,0 +1,113 @@
+---
+import type { Lang } from "~/i18n/ui";
+import { ui } from "~/i18n/ui";
+
+interface Props {
+  lang: Lang;
+  variant: "light" | "dark";
+  chapterKey: "about2";
+}
+
+const { lang, chapterKey } = Astro.props;
+const t = ui[lang];
+const chapter = t[chapterKey] as Record<string, string>;
+// About 2 uses a full-bleed parallax photo background (Monte Carlo) with a
+// dark overlay. The `variant` prop is accepted for API stability but ignored
+// — text colour is fixed to cream to remain readable on the dark overlay.
+---
+
+<section
+  data-about-chapter
+  data-about-chapter-key={chapterKey}
+  class="relative flex h-full min-h-[100dvh] flex-col justify-between overflow-hidden bg-[#0b0b0b] text-[#efe9dc] px-4 pt-10 pb-10 sm:px-6 sm:pt-14 sm:pb-14 md:px-12 md:pt-16 md:pb-16"
+  aria-label={chapter.eyebrow}
+>
+  <!-- Parallax photo background (animated via about-scroll.ts).
+       Height 200% of section → 100dvh of vertical headroom for parallax
+       traversal. object-cover crops gracefully on portrait viewports. -->
+  <img
+    data-about-parallax
+    src="/about/thom6740.webp"
+    alt=""
+    aria-hidden="true"
+    width="2400"
+    height="3600"
+    loading="eager"
+    decoding="async"
+    fetchpriority="low"
+    class="pointer-events-none absolute left-0 right-0 top-0 z-0 h-[200%] w-full object-cover will-change-transform"
+    style="transform: translate3d(0, 0, 0);"
+  />
+
+  <!-- Dark overlay for text contrast over the photo -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0 z-[1] bg-black/45"
+  ></div>
+
+  <!-- TOP : eyebrow left + accent echo right -->
+  <header class="relative z-10 flex items-start justify-between gap-4 shrink-0">
+    <p class="font-mono inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] opacity-70">
+      <span class="inline-block h-px w-6 bg-current opacity-60"></span>
+      {chapter.eyebrow}
+    </p>
+    <p class="font-mono text-right text-[11px] uppercase tracking-[0.18em] opacity-60">
+      — {chapter.accent}
+    </p>
+  </header>
+
+  <!-- CENTER : editorial prose + mouse-click CTA -->
+  <div class="relative z-10 flex flex-1 items-center">
+    <div class="w-full max-w-[36rem] sm:max-w-[44rem] md:max-w-[56rem]">
+      <p
+        data-about-chapter-line
+        class="font-serif-italic text-[clamp(22px,3.6vw,56px)] leading-[1.15] tracking-[-0.01em]"
+      >
+        {chapter["body.lead"]}
+      </p>
+      <p
+        data-about-chapter-line
+        class="font-display mt-8 flex flex-wrap items-end gap-x-[0.35em] gap-y-2 text-[clamp(20px,2.8vw,44px)] uppercase leading-[1] tracking-[-0.025em] sm:mt-10 md:mt-12"
+      >
+        <span>{chapter["body.trail"]}</span>
+        <span class="inline-flex items-end gap-[0.3em]">
+          <span class="underline decoration-[0.06em] underline-offset-[0.18em]">{chapter["body.cta"]}</span>
+          <svg
+            role="img"
+            aria-label="souris d'ordinateur, action de clic"
+            viewBox="0 0 32 44"
+            width="0.85em"
+            height="1.15em"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="inline-block translate-y-[0.05em]"
+          >
+            <!-- click indication: 3 small radiating lines above -->
+            <path d="M16 1 L16 4" />
+            <path d="M6 4 L8 6.5" />
+            <path d="M26 4 L24 6.5" />
+            <!-- mouse body -->
+            <rect x="5" y="10" width="22" height="32" rx="11" />
+            <!-- top split line (left/right buttons) -->
+            <line x1="16" y1="10" x2="16" y2="20" />
+            <!-- scroll wheel highlight -->
+            <line x1="16" y1="14" x2="16" y2="18" stroke-width="3" />
+          </svg>
+        </span>
+      </p>
+    </div>
+  </div>
+
+  <!-- BOTTOM : thin rule left + giant accent number right -->
+  <div class="relative z-10 flex items-end justify-between gap-4 shrink-0">
+    <span class="inline-block h-px w-[clamp(40px,8vw,96px)] bg-current opacity-40" aria-hidden="true"></span>
+    <span
+      class="font-display text-[clamp(80px,16vw,200px)] leading-[0.85] tracking-[-0.04em] opacity-80"
+      aria-hidden="true"
+      >{chapter.accent}</span
+    >
+  </div>
+</section>

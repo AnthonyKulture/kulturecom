@@ -1,0 +1,104 @@
+---
+import type { Lang } from "~/i18n/ui";
+import { ui } from "~/i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = ui[lang];
+
+const items = [
+  {
+    label: t.services["item1.label"],
+    title: t.services["item1.title"],
+    body: t.services["item1.body"],
+  },
+  {
+    label: t.services["item2.label"],
+    title: t.services["item2.title"],
+    body: t.services["item2.body"],
+  },
+  {
+    label: t.services["item3.label"],
+    title: t.services["item3.title"],
+    body: t.services["item3.body"],
+  },
+];
+
+// Pre-split titles into per-word spans at SSR. Same .split-word utility as
+// About / Services desktop (defined in global.css).
+const splitTitle = (s: string) =>
+  s
+    .split(/\s+/)
+    .map(
+      (w) =>
+        `<span class="split-word"><span class="split-word-inner">${w}</span></span>`
+    )
+    .join(" ");
+
+const total = items.length;
+const pad = (n: number) => String(n).padStart(2, "0");
+---
+
+<section
+  data-services-mobile-panel
+  class="relative h-full min-h-[100dvh] overflow-hidden bg-[#efe9dc]"
+  aria-label={t.services.eyebrow}
+>
+  {items.map((item, i) => (
+    <article
+      data-axis-card={i}
+      data-axis-panel={i}
+      class="absolute inset-0 flex flex-col justify-between px-5 pt-12 pb-10"
+      style={`opacity: ${i === 0 ? 1 : 0}; z-index: ${30 - i * 10};`}
+    >
+      {/* TOP horizontal row : eyebrow left + count right */}
+      <header
+        data-axis-panel-header={i}
+        class="flex items-center justify-between"
+      >
+        <p class="font-mono inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[#7a7a7a]">
+          <span class="inline-block h-px w-6 bg-[var(--color-accent)]" />
+          {t.services.eyebrow}
+        </p>
+        <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-[#7a7a7a]">
+          {pad(i + 1)} / {pad(total)}
+        </p>
+      </header>
+
+      {/* CENTER : oversized label number → title → body */}
+      <div class="flex flex-1 flex-col justify-center">
+        <span
+          data-axis-panel-label={i}
+          class="font-display block text-[clamp(120px,30vw,180px)] leading-[0.82] tracking-[-0.04em] text-[#0b0b0b]"
+        >
+          {item.label}
+        </span>
+        <h3
+          data-axis-card-title={i}
+          class="mt-3 font-sans text-[clamp(28px,8vw,42px)] font-semibold leading-[1.05] tracking-[-0.025em] text-[#0b0b0b]"
+          set:html={splitTitle(item.title)}
+        />
+        <p
+          data-axis-card-body={i}
+          class="mt-5 max-w-[40ch] text-[15px] leading-[1.6] text-[#3a3a3a]"
+        >
+          {item.body}
+        </p>
+      </div>
+
+      {/* BOTTOM horizontal row : accent line left + hint right */}
+      <footer
+        data-axis-panel-footer={i}
+        class="flex items-end justify-between"
+      >
+        <span class="block h-px w-[clamp(80px,30vw,140px)] bg-[var(--color-accent)]" />
+        <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-[#7a7a7a]">
+          {i < total - 1 ? "↓ suivant" : "↓ projets"}
+        </span>
+      </footer>
+    </article>
+  ))}
+</section>

@@ -1,0 +1,99 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import Nav from "~/components/Nav.astro";
+import type { Lang } from "~/i18n/ui";
+
+interface Props {
+  lang: Lang;
+  title: string;
+  pathname: string;
+  altLang: Lang;
+  altLangPath: string;
+}
+
+const { lang, title, pathname, altLang, altLangPath } = Astro.props;
+---
+
+<BaseLayout lang={lang} pathname={pathname}>
+  <Nav lang={lang} altLang={altLang} altLangPath={altLangPath} />
+  <main
+    class="bg-[var(--color-bg)] text-[var(--color-ink)] px-4 pt-32 pb-24 sm:px-6 sm:pt-40 md:px-12 md:pt-48"
+  >
+    <article class="mx-auto w-full max-w-[68ch]">
+      <header class="mb-12 sm:mb-16">
+        <p
+          class="font-mono mb-4 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]"
+        >
+          <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
+          {lang === "fr" ? "Légal" : "Legal"}
+        </p>
+        <h1
+          class="font-display text-[clamp(32px,5vw,72px)] uppercase leading-[0.95] tracking-[-0.04em] text-[var(--color-ink)]"
+        >
+          {title}
+        </h1>
+      </header>
+      <div class="text-page-content">
+        <slot />
+      </div>
+    </article>
+  </main>
+</BaseLayout>
+
+<style is:global>
+  .text-page-content {
+    font-family: var(--font-sans);
+    font-size: clamp(15px, 1.1vw, 17px);
+    line-height: 1.7;
+    color: var(--color-ink);
+  }
+  .text-page-content h2 {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: clamp(20px, 2vw, 28px);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    color: var(--color-ink);
+  }
+  .text-page-content h3 {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: clamp(15px, 1.2vw, 18px);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-ink);
+  }
+  .text-page-content p {
+    margin-bottom: 1rem;
+  }
+  .text-page-content a {
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .text-page-content a:hover {
+    color: var(--color-accent);
+  }
+  .text-page-content ul {
+    list-style: disc;
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .text-page-content ul li {
+    margin-bottom: 0.25rem;
+  }
+  .text-page-content strong {
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+  .text-page-content .meta {
+    font-family: var(--font-mono);
+    font-size: 0.75em;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--color-ink-muted);
+    margin-top: 2rem;
+  }
+</style>

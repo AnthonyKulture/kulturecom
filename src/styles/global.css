@@ -1,0 +1,214 @@
+@import "tailwindcss";
+
+/* === Brand design tokens — Brutalist editorial (cream + ink) === */
+@theme {
+  /* Colors */
+  --color-bg: #efe9dc;
+  --color-bg-shade: #e6dfce;
+  --color-ink: #0b0b0b;
+  --color-ink-muted: #5a5a5a;
+  --color-ink-subtle: #8a8a8a;
+  --color-border: #d4ccba;
+
+  /* Typography */
+  --font-display:
+    "Archivo Black", system-ui, -apple-system, sans-serif;
+  --font-sans:
+    "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif:
+    "Instrument Serif", "Times New Roman", Georgia, serif;
+  --font-mono:
+    "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Easings */
+  --ease-power3: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-power2: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --container-wide: 96rem;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    font-family: var(--font-sans);
+    /* Disable rubber-band overscroll on Mac Chrome — without this, scrolling
+       past the bottom of the page causes a brief negative scroll delta, which
+       ScrollTrigger interprets as a reverse scroll and plays the pinned
+       timeline backward (Projects letter-mask shrinks back, exposing the
+       previous Services layer). Safari filters those events natively. */
+    overscroll-behavior: none;
+  }
+
+  body {
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    overscroll-behavior: none;
+  }
+
+  ::selection {
+    background: var(--color-ink);
+    color: var(--color-bg);
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: -0.04em;
+    line-height: 0.92;
+  }
+
+  .font-serif-italic {
+    font-family: var(--font-serif);
+    font-style: italic;
+  }
+
+  .font-mono {
+    font-family: var(--font-mono);
+  }
+
+  /* Initial state for arrival animation — set on the JS side */
+  .anim-hidden {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  .anim-in {
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity 0.9s var(--ease-power3),
+      transform 0.9s var(--ease-power3);
+  }
+}
+
+/* === About — dark section (inverted color scheme) === */
+[data-about] {
+  --color-bg: #0b0b0b;
+  --color-ink: #efe9dc;
+  --color-ink-muted: #a8a59c;
+  --color-ink-subtle: #6a6a64;
+  --color-border: #2a2a28;
+}
+
+/* === Mobile hero baselines + full-bleed === */
+.baseline-divider {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: color-mix(in srgb, var(--color-ink) 22%, transparent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.6s var(--ease-power3);
+  margin: clamp(6px, 1.5vw, 14px) 0;
+  will-change: transform;
+}
+.baseline-divider.is-drawn {
+  transform: scaleX(1);
+}
+
+.full-bleed-mobile {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+@media (min-width: 640px) {
+  .full-bleed-mobile {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+/* === Letter-mask reveal (Projects layer transition) ===
+   A giant `+` glyph acts as a CSS mask: the layer is only visible inside the
+   letter shape. Animating mask-size from 0% to a huge value (via GSAP) makes
+   the `+` grow from the center and "engulf" the viewport, progressively
+   revealing the section beneath. */
+.letter-mask {
+  --mask-svg: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text x='50' y='78' text-anchor='middle' font-family='Archivo Black, sans-serif' font-size='90' font-weight='900' fill='white'>%2B</text></svg>");
+  -webkit-mask-image: var(--mask-svg);
+  mask-image: var(--mask-svg);
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 0%;
+  mask-size: 0%;
+  will-change: mask-size, -webkit-mask-size;
+}
+
+/* === Preloader === */
+.preloader {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 0.7s var(--ease-power3);
+  will-change: clip-path;
+}
+.preloader--exit {
+  clip-path: inset(50% 0 50% 0);
+  pointer-events: none;
+}
+
+/* Marquees inside preloader (and reusable elsewhere) */
+.marquee__track {
+  animation: marquee-scroll 22s linear infinite;
+  will-change: transform;
+}
+.marquee__track--reverse {
+  animation-direction: reverse;
+}
+.marquee__track--fast {
+  animation-duration: 16s;
+}
+@keyframes marquee-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* === Word-split scroll reveal utility (mask reveal) ===
+   Titles are split into per-word spans at SSR. Each wrapper is an
+   inline-block with `overflow: hidden` that acts as a clipping mask;
+   the inner span is translated below the wrapper at initial state
+   (yPercent: 110) and rises into view as the GSAP timeline progresses.
+   Used by both About manifesto items (.about-word) and Services items
+   (.split-word) — same behaviour, different parent contexts. Title
+   line-height ≥ 1.15 gives enough vertical room for descenders (p, g, j). */
+.about-word,
+.split-word {
+  display: inline-block;
+  vertical-align: top;
+  overflow: hidden;
+}
+.about-word-inner,
+.split-word-inner {
+  display: inline-block;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .marquee__track {
+    animation: none !important;
+  }
+}

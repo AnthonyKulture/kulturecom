@@ -1,0 +1,140 @@
+---
+import type { Lang } from "~/i18n/ui";
+import { ui } from "~/i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = ui[lang];
+
+const homeHref = lang === "fr" ? "/" : "/en/";
+const aboutHref = lang === "fr" ? "/a-propos/" : "/en/about/";
+const legalMentionsHref = lang === "fr" ? "/mentions-legales/" : "/en/legal-notice/";
+const privacyHref = lang === "fr" ? "/confidentialite/" : "/en/privacy/";
+
+// External profile URLs — replace with real ones once available.
+const linkedinUrl = "https://www.linkedin.com/in/anthony-profit/";
+const githubUrl = "https://github.com/anthony-profit";
+const behanceUrl = "https://www.behance.net/anthony-profit";
+---
+
+<footer
+  data-site-footer
+  class="relative bg-[#0b0b0b] text-[#efe9dc] px-4 pt-16 pb-10 sm:px-6 sm:pt-20 sm:pb-12 md:px-12 md:pt-24 md:pb-14"
+  aria-label="Pied de page"
+>
+  <div class="mx-auto w-full max-w-[var(--container-wide)]">
+    <!-- Tagline / brand reminder -->
+    <p
+      class="font-display text-[clamp(28px,5vw,72px)] uppercase leading-[0.95] tracking-[-0.03em] max-w-[20ch]"
+    >
+      {t.footer.tagline}
+    </p>
+
+    <!-- Columns: site / contact / social / legal -->
+    <div class="mt-12 grid grid-cols-2 gap-8 sm:mt-16 sm:grid-cols-4 sm:gap-12">
+      <!-- Site -->
+      <section>
+        <p class="font-mono mb-3 text-[11px] uppercase tracking-[0.18em] text-[#8a8a8a]">
+          {t.footer["site.label"]}
+        </p>
+        <ul class="flex flex-col gap-2">
+          <li>
+            <a
+              href={homeHref}
+              class="font-sans text-[clamp(14px,1.2vw,16px)] text-[#efe9dc] no-underline hover:underline underline-offset-4"
+              >{t.footer["site.home"]}</a
+            >
+          </li>
+          <li>
+            <a
+              href={aboutHref}
+              class="font-sans text-[clamp(14px,1.2vw,16px)] text-[#efe9dc] no-underline hover:underline underline-offset-4"
+              >{t.footer["site.about"]}</a
+            >
+          </li>
+        </ul>
+      </section>
+
+      <!-- Contact -->
+      <section>
+        <p class="font-mono mb-3 text-[11px] uppercase tracking-[0.18em] text-[#8a8a8a]">
+          {t.footer["contact.label"]}
+        </p>
+        <a
+          href={`mailto:${t.footer["contact.email"]}?subject=${encodeURIComponent(t.nav["cta.subject"])}`}
+          class="font-sans text-[clamp(15px,1.4vw,18px)] text-[#efe9dc] no-underline hover:underline underline-offset-4"
+          >{t.footer["contact.email"]}</a
+        >
+      </section>
+
+      <!-- Social -->
+      <section>
+        <p class="font-mono mb-3 text-[11px] uppercase tracking-[0.18em] text-[#8a8a8a]">
+          {t.footer["social.label"]}
+        </p>
+        <ul class="flex flex-col gap-2">
+          <li>
+            <a
+              href={linkedinUrl}
+              rel="noopener"
+              target="_blank"
+              class="font-sans text-[clamp(14px,1.2vw,16px)] text-[#efe9dc] no-underline hover:underline underline-offset-4"
+              >{t.footer.linkedin} ↗</a
+            >
+          </li>
+          <li>
+            <a
+              href={githubUrl}
+              rel="noopener"
+              target="_blank"
+              class="font-sans text-[clamp(14px,1.2vw,16px)] text-[#efe9dc] no-underline hover:underline underline-offset-4"
+              >{t.footer.github} ↗</a
+            >
+          </li>
+          <li>
+            <a
+              href={behanceUrl}
+              rel="noopener"
+              target="_blank"
+              class="font-sans text-[clamp(14px,1.2vw,16px)] text-[#efe9dc] no-underline hover:underline underline-offset-4"
+              >{t.footer.behance} ↗</a
+            >
+          </li>
+        </ul>
+      </section>
+
+      <!-- Legal -->
+      <section>
+        <p class="font-mono mb-3 text-[11px] uppercase tracking-[0.18em] text-[#8a8a8a]">
+          {t.footer["legal.label"]}
+        </p>
+        <ul class="flex flex-col gap-2">
+          <li>
+            <a
+              href={legalMentionsHref}
+              class="font-sans text-[clamp(14px,1.2vw,16px)] text-[#efe9dc] no-underline hover:underline underline-offset-4"
+              >{t.footer["legal.mentions"]}</a
+            >
+          </li>
+          <li>
+            <a
+              href={privacyHref}
+              class="font-sans text-[clamp(14px,1.2vw,16px)] text-[#efe9dc] no-underline hover:underline underline-offset-4"
+              >{t.footer["legal.privacy"]}</a
+            >
+          </li>
+        </ul>
+      </section>
+    </div>
+
+    <!-- Bottom bar : copyright + horizontal rule -->
+    <div class="mt-12 border-t border-[#2a2a28] pt-6 sm:mt-16">
+      <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-[#6a6a64]">
+        {t.footer.copyright}
+      </p>
+    </div>
+  </div>
+</footer>

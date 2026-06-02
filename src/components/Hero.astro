@@ -1,0 +1,208 @@
+---
+import type { Lang } from "~/i18n/ui";
+import { ui } from "~/i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = ui[lang];
+
+const slideSources = Array.from({ length: 20 }, (_, i) =>
+  `/hero-slides/slide-${String(i + 1).padStart(2, "0")}.webp`
+);
+---
+
+<section
+  data-hero
+  class="relative flex min-h-[100dvh] flex-col justify-center overflow-hidden px-4 py-20 sm:items-center sm:px-6 md:px-12 md:py-16"
+>
+  <!-- ========== MOBILE LAYOUT (< 640px) ========== -->
+  <div class="mobile-hero block w-full sm:hidden">
+    <h1 class="font-display w-full text-left">
+      <span
+        data-anim-line
+        class="anim-hidden block text-[clamp(56px,16vw,88px)]"
+        >{t.hero.line1}</span
+      >
+      <span
+        data-baseline
+        class="baseline-divider"
+        role="presentation"
+        aria-hidden="true"
+      ></span>
+
+      <span
+        data-anim-line
+        class="anim-hidden block text-[clamp(36px,9.5vw,48px)]"
+        >{t.hero.line2}</span
+      >
+      <span
+        data-baseline
+        class="baseline-divider"
+        role="presentation"
+        aria-hidden="true"
+      ></span>
+
+      <span
+        data-anim-line
+        class="anim-hidden block text-[clamp(50px,14vw,76px)]"
+        >{t.hero.line3}</span
+      >
+      <span
+        data-baseline
+        class="baseline-divider"
+        role="presentation"
+        aria-hidden="true"
+      ></span>
+
+      <span
+        data-anim-line
+        class="anim-hidden block text-[clamp(24px,6.5vw,32px)]"
+        >{t.hero.line4}</span
+      >
+      <span
+        data-baseline
+        class="baseline-divider"
+        role="presentation"
+        aria-hidden="true"
+      ></span>
+    </h1>
+
+    <!-- Full-bleed image carousel -->
+    <figure
+      data-anim-figure
+      class="anim-hidden full-bleed-mobile mt-8 aspect-[4/5] overflow-hidden"
+    >
+      <img
+        data-carousel-img-mobile
+        src={slideSources[0]}
+        alt="Anthony Profit — freelance design, digital experience, SEO & GEO"
+        width="500"
+        height="625"
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
+        class="block h-full w-full object-cover"
+      />
+      <figcaption class="sr-only">{t.hero["label.showreel"]}</figcaption>
+    </figure>
+
+    <!-- Showreel label sous l'image -->
+    <p
+      data-anim-figcap
+      class="anim-hidden mt-3 flex items-center gap-2 text-[var(--color-ink)]"
+    >
+      <span class="font-display text-[20px] leading-none">*</span>
+      <span class="font-serif-italic text-[16px] leading-none">
+        {t.hero["label.showreel"]}
+      </span>
+    </p>
+  </div>
+
+  <!-- ========== TABLET / DESKTOP LAYOUT (≥ 640px) ==========
+       NOTE: This visual variant is a <div> (not <h1>) to avoid having two H1
+       tags in the rendered HTML. The mobile <h1> above is the canonical SEO
+       heading (Google indexes mobile-first). Desktop screen readers still get
+       the page heading via the mobile <h1> which is in the DOM regardless of
+       viewport — only its visual display is gated by `sm:hidden`. -->
+  <div
+    data-hero-desktop-title
+    role="presentation"
+    class="font-display relative z-10 hidden w-full max-w-[var(--container-wide)] sm:mx-auto sm:block sm:text-center"
+  >
+    <span
+      data-anim-line
+      class="anim-hidden block text-[clamp(48px,10vw,180px)]"
+      >{t.hero.line1}</span
+    >
+    <span
+      data-anim-line
+      class="anim-hidden block text-[clamp(36px,8vw,140px)]"
+      >{t.hero.line2}</span
+    >
+
+    <span
+      class="my-2 flex items-center justify-center gap-[clamp(8px,2vw,32px)] text-[clamp(28px,4.5vw,72px)] md:my-3"
+    >
+      <span data-anim-inline class="anim-hidden inline-block">*</span>
+      <span
+        data-anim-inline
+        class="anim-hidden inline-flex items-center gap-[clamp(6px,1vw,18px)]"
+      >
+        <span aria-hidden="true">(</span>
+        <span class="img-frame inline-block aspect-[4/5] h-[0.95em] overflow-hidden align-middle">
+          <img
+            data-carousel-img
+            src={slideSources[0]}
+            alt=""
+            width="400"
+            height="500"
+            loading="eager"
+            decoding="async"
+            class="block h-full w-full object-cover"
+            aria-hidden="true"
+          />
+        </span>
+        <span aria-hidden="true">)</span>
+      </span>
+      <span
+        data-anim-inline
+        class="anim-hidden font-serif-italic text-[0.6em] font-normal normal-case tracking-normal text-[var(--color-ink)] inline-block"
+        >{t.hero["label.showreel"]}</span
+      >
+    </span>
+
+    <span
+      data-anim-line
+      class="anim-hidden block text-[clamp(48px,10vw,180px)]"
+      >{t.hero.line3}</span
+    >
+    <span
+      data-anim-line
+      class="anim-hidden block text-[clamp(28px,6vw,108px)]"
+      >{t.hero.line4}</span
+    >
+  </div>
+
+  <!-- H2 subtitle — positioning + offer explainer, visible on both viewports.
+       Placed in flow after both H1 blocks; on mobile renders after the figure
+       carousel (mobile-hero block flows above), on desktop after the centered
+       H1 (the mobile block is hidden via sm:hidden, so subtitle follows the
+       desktop title visually). -->
+  <p
+    data-anim-inline
+    data-hero-subtitle
+    class="anim-hidden font-sans mt-6 text-[clamp(15px,1.8vw,22px)] leading-[1.45] text-[var(--color-ink-muted)] sm:mx-auto sm:mt-8 sm:max-w-[clamp(20rem,52vw,42rem)] sm:text-center md:mt-10"
+  >
+    {t.hero.subtitle}
+  </p>
+
+  <!-- Side italic label — hidden on mobile, original left placement on md+ -->
+  <span
+    data-anim-inline
+    class="anim-hidden font-serif-italic absolute top-1/2 hidden -translate-y-1/2 text-[clamp(13px,1.2vw,18px)] text-[var(--color-ink)] md:left-8 md:block lg:left-12"
+    >{t.hero["label.side"]}</span
+  >
+
+  <!-- Bottom tagline — web/SEO/GEO positioning -->
+  <span
+    data-anim-inline
+    class="anim-hidden font-mono absolute bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)] sm:bottom-6 sm:text-[11px] sm:tracking-[0.2em]"
+    >{t.hero["label.tagline"]}</span
+  >
+
+  <!-- Carousel sources for JS -->
+  <script
+    type="application/json"
+    data-carousel-sources
+    is:inline
+    set:html={JSON.stringify(slideSources)}
+  />
+</section>
+
+<script>
+  import { initHero } from "~/lib/hero";
+  initHero();
+</script>

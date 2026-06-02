@@ -1,0 +1,150 @@
+---
+import type { Lang } from "~/i18n/ui";
+import { ui } from "~/i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = ui[lang];
+
+// Display order: Surly → Eden Rock → Sun Beach House → Royal Yacht → Vaulk.
+const items = [
+  {
+    title: t.projects["project1.title"],
+    client: t.projects["project1.client"],
+    tag: t.projects["project1.tag"],
+    problem: t.projects["project1.problem"],
+    summary: t.projects["project1.summary"],
+    metric: t.projects["project1.metric"],
+    image: "/hero-slides/surly-superman.webp",
+    num: "01",
+  },
+  {
+    title: t.projects["project5.title"],
+    client: t.projects["project5.client"],
+    tag: t.projects["project5.tag"],
+    problem: t.projects["project5.problem"],
+    summary: t.projects["project5.summary"],
+    metric: t.projects["project5.metric"],
+    image: "/hero-slides/eden-rock.webp",
+    num: "02",
+  },
+  {
+    title: t.projects["project3.title"],
+    client: t.projects["project3.client"],
+    tag: t.projects["project3.tag"],
+    problem: t.projects["project3.problem"],
+    summary: t.projects["project3.summary"],
+    metric: t.projects["project3.metric"],
+    image: "/hero-slides/sunbeachhouse.webp",
+    num: "03",
+  },
+  {
+    title: t.projects["project4.title"],
+    client: t.projects["project4.client"],
+    tag: t.projects["project4.tag"],
+    problem: t.projects["project4.problem"],
+    summary: t.projects["project4.summary"],
+    metric: t.projects["project4.metric"],
+    image: "/hero-slides/royal-yacht.avif",
+    num: "04",
+  },
+  {
+    title: t.projects["project2.title"],
+    client: t.projects["project2.client"],
+    tag: t.projects["project2.tag"],
+    problem: t.projects["project2.problem"],
+    summary: t.projects["project2.summary"],
+    metric: t.projects["project2.metric"],
+    image: "/hero-slides/vaulk.webp",
+    video: "https://fabulous-event-3b100f58f8.media.strapiapp.com/header_desktop_video_v2_59a6bf4363.webm",
+    num: "05",
+  },
+];
+---
+
+<section
+  data-projects-mobile
+  class="relative bg-[#efe9dc] px-4 pt-10 pb-16"
+  aria-label={t.projects.eyebrow}
+>
+  {/* Mobile section header — eyebrow + H2, same i18n keys as desktop. */}
+  <header class="mb-10">
+    <p class="font-mono mb-3 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[#5a5a5a]">
+      <span class="inline-block h-px w-6 bg-[var(--color-accent,#c14a1d)]"></span>
+      {t.projects.eyebrow}
+    </p>
+    <h2 class="font-display text-[clamp(28px,8vw,44px)] uppercase leading-[0.95] tracking-[-0.04em] text-[#0b0b0b]">
+      <span class="block">{t.projects["title.line1"]}</span>
+      <span class="block">{t.projects["title.line2"]}</span>
+    </h2>
+  </header>
+
+  <ul class="flex flex-col gap-12">
+    {
+      items.map((p) => (
+        <li data-project-card-mobile class="flex flex-col">
+          <div class="relative aspect-[4/5] overflow-hidden">
+            {p.video ? (
+              <video
+                src={p.video}
+                poster={p.image}
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="metadata"
+                aria-label={`${p.title} — ${p.tag}`}
+                class="absolute inset-0 block h-full w-full object-cover"
+              />
+            ) : (
+              <img
+                src={p.image}
+                alt={`${p.title} — ${p.tag}`}
+                width="500"
+                height="625"
+                loading="lazy"
+                class="absolute inset-0 block h-full w-full object-cover"
+              />
+            )}
+            <span class="font-mono absolute left-2 top-2 rounded-sm bg-[#efe9dc]/90 px-1.5 py-0.5 text-[10px] uppercase tracking-[0.18em] text-[#0b0b0b]">
+              {p.num}
+            </span>
+
+            {/* Result stamp — always visible bottom-right */}
+            <div class="font-mono absolute bottom-2 right-2 inline-flex items-center gap-1.5 bg-[#0b0b0b] px-2 py-1 text-[10px] uppercase leading-tight tracking-[0.14em] text-[#efe9dc] max-w-[calc(100%-1rem)]">
+              <span aria-hidden="true" class="inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-accent,#c14a1d)] shrink-0"></span>
+              <span class="truncate">{p.metric}</span>
+            </div>
+          </div>
+
+          {/* Title + tag */}
+          <div class="mt-3 flex items-baseline justify-between gap-3">
+            <h3 class="font-sans text-[18px] font-medium tracking-[-0.02em] text-[#0b0b0b]">
+              {p.title}
+            </h3>
+            <span class="font-mono shrink-0 text-[10px] uppercase tracking-[0.16em] text-[#7a7a7a]">
+              {p.tag}
+            </span>
+          </div>
+          <p class="mt-1 text-[12px] text-[#5a5a5a]">{p.client}</p>
+
+          {/* Case study mini-narrative — problem italic + solution */}
+          <p class="font-serif-italic mt-3 text-[15px] leading-snug text-[#0b0b0b]">
+            {p.problem}
+          </p>
+          <p class="mt-1.5 text-[13px] leading-relaxed text-[#5a5a5a]">
+            {p.summary}
+          </p>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<script>
+  import { initProjectsMobile } from "~/lib/projects-mobile";
+  initProjectsMobile();
+</script>

@@ -1,0 +1,50 @@
+---
+import type { Lang } from "~/i18n/ui";
+import { ui } from "~/i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = ui[lang];
+---
+
+<section
+  data-projects-mobile-cover-panel
+  class="relative flex h-full min-h-[100dvh] flex-col justify-between overflow-hidden bg-[#efe9dc] px-5 pt-10 pb-10"
+  aria-label={t.projects.eyebrow}
+>
+  <!-- Top : eyebrow + count -->
+  <header class="flex items-start justify-between gap-4 shrink-0">
+    <p class="font-mono inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[#5a5a5a]">
+      <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
+      {t.projects.eyebrow}
+    </p>
+    <p class="font-mono text-right text-[11px] uppercase tracking-[0.18em] text-[#7a7a7a]">
+      05 / {t.projects["count.label"]}
+    </p>
+  </header>
+
+  <!-- Center : oversized display title, brutalist editorial -->
+  <div class="flex flex-1 items-center">
+    <h2
+      class="font-display text-[clamp(48px,14vw,96px)] uppercase leading-[0.92] tracking-[-0.04em] text-[#0b0b0b]"
+    >
+      <span class="block">{t.projects["title.line1"]}</span>
+      <span class="block">{t.projects["title.line2"]}</span>
+    </h2>
+  </div>
+
+  <!-- Bottom : geometric accent + hint -->
+  <div class="flex items-end justify-between gap-4 shrink-0">
+    <span
+      class="font-display text-[clamp(40px,12vw,72px)] leading-none text-[var(--color-accent)]"
+      aria-hidden="true"
+      >+</span
+    >
+    <p class="font-serif-italic text-[clamp(14px,3.5vw,18px)] text-[#5a5a5a]">
+      scroll ↓
+    </p>
+  </div>
+</section>

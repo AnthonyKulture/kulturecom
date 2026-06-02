@@ -1,0 +1,82 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import Nav from "~/components/Nav.astro";
+import Hero from "~/components/Hero.astro";
+import About from "~/components/About.astro";
+import AboutChapter from "~/components/AboutChapter.astro";
+import Services from "~/components/Services.astro";
+import ServicesMobile from "~/components/ServicesMobile.astro";
+import Projects from "~/components/Projects.astro";
+import ProjectsMobile from "~/components/ProjectsMobile.astro";
+import ProjectsMobileCover from "~/components/ProjectsMobileCover.astro";
+import CTA from "~/components/CTA.astro";
+import type { Lang } from "~/i18n/ui";
+
+const lang: Lang = "en";
+---
+
+<BaseLayout lang={lang} pathname="/en/">
+  <Nav lang={lang} altLang="fr" altLangPath="/" />
+  <main>
+    <div
+      data-screen-stack
+      class="relative isolate h-[100dvh] overflow-hidden"
+    >
+      <div data-screen-layer="hero" class="absolute inset-0 z-10">
+        <Hero lang={lang} />
+      </div>
+      <div data-screen-layer="about" class="absolute inset-0 z-20 opacity-0">
+        <About lang={lang} />
+      </div>
+      <div
+        data-screen-layer="about2"
+        class="absolute inset-0 z-[22]"
+        style="clip-path: inset(50% 0 50% 0);"
+      >
+        <AboutChapter lang={lang} variant="light" chapterKey="about2" />
+      </div>
+      <div
+        data-screen-layer="services"
+        class="absolute inset-0 z-30 hidden sm:block"
+        style="clip-path: circle(0% at 100% 100%);"
+      >
+        <Services lang={lang} />
+      </div>
+      <div
+        data-screen-layer="projects"
+        class="letter-mask absolute inset-0 z-40 hidden sm:block"
+      >
+        <Projects lang={lang} />
+      </div>
+
+      <!-- Mobile-only layers (sm:hidden) — same z stack as desktop counterparts -->
+      <div
+        data-screen-layer="services-mobile"
+        class="absolute inset-0 z-30 sm:hidden"
+        style="clip-path: circle(0% at 100% 100%);"
+      >
+        <ServicesMobile lang={lang} />
+      </div>
+      <div
+        data-screen-layer="projects-mobile-cover"
+        class="absolute inset-0 z-40 sm:hidden"
+        style="transform: translateY(100%); will-change: transform;"
+      >
+        <ProjectsMobileCover lang={lang} />
+      </div>
+    </div>
+
+    <!-- Mobile-only Projects detail list (after stack, normal flow) -->
+    <div class="sm:hidden">
+      <ProjectsMobile lang={lang} />
+    </div>
+
+    <!-- Final CTA section (after pin ends, normal flow, before footer) -->
+    <CTA lang={lang} />
+  </main>
+
+  <script>
+    import { initAboutScroll } from "~/lib/about-scroll";
+    initAboutScroll();
+  </script>
+</BaseLayout>

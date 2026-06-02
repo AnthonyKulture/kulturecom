@@ -1,0 +1,156 @@
+---
+import type { Lang } from "~/i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+// Words for marquees
+const words = ["Web", "SEO", "Design", "Brand", "Dev"];
+// Repeat enough to fill 2x viewport, ensuring seamless infinite scroll
+const marqueeWords = Array.from({ length: 8 }, () => words).flat();
+
+const slideSources = Array.from(
+  { length: 20 },
+  (_, i) => `/hero-slides/slide-${String(i + 1).padStart(2, "0")}.webp`
+);
+---
+
+<div
+  id="preloader"
+  class="preloader fixed inset-0 z-[100] flex flex-col overflow-hidden bg-[var(--color-bg)]"
+  aria-busy="true"
+  aria-label={lang === "fr" ? "Chargement" : "Loading"}
+  role="status"
+>
+  <!-- TOP MARQUEE -->
+  <div
+    class="marquee marquee--top relative flex shrink-0 items-center overflow-hidden border-b border-[var(--color-border)] py-3"
+    aria-hidden="true"
+  >
+    <div class="marquee__track flex items-center gap-[clamp(20px,3vw,48px)] whitespace-nowrap pr-[clamp(20px,3vw,48px)]">
+      {
+        [...marqueeWords, ...marqueeWords].map((w) => (
+          <span class="font-display text-[clamp(20px,2.4vw,36px)] uppercase leading-none text-[var(--color-ink)]">
+            {w}
+            <span class="ml-[clamp(20px,3vw,48px)] inline-block align-middle opacity-40">·</span>
+          </span>
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- MAIN AREA -->
+  <div class="relative flex-1 overflow-hidden">
+    <!-- Top-left label -->
+    <span
+      class="font-mono absolute left-4 top-4 text-[10px] uppercase tracking-[0.16em] text-[var(--color-ink-muted)] sm:left-6 sm:top-6 sm:text-[11px] sm:tracking-[0.18em] md:left-12 md:top-12"
+    >
+      {lang === "fr" ? "Chargement" : "Loading"}
+    </span>
+
+    <!-- Top-right SVG (cycling) -->
+    <div
+      class="absolute right-4 top-4 aspect-[4/5] w-[44px] overflow-hidden sm:right-6 sm:top-6 sm:w-[clamp(60px,8vw,110px)] md:right-12 md:top-12"
+      aria-hidden="true"
+    >
+      <img
+        data-preloader-slide
+        data-cycle-offset="0"
+        src={slideSources[0]}
+        alt=""
+        width="200"
+        height="250"
+        class="block h-full w-full object-cover"
+      />
+    </div>
+
+    <!-- Mid-left SVG — hidden on mobile to avoid overlap with center counter -->
+    <div
+      class="absolute left-6 top-1/2 hidden aspect-[4/5] w-[clamp(70px,9vw,120px)] -translate-y-1/2 overflow-hidden md:left-12 md:block"
+      aria-hidden="true"
+    >
+      <img
+        data-preloader-slide
+        data-cycle-offset="2"
+        src={slideSources[2]}
+        alt=""
+        width="200"
+        height="250"
+        class="block h-full w-full object-cover"
+      />
+    </div>
+
+    <!-- Mid-right SVG — hidden on mobile -->
+    <div
+      class="absolute right-6 top-1/2 hidden aspect-[4/5] w-[clamp(70px,9vw,120px)] -translate-y-1/2 overflow-hidden md:right-12 md:block"
+      aria-hidden="true"
+    >
+      <img
+        data-preloader-slide
+        data-cycle-offset="4"
+        src={slideSources[4]}
+        alt=""
+        width="200"
+        height="250"
+        class="block h-full w-full object-cover"
+      />
+    </div>
+
+    <!-- Center HUGE percentage -->
+    <div class="absolute inset-0 flex items-center justify-center px-4">
+      <span
+        class="font-display tabular-nums leading-none text-[clamp(96px,30vw,360px)] text-[var(--color-ink)]"
+      >
+        <span data-preloader-counter>0</span><span class="text-[0.5em] align-top">%</span>
+      </span>
+    </div>
+
+    <!-- Bottom-left SVG -->
+    <div
+      class="absolute bottom-4 left-4 aspect-[4/5] w-[44px] overflow-hidden sm:bottom-6 sm:left-6 sm:w-[clamp(60px,8vw,110px)] md:bottom-12 md:left-12"
+      aria-hidden="true"
+    >
+      <img
+        data-preloader-slide
+        data-cycle-offset="6"
+        src={slideSources[6]}
+        alt=""
+        width="200"
+        height="250"
+        class="block h-full w-full object-cover"
+      />
+    </div>
+
+    <!-- Bottom-right label -->
+    <span
+      class="font-mono absolute bottom-4 right-4 text-[10px] uppercase tracking-[0.16em] text-[var(--color-ink-muted)] sm:bottom-6 sm:right-6 sm:text-[11px] sm:tracking-[0.18em] md:bottom-12 md:right-12"
+    >
+      anthony.profit / 2026
+    </span>
+  </div>
+
+  <!-- BOTTOM MARQUEE (reverse direction) -->
+  <div
+    class="marquee marquee--bottom relative flex shrink-0 items-center overflow-hidden border-t border-[var(--color-border)] py-3"
+    aria-hidden="true"
+  >
+    <div class="marquee__track marquee__track--reverse flex items-center gap-[clamp(20px,3vw,48px)] whitespace-nowrap pr-[clamp(20px,3vw,48px)]">
+      {
+        [...marqueeWords, ...marqueeWords].map((w) => (
+          <span class="font-serif-italic text-[clamp(18px,2vw,32px)] lowercase leading-none text-[var(--color-ink)]">
+            {w}
+            <span class="ml-[clamp(20px,3vw,48px)] inline-block align-middle opacity-40">·</span>
+          </span>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<script>
+  import { initPreloader } from "~/lib/preloader";
+  initPreloader();
+</script>

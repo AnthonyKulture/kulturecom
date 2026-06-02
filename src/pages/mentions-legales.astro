@@ -1,0 +1,76 @@
+---
+import TextPageLayout from "~/layouts/TextPageLayout.astro";
+
+const lang = "fr" as const;
+---
+
+<TextPageLayout
+  lang={lang}
+  title="Mentions légales"
+  pathname="/mentions-legales/"
+  altLang="en"
+  altLangPath="/en/legal-notice/"
+>
+  <h2>Éditeur du site</h2>
+  <p>
+    Le site <strong>anthonyprofit.com</strong> est édité par :
+  </p>
+  <ul>
+    <li><strong>Anthony Profit</strong> — Entrepreneur individuel</li>
+    <li>Adresse : <em>À compléter</em></li>
+    <li>SIRET : <em>À compléter</em></li>
+    <li>Code APE : <em>À compléter</em></li>
+    <li>Numéro de TVA intracommunautaire : <em>À compléter (le cas échéant)</em></li>
+    <li>Email : <a href="mailto:hello@anthonyprofit.com">hello@anthonyprofit.com</a></li>
+  </ul>
+  <p>Directeur de la publication : Anthony Profit.</p>
+
+  <h2>Hébergement</h2>
+  <p>
+    Le site est hébergé par :
+  </p>
+  <ul>
+    <li><strong>Vercel Inc.</strong></li>
+    <li>440 N Barranca Ave #4133, Covina, CA 91723, USA</li>
+    <li>Site : <a href="https://vercel.com" rel="noopener" target="_blank">vercel.com</a></li>
+  </ul>
+
+  <h2>Propriété intellectuelle</h2>
+  <p>
+    L'ensemble du contenu du site (textes, graphismes, logos, icônes, images, photographies, vidéos,
+    code) est la propriété exclusive d'Anthony Profit ou des partenaires l'ayant autorisé à les
+    utiliser. Toute reproduction, représentation, modification, publication, transmission ou
+    dénaturation, totale ou partielle, du site ou de son contenu, sans autorisation écrite
+    préalable, est interdite et constitue une contrefaçon sanctionnée par les articles L.335-2 et
+    suivants du Code de la propriété intellectuelle.
+  </p>
+
+  <h2>Données personnelles</h2>
+  <p>
+    Le traitement des données personnelles est régi par notre
+    <a href="/confidentialite/">politique de confidentialité</a>, conforme au Règlement Général sur
+    la Protection des Données (RGPD) et à la loi Informatique et Libertés modifiée.
+  </p>
+
+  <h2>Cookies</h2>
+  <p>
+    Ce site n'utilise aucun cookie de tracking ou publicitaire. Voir la
+    <a href="/confidentialite/">politique de confidentialité</a> pour plus de détails.
+  </p>
+
+  <h2>Responsabilité</h2>
+  <p>
+    Anthony Profit s'efforce d'assurer l'exactitude et la mise à jour des informations diffusées
+    sur ce site. Toutefois, il ne peut garantir l'absence d'erreurs ou d'omissions, ni la
+    disponibilité permanente du site. Les liens externes pointant vers d'autres sites n'engagent
+    pas la responsabilité d'Anthony Profit quant à leur contenu.
+  </p>
+
+  <h2>Loi applicable et juridiction</h2>
+  <p>
+    Les présentes mentions légales sont régies par le droit français. En cas de litige et à défaut
+    de résolution amiable, les tribunaux français seront seuls compétents.
+  </p>
+
+  <p class="meta">Dernière mise à jour : juin 2026</p>
+</TextPageLayout>

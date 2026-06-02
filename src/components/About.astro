@@ -1,0 +1,142 @@
+---
+import type { Lang } from "~/i18n/ui";
+import { ui } from "~/i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = ui[lang];
+
+const words = ["Web", "SEO", "Design", "Brand", "Dev", "Code", "Strategy"];
+const marqueeWords = Array.from({ length: 8 }, () => words).flat();
+
+const slideSources = Array.from(
+  { length: 20 },
+  (_, i) => `/hero-slides/slide-${String(i + 1).padStart(2, "0")}.webp`
+);
+
+const items = [1, 2, 3, 4, 5] as const;
+type ItemNum = (typeof items)[number];
+const itemKey = (n: ItemNum, k: "title" | "desc") =>
+  `item${n}.${k}` as `item${ItemNum}.${"title" | "desc"}`;
+---
+
+<section
+  data-about
+  class="relative flex h-full min-h-[100dvh] flex-col overflow-hidden bg-[var(--color-bg)]"
+  aria-label={t.about.eyebrow}
+>
+  <!-- MIDDLE: about text + top-right cycling SVG patterns -->
+  <div class="relative flex flex-1 items-center px-4 pb-6 sm:px-6 sm:pb-0 md:px-12">
+    <!-- Cycling SVG pattern (top-right) -->
+    <div
+      class="absolute right-3 top-3 aspect-square w-[clamp(56px,9vw,128px)] overflow-hidden sm:right-5 sm:top-5 md:right-8 md:top-8"
+      aria-hidden="true"
+    >
+      <img
+        data-about-pattern
+        src="/patterns/pattern-01.svg"
+        alt=""
+        width="200"
+        height="200"
+        class="block h-full w-full"
+      />
+    </div>
+
+    <!-- About text -->
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <p
+        data-about-line
+        class="font-mono mb-5 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)] sm:mb-12"
+      >
+        <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
+        {t.about.eyebrow}
+      </p>
+
+      <ol class="about-items flex flex-col gap-[1.1rem] text-[var(--color-ink)] sm:max-w-[clamp(28rem,80vw,60rem)] sm:gap-[clamp(1.5rem,3vw,2.75rem)]" role="list">
+        {items.map((n) => {
+          const titleHtml = t.about[itemKey(n, "title")]
+            .split(/\s+/)
+            .map(
+              (w) =>
+                `<span class="about-word"><span class="about-word-inner">${w}</span></span>`
+            )
+            .join(" ");
+          return (
+            <li class="about-item flex flex-col gap-[0.65rem]">
+              <span
+                class="about-item-title font-sans block text-[clamp(17px,2.4vw,32px)] font-medium uppercase leading-[1.15] tracking-[-0.02em]"
+                set:html={titleHtml}
+              />
+              <span
+                class="about-item-desc font-serif-italic block text-[clamp(15px,1.8vw,22px)] leading-[1.4] text-[var(--color-ink-muted)] text-balance"
+              >
+                {t.about[itemKey(n, "desc")]}
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+    </div>
+  </div>
+
+  <!-- BOTTOM TEXT MARQUEE (reverse) -->
+  <div
+    class="marquee relative shrink-0 overflow-hidden border-t border-[var(--color-border)] py-3"
+    aria-hidden="true"
+  >
+    <div
+      class="marquee__track marquee__track--reverse flex items-center gap-[clamp(20px,3vw,48px)] whitespace-nowrap pr-[clamp(20px,3vw,48px)]"
+    >
+      {
+        [...marqueeWords, ...marqueeWords].map((w) => (
+          <span class="font-serif-italic text-[clamp(18px,2vw,32px)] lowercase leading-none text-[var(--color-ink)]">
+            {w}
+            <span class="ml-[clamp(20px,3vw,48px)] inline-block align-middle opacity-40">·</span>
+          </span>
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- 2 parallax photos, bottom-right, asymmetric heights, opposite directions.
+       Only rendered at xl+ (≥1280px). Below that, the manifesto descriptions
+       (italic 22px, ~120 chars) wrap into the bottom-right zone and the
+       z-10 photos cover the text. xl is the first breakpoint where the
+       text-balance'd column visually leaves room for the corner cluster. -->
+  <div
+    class="pointer-events-none absolute bottom-[80px] right-5 z-10 hidden items-end gap-3 xl:flex xl:bottom-[96px] xl:right-12"
+    aria-hidden="true"
+  >
+    <!-- Photo A — moves UP on scroll (boat, ex slide-07 → now slide-05) -->
+    <div
+      data-parallax-corner
+      data-parallax-direction="up"
+      class="relative h-[180px] w-[144px] overflow-hidden sm:h-[240px] sm:w-[192px] md:h-[300px] md:w-[240px]"
+    >
+      <img
+        src={slideSources[4]}
+        alt=""
+        width="500"
+        height="625"
+        class="block h-full w-full object-cover"
+      />
+    </div>
+    <!-- Photo B — moves DOWN on scroll (house/pool, ex slide-10 → now slide-07) -->
+    <div
+      data-parallax-corner
+      data-parallax-direction="down"
+      class="relative mb-4 h-[130px] w-[104px] overflow-hidden sm:mb-7 sm:h-[180px] sm:w-[144px] md:mb-10 md:h-[220px] md:w-[176px]"
+    >
+      <img
+        src={slideSources[6]}
+        alt=""
+        width="500"
+        height="625"
+        class="block h-full w-full object-cover"
+      />
+    </div>
+  </div>
+</section>
