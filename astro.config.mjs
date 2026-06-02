@@ -3,8 +3,11 @@ import sitemap from "@astrojs/sitemap";
 import react from "@astrojs/react";
 import tailwindcss from "@tailwindcss/vite";
 
+import cloudflare from "@astrojs/cloudflare";
+
 export default defineConfig({
   site: "https://anthonyprofit.com",
+
   i18n: {
     defaultLocale: "fr",
     locales: ["fr", "en"],
@@ -12,8 +15,12 @@ export default defineConfig({
       prefixDefaultLocale: false,
     },
   },
+
   integrations: [react(), sitemap()],
+
   vite: {
     plugins: [tailwindcss()],
   },
+
+  adapter: cloudflare(),
 });
