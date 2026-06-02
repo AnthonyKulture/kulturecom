@@ -459,16 +459,16 @@ export function initAboutScroll(): void {
 
     // Parallax — photo scrolls bottom-to-top continuously across About 2.
     // Image element is 200% of section height; yPercent -45 traverses ~90%
-    // of the image. Spans 0.85 → 1.37 (duration 0.52) — animation ends at
+    // of the image. Spans 0.85 → 1.17 (duration 0.32). Animation ends at
     // the exact moment Services starts to cover About 2, so the image is
-    // in constant motion until the next transition (no dead-air plateau
-    // where scroll moves but image doesn't). Same per-tick speed as before
-    // (~87 yPercent per timeline unit), just longer range.
+    // in constant motion until the next transition (no dead-air plateau).
+    // Shortened from 0.52 to tighten the About 2 → Services transition —
+    // the parallax phase felt too long on mobile.
     if (about2ParallaxImg) {
       tl.fromTo(
         about2ParallaxImg,
         { yPercent: 0 },
-        { yPercent: -45, duration: 0.52, ease: "sine.inOut" },
+        { yPercent: -45, duration: 0.32, ease: "sine.inOut" },
         0.85
       );
     }
@@ -484,7 +484,7 @@ export function initAboutScroll(): void {
         servicesLayer,
         { clipPath: "circle(0% at 100% 100%)" },
         { clipPath: "circle(150% at 100% 100%)", duration: 0.2 },
-        1.37
+        1.17
       );
     }
 
@@ -495,7 +495,7 @@ export function initAboutScroll(): void {
     tl.to(
       servicesLines,
       { opacity: 1, y: 0, stagger: 0.04, duration: 0.16, ease: "power2.out" },
-      1.47
+      1.27
     );
     if (servicesH2Words.length > 0) {
       tl.to(
@@ -506,11 +506,11 @@ export function initAboutScroll(): void {
           duration: 0.24,
           ease: "power3.out",
         },
-        1.50
+        1.30
       );
     }
     servicesItemList.forEach((item, idx) => {
-      const itemStart = 1.58 + idx * 0.04;
+      const itemStart = 1.38 + idx * 0.04;
       const words = servicesItemTitleWords[idx];
       const body = servicesItemBodies[idx];
       tl.to(
@@ -544,7 +544,7 @@ export function initAboutScroll(): void {
       tl.to(
         servicesProgressRing,
         { strokeDashoffset: 0, duration: 0.38, ease: "none" },
-        1.86
+        1.66
       );
     }
 
@@ -559,7 +559,7 @@ export function initAboutScroll(): void {
           duration: 0.3,
           ease: "power2.out",
         },
-        2.24
+        2.04
       );
     }
   }
@@ -573,7 +573,7 @@ export function initAboutScroll(): void {
       servicesMobileLayer,
       { clipPath: "circle(0% at 100% 100%)" },
       { clipPath: "circle(150% at 100% 100%)", duration: 0.10 },
-      1.39
+      1.19
     );
 
     // Mobile Phase 4 (cont.) — Panel 0 elaborate reveal :
@@ -594,7 +594,7 @@ export function initAboutScroll(): void {
           duration: 0.22,
           ease: "power2.out",
         },
-        1.41
+        1.21
       );
     }
     if (servicesMobileFirstLabel) {
@@ -607,7 +607,7 @@ export function initAboutScroll(): void {
           duration: 0.32,
           ease: "power3.out",
         },
-        1.43
+        1.23
       );
     }
     if (servicesMobileFirstTitleWords.length > 0) {
@@ -619,7 +619,7 @@ export function initAboutScroll(): void {
           duration: 0.26,
           ease: "power3.out",
         },
-        1.47
+        1.27
       );
     }
     if (servicesMobileFirstBody) {
@@ -632,14 +632,14 @@ export function initAboutScroll(): void {
           duration: 0.24,
           ease: "power2.out",
         },
-        1.52
+        1.32
       );
     }
     if (servicesMobileFirstFooter) {
       tl.to(
         servicesMobileFirstFooter,
         { opacity: 1, y: 0, duration: 0.20, ease: "power2.out" },
-        1.55
+        1.35
       );
     }
 
@@ -651,9 +651,9 @@ export function initAboutScroll(): void {
     // to 0 lets the gaps reveal the body bg (cream) — matching services-mobile.
     const layersToHide: HTMLElement[] = [heroLayer, aboutLayer];
     if (about2Layer) layersToHide.push(about2Layer);
-    tl.to(layersToHide, { opacity: 0, duration: 0.05 }, 1.54);
+    tl.to(layersToHide, { opacity: 0, duration: 0.05 }, 1.34);
 
-    // --- Plateau 1.75 → 1.90 : Panel 0 fully revealed + still on screen ---
+    // --- Plateau 1.55 → 1.70 : Panel 0 fully revealed + still on screen ---
     // Gives the user ~95% of viewport scroll on mobile (~1 swipe) to read
     // the full label / title / body before the next crossfade starts.
 
@@ -664,42 +664,42 @@ export function initAboutScroll(): void {
     tl.to(
       axisCards[0],
       { opacity: 0, filter: "blur(10px)", duration: 0.06 },
-      1.90
+      1.70
     );
     tl.to(
       axisCards[1],
       { opacity: 1, filter: "blur(0px)", duration: 0.06 },
-      1.90
+      1.70
     );
 
-    // --- Plateau 1.96 → 2.11 : Panel 1 visible, reading breathing room ---
+    // --- Plateau 1.76 → 1.91 : Panel 1 visible, reading breathing room ---
 
     // Phase 8 — crossfade axis 1 → 2 (blur + opacity)
     tl.to(
       axisCards[1],
       { opacity: 0, filter: "blur(10px)", duration: 0.06 },
-      2.11
+      1.91
     );
     tl.to(
       axisCards[2],
       { opacity: 1, filter: "blur(0px)", duration: 0.06 },
-      2.11
+      1.91
     );
 
-    // --- Plateau 2.17 → 2.32 : Panel 2 visible, reading breathing room ---
+    // --- Plateau 1.97 → 2.12 : Panel 2 visible, reading breathing room ---
 
     // Phase 10 — push-stack (transition 2)
     // Services-mobile recedes (yPercent + scale), cover arrives from below.
     tl.to(
       servicesMobileLayer,
       { yPercent: -15, scale: 0.96, duration: 0.10, ease: "power2.in" },
-      2.32
+      2.12
     );
     tl.fromTo(
       projectsMobileCoverLayer,
       { yPercent: 100 },
       { yPercent: 0, duration: 0.10, ease: "power2.out" },
-      2.32
+      2.12
     );
   }
 
