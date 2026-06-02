@@ -20,10 +20,18 @@ const slideSources = Array.from({ length: 20 }, (_, i) =>
 >
   <!-- ========== MOBILE LAYOUT (< 640px) ========== -->
   <div class="mobile-hero block w-full sm:hidden">
+    {/* 5-line typographic mix:
+        - Line 1 "DES SITES" — small intro (Archivo Black)
+        - Line 2 "CONÇUS" — hero verb, biggest size (Archivo Black)
+        - Line 3 "pour séduire." — italic serif lowercase, editorial counterpoint
+        - Line 4 "OPTIMISÉS" — second hero verb, big (Archivo Black)
+        - Line 5 "pour être trouvé." — italic serif lowercase, closing line
+        The italic lines override the .font-display uppercase/tracking via
+        font-serif-italic + normal-case + tracking-normal + leading-tight. */}
     <h1 class="font-display w-full text-left">
       <span
         data-anim-line
-        class="anim-hidden block text-[clamp(56px,16vw,88px)]"
+        class="anim-hidden block text-[clamp(22px,6vw,34px)]"
         >{t.hero.line1}</span
       >
       <span
@@ -35,7 +43,7 @@ const slideSources = Array.from({ length: 20 }, (_, i) =>
 
       <span
         data-anim-line
-        class="anim-hidden block text-[clamp(36px,9.5vw,48px)]"
+        class="anim-hidden block text-[clamp(56px,16vw,88px)]"
         >{t.hero.line2}</span
       >
       <span
@@ -47,7 +55,7 @@ const slideSources = Array.from({ length: 20 }, (_, i) =>
 
       <span
         data-anim-line
-        class="anim-hidden block text-[clamp(50px,14vw,76px)]"
+        class="anim-hidden font-serif-italic block normal-case leading-[1.0] tracking-normal text-[clamp(32px,9vw,46px)]"
         >{t.hero.line3}</span
       >
       <span
@@ -59,8 +67,20 @@ const slideSources = Array.from({ length: 20 }, (_, i) =>
 
       <span
         data-anim-line
-        class="anim-hidden block text-[clamp(24px,6.5vw,32px)]"
+        class="anim-hidden block text-[clamp(50px,14vw,76px)]"
         >{t.hero.line4}</span
+      >
+      <span
+        data-baseline
+        class="baseline-divider"
+        role="presentation"
+        aria-hidden="true"
+      ></span>
+
+      <span
+        data-anim-line
+        class="anim-hidden font-serif-italic block normal-case leading-[1.0] tracking-normal text-[clamp(26px,7vw,36px)]"
+        >{t.hero.line5}</span
       >
       <span
         data-baseline
@@ -112,17 +132,27 @@ const slideSources = Array.from({ length: 20 }, (_, i) =>
     role="presentation"
     class="font-display relative z-10 hidden w-full max-w-[var(--container-wide)] sm:mx-auto sm:block sm:text-center"
   >
+    {/* Intro line — smaller, sets the subject "DES SITES" */}
+    <span
+      data-anim-line
+      class="anim-hidden block text-[clamp(28px,5vw,72px)]"
+      >{t.hero.line1}</span
+    >
+    {/* Hero verb 1 — biggest */}
     <span
       data-anim-line
       class="anim-hidden block text-[clamp(48px,10vw,180px)]"
-      >{t.hero.line1}</span
-    >
-    <span
-      data-anim-line
-      class="anim-hidden block text-[clamp(36px,8vw,140px)]"
       >{t.hero.line2}</span
     >
+    {/* Editorial counterpoint — italic serif lowercase */}
+    <span
+      data-anim-line
+      class="anim-hidden font-serif-italic block normal-case leading-[1.0] tracking-normal text-[clamp(36px,7.5vw,124px)]"
+      >{t.hero.line3}</span
+    >
 
+    {/* Inline visual divider: * + carousel frame + showreel label.
+        Separates the two halves of the message (design+experience vs SEO+GEO). */}
     <span
       class="my-2 flex items-center justify-center gap-[clamp(8px,2vw,32px)] text-[clamp(28px,4.5vw,72px)] md:my-3"
     >
@@ -154,15 +184,17 @@ const slideSources = Array.from({ length: 20 }, (_, i) =>
       >
     </span>
 
+    {/* Hero verb 2 — biggest */}
     <span
       data-anim-line
       class="anim-hidden block text-[clamp(48px,10vw,180px)]"
-      >{t.hero.line3}</span
+      >{t.hero.line4}</span
     >
+    {/* Editorial closing — italic serif lowercase */}
     <span
       data-anim-line
-      class="anim-hidden block text-[clamp(28px,6vw,108px)]"
-      >{t.hero.line4}</span
+      class="anim-hidden font-serif-italic block normal-case leading-[1.0] tracking-normal text-[clamp(28px,6.5vw,116px)]"
+      >{t.hero.line5}</span
     >
   </div>
 
