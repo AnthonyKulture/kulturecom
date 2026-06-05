@@ -41,18 +41,21 @@ const subtitleHtml = splitWordsWithDelay(t.hero.subtitle, 30);
     <h1 class="font-display w-full text-center">
       <span
         data-anim-line
+        data-anim-line-half="top"
         class="anim-hidden block text-[clamp(16px,4.5vw,24px)]"
         >{t.hero.line1}</span
       >
 
       <span
         data-anim-line
+        data-anim-line-half="top"
         class="anim-hidden block text-[clamp(36px,10vw,52px)]"
         >{t.hero.line2}</span
       >
 
       <span
         data-anim-line
+        data-anim-line-half="top"
         class="anim-hidden font-serif-italic block normal-case leading-[1.0] tracking-normal text-[clamp(28px,7.5vw,40px)]"
         >{t.hero.line3}</span
       >
@@ -80,12 +83,14 @@ const subtitleHtml = splitWordsWithDelay(t.hero.subtitle, 30);
 
       <span
         data-anim-line
+        data-anim-line-half="bottom"
         class="anim-hidden block text-[clamp(34px,9vw,48px)]"
         >{t.hero.line4}</span
       >
 
       <span
         data-anim-line
+        data-anim-line-half="bottom"
         class="anim-hidden font-serif-italic block normal-case leading-[1.0] tracking-normal text-[clamp(24px,6.5vw,32px)]"
         >{t.hero.line5}</span
       >
@@ -107,26 +112,31 @@ const subtitleHtml = splitWordsWithDelay(t.hero.subtitle, 30);
   >
     <span
       data-anim-line
+      data-anim-line-half="top"
       class="anim-hidden block text-[clamp(20px,3.5vw,44px)]"
       >{t.hero.line1}</span
     >
     <span
       data-anim-line
+      data-anim-line-half="top"
       class="anim-hidden block text-[clamp(40px,7vw,108px)]"
       >{t.hero.line2}</span
     >
     <span
       data-anim-line
+      data-anim-line-half="top"
       class="anim-hidden font-serif-italic block normal-case leading-[1.05] tracking-normal text-[clamp(32px,5.5vw,84px)]"
       >{t.hero.line3}</span
     >
     <span
       data-anim-line
+      data-anim-line-half="bottom"
       class="anim-hidden block text-[clamp(40px,7vw,108px)]"
       >{t.hero.line4}</span
     >
     <span
       data-anim-line
+      data-anim-line-half="bottom"
       class="anim-hidden font-serif-italic block normal-case leading-[1.05] tracking-normal text-[clamp(28px,5vw,72px)]"
       >{t.hero.line5}</span
     >
@@ -150,12 +160,24 @@ const subtitleHtml = splitWordsWithDelay(t.hero.subtitle, 30);
     >{t.hero["label.side"]}</span
   >
 
-  <!-- Bottom tagline — web/SEO/GEO positioning -->
-  <span
+  {/* Scroll-down hint — small label + thin vertical track with a 16px
+      segment that slides from top to bottom in a loop. Visually suggests
+      "scroll down" without being noisy. Decorative (aria-hidden) since
+      the scroll affordance is already conveyed by the page structure. */}
+  <div
     data-anim-inline
-    class="anim-hidden font-mono absolute bottom-5 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap text-[10px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)] sm:bottom-6 sm:text-[11px] sm:tracking-[0.2em]"
-    >{t.hero["label.tagline"]}</span
+    data-hero-scroll
+    class="anim-hidden absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2 sm:bottom-8 sm:gap-3"
+    aria-hidden="true"
   >
+    <span
+      class="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)] sm:text-[11px] sm:tracking-[0.2em]"
+      >{t.hero["label.scroll"]}</span
+    >
+    <span class="hero-scroll-bar relative block h-12 w-px overflow-hidden bg-[color-mix(in_srgb,var(--color-ink)_15%,transparent)]">
+      <span class="hero-scroll-bar__progress absolute left-0 top-0 h-4 w-full bg-[var(--color-ink)]"></span>
+    </span>
+  </div>
 
   {/* Carousel sources JSON — consumed by hero.ts to cycle the
       [data-carousel-img-mobile] image in the H1 every 1s. */}

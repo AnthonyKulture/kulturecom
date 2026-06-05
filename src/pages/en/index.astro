@@ -3,6 +3,7 @@ import BaseLayout from "~/layouts/BaseLayout.astro";
 import Nav from "~/components/Nav.astro";
 import Hero from "~/components/Hero.astro";
 import About from "~/components/About.astro";
+import AboutPortrait from "~/components/AboutPortrait.astro";
 import AboutChapter from "~/components/AboutChapter.astro";
 import Services from "~/components/Services.astro";
 import ServicesMobile from "~/components/ServicesMobile.astro";
@@ -18,19 +19,60 @@ const lang: Lang = "en";
 <BaseLayout lang={lang} pathname="/en/">
   <Nav lang={lang} altLang="fr" altLangPath="/" />
   <main id="main-content">
+    {/* Hero — wrapped in a pinned container that drives a scroll-based
+        wipe transition (see src/lib/hero-transition.ts). */}
+    <div data-hero-pin class="relative">
+      <Hero lang={lang} />
+      <img
+        data-hero-transition-image
+        src="/hero-slides/hero-image.jpeg"
+        alt=""
+        aria-hidden="true"
+        class="pointer-events-none fixed inset-0 z-30 h-full w-full object-cover"
+        style="will-change: transform, clip-path; clip-path: inset(50% 0 50% 0);"
+      />
+    </div>
+
+    {/* About — `data-about-wrapper` hook for hero-transition.ts +50vh
+        translateY initial state. Arrives at viewport top at pin end. */}
+    <div data-about-wrapper class="relative" style="z-index: 60;">
+      {/* Seam feather (couture): additive black→transparent gradient just
+          above the panel's top edge, painted over the rising blurred photo
+          so it dissolves into the dark with no hard line. Additive black
+          (not a transparent mask), so it can never expose the cream bg when
+          the image/panel overlap shrinks on fast scroll. Rides with the
+          wrapper, always at the seam. */}
+      <div
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-x-0 top-0 h-[16vh] -translate-y-full bg-gradient-to-t from-[#0b0b0b] to-transparent"
+      >
+      </div>
+      <About lang={lang} />
+    </div>
+
+    {/* Fixed portrait for the About manifesto — sibling of the wrapper (its
+        translateY transform would break position:fixed inside). Held on the
+        side (desktop) / top banner (mobile); faded in/out by about-portrait.ts. */}
+    <AboutPortrait />
+
+    {/* Pinned screen-stack — base stays CREAM (mobile push-stack blends); a
+        dark backdrop (`data-about2-dark`, z-0) behind About 2 makes its curtain
+        part from BLACK, then fades out with About 2 on mobile (about-scroll.ts,
+        0.35) before the push-stack. On desktop it's covered by About 2's photo
+        once the curtain opens. */}
     <div
       data-screen-stack
-      class="relative isolate h-[100lvh] overflow-hidden"
+      class="relative isolate h-[100lvh] overflow-hidden bg-[var(--color-bg)]"
     >
-      <div data-screen-layer="hero" class="absolute inset-0 z-10">
-        <Hero lang={lang} />
-      </div>
-      <div data-screen-layer="about" class="absolute inset-0 z-20 opacity-0">
-        <About lang={lang} />
+      <div
+        data-about2-dark
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-0 z-0 bg-[#0b0b0b]"
+      >
       </div>
       <div
         data-screen-layer="about2"
-        class="absolute inset-0 z-[22]"
+        class="absolute inset-0 z-10"
         style="clip-path: inset(50% 0 50% 0);"
       >
         <AboutChapter lang={lang} chapterKey="about2" />
@@ -77,6 +119,12 @@ const lang: Lang = "en";
 
   <script>
     import { initAboutScroll } from "~/lib/about-scroll";
+    import { initAboutReveal } from "~/lib/about-reveal";
+    import { initAboutPortrait } from "~/lib/about-portrait";
+    import { initHeroTransition } from "~/lib/hero-transition";
     initAboutScroll();
+    initAboutReveal();
+    initAboutPortrait();
+    initHeroTransition();
   </script>
 </BaseLayout>

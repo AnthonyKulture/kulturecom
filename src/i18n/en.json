@@ -49,21 +49,19 @@
     "line5": "to be found.",
     "subtitle": "Freelance designer & developer on the French Riviera. I build custom websites for creators and businesses that want to stand out, grow their traffic, and leave a lasting impression — on Google and in AI answers.",
     "label.showreel": "selection",
-    "label.side": "design · digital · seo · geo",
-    "label.tagline": "web · seo · geo — google + ai"
+    "label.side": "Creative developper SEO GEO",
+    "label.scroll": "scroll down"
   },
   "about": {
     "eyebrow": "About",
-    "item1.title": "One contact, from concept to code",
-    "item1.desc": "Design, development, search optimization: I carry your project end-to-end — no dilution, no hidden subcontracting.",
-    "item2.title": "Custom over template",
-    "item2.desc": "Every site is built for your brand, not adapted from a model. Your identity deserves better than a bought theme.",
-    "item3.title": "Beautiful isn't enough — it must perform",
-    "item3.desc": "Polished design that loads fast, converts, and lasts. Aesthetics in service of results.",
-    "item4.title": "Visible today, found tomorrow",
-    "item4.desc": "Classic SEO and generative engine optimization: your brand surfaces on Google and in AI answers.",
-    "item5.title": "Commitments kept, not promised",
-    "item5.desc": "Clear deadlines, direct communication, honesty about what works — and what won't.",
+    "item1.title": "Designer, developer and strategist — I carry your project from concept to code.",
+    "item1.desc": "I'm <em>Anthony</em>. Based on the <em>French Riviera</em>, I design and build custom websites for brands, creators and businesses that want a web experience worth remembering.",
+    "item2.title": "One point of contact, brief to launch.",
+    "item2.desc": "Design, development, SEO — all through <em>one set of hands</em>. No chain of providers, no hidden subcontracting.",
+    "item3.title": "Beautiful isn't enough: fast, effective, lasting.",
+    "item3.desc": "A slow site loses before the first word. Core Web Vitals green, <em>Lighthouse ≥ 95</em>, built to last five years. Performance and design, <em>together</em>.",
+    "item4.title": "Seen on Google. Cited by AI.",
+    "item4.desc": "Technical SEO, Schema.org, llms.txt — <em>indexed and structured</em> to be cited, not just listed. ChatGPT, Perplexity, AI Overviews: the <em>new storefront</em>.",
     "scroll": "↓ Continue"
   },
   "about2": {

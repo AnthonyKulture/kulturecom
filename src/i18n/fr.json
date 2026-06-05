@@ -49,21 +49,19 @@
     "line5": "pour être trouvé.",
     "subtitle": "Designer et développeur freelance sur la Côte d'Azur. Je conçois des sites sur-mesure pour les créateurs et les entreprises qui veulent se démarquer, gagner en trafic et marquer les esprits — sur Google comme dans les réponses des IA.",
     "label.showreel": "sélection",
-    "label.side": "design · digital · seo · geo",
-    "label.tagline": "web · seo · geo — google + ia"
+    "label.side": "Creative developper SEO GEO",
+    "label.scroll": "scroll down"
   },
   "about": {
     "eyebrow": "À propos",
-    "item1.title": "Un seul interlocuteur, du concept au code",
-    "item1.desc": "Design, développement, référencement : je porte votre projet de bout en bout, sans dilution ni sous-traitance cachée.",
-    "item2.title": "Le sur-mesure plutôt que le template",
-    "item2.desc": "Chaque site est conçu pour votre marque, pas adapté d'un modèle. Votre identité mérite mieux qu'un thème acheté.",
-    "item3.title": "Beau ne suffit pas — ça doit performer",
-    "item3.desc": "Un design soigné qui charge vite, convertit, et tient dans le temps. L'esthétique au service du résultat.",
-    "item4.title": "Visible aujourd'hui, trouvable demain",
-    "item4.desc": "SEO classique et optimisation pour les moteurs génératifs : votre marque émerge sur Google comme dans les réponses des IA.",
-    "item5.title": "Des engagements tenus, pas promis",
-    "item5.desc": "Délais clairs, communication directe, honnêteté sur ce qui marche — et sur ce qui ne marchera pas.",
+    "item1.title": "Designer et développeur freelance, je porte votre projet du concept au code.",
+    "item1.desc": "Je m'appelle <em>Anthony</em>. Installé sur la <em>Côte d'Azur</em>, je conçois et développe des sites sur-mesure pour les marques, créateurs et entreprises qui veulent une expérience web qui marque.",
+    "item2.title": "Un seul interlocuteur, du brief au lancement.",
+    "item2.desc": "Design, développement, SEO : tout passe par <em>une seule main</em>. Pas de chaîne de prestataires, pas de sous-traitance déguisée.",
+    "item3.title": "Beau ne suffit pas : rapide, efficace, durable.",
+    "item3.desc": "Un site lent perd avant le premier mot. Core Web Vitals au vert, <em>Lighthouse ≥ 95</em>, pensé pour durer cinq ans. Performance et design, <em>ensemble</em>.",
+    "item4.title": "Visible sur Google. Cité par les IA.",
+    "item4.desc": "SEO technique, Schema.org, llms.txt : <em>indexé et structuré</em> pour être cité, pas juste listé. ChatGPT, Perplexity, AI Overviews — la <em>nouvelle vitrine</em>.",
     "scroll": "↓ Continuer"
   },
   "about2": {

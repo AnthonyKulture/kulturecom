@@ -21,14 +21,24 @@ const enHref = lang === "en" ? "/en/" : altLangPath;
 ---
 
 {/* Smart nav — `fixed` so it survives scroll. mix-blend-mode: difference
-    keeps the labels readable on any section bg (cream Hero, ink About 2,
-    cream Services, etc.) without a backdrop. Show on scroll-up, hide on
-    scroll-down via the inline script below. Slide + fade transition. */}
+    with a CREAM source (`text-[var(--color-bg)]`, not white) gives PURE
+    BLACK on the cream Hero (|cream - cream| = 0) AND a near-cream tint on
+    the dark About section (|cream - ink| ≈ cream). The cream source is
+    intentional : with `text-white`, the blend resolved to rgb(16,22,35)
+    — a slight blue tint that mismatched the preloader name's handoff
+    color. Show on scroll-up, hide on scroll-down via the inline script.
+    `will-change: transform, opacity` is a GPU-layer pre-warm hint : the
+    nav is fully occluded by the Preloader (z-100) at page load, and
+    without the hint browsers may decompose its compositing layer to save
+    resources — costing a 1-2 frame paint gap when the preloader is
+    removed. The hint forces the browser to keep the layer ready, which
+    is what makes the preloader→nav swap visually continuous. */}
 <nav
   data-nav-smart
   data-hidden="false"
   class="fixed left-0 right-0 top-0 z-50 flex items-center justify-between px-4 py-4 mix-blend-difference transition-[transform,opacity] duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] data-[hidden=true]:-translate-y-full data-[hidden=true]:opacity-0 sm:px-6 md:px-12 md:py-7"
   aria-label="Navigation principale"
+  style="will-change: transform, opacity;"
 >
   {/* Brand — "Anthony" in serif italic + "PROFIT" in display caps, collés.
       Typographic contrast (editorial italic ↔ brutalist display) acts as
@@ -36,7 +46,7 @@ const enHref = lang === "en" ? "/en/" : altLangPath;
   <a
     href={homeHref}
     aria-label="Anthony Profit"
-    class="inline-flex items-baseline gap-0 text-white no-underline hover:[&>span]:underline [&>span]:underline-offset-4"
+    class="inline-flex items-baseline gap-0 text-[var(--color-bg)] no-underline hover:[&>span]:underline [&>span]:underline-offset-4"
   >
     <span class="font-serif-italic text-[20px] leading-none sm:text-[24px] md:text-[28px]"
       >Anthony</span
@@ -50,20 +60,20 @@ const enHref = lang === "en" ? "/en/" : altLangPath;
     {/* About — hidden on mobile to save horizontal space */}
     <a
       href={aboutHref}
-      class="font-mono hidden text-[12px] uppercase tracking-[0.04em] text-white no-underline hover:underline underline-offset-4 sm:inline-block sm:text-[13px]"
+      class="font-mono hidden text-[12px] uppercase tracking-[0.04em] text-[var(--color-bg)] no-underline hover:underline underline-offset-4 sm:inline-block sm:text-[13px]"
       >{t.nav.about}</a
     >
     {/* Discutons / Let's talk — anchors to the homepage's #contact (CTA)
         section. From any other page we navigate to homepage then scroll. */}
     <a
       href={`${homeHref}#contact`}
-      class="font-mono text-[12px] uppercase tracking-[0.04em] text-white no-underline hover:underline underline-offset-4 sm:text-[13px]"
+      class="font-mono text-[12px] uppercase tracking-[0.04em] text-[var(--color-bg)] no-underline hover:underline underline-offset-4 sm:text-[13px]"
       >{t.nav.cta}</a
     >
 
     {/* Lang switcher — both EN and FR visible, current lang in bold for
         clarity; alt lang slightly faded as a secondary affordance. */}
-    <span class="font-mono inline-flex items-center gap-1 text-[11px] uppercase tracking-[0.16em] text-white sm:text-[12px]">
+    <span class="font-mono inline-flex items-center gap-1 text-[11px] uppercase tracking-[0.16em] text-[var(--color-bg)] sm:text-[12px]">
       <a
         href={enHref}
         hreflang="en"
