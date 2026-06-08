@@ -336,7 +336,11 @@ export function initHeroTransition(): void {
     tl.to(
       transitionImg,
       {
-        filter: "blur(24px)",
+        // 8px (was 24px): the departure blur is repainted every scrub frame on
+        // a fixed full-viewport image — repaint cost scales with radius×area,
+        // so this is the single most expensive frame on the site. 8px still
+        // reads as a motion-blur on the lifting photo at ~1/3 the cost.
+        filter: "blur(8px)",
         duration: 0.45,
         ease: "expo.inOut",
       },

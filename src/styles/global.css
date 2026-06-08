@@ -53,6 +53,22 @@
     overscroll-behavior: none;
   }
 
+  /* Lenis smooth-scroll (src/lib/smooth-scroll.ts). While Lenis is active it
+     adds `.lenis.lenis-smooth` to <html>; we disable the native
+     `scroll-behavior: smooth` above so the two don't fight (Lenis drives anchor
+     scrolling via lenis.scrollTo). Under prefers-reduced-motion Lenis is never
+     initialised, so these classes are absent and native smooth-scroll stands. */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
   ::selection {
     background: var(--color-ink);
     color: var(--color-bg);
@@ -260,7 +276,7 @@
   margin: 0 0.1em;
   animation: word-appear 0.8s ease-out forwards;
   animation-play-state: paused;
-  will-change: opacity, transform, filter;
+  will-change: opacity, transform;
 }
 [data-words-revealed] .word-animate {
   animation-play-state: running;
@@ -277,8 +293,6 @@
   display: inline-block;
   opacity: 0;
   transform: translateY(30px);
-  filter: blur(8px);
-  will-change: opacity, transform, filter;
 }
 
 /* Modifier — swaps the per-word brutalist font-display (uppercase, tight
@@ -310,8 +324,14 @@
   display: inline-block;
   opacity: 0;
   transform: translateY(40px);
-  filter: blur(6px);
-  will-change: opacity, transform, filter;
+}
+
+/* Blur is animated on the chapter title/body CONTAINERS (one layer each) by
+   src/lib/about-reveal.ts, not per word — `will-change: filter` here promotes
+   just those 8 blocks instead of ~200 word spans. */
+[data-about-chapter-title],
+[data-about-chapter-body] {
+  will-change: filter;
 }
 
 /* Modifier — words that lived inside an <em> tag in the i18n string
@@ -325,14 +345,20 @@
   letter-spacing: 0;
 }
 
-/* About chapter image (single block — same bell-curve blur reveal as the
-   title, but applied to one element with no stagger). GSAP drives this in
-   sync with the title from `src/lib/about-reveal.ts`. */
-.about-image-reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  filter: blur(8px);
-  will-change: opacity, transform, filter;
+/* Service-teaser variant — a mono index ("01") leads the serif-italic title.
+   It's baked into the title HTML by About.astro (not an `.about-reveal-word`),
+   so it rides the container blur reveal at opacity 1 and sharpens with the
+   block instead of cascading word-by-word. The `not-italic` mono num is the
+   brutalist counterpoint to the soft serif title beneath it. */
+.about-service-num {
+  display: block;
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: clamp(11px, 0.9vw, 13px);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(239, 233, 220, 0.45);
+  margin-bottom: clamp(0.75rem, 1.6vw, 1.4rem);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -363,11 +389,6 @@
     filter: none !important;
   }
   .about-body-word {
-    opacity: 1 !important;
-    transform: none !important;
-    filter: none !important;
-  }
-  .about-image-reveal {
     opacity: 1 !important;
     transform: none !important;
     filter: none !important;

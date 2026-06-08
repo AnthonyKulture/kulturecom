@@ -2,16 +2,17 @@
  * Fixed About portrait — the "sticky image" the manifesto statements scroll past.
  *
  * The portrait ([data-about-portrait]) lives OUTSIDE [data-about-wrapper] (whose
- * translateY transform would break position:fixed) and is held FIXED on the side
- * (desktop) / top (mobile) while every About statement scrolls past it. We fade
- * it IN as the first statement arrives and OUT before the screen-stack, on
- * ABSOLUTE (docTop-based) scroll positions — the statements live inside the
- * transformed wrapper, so rect-based triggers would be cached ~50vh off (same
- * reason about-reveal.ts uses docTop()).
+ * translateY transform would break position:fixed) and is held FIXED on the
+ * right while every About service scrolls past it. DESKTOP ONLY — it is hidden
+ * on mobile (AboutPortrait.astro), so this skips its wiring there. We fade it IN
+ * as the first service arrives and OUT before the screen-stack, on ABSOLUTE
+ * (docTop-based) scroll positions — the services live inside the transformed
+ * wrapper, so rect-based triggers would be cached ~50vh off (same reason
+ * about-reveal.ts uses docTop()).
  *
  * `prefers-reduced-motion`: no scrub — opacity is toggled on/off across the
- * manifesto range so the portrait is simply present (and never floats over the
- * Hero or the screen-stack).
+ * range so the portrait is simply present (never floating over the Hero or the
+ * screen-stack).
  */
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -23,6 +24,10 @@ export function initAboutPortrait(): void {
 
   const portrait = document.querySelector<HTMLElement>("[data-about-portrait]");
   if (!portrait) return;
+
+  // The portrait is DESKTOP-ONLY (hidden on mobile via `hidden md:block` in
+  // AboutPortrait.astro); skip all of its scroll wiring on small screens.
+  if (window.matchMedia("(max-width: 639px)").matches) return;
 
   const sections = Array.from(
     document.querySelectorAll<HTMLElement>("[data-about-chapter-section]")
@@ -48,9 +53,14 @@ export function initAboutPortrait(): void {
   // wrapper sits one viewport below the hero). So the portrait fades IN from
   // there, holds across every statement, and fades OUT before the screen-stack
   // (wrapper bottom) reaches the viewport top.
+  // Fade IN exactly as the first About section reaches the top — i.e. right when the
+  // hero's full-screen transition photo has finished rising off and the About arrives
+  // (hero pin release). Starting any earlier overlaps the still-present photo. Fade OUT
+  // well before the last section scrolls off, so the portrait never lingers over the
+  // revealed cylinder. Both offsets are easy to tune.
   const startY = () => docTop(first);
   const endY = () =>
-    docTop(last) + last.offsetHeight - window.innerHeight * 0.3;
+    docTop(last) + last.offsetHeight - window.innerHeight * 0.85;
 
   const reduced = window.matchMedia(
     "(prefers-reduced-motion: reduce)"
@@ -69,22 +79,13 @@ export function initAboutPortrait(): void {
     return;
   }
 
-  // On mobile the portrait is a FIXED top banner. ANY transform (scale or
-  // translateY) makes it visibly drift during the entry/exit fade — and since
-  // it's `position: fixed`, that drift reads as "not pinned" (most noticeable
-  // scrolling back UP toward the manifesto start, where the entry tween
-  // reverses). So mobile animates OPACITY ONLY — the banner never moves.
-  // Desktop keeps the subtle scale/translate "settle" (it floats free on the
-  // side, where a little motion looks intentional, not broken).
-  const isMobile = window.matchMedia("(max-width: 639px)").matches;
-
-  // Initial state.
-  gsap.set(
-    portrait,
-    isMobile
-      ? { opacity: 0 }
-      : { opacity: 0, scale: 1.04, y: () => window.innerHeight * 0.04 }
-  );
+  // Initial state. The portrait floats free on the right, so a subtle
+  // scale/translate "settle" on entry reads as intentional motion.
+  gsap.set(portrait, {
+    opacity: 0,
+    scale: 1.04,
+    y: () => window.innerHeight * 0.04,
+  });
 
   const tl = gsap.timeline({
     defaults: { ease: "none" },
@@ -98,25 +99,18 @@ export function initAboutPortrait(): void {
   });
 
   // Arrival → hold → departure. The hold pad (0.76) keeps the scrub mapping
-  // linear to scroll across the whole window; on mobile the portrait simply
-  // holds at opacity 1 (no transform) so it stays rock-fixed.
-  if (isMobile) {
-    tl.to(portrait, { opacity: 1, duration: 0.12, ease: "power2.out" }, 0);
-    tl.to({}, { duration: 0.76 }, 0.12);
-    tl.to(portrait, { opacity: 0, duration: 0.12, ease: "power2.in" }, 0.88);
-  } else {
-    tl.to(
-      portrait,
-      { opacity: 1, scale: 1, y: 0, duration: 0.12, ease: "power2.out" },
-      0
-    );
-    tl.to({}, { duration: 0.76 }, 0.12);
-    tl.to(
-      portrait,
-      { opacity: 0, scale: 1.02, duration: 0.12, ease: "power2.in" },
-      0.88
-    );
-  }
+  // linear to scroll across the whole window.
+  tl.to(
+    portrait,
+    { opacity: 1, scale: 1, y: 0, duration: 0.12, ease: "power2.out" },
+    0
+  );
+  tl.to({}, { duration: 0.76 }, 0.12);
+  tl.to(
+    portrait,
+    { opacity: 0, scale: 1.02, duration: 0.12, ease: "power2.in" },
+    0.88
+  );
 
   ScrollTrigger.refresh();
 }

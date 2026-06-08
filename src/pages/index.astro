@@ -4,6 +4,7 @@ import Nav from "~/components/Nav.astro";
 import Hero from "~/components/Hero.astro";
 import About from "~/components/About.astro";
 import AboutPortrait from "~/components/AboutPortrait.astro";
+import CinematicScroll from "~/components/CinematicScroll.astro";
 import AboutChapter from "~/components/AboutChapter.astro";
 import Services from "~/components/Services.astro";
 import ServicesMobile from "~/components/ServicesMobile.astro";
@@ -63,6 +64,15 @@ const lang: Lang = "fr";
       >
       </div>
       <About lang={lang} />
+      {/* Bottom feather — mirror of the top seam: a black→transparent gradient just
+          BELOW the panel's bottom edge, painted over the fixed cinematic stage (z-1)
+          behind it, so the About dissolves softly into the emerging cylinder instead
+          of meeting it on a hard edge. Rides with the wrapper. */}
+      <div
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-x-0 bottom-0 h-[24vh] translate-y-full bg-gradient-to-b from-[#0b0b0b] to-transparent"
+      >
+      </div>
     </div>
 
     {/* Fixed portrait for the About manifesto — sibling of the wrapper (NOT
@@ -70,6 +80,12 @@ const lang: Lang = "fr";
         position:fixed). Held on the side (desktop) / top banner (mobile) while
         the statements above scroll past; faded in/out by about-portrait.ts. */}
     <AboutPortrait />
+
+    {/* Cinematic cylinder — full-viewport WebGL (OGL) section inserted AFTER the
+        3 About service teasers and BEFORE the pinned screen-stack. It pins for a
+        scrubbed camera fly-through of the project images, then releases into the
+        stack below. Lazy-booted + rAF-gated (src/lib/cinematic-scroll.ts). */}
+    <CinematicScroll lang={lang} />
 
     {/* Pinned screen-stack — only About 2 + Services + Projects now. The base
         stays CREAM so the mobile push-stack gap (Services panel scales back as
@@ -138,13 +154,17 @@ const lang: Lang = "fr";
   </main>
 
   <script>
+    import { initSmoothScroll } from "~/lib/smooth-scroll";
     import { initAboutScroll } from "~/lib/about-scroll";
     import { initAboutReveal } from "~/lib/about-reveal";
     import { initAboutPortrait } from "~/lib/about-portrait";
+    import { initCinematicScroll } from "~/lib/cinematic-scroll";
     import { initHeroTransition } from "~/lib/hero-transition";
+    initSmoothScroll();
     initAboutScroll();
     initAboutReveal();
     initAboutPortrait();
+    initCinematicScroll();
     initHeroTransition();
   </script>
 </BaseLayout>

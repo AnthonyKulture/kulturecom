@@ -1,6 +1,6 @@
 ---
-// Fixed portrait for the About manifesto — the "sticky image" the text
-// statements scroll past.
+// Fixed portrait for the About section — the "sticky image" the service
+// statements scroll past. DESKTOP ONLY (hidden on mobile via `hidden md:block`).
 //
 // Rendered INSIDE <main> but OUTSIDE [data-about-wrapper]: the wrapper carries
 // a translateY transform (hero-transition.ts) that would break position:fixed,
@@ -8,32 +8,23 @@
 // sections (wrapper is z-60) while staying under the nav. GSAP
 // (src/lib/about-portrait.ts) fades it IN as the first statement arrives, holds
 // it FIXED across every statement, and fades it OUT before the screen-stack —
-// all on absolute (docTop) scroll positions.
-//
-// Desktop: pinned on the right, vertically centered. Mobile: a top banner
-// (just below the nav) that the rising statements fade beneath.
+// all on absolute (docTop) scroll positions. On mobile the section is plain
+// full-width scrolling text (no portrait).
 ---
 
 <div
   data-about-portrait
   aria-hidden="true"
-  class="pointer-events-none fixed z-[61] opacity-0 left-0 right-0 top-0 h-[32svh] bg-[#0b0b0b] px-4 pt-[7svh] md:left-auto md:right-0 md:top-[13vh] md:h-[74vh] md:w-[38vw] md:bg-transparent md:px-0 md:pt-0"
+  class="pointer-events-none fixed z-[61] opacity-0 hidden md:block right-0 top-[13vh] h-[74vh] w-[38vw]"
   style="will-change: transform, opacity;"
 >
+  {/* Single portrait image — no transition. It fades in/out with the container
+      (src/lib/about-portrait.ts) and stays fixed while the services scroll past. */}
   <img
     src="/about/anthony-portrait.webp"
     alt=""
     loading="eager"
     decoding="async"
-    class="block h-full w-full object-cover rounded-[clamp(1.25rem,5vw,2rem)] md:rounded-l-[clamp(8rem,25vw,25rem)] md:rounded-r-none"
+    class="block h-full w-full object-cover rounded-l-[clamp(8rem,25vw,25rem)]"
   />
-  {/* Mobile only — soft dark gradient just BELOW the banner so the rising text
-      statements dissolve into the dark as they pass beneath the portrait
-      (the portrait container is z-61, above the text), instead of cutting off
-      against a hard edge. */}
-  <div
-    aria-hidden="true"
-    class="md:hidden absolute inset-x-4 bottom-0 h-[10svh] translate-y-full bg-gradient-to-b from-[#0b0b0b] to-transparent"
-  >
-  </div>
 </div>

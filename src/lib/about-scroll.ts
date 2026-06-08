@@ -245,7 +245,9 @@ export function initAboutScroll(): void {
     gsap.set(servicesMobileFirstLabel, {
       opacity: 0,
       scale: 0.85,
-      filter: "blur(14px)",
+      // 6px (was 14px): mobile uses native touch scroll (no Lenis cushion), so
+      // per-frame blur is the mobile jank source — keep the radius modest.
+      filter: "blur(6px)",
     });
   }
   if (servicesMobileFirstTitleWords.length > 0) {
@@ -262,9 +264,12 @@ export function initAboutScroll(): void {
     gsap.set(servicesMobileFirstFooter, { opacity: 0, y: 12 });
   }
   if (axisCards.length >= 3) {
+    // Standby cards sit blurred behind the active one; the crossfade (opacity +
+    // blur) below switches them. 4px (was 10px) keeps the mobile per-frame
+    // repaint cheap while the opacity crossfade still carries the transition.
     gsap.set(axisCards[0], { filter: "blur(0px)" });
-    gsap.set(axisCards[1], { filter: "blur(10px)" });
-    gsap.set(axisCards[2], { filter: "blur(10px)" });
+    gsap.set(axisCards[1], { filter: "blur(4px)" });
+    gsap.set(axisCards[2], { filter: "blur(4px)" });
   }
   if (servicesProgressRing) {
     gsap.set(servicesProgressRing, { strokeDashoffset: PROGRESS_RING_CIRCUMFERENCE });
@@ -468,7 +473,7 @@ export function initAboutScroll(): void {
     // Phase 6 — crossfade axis 0 → 1 (blur + opacity)
     tl.to(
       axisCards[0],
-      { opacity: 0, filter: "blur(10px)", duration: 0.06 },
+      { opacity: 0, filter: "blur(4px)", duration: 0.06 },
       0.71
     );
     tl.to(
@@ -480,7 +485,7 @@ export function initAboutScroll(): void {
     // Phase 8 — crossfade axis 1 → 2 (blur + opacity)
     tl.to(
       axisCards[1],
-      { opacity: 0, filter: "blur(10px)", duration: 0.06 },
+      { opacity: 0, filter: "blur(4px)", duration: 0.06 },
       0.92
     );
     tl.to(

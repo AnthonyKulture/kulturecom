@@ -47,17 +47,20 @@ export function initAboutReveal(): void {
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   if (reduced) {
+    // Words carry opacity/transform only now (blur lives on the chapter
+    // title/body CONTAINERS, set via gsap below — never reached in this
+    // branch, so containers stay un-blurred under reduced motion).
     const allWords = Array.from(
       document.querySelectorAll<HTMLElement>(".about-reveal-word")
     );
     if (allWords.length > 0) {
-      gsap.set(allWords, { opacity: 1, y: 0, filter: "blur(0px)" });
+      gsap.set(allWords, { opacity: 1, y: 0 });
     }
     const allBodyWords = Array.from(
       document.querySelectorAll<HTMLElement>(".about-body-word")
     );
     if (allBodyWords.length > 0) {
-      gsap.set(allBodyWords, { opacity: 1, y: 0, filter: "blur(0px)" });
+      gsap.set(allBodyWords, { opacity: 1, y: 0 });
     }
     // Parallax targets snap to neutral so they don't carry a Y offset
     // when scroll-driven motion is disabled.
@@ -102,7 +105,22 @@ export function initAboutReveal(): void {
     const textContent = section.querySelector<HTMLElement>(
       "[data-about-chapter-content]"
     );
+    const titleEl = section.querySelector<HTMLElement>(
+      "[data-about-chapter-title]"
+    );
+    const bodyEl = section.querySelector<HTMLElement>(
+      "[data-about-chapter-body]"
+    );
     if (titleWords.length === 0 && bodyWords.length === 0) return;
+
+    // Blur is applied ONCE to the whole title/body BLOCK (one layer each)
+    // rather than per word (~200 layers across all chapters) — same
+    // "sharpens into focus" look at a fraction of the per-frame repaint cost.
+    // The words themselves animate opacity + translate only (cheap, GPU-
+    // composited). The words' own opacity:0 (CSS) hides them until the cascade,
+    // so there's no FOUC despite the block starting un-blurred in markup.
+    if (titleEl) gsap.set(titleEl, { filter: "blur(8px)" });
+    if (bodyEl) gsap.set(bodyEl, { filter: "blur(6px)" });
 
     // The intro (statement 0) starts revealing at 0.72 viewport of scroll —
     // DURING the
@@ -251,11 +269,19 @@ export function initAboutReveal(): void {
         {
           opacity: 1,
           y: 0,
-          filter: "blur(0px)",
           stagger: 0.006,
           duration: 0.10,
           ease: "power2.out",
         },
+        inTitle
+      );
+    }
+    // Block sharpens over (≈) the cascade span so it reads as the words
+    // resolving into focus together.
+    if (titleEl) {
+      tl.to(
+        titleEl,
+        { filter: "blur(0px)", duration: 0.16, ease: "power2.out" },
         inTitle
       );
     }
@@ -272,11 +298,17 @@ export function initAboutReveal(): void {
         {
           opacity: 1,
           y: 0,
-          filter: "blur(0px)",
           stagger: 0.0010,
           duration: 0.06,
           ease: "power2.out",
         },
+        inBody
+      );
+    }
+    if (bodyEl) {
+      tl.to(
+        bodyEl,
+        { filter: "blur(0px)", duration: 0.14, ease: "power2.out" },
         inBody
       );
     }
@@ -294,11 +326,17 @@ export function initAboutReveal(): void {
         {
           opacity: 0,
           y: -30,
-          filter: "blur(8px)",
           stagger: 0.008,
           duration: 0.15,
           ease: "power2.in",
         },
+        outTitle
+      );
+    }
+    if (titleEl) {
+      tl.to(
+        titleEl,
+        { filter: "blur(8px)", duration: 0.15, ease: "power2.in" },
         outTitle
       );
     }
@@ -315,11 +353,17 @@ export function initAboutReveal(): void {
         {
           opacity: 0,
           y: -40,
-          filter: "blur(6px)",
           stagger: 0.0015,
           duration: 0.05,
           ease: "power2.in",
         },
+        outBody
+      );
+    }
+    if (bodyEl) {
+      tl.to(
+        bodyEl,
+        { filter: "blur(6px)", duration: 0.10, ease: "power2.in" },
         outBody
       );
     }

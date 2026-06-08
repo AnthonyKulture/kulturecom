@@ -9,28 +9,49 @@ interface Props {
 const { lang } = Astro.props;
 const t = ui[lang];
 
-// About manifesto — 5 statements, each a full-bleed text block in normal flow
-// that reveals on scroll (per-word blur cascade, driven by GSAP ScrollTrigger
-// in `src/lib/about-reveal.ts`).
+// About — three service teasers: Direction artistique & design / Développement
+// web sur-mesure / SEO & GEO technique. Each is a full-bleed text block in
+// normal flow that reveals on scroll (GSAP ScrollTrigger, `src/lib/about-reveal.ts`),
+// shown as a large serif-italic title prefixed by a mono index (01/02/03).
+// (`data-about-variant` still drives the styling; the personal intro block that
+// used the brutalist display treatment was removed.)
 //
-// The PORTRAIT is no longer part of these sections: it's a FIXED element
-// (AboutPortrait.astro + src/lib/about-portrait.ts) rendered as a sibling of
-// this block, held on the side (desktop) / top banner (mobile) while these
-// statements scroll past it. So every statement here is a uniform LEFT-column
-// text block — on desktop `md:pr-[42vw]` reserves the right side for the
-// pinned portrait; on mobile the block is full-width and the rising text
-// dissolves under the top banner.
+// The PORTRAIT is a FIXED sibling element (AboutPortrait.astro +
+// src/lib/about-portrait.ts), held on the side (desktop) / top banner (mobile)
+// while these blocks scroll past it. On desktop `md:pr-[42vw]` reserves the
+// right side for it; on mobile the block is full-width and the rising text
+// dissolves under the top banner. The portrait SWAPS to a second image (blur
+// in/out) as the services arrive (about-portrait.ts).
 //
 // Each TITLE word is wrapped in an `.about-reveal-word` span and each
 // DESCRIPTION word in an `.about-body-word` span (SSR split) so GSAP can
-// stagger opacity/transform/filter per word. `<em>` phrases become serif
-// italic per word via the `--italic` modifier.
-const wrapWords = (s: string): string =>
-  s
-    .split(/\s+/)
+// stagger opacity/transform per word; the blur lives on the title/body
+// CONTAINER. `<em>` phrases become serif italic per word via the `--italic`
+// modifier. Service titles also carry a leading `.about-service-num` span.
+const wrapWords = (s: string): string => {
+  // Split on <em>…</em> tokens so emphasised words render in serif italic
+  // (`--italic` modifier) while the rest follow the title's base font. On the
+  // intro this produces the two-font "fusion" — brutalist display UPPERCASE
+  // with Instrument Serif italic accents. No <em> ⇒ every word is a plain
+  // `.about-reveal-word`.
+  const parts = s.split(/(<em>[\s\S]*?<\/em>)/g);
+  return parts
+    .map((part) => {
+      if (!part) return "";
+      const emMatch = part.match(/^<em>([\s\S]*?)<\/em>$/);
+      const text = emMatch ? emMatch[1] : part;
+      const cls = emMatch
+        ? "about-reveal-word about-reveal-word--italic"
+        : "about-reveal-word";
+      return text
+        .split(/\s+/)
+        .filter(Boolean)
+        .map((w) => `<span class="${cls}">${w}</span>`)
+        .join(" ");
+    })
     .filter(Boolean)
-    .map((w) => `<span class="about-reveal-word">${w}</span>`)
     .join(" ");
+};
 
 // Per-word reveal for the description, with <em>...</em> tokens preserved
 // as serif italic on a per-word basis. We split the input on the <em>
@@ -65,33 +86,45 @@ const wrapBodyWords = (s: string): string => {
 };
 
 const tAbout = t.about as Record<string, string>;
-// Strip the `<em>` markup for the aria-label (screen-readers hear the rendered
-// text; the inline <em> still renders for sighted users).
-const stripEm = (s: string): string => s.replace(/<\/?em>/g, "");
-const chapters = ([1, 2, 3, 4] as const).map((n) => ({
-  index: n - 1,
-  plainTitle: tAbout[`item${n}.title`],
-  titleHtml: wrapWords(tAbout[`item${n}.title`]),
-  descHtml: wrapBodyWords(tAbout[`item${n}.desc`]),
-  descPlain: stripEm(tAbout[`item${n}.desc`]),
+
+type Block = {
+  variant: "intro" | "service";
+  plainTitle: string;
+  titleHtml: string;
+  descHtml: string;
+};
+
+// The About section is now the three service teasers only — the personal intro
+// block was removed. Same scroll-reveal sequence, but
+// a serif-italic title prefixed by a mono index (01/02/03), echoing the
+// dedicated Services section. The index span is baked into the title HTML so it
+// rides the container blur reveal (it is NOT an `.about-reveal-word`, so it sits
+// at opacity 1 and sharpens with the block instead of cascading word-by-word).
+const services: Block[] = ([1, 2, 3] as const).map((n) => ({
+  variant: "service",
+  plainTitle: tAbout[`svc${n}.title`],
+  titleHtml:
+    `<span class="about-service-num">${tAbout[`svc${n}.num`]}</span>` +
+    wrapWords(tAbout[`svc${n}.title`]),
+  descHtml: wrapBodyWords(tAbout[`svc${n}.desc`]),
 }));
+
+const chapters: Block[] = services;
 ---
 
 <div class="relative bg-[#0b0b0b] text-[#efe9dc]">
   {chapters.map((chapter) => {
-    // The intro (statement 0) keeps the original, longer copy, so it gets a
-    // little more height than the condensed statements that follow. Short
-    // sections keep the statements close together so one leaves the top as
-    // the next enters the bottom (see about-reveal.ts for the timing).
-    const isIntro = chapter.index === 0;
+    // Each service is sized to its own content with EQUAL vertical padding, so
+    // the gap between the three teasers is constant. (Fixed-height slots with
+    // centred content made the gaps look uneven because the copy lengths
+    // differ.) `isIntro` is kept only for the title/body styling branches below
+    // — every block is a service now.
+    const isIntro = chapter.variant === "intro";
     return (
       <section
         data-about-chapter-section
-        data-about-chapter-index={chapter.index}
-        class:list={[
-          "relative overflow-hidden",
-          isIntro ? "min-h-[56dvh]" : "min-h-[46dvh]",
-        ]}
+        data-about-variant={chapter.variant}
+        class="relative overflow-hidden"
         aria-label={chapter.plainTitle}
       >
         {/* TEXT CONTENT — vertically centered so the parallax + reveal carries
@@ -101,19 +134,26 @@ const chapters = ([1, 2, 3, 4] as const).map((n) => ({
             the right side is reserved for the fixed portrait on desktop. */}
         <div
           data-about-chapter-content
-          class:list={[
-            "relative w-full flex flex-col justify-center px-6 md:pl-12 md:pr-[42vw]",
-            isIntro ? "min-h-[56dvh]" : "min-h-[46dvh]",
-          ]}
+          class="relative w-full flex flex-col px-6 py-[11dvh] md:pl-12 md:pr-[42vw] md:py-[13dvh]"
         >
           <h3
             data-about-chapter-title
-            class="font-display block text-left text-[clamp(16px,2.2vw,32px)] uppercase leading-[1.05] tracking-[-0.03em]"
+            class:list={[
+              "block text-left",
+              isIntro
+                ? "font-display text-[clamp(28px,4.6vw,60px)] uppercase leading-[1.02] tracking-[-0.03em]"
+                : "font-serif-italic text-[clamp(42px,7.5vw,92px)] leading-[0.92] tracking-[-0.015em]",
+            ]}
             set:html={chapter.titleHtml}
           />
           <p
             data-about-chapter-body
-            class="about-body-reveal font-sans text-left text-[clamp(19px,2.1vw,28px)] leading-[1.5] text-[#efe9dc]/85 max-w-[62ch] mt-8 md:mt-12"
+            class:list={[
+              "about-body-reveal font-sans text-left",
+              isIntro
+                ? "text-[clamp(19px,2.1vw,28px)] leading-[1.5] text-[#efe9dc]/85 max-w-[62ch] mt-8 md:mt-12"
+                : "text-[clamp(15px,1.5vw,19px)] leading-[1.5] text-[#efe9dc]/55 max-w-[46ch] mt-4 md:mt-6",
+            ]}
             set:html={chapter.descHtml}
           />
         </div>
