@@ -359,12 +359,17 @@ export function initCinematicScroll(): void {
 
   tl.to(rotationAnim, { y: "+=28.27", duration: DUR, ease: "none" }, 0);
 
-  // Gentle uniform dim over the cover window (complements the feather; kills any horizon on
-  // bright image cells). 0.3 → 0.5 across [cover_start, cover_solid]; the cylinder stays
-  // mostly visible (organic) — the feather does the actual cover.
+  // Dissolve the cylinder fully to the site background (#0b0b0b) over the cover window:
+  // 0.3 → 1.0 across [cover_start, cover_solid] (complements the feather; kills any horizon
+  // on bright image cells). It reaches FULL dissolve at cover_solid and holds 1.0 to the end,
+  // so the cinematic's exit state — and the whole [cover_solid → pin] handoff zone — is solid
+  // site-black. This is what kills the mobile "cylinder flash": the stage's visibility gate is
+  // instant (onToggle) while this dim is scrubbed, so a momentum bounce / scroll-up near the
+  // pin re-exposes the stage; with the cylinder dissolved to #0b0b0b that re-exposure is
+  // invisible against the About 2 backdrop (it used to flash the still-lit cylinder + particles).
   tl.to(
     darknessAnim,
-    { v: 0.5, ease: "power2.in", duration: Math.max(0.4, (coverSolid - coverStart) * DUR) },
+    { v: 1.0, ease: "power2.in", duration: Math.max(0.4, (coverSolid - coverStart) * DUR) },
     coverStart * DUR
   );
 
