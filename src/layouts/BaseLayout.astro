@@ -8,16 +8,23 @@ import { ui } from "~/i18n/ui";
 interface Props {
   lang: Lang;
   pathname?: string;
+  // Explicit hreflang counterpart URL. The default below assumes the alt-lang
+  // page lives at the same slug under (or without) the `/en` prefix — true for
+  // the homepage, but NOT for pages with localized slugs (e.g. `/projets/` ↔
+  // `/en/work/`). Those pass `altPath` so the hreflang alternate resolves to
+  // the real translated URL instead of a 404.
+  altPath?: string;
 }
 
-const { lang, pathname = "/" } = Astro.props;
+const { lang, pathname = "/", altPath: altPathProp } = Astro.props;
 const dict = ui[lang];
 
 const altLang: Lang = lang === "fr" ? "en" : "fr";
 const altPath =
-  altLang === "fr"
+  altPathProp ??
+  (altLang === "fr"
     ? pathname.replace(/^\/en/, "") || "/"
-    : `/en${pathname === "/" ? "" : pathname}`;
+    : `/en${pathname === "/" ? "" : pathname}`);
 
 const canonical = new URL(pathname, Astro.site).toString();
 // og.svg is a placeholder (supports Twitter/Discord/Slack). For best Facebook

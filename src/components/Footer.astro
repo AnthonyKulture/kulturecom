@@ -10,6 +10,7 @@ const { lang } = Astro.props;
 const t = ui[lang];
 
 const homeHref = lang === "fr" ? "/" : "/en/";
+const workHref = lang === "fr" ? "/projets/" : "/en/work/";
 const aboutHref = lang === "fr" ? "/a-propos/" : "/en/about/";
 
 const linkedinUrl = "https://www.linkedin.com/in/anthony-profit/";
@@ -115,9 +116,14 @@ const navLabels = lang === "en"
         >BEHANCE</a>
       </div>
 
-      {/* Right : nav. (Projects link removed — Projects is moving to a
-          standalone page; re-add it here pointing at that page once it exists.) */}
+      {/* Right : nav — Work · About · Contact. */}
       <div class="flex flex-col gap-1.5 sm:items-end">
+        <a
+          data-footer-top
+          style="transition-delay:600ms"
+          href={workHref}
+          class="text-[var(--color-ink)] no-underline hover:underline underline-offset-4"
+        >{navLabels.projects}</a>
         <a
           data-footer-top
           style="transition-delay:720ms"

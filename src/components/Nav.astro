@@ -10,6 +10,7 @@ interface Props {
 
 const { lang, altLangPath, altLang } = Astro.props;
 const t = ui[lang];
+const workHref = lang === "fr" ? "/projets/" : "/en/work/";
 const aboutHref = lang === "fr" ? "/a-propos/" : "/en/about/";
 const homeHref = lang === "fr" ? "/" : "/en/";
 
@@ -55,8 +56,14 @@ const enHref = lang === "en" ? "/en/" : altLangPath;
     >
   </a>
 
-  {/* Right cluster: about · contact · lang switcher */}
+  {/* Right cluster: work · about · contact · lang switcher */}
   <div class="flex items-center gap-4 sm:gap-5">
+    {/* Work — hidden on mobile to save horizontal space (reachable via footer) */}
+    <a
+      href={workHref}
+      class="font-mono hidden text-[12px] uppercase tracking-[0.18em] text-[var(--color-bg)] no-underline hover:underline underline-offset-4 sm:inline-block sm:text-[13px]"
+      >{t.nav.work}</a
+    >
     {/* About — hidden on mobile to save horizontal space */}
     <a
       href={aboutHref}
