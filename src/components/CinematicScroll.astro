@@ -25,7 +25,9 @@ const captions: { title: string; desc: string; position: CaptionPos }[] = [
   { title: c["cap1.title"], desc: c["cap1.desc"], position: "top" },
   { title: c["cap2.title"], desc: c["cap2.desc"], position: "center" },
   { title: c["cap3.title"], desc: c["cap3.desc"], position: "center" },
-  { title: c["cap4.title"], desc: c["cap4.desc"], position: "bottom" },
+  // "Kulturecom" closing caption — fades out as the soft cover feather begins to swallow
+  // the cylinder (cinematic-scroll.ts), so it's integrated with the dissolve, not held alone.
+  { title: c["cap4.title"], desc: c["cap4.desc"], position: "center" },
 ];
 
 const getPositionClasses = (position: CaptionPos): string => {
@@ -58,7 +60,7 @@ const getPositionClasses = (position: CaptionPos): string => {
     />
     <canvas data-cinematic-canvas class="absolute inset-0 block h-full w-full"></canvas>
 
-    <div class="pointer-events-none absolute inset-0 z-10 text-[#efe9dc]">
+    <div class="pointer-events-none absolute inset-0 z-10 text-[var(--color-bg)]">
       {
         captions.map((cap, i) => (
           <div
@@ -85,5 +87,19 @@ const getPositionClasses = (position: CaptionPos): string => {
 
   {/* Scroll runway (normal flow) between About and the screen-stack — drives the
       scrubbed timeline. Transparent, so the fixed stage shows through it. */}
-  <div data-cinematic-spacer aria-hidden="true" class="h-[350svh] md:h-[500svh]"></div>
+  <div data-cinematic-spacer aria-hidden="true" class="h-[200svh] md:h-[320svh]"></div>
+
+  {/* Exit cover feather — the mirror of the About bottom feather. A static, normal-flow
+      transparent→#0b0b0b gradient sitting just before the screen-stack: as it scrolls up
+      over the fixed stage it softly swallows the (still-lit, spinning) cylinder into the
+      site black — a soft cover edge, no hard line, no pre-dissolved dead black. Its solid
+      bottom joins the screen-stack's #0b0b0b backdrop seamlessly. MUST stay a dumb block
+      (no z-index / transform / opacity / isolation) so it never forms a stacking context
+      over the z:-1 stage; it paints over the stage purely because the stage is z-index:-1. */}
+  <div
+    data-cinematic-cover-feather
+    aria-hidden="true"
+    class="pointer-events-none h-[48svh] bg-gradient-to-b from-transparent to-[#0b0b0b]"
+  >
+  </div>
 </section>

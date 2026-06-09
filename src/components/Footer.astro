@@ -37,7 +37,7 @@ const wrapLettersShuffled = (
     .map((c, i) => {
       const isAccent = accentChars.has(c);
       const innerClass = isAccent
-        ? "footer-letter-inner text-[var(--color-accent,#c14a1d)]"
+        ? "footer-letter-inner text-[var(--color-accent)]"
         : "footer-letter-inner";
       const ch = c === " " ? "&nbsp;" : c;
       return `<span class="footer-letter-mask"><span class="${innerClass}" style="transition-delay:${delays[i]}ms">${ch}</span></span>`;
@@ -61,7 +61,8 @@ const navLabels = lang === "en"
 
 <footer
   data-site-footer
-  class="relative overflow-hidden bg-[#0b0b0b] text-[#efe9dc]"
+  data-surface="dark"
+  class="relative overflow-hidden bg-[var(--color-bg)] text-[var(--color-ink)]"
   aria-label="Pied de page"
 >
   <div class="relative mx-auto flex h-[100lvh] w-full max-w-[var(--container-wide)] flex-col px-4 pt-12 sm:px-6 sm:pt-16 md:px-12 md:pt-20">
@@ -77,12 +78,12 @@ const navLabels = lang === "en"
           data-footer-top
           style="transition-delay:0ms"
           href={`mailto:${t.footer["contact.email"]}?subject=${encodeURIComponent(t.nav["cta.subject"])}`}
-          class="lowercase tracking-[0.05em] text-[#efe9dc] no-underline hover:underline underline-offset-4"
+          class="lowercase tracking-[0.05em] text-[var(--color-ink)] no-underline hover:underline underline-offset-4"
         >{t.footer["contact.email"]}</a>
         <p
           data-footer-top
           style="transition-delay:120ms"
-          class="text-[#efe9dc]/70"
+          class="text-[var(--color-ink)]/70"
         >© {currentYear}</p>
       </div>
 
@@ -94,7 +95,7 @@ const navLabels = lang === "en"
           href={githubUrl}
           rel="noopener"
           target="_blank"
-          class="text-[#efe9dc] no-underline hover:underline underline-offset-4"
+          class="text-[var(--color-ink)] no-underline hover:underline underline-offset-4"
         >GITHUB</a>
         <a
           data-footer-top
@@ -102,7 +103,7 @@ const navLabels = lang === "en"
           href={linkedinUrl}
           rel="noopener"
           target="_blank"
-          class="text-[#efe9dc] no-underline hover:underline underline-offset-4"
+          class="text-[var(--color-ink)] no-underline hover:underline underline-offset-4"
         >LINKEDIN</a>
         <a
           data-footer-top
@@ -110,29 +111,24 @@ const navLabels = lang === "en"
           href={behanceUrl}
           rel="noopener"
           target="_blank"
-          class="text-[#efe9dc] no-underline hover:underline underline-offset-4"
+          class="text-[var(--color-ink)] no-underline hover:underline underline-offset-4"
         >BEHANCE</a>
       </div>
 
-      {/* Right : nav */}
+      {/* Right : nav. (Projects link removed — Projects is moving to a
+          standalone page; re-add it here pointing at that page once it exists.) */}
       <div class="flex flex-col gap-1.5 sm:items-end">
-        <a
-          data-footer-top
-          style="transition-delay:600ms"
-          href={`${homeHref}#projects`}
-          class="text-[#efe9dc] no-underline hover:underline underline-offset-4"
-        >{navLabels.projects}</a>
         <a
           data-footer-top
           style="transition-delay:720ms"
           href={aboutHref}
-          class="text-[#efe9dc] no-underline hover:underline underline-offset-4"
+          class="text-[var(--color-ink)] no-underline hover:underline underline-offset-4"
         >{navLabels.about}</a>
         <a
           data-footer-top
           style="transition-delay:840ms"
           href={`${homeHref}#contact`}
-          class="text-[#efe9dc] no-underline hover:underline underline-offset-4"
+          class="text-[var(--color-ink)] no-underline hover:underline underline-offset-4"
         >{navLabels.contact}</a>
       </div>
     </div>

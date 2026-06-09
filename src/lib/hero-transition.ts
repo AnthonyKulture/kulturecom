@@ -88,6 +88,11 @@ export function initHeroTransition(): void {
   const transitionImg = document.querySelector<HTMLElement>(
     "[data-hero-transition-image]"
   );
+  // Opaque ink layer behind the image; fades in just before the image lifts
+  // so the seam (and any fast-scroll desync gap) reads dark, never cream.
+  const departureBackdrop = document.querySelector<HTMLElement>(
+    "[data-hero-transition-backdrop]"
+  );
   if (!pinTrigger || !transitionImg) return;
 
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -252,11 +257,20 @@ export function initHeroTransition(): void {
     // image; this clears the center early so the big image opens into
     // clean space.
     if (figure) {
+      // `y: 0` in BOTH from and to (not just opacity) so immediateRender pins
+      // the figure at its final position the instant the timeline is created
+      // (at fonts.ready — while the preloader still locks scroll). The figure
+      // ships with `.anim-hidden` (translateY(14px)); without this it would sit
+      // 14px low until hero.ts's late arrival reveal (~1.4s) snapped it up,
+      // reading as the image "jumping up a few pixels" right after it appears.
+      // Pinning y here means it's already in its correct place on arrival and
+      // the later reveal is a visual no-op. It still fades out on departure.
       tl.fromTo(
         figure,
-        { opacity: 1 },
+        { opacity: 1, y: 0 },
         {
           opacity: 0,
+          y: 0,
           duration: 0.16,
           ease: "power2.out",
         },
@@ -301,6 +315,24 @@ export function initHeroTransition(): void {
       },
       0.28
     );
+
+    // ─── Departure backdrop fade-in (0.42 → 0.52) ─────────────────────────
+    // Raise the ink layer to full opacity while the image still covers the
+    // whole viewport (clip finished ~0.30, scale only growing, rise not yet
+    // started at 0.55) — so the fade itself is invisible (it happens behind
+    // the opaque full-screen image). By the time the image lifts off at 0.55
+    // the ink is solid, backing the rising image's blurred underside with
+    // dark instead of the cream body. No fade-OUT needed: the backdrop is an
+    // absolute child of the pinned hero, so it scrolls off with the hero when
+    // the pin releases rather than lingering as a fixed full-screen layer.
+    if (departureBackdrop) {
+      tl.fromTo(
+        departureBackdrop,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.10, ease: "none" },
+        0.42
+      );
+    }
 
     // ─── Departure — image rises + blurs, About rises from below (0.55 → 1.0) ──
     // Sync requirement : image bottom edge must stay glued to About top

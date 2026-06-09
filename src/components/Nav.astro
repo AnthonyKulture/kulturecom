@@ -60,20 +60,20 @@ const enHref = lang === "en" ? "/en/" : altLangPath;
     {/* About — hidden on mobile to save horizontal space */}
     <a
       href={aboutHref}
-      class="font-mono hidden text-[12px] uppercase tracking-[0.04em] text-[var(--color-bg)] no-underline hover:underline underline-offset-4 sm:inline-block sm:text-[13px]"
+      class="font-mono hidden text-[12px] uppercase tracking-[0.18em] text-[var(--color-bg)] no-underline hover:underline underline-offset-4 sm:inline-block sm:text-[13px]"
       >{t.nav.about}</a
     >
     {/* Discutons / Let's talk — anchors to the homepage's #contact (CTA)
         section. From any other page we navigate to homepage then scroll. */}
     <a
       href={`${homeHref}#contact`}
-      class="font-mono text-[12px] uppercase tracking-[0.04em] text-[var(--color-bg)] no-underline hover:underline underline-offset-4 sm:text-[13px]"
+      class="font-mono text-[12px] uppercase tracking-[0.18em] text-[var(--color-bg)] no-underline hover:underline underline-offset-4 sm:text-[13px]"
       >{t.nav.cta}</a
     >
 
     {/* Lang switcher — both EN and FR visible, current lang in bold for
         clarity; alt lang slightly faded as a secondary affordance. */}
-    <span class="font-mono inline-flex items-center gap-1 text-[11px] uppercase tracking-[0.16em] text-[var(--color-bg)] sm:text-[12px]">
+    <span class="font-mono inline-flex items-center gap-1 text-[11px] uppercase tracking-[0.18em] text-[var(--color-bg)] sm:text-[12px]">
       <a
         href={enHref}
         hreflang="en"

@@ -29,6 +29,9 @@ export function initSmoothScroll(): void {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   const lenis = new Lenis({ lerp: 0.1 });
+  // Expose the instance: about-scroll.ts routes the "clic" CTA + #contact links
+  // through `window.__lenis.scrollTo` (and falls back to native scroll if absent).
+  (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
 
   // Keep ScrollTrigger in sync with Lenis' interpolated scroll position.
   lenis.on("scroll", ScrollTrigger.update);

@@ -64,9 +64,9 @@ const subtitleHtml = splitWordsWithDelay(t.hero.subtitle, 30);
           One image per second (CAROUSEL_INTERVAL in hero.ts). */}
       <span
         data-anim-figure
-        class="anim-hidden my-4 block w-full"
+        class="anim-hidden my-2 block w-full"
       >
-        <span class="mx-auto block aspect-square w-[clamp(120px,38vw,180px)] overflow-hidden bg-[#0b0b0b]">
+        <span class="mx-auto block aspect-square w-[clamp(120px,38vw,180px)] overflow-hidden bg-[var(--color-ink)]">
           <img
             data-carousel-img-mobile
             src={slideSources[0]}
@@ -149,7 +149,7 @@ const subtitleHtml = splitWordsWithDelay(t.hero.subtitle, 30);
       class on the <p> itself — visibility is per-word. */}
   <p
     data-hero-subtitle
-    class="font-sans relative z-10 mx-auto mt-10 max-w-[clamp(20rem,92vw,36rem)] text-balance text-center text-[clamp(15px,1.8vw,22px)] leading-[1.45] text-[var(--color-ink-muted)] sm:mt-8 sm:max-w-[clamp(24rem,60vw,50rem)] md:mt-10"
+    class="font-sans relative z-10 mx-auto mt-6 max-w-[clamp(20rem,92vw,36rem)] text-balance text-center text-[clamp(15px,1.8vw,22px)] leading-[1.45] text-[var(--color-ink-muted)] sm:mt-8 sm:max-w-[clamp(24rem,60vw,50rem)] md:mt-10"
     set:html={subtitleHtml}
   />
 
@@ -171,10 +171,10 @@ const subtitleHtml = splitWordsWithDelay(t.hero.subtitle, 30);
     aria-hidden="true"
   >
     <span
-      class="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)] sm:text-[11px] sm:tracking-[0.2em]"
+      class="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)] sm:text-[11px]"
       >{t.hero["label.scroll"]}</span
     >
-    <span class="hero-scroll-bar relative block h-12 w-px overflow-hidden bg-[color-mix(in_srgb,var(--color-ink)_15%,transparent)]">
+    <span class="hero-scroll-bar relative block h-8 w-px overflow-hidden bg-[color-mix(in_srgb,var(--color-ink)_15%,transparent)] sm:h-12">
       <span class="hero-scroll-bar__progress absolute left-0 top-0 h-4 w-full bg-[var(--color-ink)]"></span>
     </span>
   </div>

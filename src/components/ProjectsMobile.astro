@@ -68,13 +68,13 @@ const items = [
 
 <section
   data-projects-mobile
-  class="relative bg-[#efe9dc] px-4 pt-10 pb-16"
+  class="relative bg-[var(--color-bg)] px-4 pt-10 pb-16"
   aria-label={t.projects.eyebrow}
 >
   {/* Mobile section header — eyebrow + H2, same i18n keys as desktop. */}
   <header class="mb-10">
     <Eyebrow label={t.projects.eyebrow} class="mb-3" />
-    <h2 class="font-display text-[clamp(28px,8vw,44px)] uppercase leading-[0.95] tracking-[-0.04em] text-[#0b0b0b]">
+    <h2 class="font-display text-[clamp(28px,8vw,44px)] uppercase leading-[0.95] tracking-[-0.04em] text-[var(--color-ink)]">
       <span class="block">{t.projects["title.line1"]}</span>
       <span class="block">{t.projects["title.line2"]}</span>
     </h2>
@@ -107,33 +107,33 @@ const items = [
                 class="absolute inset-0 block h-full w-full object-cover"
               />
             )}
-            <span class="font-mono absolute left-2 top-2 rounded-sm bg-[#efe9dc]/90 px-1.5 py-0.5 text-[10px] uppercase tracking-[0.18em] text-[#0b0b0b]">
+            <span class="font-mono absolute left-2 top-2 rounded-sm bg-[var(--color-bg)]/90 px-1.5 py-0.5 text-[10px] uppercase tracking-[0.18em] text-[var(--color-ink)]">
               {p.num}
             </span>
 
             {/* Result stamp — always visible bottom-right */}
-            <div class="font-mono absolute bottom-2 right-2 inline-flex items-center gap-1.5 bg-[#0b0b0b] px-2 py-1 text-[10px] uppercase leading-tight tracking-[0.14em] text-[#efe9dc] max-w-[calc(100%-1rem)]">
-              <span aria-hidden="true" class="inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-accent,#c14a1d)] shrink-0"></span>
+            <div class="font-mono absolute bottom-2 right-2 inline-flex items-center gap-1.5 bg-[var(--color-ink)] px-2 py-1 text-[10px] uppercase leading-tight tracking-[0.18em] text-[var(--color-bg)] max-w-[calc(100%-1rem)]">
+              <span aria-hidden="true" class="inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-accent)] shrink-0"></span>
               <span class="truncate">{p.metric}</span>
             </div>
           </div>
 
           {/* Title + tag */}
           <div class="mt-3 flex items-baseline justify-between gap-3">
-            <h3 class="font-sans text-[18px] font-medium tracking-[-0.02em] text-[#0b0b0b]">
+            <h3 class="font-sans text-[18px] font-medium tracking-normal text-[var(--color-ink)]">
               {p.title}
             </h3>
-            <span class="font-mono shrink-0 text-[10px] uppercase tracking-[0.16em] text-[#7a7a7a]">
+            <span class="font-mono shrink-0 text-[10px] uppercase tracking-[0.18em] text-[var(--color-ink-subtle)]">
               {p.tag}
             </span>
           </div>
-          <p class="mt-1 text-[12px] text-[#5a5a5a]">{p.client}</p>
+          <p class="mt-1 text-[12px] text-[var(--color-ink-muted)]">{p.client}</p>
 
           {/* Case study mini-narrative — problem italic + solution */}
-          <p class="font-serif-italic mt-3 text-[15px] leading-snug text-[#0b0b0b]">
+          <p class="font-serif-italic mt-3 text-[15px] leading-snug text-[var(--color-ink)]">
             {p.problem}
           </p>
-          <p class="mt-1.5 text-[13px] leading-relaxed text-[#5a5a5a]">
+          <p class="mt-1.5 text-[13px] leading-relaxed text-[var(--color-ink-muted)]">
             {p.summary}
           </p>
         </li>

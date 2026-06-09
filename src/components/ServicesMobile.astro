@@ -37,7 +37,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
 
 <section
   data-services-mobile-panel
-  class="relative h-full min-h-[100dvh] overflow-hidden bg-[#efe9dc]"
+  class="relative h-full min-h-[100dvh] overflow-hidden bg-[var(--color-bg)]"
   aria-label={t.services.eyebrow}
 >
   {items.map((item, i) => (
@@ -54,7 +54,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
         class="absolute left-5 right-5 top-24 z-10 flex items-center justify-between"
       >
         <Eyebrow label={t.services.eyebrow} />
-        <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-[#7a7a7a]">
+        <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-ink-subtle)]">
           {pad(i + 1)} / {pad(total)}
         </p>
       </header>
@@ -64,7 +64,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
           right edge for the brutalist "too big to contain" feel. */}
       <span
         data-axis-panel-label={i}
-        class="font-display pointer-events-none absolute right-[-2vw] top-1/2 block -translate-y-1/2 text-[clamp(280px,80vw,420px)] leading-[0.78] tracking-[-0.06em] text-[#0b0b0b]"
+        class="font-display pointer-events-none absolute right-[-2vw] top-1/2 block -translate-y-1/2 text-[clamp(280px,80vw,420px)] leading-[0.78] tracking-[-0.06em] text-[var(--color-ink)]"
       >
         {item.label}
       </span>
@@ -75,12 +75,12 @@ const pad = (n: number) => String(n).padStart(2, "0");
       <div class="absolute bottom-24 left-5 right-5 z-10 max-w-[26ch]">
         <h3
           data-axis-card-title={i}
-          class="font-sans text-[clamp(24px,7vw,36px)] font-semibold leading-[1.05] tracking-[-0.025em] text-[#0b0b0b]"
+          class="font-sans text-[clamp(24px,7vw,36px)] font-semibold leading-[1.05] tracking-normal text-[var(--color-ink)]"
           set:html={splitTitle(item.title)}
         />
         <p
           data-axis-card-body={i}
-          class="mt-4 text-[14px] leading-[1.55] text-[#3a3a3a]"
+          class="mt-4 text-[14px] leading-[1.55] text-[var(--color-ink-muted)]"
         >
           {item.body}
         </p>
@@ -92,7 +92,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
         class="absolute bottom-10 left-5 right-5 z-10 flex items-end justify-between"
       >
         <span class="block h-px w-[clamp(80px,30vw,140px)] bg-[var(--color-accent)]" />
-        <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-[#7a7a7a]">
+        <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-ink-subtle)]">
           {i < total - 1 ? "↓ suivant" : "↓ projets"}
         </span>
       </footer>

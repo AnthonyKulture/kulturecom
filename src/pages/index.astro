@@ -6,11 +6,6 @@ import About from "~/components/About.astro";
 import AboutPortrait from "~/components/AboutPortrait.astro";
 import CinematicScroll from "~/components/CinematicScroll.astro";
 import AboutChapter from "~/components/AboutChapter.astro";
-import Services from "~/components/Services.astro";
-import ServicesMobile from "~/components/ServicesMobile.astro";
-import Projects from "~/components/Projects.astro";
-import ProjectsMobile from "~/components/ProjectsMobile.astro";
-import ProjectsMobileCover from "~/components/ProjectsMobileCover.astro";
 import CTA from "~/components/CTA.astro";
 import type { Lang } from "~/i18n/ui";
 
@@ -29,6 +24,22 @@ const lang: Lang = "fr";
         fixed-positioned and floats above the Hero. */}
     <div data-hero-pin class="relative">
       <Hero lang={lang} />
+      {/* Departure backdrop — opaque ink layer BEHIND the transition image
+          (z-20, between the hero text z-10 and the image z-30). Faded 0→1 by
+          hero-transition.ts just before the image lifts off. As the image
+          rises + blurs, anything that peeks below its bottom edge (the blur
+          halo, or a gap if the scrub-driven image desyncs from About's native
+          scroll on a fast mobile fling) lands on THIS ink instead of the cream
+          body bg — so the seam reads dark→dark (organic), never flashing white.
+          It's `absolute` (not fixed), so it scrolls away with the pinned hero
+          on release and can't persist over the cream Contact section below. */}
+      <div
+        data-hero-transition-backdrop
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-0 z-20 bg-[#0b0b0b]"
+        style="opacity: 0;"
+      >
+      </div>
       <img
         data-hero-transition-image
         src="/hero-slides/hero-image.jpeg"
@@ -87,15 +98,14 @@ const lang: Lang = "fr";
         stack below. Lazy-booted + rAF-gated (src/lib/cinematic-scroll.ts). */}
     <CinematicScroll lang={lang} />
 
-    {/* Pinned screen-stack — only About 2 + Services + Projects now. The base
-        stays CREAM so the mobile push-stack gap (Services panel scales back as
-        Projects slides up) blends seamlessly. A dedicated dark backdrop
-        (`data-about2-dark`, z-0) sits behind About 2 so its curtain parts from
-        BLACK — continuing the dark About manifesto instead of flashing cream.
-        On mobile it fades out WITH About 2 (about-scroll.ts, timeline 0.35),
-        before the push-stack, so no dark band ever shows between the cream
-        panels. On desktop it stays but is covered by About 2's photo once the
-        curtain opens. */}
+    {/* Pinned screen-stack — About 2 → Contact. About 2 (the "return to calm"
+        message on the peaceful photo) opens via a clip-path curtain, then the
+        Contact layer reveals over it with the bottom-right circle clip-path —
+        the same transition that used to bring in Services. A dedicated dark
+        backdrop (`data-about2-dark`, z-0) sits behind About 2 so its curtain
+        parts from BLACK, continuing the dark About manifesto. Driven by
+        src/lib/about-scroll.ts. (Services + Projects moved to future standalone
+        pages — their components/i18n are kept but no longer rendered here.) */}
     <div
       data-screen-stack
       class="relative isolate h-[100lvh] overflow-hidden bg-[var(--color-bg)]"
@@ -113,44 +123,17 @@ const lang: Lang = "fr";
       >
         <AboutChapter lang={lang} chapterKey="about2" />
       </div>
+      {/* Contact — revealed over About 2 with the circle clip-path (the same
+          transition that used to bring in Services). CTA is responsive and has
+          an opaque cream background, so one layer covers desktop and mobile. */}
       <div
-        data-screen-layer="services"
-        class="absolute inset-0 z-30 hidden sm:block"
+        data-screen-layer="cta"
+        class="absolute inset-0 z-30"
         style="clip-path: circle(0% at 100% 100%);"
       >
-        <Services lang={lang} />
-      </div>
-      <div
-        data-screen-layer="projects"
-        class="letter-mask absolute inset-0 z-40 hidden sm:block"
-      >
-        <Projects lang={lang} />
-      </div>
-
-      <!-- Mobile-only layers (sm:hidden) — same z stack as desktop counterparts -->
-      <div
-        data-screen-layer="services-mobile"
-        class="absolute inset-0 z-30 sm:hidden"
-        style="clip-path: circle(0% at 100% 100%);"
-      >
-        <ServicesMobile lang={lang} />
-      </div>
-      <div
-        data-screen-layer="projects-mobile-cover"
-        class="absolute inset-0 z-40 sm:hidden"
-        style="transform: translateY(100%); will-change: transform;"
-      >
-        <ProjectsMobileCover lang={lang} />
+        <CTA lang={lang} />
       </div>
     </div>
-
-    <!-- Mobile-only Projects detail list (after stack, normal flow) -->
-    <div class="sm:hidden">
-      <ProjectsMobile lang={lang} />
-    </div>
-
-    <!-- Final CTA section (after pin ends, normal flow, before footer) -->
-    <CTA lang={lang} />
   </main>
 
   <script>

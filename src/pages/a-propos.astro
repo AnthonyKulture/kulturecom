@@ -119,21 +119,21 @@ const refuse = [
     </section>
 
     <!-- ========== STORY (dark band) ========== -->
-    <section class="relative bg-[#0b0b0b] text-[#efe9dc] px-4 py-24 sm:px-6 sm:py-32 md:px-12 md:py-40">
+    <section data-surface="dark" class="relative bg-[var(--color-bg)] text-[var(--color-ink)] px-4 py-24 sm:px-6 sm:py-32 md:px-12 md:py-40">
       <div class="mx-auto w-full max-w-[68ch]">
-        <p class="font-mono mb-6 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[#8a8a8a]">
+        <p class="font-mono mb-6 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
           <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
           Parcours
         </p>
-        <div class="font-sans space-y-6 text-[clamp(16px,1.3vw,20px)] leading-[1.7] text-[#efe9dc]">
+        <div class="font-sans space-y-6 text-[clamp(16px,1.3vw,20px)] leading-[1.7] text-[var(--color-ink)]">
           <p>
             J'ai commencé en agence digital, j'ai vu trop de projets sortir cassés parce que trois équipes (brand, dev, SEO) se passaient des fichiers sans jamais se parler. En 2018, j'ai décidé de faire les trois moi-même. Pas pour être polyvalent — pour <em class="font-serif-italic">supprimer les friction points</em> entre les disciplines.
           </p>
           <p>
-            Depuis, je travaille en solo avec un objectif simple : <strong class="font-medium text-[#efe9dc]">votre marque doit être trouvée, comprise, et préférée</strong>. La forme (design), la mécanique (code) et la visibilité (SEO) sont trois faces d'un même problème. Je les traite ensemble parce que les séparer coûte plus cher au client qu'à moi.
+            Depuis, je travaille en solo avec un objectif simple : <strong class="font-medium text-[var(--color-ink)]">votre marque doit être trouvée, comprise, et préférée</strong>. La forme (design), la mécanique (code) et la visibilité (SEO) sont trois faces d'un même problème. Je les traite ensemble parce que les séparer coûte plus cher au client qu'à moi.
           </p>
           <p>
-            Je travaille avec des <strong class="font-medium text-[#efe9dc]">PME en croissance, des marques B2B techniques, et des fondateurs qui prennent l'image au sérieux</strong>. Je ne prends pas de projets « refonte cosmétique » sans repenser la structure SEO. Je ne fais pas de mission de moins de 8 semaines. Je n'ai jamais utilisé un template Webflow et je n'ai pas l'intention de commencer.
+            Je travaille avec des <strong class="font-medium text-[var(--color-ink)]">PME en croissance, des marques B2B techniques, et des fondateurs qui prennent l'image au sérieux</strong>. Je ne prends pas de projets « refonte cosmétique » sans repenser la structure SEO. Je ne fais pas de mission de moins de 8 semaines. Je n'ai jamais utilisé un template Webflow et je n'ai pas l'intention de commencer.
           </p>
         </div>
       </div>
@@ -156,10 +156,10 @@ const refuse = [
           {
             stack.map((s) => (
               <article class="border-t border-[var(--color-border)] pt-6">
-                <span class="font-mono block text-[11px] uppercase tracking-[0.16em] text-[var(--color-ink-subtle)]">
+                <span class="font-mono block text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-subtle)]">
                   {s.label}
                 </span>
-                <h3 class="font-sans mt-2 text-[clamp(22px,2.5vw,32px)] font-medium tracking-[-0.02em] text-[var(--color-ink)]">
+                <h3 class="font-sans mt-2 text-[clamp(22px,2.5vw,32px)] font-medium tracking-normal text-[var(--color-ink)]">
                   {s.title}
                 </h3>
                 <ul class="mt-6 space-y-2 text-[clamp(14px,1.1vw,16px)] text-[var(--color-ink-muted)]">
@@ -178,14 +178,14 @@ const refuse = [
     </section>
 
     <!-- ========== PROCESS (numbered narrative) ========== -->
-    <section class="relative bg-[#0b0b0b] text-[#efe9dc] px-4 py-24 sm:px-6 sm:py-32 md:px-12 md:py-40">
+    <section data-surface="dark" class="relative bg-[var(--color-bg)] text-[var(--color-ink)] px-4 py-24 sm:px-6 sm:py-32 md:px-12 md:py-40">
       <div class="mx-auto w-full max-w-[var(--container-wide)]">
         <header class="mb-16 sm:mb-20">
-          <p class="font-mono mb-3 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[#8a8a8a]">
+          <p class="font-mono mb-3 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
             <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
             Process
           </p>
-          <h2 class="font-display text-[clamp(28px,5vw,72px)] uppercase leading-[0.95] tracking-[-0.04em] text-[#efe9dc]">
+          <h2 class="font-display text-[clamp(28px,5vw,72px)] uppercase leading-[0.95] tracking-[-0.04em] text-[var(--color-ink)]">
             Cinq étapes, <br />zéro surprise.
           </h2>
         </header>
@@ -193,15 +193,15 @@ const refuse = [
         <ol class="flex flex-col gap-12 sm:gap-16">
           {
             process.map((step) => (
-              <li class="grid grid-cols-1 gap-4 border-t border-[#2a2a28] pt-8 sm:grid-cols-[140px_1fr] sm:gap-12">
+              <li class="grid grid-cols-1 gap-4 border-t border-[var(--color-border)] pt-8 sm:grid-cols-[140px_1fr] sm:gap-12">
                 <span class="font-display text-[clamp(48px,5vw,80px)] leading-none tracking-[-0.04em] text-[var(--color-accent)]">
                   {step.n}
                 </span>
                 <div>
-                  <h3 class="font-sans text-[clamp(20px,2.2vw,28px)] font-medium tracking-[-0.02em] text-[#efe9dc]">
+                  <h3 class="font-sans text-[clamp(20px,2.2vw,28px)] font-medium tracking-normal text-[var(--color-ink)]">
                     {step.title}
                   </h3>
-                  <p class="mt-3 max-w-[60ch] text-[clamp(15px,1.2vw,17px)] leading-[1.65] text-[#a8a59c]">
+                  <p class="mt-3 max-w-[60ch] text-[clamp(15px,1.2vw,17px)] leading-[1.65] text-[var(--color-ink-muted)]">
                     {step.body}
                   </p>
                 </div>
@@ -228,8 +228,8 @@ const refuse = [
         <ul class="font-display flex flex-col">
           {
             refuse.map((line, i) => (
-              <li class="flex items-start gap-4 border-t border-[var(--color-border)] py-6 text-[clamp(20px,2.5vw,40px)] uppercase leading-[1.05] tracking-[-0.03em] text-[var(--color-ink)] sm:gap-8 sm:py-8">
-                <span class="font-mono shrink-0 pt-2 text-[12px] tracking-[0.16em] text-[var(--color-ink-subtle)]">
+              <li class="flex items-start gap-4 border-t border-[var(--color-border)] py-6 text-[clamp(20px,2.5vw,40px)] uppercase leading-[1.05] text-[var(--color-ink)] sm:gap-8 sm:py-8">
+                <span class="font-mono shrink-0 pt-2 text-[12px] tracking-[0.18em] text-[var(--color-ink-subtle)]">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <span>{line}</span>
@@ -241,26 +241,26 @@ const refuse = [
     </section>
 
     <!-- ========== MINI CTA ========== -->
-    <section class="relative bg-[#0b0b0b] text-[#efe9dc] px-4 py-20 sm:px-6 sm:py-28 md:px-12 md:py-32">
+    <section data-surface="dark" class="relative bg-[var(--color-bg)] text-[var(--color-ink)] px-4 py-20 sm:px-6 sm:py-28 md:px-12 md:py-32">
       <div class="mx-auto w-full max-w-[var(--container-wide)]">
-        <p class="font-mono mb-6 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[#8a8a8a]">
+        <p class="font-mono mb-6 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
           <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
           Étape suivante
         </p>
-        <p class="font-display max-w-[20ch] text-[clamp(28px,5vw,72px)] uppercase leading-[0.95] tracking-[-0.04em] text-[#efe9dc]">
+        <p class="font-display max-w-[20ch] text-[clamp(28px,5vw,72px)] uppercase leading-[0.95] tracking-[-0.04em] text-[var(--color-ink)]">
           On en discute ?
         </p>
         <div class="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-baseline sm:gap-8">
           <a
             href="mailto:hello@anthonyprofit.com?subject=Projet%20%E2%80%94%20j%27aimerais%20discuter"
-            class="font-display inline-flex items-center gap-3 bg-[var(--color-accent)] px-6 py-4 text-[clamp(16px,1.4vw,20px)] uppercase tracking-[-0.01em] text-[#efe9dc] no-underline transition-colors duration-200 hover:bg-[#efe9dc] hover:text-[#0b0b0b] sm:px-8 sm:py-5"
+            class="font-display inline-flex items-center gap-3 bg-[var(--color-accent)] px-6 py-4 text-[clamp(16px,1.4vw,20px)] uppercase text-[var(--color-ink)] no-underline transition-colors duration-200 hover:bg-[var(--color-ink)] hover:text-[var(--color-bg)] sm:px-8 sm:py-5"
           >
             Écrire à Anthony
             <span aria-hidden="true" class="text-[1.2em] leading-none">→</span>
           </a>
           <a
             href="/"
-            class="font-mono text-[11px] uppercase tracking-[0.18em] text-[#8a8a8a] hover:text-[#efe9dc] underline underline-offset-4"
+            class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)] hover:text-[var(--color-ink)] underline underline-offset-4"
             >← Retour au portfolio</a
           >
         </div>

@@ -9,6 +9,7 @@
   --color-ink-muted: #5a5a5a;
   --color-ink-subtle: #8a8a8a;
   --color-border: #d4ccba;
+  --color-accent: #c14a1d;
 
   /* Typography */
   --font-display:
@@ -112,8 +113,14 @@
   }
 }
 
-/* === About — dark section (inverted color scheme) === */
-[data-about] {
+/* === Dark surface — inverted color scheme ===
+   Any section that paints cream-on-ink. `[data-about]` is the original
+   manifesto hook; `[data-surface="dark"]` generalizes it so every other dark
+   band (Footer, About 2, the About-page story/process/CTA bands) inherits the
+   SAME token values and can use var(--color-ink*)/var(--color-bg) instead of
+   hardcoded hex — keeping one source of truth for the palette. */
+[data-about],
+[data-surface="dark"] {
   --color-bg: #0b0b0b;
   --color-ink: #efe9dc;
   --color-ink-muted: #a8a59c;
@@ -355,9 +362,9 @@
   font-family: var(--font-mono);
   font-style: normal;
   font-size: clamp(11px, 0.9vw, 13px);
-  letter-spacing: 0.22em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(239, 233, 220, 0.45);
+  color: color-mix(in srgb, var(--color-ink) 45%, transparent);
   margin-bottom: clamp(0.75rem, 1.6vw, 1.4rem);
 }
 

@@ -94,11 +94,15 @@ const cylinderVertex = /* glsl */ `
 const cylinderFragment = /* glsl */ `
   precision highp float;
   uniform sampler2D tMap;
-  uniform float uDarkness; // 0.0 = normal, 1.0 = fully black
+  uniform float uDarkness; // 0.0 = normal, 1.0 = dissolved into the background
   varying vec2 vUv;
   void main() {
     vec4 tex = texture2D(tMap, vUv);
-    tex.rgb *= (1.0 - uDarkness);
+    // Dissolve TOWARD the site background (#0b0b0b ≈ 0.043), not pure black: at full
+    // darkness the cylinder matches the clear colour and vanishes with no silhouette.
+    // max() (not mix()) leaves the normal-state look untouched — only pixels already
+    // darker than the background floor get lifted, which is imperceptible.
+    tex.rgb = max(tex.rgb * (1.0 - uDarkness), vec3(0.043) * uDarkness);
     gl_FragColor = tex;
   }
 `;
@@ -235,6 +239,11 @@ export function initCinematicScroll(): void {
   // The fixed stage never moves; this tall, normal-flow spacer provides the scroll runway.
   const spacer = section.querySelector<HTMLElement>("[data-cinematic-spacer]");
   if (!canvas || !spacer || !stage) return;
+  // The soft cover feather (after the spacer) and the screen-stack below — used to drive
+  // the timeline by the REAL reveal→cover geometry (the timeline ends at the screen-stack
+  // pin, not the spacer bottom). Both optional: fall back to the spacer-only geometry.
+  const coverFeather = section.querySelector<HTMLElement>("[data-cinematic-cover-feather]");
+  const screenStack = document.querySelector<HTMLElement>("[data-screen-stack]");
 
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const isMobile = window.matchMedia("(max-width: 767px)").matches;
@@ -278,52 +287,116 @@ export function initCinematicScroll(): void {
     if (!rafId) loop();
   };
 
-  // Camera position, cylinder rotation and texture darkness are tweened on PLAIN
-  // objects; the cylinder (created later, lazily) reads them every frame. ONE scrubbed
-  // timeline, driven by the scroll spacer, runs the whole sequence — the Codrops
-  // single-timeline model. The fixed stage never moves; only this timeline animates.
+  // Camera position, cylinder rotation and texture darkness are tweened on PLAIN objects;
+  // the cylinder (created lazily) reads them every frame. ONE scrubbed timeline runs the
+  // whole sequence. The fixed stage never moves; only this timeline animates.
   const initialCameraZ = window.innerWidth < 768 ? 6 : window.innerWidth < 1024 ? 7 : 8;
   const cameraAnim = { x: 0, y: 0, z: initialCameraZ };
   const rotationAnim = { y: 0.5 };
-  // Texture darkness → `uDarkness` uniform (1 = full black, 0.3 = normal). Starts black
-  // so the cylinder EMERGES from black once the About has scrolled off the stage, and
-  // DISSOLVES back to black before the screen-stack scrolls over it — both ends
-  // dark-on-dark, so the reveal and cover are seamless and the stage never seems to move.
-  const darknessAnim = { v: 1 };
+  // Texture darkness → `uDarkness` uniform (0.3 = the normal look). The cylinder stays LIT
+  // the whole time — the feathers do the soft reveal/cover (About's bottom feather on the
+  // way in, the cover feather on the way out). This value is only nudged a little darker
+  // over the cover window so bright image cells lose their edge as the feather crosses them
+  // (no faint "horizon"). No black emerge — it starts at the normal look.
+  const darknessAnim = { v: 0.3 };
 
-  // The spacer scrubs the timeline. Start at "top bottom" (the moment the About begins
-  // scrolling off, revealing the stage) so the cylinder EMERGES during that reveal —
-  // no dead black scroll waiting for the About to fully clear first.
+  // === Reveal→cover geometry — so the timeline is SYNCED to what is actually on screen ===
+  // DOM order: [About wrapper][spacer Hs][cover feather Hf][screen-stack]. The scrub runs
+  // from "spacer top at viewport bottom" to "screen-stack top at viewport top" (its pin) —
+  // range = Hs + Hf + V. As progress p ∈ [0,1]:
+  //   • reveal_end = (V + about-feather 24vh) / range — About + its feather have cleared the
+  //     viewport, the full cylinder is visible. Captions must not start before this, else
+  //     they play behind the still-descending About (the bug being fixed).
+  //   • cover_start = Hs / range — the cover feather's transparent top enters the viewport
+  //     bottom and begins swallowing the lit cylinder.
+  //   • cover_solid = (Hs + Hf) / range — the feather's solid #0b0b0b bottom (= screen-stack
+  //     top) enters; from there the screen-stack covers the rest up to the pin (p = 1).
+  const V = window.innerHeight;
+  const Hs = spacer.offsetHeight;
+  const Hf = coverFeather ? coverFeather.offsetHeight : 0;
+  const range = Hs + Hf + V;
+  const revealEnd = (1.24 * V) / range; // 1.24 = one viewport + the 24vh About bottom feather
+  const coverStart = Hs / range;
+  const coverSolid = (Hs + Hf) / range;
+
+  // End the scrub at the screen-stack's pin ("top top"), NOT the spacer bottom — that is the
+  // exact scroll where About 2 takes over, so the timeline maps 1:1 onto the geometry above.
+  // Fall back to the spacer's own bottom if the stack isn't present.
+  const endConfig: { endTrigger?: HTMLElement; end: string } = screenStack
+    ? { endTrigger: screenStack, end: "top top" }
+    : { end: "bottom top" };
   const tl = gsap.timeline({
-    scrollTrigger: { trigger: spacer, start: "top bottom", end: "bottom bottom", scrub: 1 },
+    scrollTrigger: { trigger: spacer, start: "top bottom", ...endConfig, scrub: 1 },
   });
-  tl.to(cameraAnim, { x: 0, y: 0, z: initialCameraZ, duration: 1, ease: "cinematicSilk" })
-    .to(cameraAnim, { x: 0, y: 5, z: 5, duration: 1, ease: "cinematicFlow" })
-    .to(cameraAnim, { x: 1.5, y: 2, z: 2, duration: 2, ease: "cinematicLinear" })
-    .to(cameraAnim, { x: 0.5, y: 0, z: 0.8, duration: 3.5, ease: "power1.inOut" })
-    // Final keyframe: settle back to a front establishing shot (no fly-away "descent").
-    .to(cameraAnim, { x: 0, y: 0, z: initialCameraZ, duration: 1, ease: "cinematicSmooth" });
-  tl.to(rotationAnim, { y: "+=28.27", duration: 8.5, ease: "none" }, 0);
-  // Emerge from black over the reveal (longer, so it tracks the About scrolling off),
-  // dissolve back to black over the last stretch (total 8.5).
-  tl.to(darknessAnim, { v: 0.3, duration: 1.2, ease: "power2.out" }, 0);
-  tl.to(darknessAnim, { v: 1, duration: 1.0, ease: "power2.in" }, 7.5);
 
-  // Captions fade in/out, one per scroll-quarter, folded into the same scrubbed timeline.
-  const seg = tl.duration() / (captions.length || 1);
+  // Fixed timeline length; every keyframe below is placed as a fraction of it.
+  const DUR = 8.5;
+
+  // Camera — hold a calm establishing shot through the feathered REVEAL and COVER, and do
+  // the fly-through (incl. the close-up) only inside the fully-visible window. A close-up
+  // landing during the cover would be wasted on a darkening frame; a calm front shot feathers
+  // cleanly. The head/tail holds derive from the geometry so the framing tracks the feathers.
+  let headHold = revealEnd * DUR;
+  let tailHold = (1 - coverStart) * DUR;
+  const minFly = 2.0;
+  if (headHold + tailHold > DUR - minFly) {
+    const s = (DUR - minFly) / (headHold + tailHold);
+    headHold *= s;
+    tailHold *= s;
+  }
+  const flySpan = DUR - headHold - tailHold;
+  // Cover framing: a frame-FILLING front shot (not the small establishing one). If the
+  // cylinder sat small and centred during the cover, its black top margin would be the last
+  // thing the rising feather covered → a dead-black tail before the curtain. Filling the
+  // frame lets the feather swallow the cylinder edge-to-edge, right up to the pin.
+  const coverZ = Math.max(4, initialCameraZ * 0.5);
+  tl.to(cameraAnim, { z: initialCameraZ, duration: headHold, ease: "none" }) // hold establishing (reveal)
+    .to(cameraAnim, { x: 0, y: 4, z: 5, duration: flySpan * 0.28, ease: "cinematicFlow" }) // rise / overhead
+    .to(cameraAnim, { x: 1.3, y: 1.6, z: 1.7, duration: flySpan * 0.2, ease: "cinematicLinear" }) // swing in
+    .to(cameraAnim, { x: 0.4, y: 0, z: 0.9, duration: flySpan * 0.22, ease: "power1.inOut" }) // close-up (mid window)
+    .to(cameraAnim, { x: 0, y: 0, z: coverZ, duration: flySpan * 0.3, ease: "cinematicSmooth" }) // pull back to a frame-filling cover shot
+    .to(cameraAnim, { z: coverZ, duration: tailHold, ease: "none" }); // hold it through the cover
+
+  tl.to(rotationAnim, { y: "+=28.27", duration: DUR, ease: "none" }, 0);
+
+  // Gentle uniform dim over the cover window (complements the feather; kills any horizon on
+  // bright image cells). 0.3 → 0.5 across [cover_start, cover_solid]; the cylinder stays
+  // mostly visible (organic) — the feather does the actual cover.
+  tl.to(
+    darknessAnim,
+    { v: 0.5, ease: "power2.in", duration: Math.max(0.4, (coverSolid - coverStart) * DUR) },
+    coverStart * DUR
+  );
+
+  // Captions — all four land inside the fully-visible window [reveal_end, cover_start], so the
+  // FIRST one is actually seen (it no longer plays behind the descending About). The LAST
+  // ("Kulturecom") holds to cover_start, then fades over [cover_start, cover_solid] — dissolving
+  // WITH the rising cover, integrated, never held alone on dead black.
+  const w0 = revealEnd * DUR;
+  const w1 = coverStart * DUR;
+  const wCover = coverSolid * DUR;
+  const N = captions.length || 1;
+  const slot = (w1 - w0) / N;
   captions.forEach((cap, i) => {
-    const at = i * seg;
-    tl.fromTo(cap, { opacity: 0 }, { opacity: 1, duration: seg * 0.2, ease: "cinematicSmooth" }, at)
-      .to(cap, { opacity: 1, duration: seg * 0.55 }, at + seg * 0.2)
-      .to(cap, { opacity: 0, duration: seg * 0.25, ease: "cinematicSmooth" }, at + seg * 0.75);
+    const at = w0 + i * slot;
+    tl.fromTo(cap, { opacity: 0 }, { opacity: 1, duration: slot * 0.25, ease: "cinematicSmooth" }, at);
+    if (i === N - 1) {
+      tl.to(cap, { opacity: 1, duration: Math.max(0, w1 - (at + slot * 0.25)) }, at + slot * 0.25)
+        .to(cap, { opacity: 0, duration: Math.max(0.3, wCover - w1), ease: "cinematicSmooth" }, w1);
+      return;
+    }
+    tl.to(cap, { opacity: 1, duration: slot * 0.5 }, at + slot * 0.25)
+      .to(cap, { opacity: 0, duration: slot * 0.25, ease: "cinematicSmooth" }, at + slot * 0.75);
   });
 
-  // Gate the render loop AND the stage's visibility on the spacer being in view — i.e.
-  // whenever the fixed stage could be on screen (during the reveal, sequence, and cover).
+  // Gate the render loop AND the stage's visibility on the spacer→screen-stack span. The
+  // stage MUST stay rendered until the screen-stack pins (its opaque backdrop then covers it),
+  // because the cover feather's transparent half only reads as "cylinder" — not the cream body
+  // — while the stage is still visible behind it. Same start/endTrigger as the timeline → lockstep.
   ScrollTrigger.create({
     trigger: spacer,
     start: "top bottom",
-    end: "bottom top",
+    ...endConfig,
     onToggle: (self) => {
       running = self.isActive;
       setStageVisible(self.isActive);
@@ -518,9 +591,13 @@ export function initCinematicScroll(): void {
         const speed = Math.abs(velocity) * 100;
         const isRotating = Math.abs(velocity) > 0.0001;
 
+        // Fade the line particles out as the cover dim ramps in (darknessAnim 0.3 → 0.5
+        // over the cover window), so no faint motion lines linger above the rising feather.
+        const particleFade = Math.max(0, 1 - (darknessAnim.v - 0.3) / 0.2);
         particles.forEach((particle) => {
           const ud = particle.userData;
-          const targetOpacity = isRotating ? Math.min(speed * 3, 0.95) : 0;
+          const targetOpacity =
+            (isRotating ? Math.min(speed * 3, 0.95) : 0) * particleFade;
           const cur = particle.program.uniforms.uOpacity.value as number;
           particle.program.uniforms.uOpacity.value = cur + (targetOpacity - cur) * 0.15;
           if (!isRotating) return;
@@ -542,11 +619,13 @@ export function initCinematicScroll(): void {
 
       window.addEventListener("resize", handleResize);
 
-      // The atlas may finish while the spacer is already in view (e.g. a reload
-      // scrolled into the sequence) — the gating trigger's onToggle won't necessarily
-      // fire for an already-active trigger, so seed `running` from the live rect.
-      const rect = spacer!.getBoundingClientRect();
-      if (rect.top < window.innerHeight && rect.bottom > 0) {
+      // The atlas may finish while the stage is already in view (e.g. a reload scrolled into
+      // the sequence/cover) — the gate's onToggle won't fire for an already-active trigger, so
+      // seed `running` from the live rects: the spacer has entered AND the screen-stack hasn't
+      // pinned/covered yet (its top still below the viewport top).
+      const sRect = spacer!.getBoundingClientRect();
+      const stackTop = screenStack ? screenStack.getBoundingClientRect().top : sRect.bottom;
+      if (sRect.top < window.innerHeight && stackTop > 0) {
         running = true;
         setStageVisible(true);
       }

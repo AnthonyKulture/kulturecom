@@ -20,7 +20,8 @@ const chapter = t[chapterKey] as Record<string, string>;
 <section
   data-about-chapter
   data-about-chapter-key={chapterKey}
-  class="relative flex h-full min-h-[100dvh] flex-col justify-between overflow-hidden bg-[#0b0b0b] text-[#efe9dc] px-4 pt-10 pb-10 sm:px-6 sm:pt-14 sm:pb-14 md:px-12 md:pt-16 md:pb-16"
+  data-surface="dark"
+  class="relative flex h-full min-h-[100dvh] flex-col justify-between overflow-hidden bg-[var(--color-bg)] text-[var(--color-ink)] px-4 pt-10 pb-10 sm:px-6 sm:pt-14 sm:pb-14 md:px-12 md:pt-16 md:pb-16"
   aria-label={chapter.eyebrow}
 >
   <!-- Parallax photo background (animated via about-scroll.ts).
@@ -59,20 +60,20 @@ const chapter = t[chapterKey] as Record<string, string>;
     <div class="w-full max-w-[36rem] sm:max-w-[44rem] md:max-w-[56rem]">
       <p
         data-about-chapter-line
-        class="font-serif-italic text-[clamp(22px,3.6vw,56px)] leading-[1.15] tracking-[-0.01em]"
+        class="font-serif-italic text-[clamp(22px,3.6vw,56px)] leading-[1.15] tracking-normal"
       >
         {chapter["body.lead"]}
       </p>
       {/* Clickable CTA wraps the entire "Ça commence par un clic" line —
-          smooth-scrolls to the next section (Services) when activated.
-          about-scroll.ts attaches the click handler at init and computes
-          the target scroll position from the pinned-timeline math. */}
+          smooth-scrolls to the Contact reveal when activated. about-scroll.ts
+          attaches the click handler at init and computes the target scroll
+          position from the pinned-timeline math. */}
       <button
         type="button"
         data-about-chapter-line
         data-about-chapter-cta
-        aria-label={lang === "en" ? "Continue to services" : "Continuer vers les services"}
-        class="group font-display mt-8 flex flex-wrap items-end gap-x-[0.35em] gap-y-2 bg-transparent p-0 text-left text-[clamp(20px,2.8vw,44px)] uppercase leading-[1] tracking-[-0.025em] text-[inherit] cursor-pointer transition-colors duration-200 hover:text-[var(--color-accent)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-accent)] sm:mt-10 md:mt-12"
+        aria-label={lang === "en" ? "Continue to contact" : "Continuer vers le contact"}
+        class="group font-display mt-8 flex flex-wrap items-end gap-x-[0.35em] gap-y-2 bg-transparent p-0 text-left text-[clamp(20px,2.8vw,44px)] uppercase leading-[1] text-[inherit] cursor-pointer transition-colors duration-200 hover:text-[var(--color-accent)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-accent)] sm:mt-10 md:mt-12"
       >
         <span>{chapter["body.trail"]}</span>
         <span class="inline-flex items-end gap-[0.3em]">

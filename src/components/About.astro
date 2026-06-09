@@ -112,7 +112,7 @@ const services: Block[] = ([1, 2, 3] as const).map((n) => ({
 const chapters: Block[] = services;
 ---
 
-<div class="relative bg-[#0b0b0b] text-[#efe9dc]">
+<div data-surface="dark" class="relative bg-[var(--color-bg)] text-[var(--color-ink)]">
   {chapters.map((chapter) => {
     // Each service is sized to its own content with EQUAL vertical padding, so
     // the gap between the three teasers is constant. (Fixed-height slots with
@@ -141,8 +141,8 @@ const chapters: Block[] = services;
             class:list={[
               "block text-left",
               isIntro
-                ? "font-display text-[clamp(28px,4.6vw,60px)] uppercase leading-[1.02] tracking-[-0.03em]"
-                : "font-serif-italic text-[clamp(42px,7.5vw,92px)] leading-[0.92] tracking-[-0.015em]",
+                ? "font-display text-[clamp(28px,4.6vw,60px)] uppercase leading-[1.02]"
+                : "font-serif-italic text-[clamp(42px,7.5vw,92px)] leading-[0.92] tracking-normal",
             ]}
             set:html={chapter.titleHtml}
           />
@@ -151,8 +151,8 @@ const chapters: Block[] = services;
             class:list={[
               "about-body-reveal font-sans text-left",
               isIntro
-                ? "text-[clamp(19px,2.1vw,28px)] leading-[1.5] text-[#efe9dc]/85 max-w-[62ch] mt-8 md:mt-12"
-                : "text-[clamp(15px,1.5vw,19px)] leading-[1.5] text-[#efe9dc]/55 max-w-[46ch] mt-4 md:mt-6",
+                ? "text-[clamp(19px,2.1vw,28px)] leading-[1.5] text-[var(--color-ink)]/85 max-w-[62ch] mt-8 md:mt-12"
+                : "text-[clamp(15px,1.5vw,19px)] leading-[1.5] text-[var(--color-ink)]/55 max-w-[46ch] mt-4 md:mt-6",
             ]}
             set:html={chapter.descHtml}
           />

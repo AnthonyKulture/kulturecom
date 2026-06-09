@@ -12,16 +12,16 @@ const t = ui[lang];
 
 <section
   data-projects-mobile-cover-panel
-  class="relative flex h-full min-h-[100dvh] flex-col justify-between overflow-hidden bg-[#efe9dc] px-5 pt-10 pb-10"
+  class="relative flex h-full min-h-[100dvh] flex-col justify-between overflow-hidden bg-[var(--color-bg)] px-5 pt-10 pb-10"
   aria-label={t.projects.eyebrow}
 >
   <!-- Top : eyebrow + count -->
   <header class="flex items-start justify-between gap-4 shrink-0">
-    <p class="font-mono inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[#5a5a5a]">
+    <p class="font-mono inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
       <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
       {t.projects.eyebrow}
     </p>
-    <p class="font-mono text-right text-[11px] uppercase tracking-[0.18em] text-[#7a7a7a]">
+    <p class="font-mono text-right text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-subtle)]">
       05 / {t.projects["count.label"]}
     </p>
   </header>
@@ -29,7 +29,7 @@ const t = ui[lang];
   <!-- Center : oversized display title, brutalist editorial -->
   <div class="flex flex-1 items-center">
     <h2
-      class="font-display text-[clamp(48px,14vw,96px)] uppercase leading-[0.92] tracking-[-0.04em] text-[#0b0b0b]"
+      class="font-display text-[clamp(48px,14vw,96px)] uppercase leading-[0.92] tracking-[-0.04em] text-[var(--color-ink)]"
     >
       <span class="block">{t.projects["title.line1"]}</span>
       <span class="block">{t.projects["title.line2"]}</span>
@@ -43,7 +43,7 @@ const t = ui[lang];
       aria-hidden="true"
       >+</span
     >
-    <p class="font-serif-italic text-[clamp(14px,3.5vw,18px)] text-[#5a5a5a]">
+    <p class="font-serif-italic text-[clamp(14px,3.5vw,18px)] text-[var(--color-ink-muted)]">
       scroll ↓
     </p>
   </div>
