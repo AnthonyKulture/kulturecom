@@ -1,0 +1,189 @@
+---
+import Nav from "~/components/Nav.astro";
+import Hero from "~/components/Hero.astro";
+import About from "~/components/About.astro";
+import AboutPortrait from "~/components/AboutPortrait.astro";
+import CinematicScroll from "~/components/CinematicScroll.astro";
+import AboutChapter from "~/components/AboutChapter.astro";
+import CTA from "~/components/CTA.astro";
+import type { Lang } from "~/i18n/ui";
+
+// Shared body of the home page, rendered identically for both locales. Only
+// the language + the alternate-language link differ — passed in by the thin
+// index.astro / en/index.astro page wrappers (which own the BaseLayout shell).
+interface Props {
+  lang: Lang;
+  altLang: Lang;
+  altLangPath: string;
+}
+
+const { lang, altLang, altLangPath } = Astro.props;
+---
+
+  <Nav lang={lang} altLang={altLang} altLangPath={altLangPath} />
+  <main id="main-content">
+    {/* Hero — wrapped in a pinned container that drives ONE continuous
+        scroll-based transition (see src/lib/hero-transition.ts) : the H1
+        splits and the transition image emerges from a center slit, a slow
+        scale push-in keeps the frame alive (no dead stop), then the image
+        rises off-screen + blurs while About wipes up in lockstep — a single
+        fused arc, no separate sections. The transition image is
+        fixed-positioned and floats above the Hero. */}
+    {/* `min-h-[100dvh]` on the PIN element (not the Hero <section> inside it)
+        keeps the pin/seam geometry locked to the live viewport: data-hero-pin
+        height = dvh = innerHeight = the pin distance (`end:"+=100%"`), so
+        About's DOM offset always equals the pin distance — no seam gap when the
+        mobile URL bar collapses. The Hero <section> is `min-h-[100svh]`
+        (stable), so the centered H1 does NOT re-center downward when dvh grows:
+        the extra height is added BELOW the svh hero (cream, covered during the
+        transition) instead of dropping the title a few px on arrival. */}
+    <div data-hero-pin class="relative min-h-[100dvh]">
+      <Hero lang={lang} />
+      {/* Departure backdrop — opaque ink layer BEHIND the transition image
+          (z-20, between the hero text z-10 and the image z-30). Faded 0→1 by
+          hero-transition.ts just before the image lifts off. As the image
+          rises + blurs, anything that peeks below its bottom edge (the blur
+          halo, or a gap if the scrub-driven image desyncs from About's native
+          scroll on a fast mobile fling) lands on THIS ink instead of the cream
+          body bg — so the seam reads dark→dark (organic), never flashing white.
+          It's `absolute` (not fixed), so it scrolls away with the pinned hero
+          on release and can't persist over the cream Contact section below. */}
+      <div
+        data-hero-transition-backdrop
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-0 z-20 bg-[#0b0b0b]"
+        style="opacity: 0;"
+      >
+      </div>
+      <img
+        data-hero-transition-image
+        src="/hero-slides/hero-image.jpeg"
+        alt=""
+        aria-hidden="true"
+        class="pointer-events-none fixed inset-0 z-30 h-full w-full object-cover"
+        style="will-change: transform, clip-path; clip-path: inset(50% 0 50% 0);"
+      />
+    </div>
+
+    {/* About — `position: relative` + inline `z-index: 60` (Tailwind scale
+        stops at 50). The `data-about-wrapper` hook lets hero-transition.ts
+        translate this wrapper DOWN +50vh initially, then animate back to
+        0 during the departure. Combined with `pinSpacing: false` on the Hero
+        pin, About arrives at viewport top EXACTLY when the pin releases.
+        z-60 ensures About paints over the transition image (z-30) as it
+        rises. */}
+    <div data-about-wrapper class="relative" style="z-index: 60;">
+      {/* Seam feather (couture). A black→transparent gradient sitting just
+          ABOVE the panel's top edge, painted over the rising blurred photo
+          (the wrapper is z-60, above the z-30 photo). It darkens the photo's
+          lowest band into the panel's black so the photo dissolves into the
+          dark with no hard line. This is ADDITIVE black — unlike masking the
+          panel transparent, it can NEVER reveal the cream bg, even when the
+          image/panel overlap momentarily shrinks on fast scroll (the photo
+          is position:fixed / GSAP-scrubbed while the panel scrolls
+          naturally, so they desync and a transparent mask would flash the
+          cream — a black overlay cannot). It rides with the wrapper, so it
+          always sits exactly at the seam. */}
+      <div
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-x-0 top-0 h-[16vh] -translate-y-full bg-gradient-to-t from-[#0b0b0b] to-transparent"
+      >
+      </div>
+      <About lang={lang} />
+      {/* Bottom feather — mirror of the top seam: a black→transparent gradient just
+          BELOW the panel's bottom edge, painted over the fixed cinematic stage (z-1)
+          behind it, so the About dissolves softly into the emerging cylinder instead
+          of meeting it on a hard edge. Rides with the wrapper. */}
+      <div
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-x-0 bottom-0 h-[24vh] translate-y-full bg-gradient-to-b from-[#0b0b0b] to-transparent"
+      >
+      </div>
+    </div>
+
+    {/* Fixed portrait for the About manifesto — sibling of the wrapper (NOT
+        inside it: the wrapper's translateY transform would break
+        position:fixed). Held on the side (desktop) / top banner (mobile) while
+        the statements above scroll past; faded in/out by about-portrait.ts. */}
+    <AboutPortrait />
+
+    {/* Cinematic cylinder — full-viewport WebGL (OGL) section inserted AFTER the
+        3 About service teasers and BEFORE the pinned screen-stack. It pins for a
+        scrubbed camera fly-through of the project images, then releases into the
+        stack below. Lazy-booted + rAF-gated (src/lib/cinematic-scroll.ts). */}
+    <CinematicScroll lang={lang} />
+
+    {/* Calm "Promesse" photo — the cross-dissolve target. A FIXED full-viewport
+        layer at z-index:-1 (a sibling of the cinematic stage, sitting ABOVE it in
+        the same negative layer). cinematic-scroll.ts fades it in (opacity 0→1) while
+        the cylinder slows + dims, so the spinning cylinder CROSS-DISSOLVES into this
+        still photo IN PLACE — no black, no curtain, nothing sliding. It stays put
+        (fixed) while the transparent screen-stack rises over it, so the photo never
+        slides; the built-in scrim darkens it just enough for the cream Promesse text.
+        It only ever shows through the transparent About 2 window (z:-1 is occluded by
+        every opaque section: hero, CTA, footer). */}
+    <div
+      data-promesse-photo
+      aria-hidden="true"
+      class="pointer-events-none fixed inset-0 overflow-hidden opacity-0"
+      style="z-index: -1; will-change: opacity;"
+    >
+      {/* Tall image (200% of the viewport) so the vertical PARALLAX can travel from the top of
+          the photo to the bottom as the message is read (about-scroll.ts drifts its yPercent). */}
+      <img
+        data-promesse-photo-img
+        src="/about/kulturecom-webdesign.webp"
+        alt=""
+        width="2400"
+        height="3600"
+        class="absolute inset-x-0 top-0 h-[200%] w-full object-cover"
+        style="will-change: transform;"
+      />
+      {/* Soft gradient scrim for text legibility — part of THIS layer, so it fades IN with the
+          photo (never "appears" as a separate dark filter), and a gradient (not a flat fill) so
+          most of the image stays clean. Static: it does NOT ride the parallax. */}
+      <div class="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-transparent"></div>
+    </div>
+
+    {/* Pinned screen-stack — About 2 → Contact. TRANSPARENT now: the calm photo above
+        is the background (shown through this stack), and the cylinder cross-dissolves
+        into it before this stack covers — so there's no curtain and no dark backdrop.
+        About 2 is just the Promesse text, which WRITES IN over the held photo once the
+        stack pins; then the Contact layer reveals with the bottom-right circle clip-path.
+        Driven by src/lib/about-scroll.ts. (Services + Projects moved to standalone pages.) */}
+    <div
+      data-screen-stack
+      class="relative isolate h-[100lvh] overflow-hidden"
+    >
+      <div
+        data-screen-layer="about2"
+        class="absolute inset-0 z-10"
+      >
+        <AboutChapter lang={lang} chapterKey="about2" />
+      </div>
+      {/* Contact — revealed over About 2 with the circle clip-path. CTA is responsive
+          and has an opaque cream background, so one layer covers desktop and mobile. */}
+      <div
+        data-screen-layer="cta"
+        class="absolute inset-0 z-30"
+        style="clip-path: circle(0% at 100% 100%);"
+      >
+        <CTA lang={lang} />
+      </div>
+    </div>
+  </main>
+
+  <script>
+    import { initSmoothScroll } from "~/lib/smooth-scroll";
+    import { initAboutScroll } from "~/lib/about-scroll";
+    import { initAboutReveal } from "~/lib/about-reveal";
+    import { initAboutPortrait } from "~/lib/about-portrait";
+    import { initCinematicScroll } from "~/lib/cinematic-scroll";
+    import { initHeroTransition } from "~/lib/hero-transition";
+    initSmoothScroll();
+    initAboutScroll();
+    initAboutReveal();
+    initAboutPortrait();
+    initCinematicScroll();
+    initHeroTransition();
+  </script>
