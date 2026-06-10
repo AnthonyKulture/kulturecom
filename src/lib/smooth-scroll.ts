@@ -5,10 +5,10 @@
  * can no longer jump several hundred px in one frame, so a `scrub: 1` timeline
  * always has a continuous value to catch up to.
  *
- * Touch stays NATIVE (`syncTouch` left off) so mobile INP is unaffected — Lenis
- * only smooths the desktop wheel. Mobile (native touch) smoothness comes from
- * the separately-lightened blur work (manifesto blur moved to the container,
- * hero seam blur reduced), not from a JS scroll handler.
+ * Touch is also routed through Lenis (`syncTouch`, tuned conservative) to BOUND
+ * the mobile fling velocity — a fast flick can no longer out-run the scrubbed
+ * timelines or blow past a pinned sequence before it plays. Costs some INP (touch
+ * goes through JS); revert `syncTouch:false` in the init below if it regresses.
  *
  * Integration follows GSAP's official pattern: Lenis drives `ScrollTrigger.update`
  * on its scroll event, and ONE shared rAF (`gsap.ticker`) advances Lenis;
