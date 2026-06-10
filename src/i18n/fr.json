@@ -19,7 +19,7 @@
     "title.line1": "PARLONS",
     "title.line2": "DE VOTRE PROJET.",
     "subject": "Projet — j'aimerais discuter",
-    "note": "Réponse sous 48 h ouvrées",
+    "projects.label": "Découvrir mes projets",
     "email.label": "Email",
     "email.value": "contact@kulturecom.fr",
     "whatsapp.label": "WhatsApp",
@@ -75,7 +75,7 @@
     "cap2.desc": "Pensé, conçu, codé sur-mesure",
     "cap3.title": "Du concept au code",
     "cap3.desc": "Une signature web qui marque",
-    "cap4.title": "Kulturecom",
+    "cap4.title": "Continuez à défiler",
     "cap4.desc": ""
   },
   "about2": {
