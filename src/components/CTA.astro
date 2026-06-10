@@ -5,10 +5,16 @@ import Eyebrow from "~/components/Eyebrow.astro";
 
 interface Props {
   lang: Lang;
+  // h2 on the homepage finale (sits under the page context); h1 on the
+  // standalone /contact/ page where this is the main heading. Same classes →
+  // identical render, only the semantic tag differs.
+  headingLevel?: 1 | 2;
 }
 
-const { lang } = Astro.props;
+const { lang, headingLevel = 2 } = Astro.props;
 const t = ui[lang];
+
+const Heading = `h${headingLevel}` as "h1" | "h2";
 
 const mailtoHref = `mailto:${t.cta["email.value"]}?subject=${encodeURIComponent(t.cta.subject)}`;
 
@@ -30,12 +36,12 @@ const whatsappHref = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
     <Eyebrow label={t.cta.eyebrow} class="mb-8 sm:mb-12" />
 
     <!-- Display title — brutalist 2 lines, reasonable size -->
-    <h2
+    <Heading
       class="font-display text-[clamp(36px,7vw,96px)] uppercase leading-[0.95] tracking-[-0.04em] text-[var(--color-ink)]"
     >
       <span class="block">{t.cta["title.line1"]}</span>
       <span class="block">{t.cta["title.line2"]}</span>
-    </h2>
+    </Heading>
 
     <!-- 2 contact actions — Email + WhatsApp, label + value in each card.
          Same brutalist treatment, side by side on sm+, stacked on mobile. -->

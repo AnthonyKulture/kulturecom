@@ -9,7 +9,7 @@ interface Props {
 const { lang } = Astro.props;
 const t = ui[lang];
 
-const homeHref = lang === "fr" ? "/" : "/en/";
+const contactHref = lang === "fr" ? "/contact/" : "/en/contact/";
 const workHref = lang === "fr" ? "/projets/" : "/en/work/";
 const aboutHref = lang === "fr" ? "/a-propos/" : "/en/about/";
 
@@ -133,7 +133,7 @@ const navLabels = lang === "en"
         <a
           data-footer-top
           style="transition-delay:840ms"
-          href={`${homeHref}#contact`}
+          href={contactHref}
           class="text-[var(--color-ink)] no-underline hover:underline underline-offset-4"
         >{navLabels.contact}</a>
       </div>

@@ -13,6 +13,7 @@ const t = ui[lang];
 const workHref = lang === "fr" ? "/projets/" : "/en/work/";
 const aboutHref = lang === "fr" ? "/a-propos/" : "/en/about/";
 const homeHref = lang === "fr" ? "/" : "/en/";
+const contactHref = lang === "fr" ? "/contact/" : "/en/contact/";
 
 // Lang switcher: both languages always visible. Current lang stays on the
 // current URL; the other lang switches via the `altLangPath` injected by
@@ -28,7 +29,7 @@ const closeLabel = lang === "fr" ? "Fermer le menu" : "Close menu";
 const menuItems = [
   { n: "01", label: t.nav.work, href: workHref },
   { n: "02", label: t.nav.about, href: aboutHref },
-  { n: "03", label: "Contact", href: `${homeHref}#contact` },
+  { n: "03", label: "Contact", href: contactHref },
 ];
 const email = t.footer["contact.email"];
 const linkedinUrl = "https://www.linkedin.com/in/anthony-profit/";
@@ -88,7 +89,7 @@ const behanceUrl = "https://www.behance.net/anthony-profit";
     {/* Discutons / Let's talk — anchors to the homepage's #contact (CTA)
         section. From any other page we navigate to homepage then scroll. */}
     <a
-      href={`${homeHref}#contact`}
+      href={contactHref}
       class="font-mono text-[12px] uppercase tracking-[0.18em] text-[var(--color-bg)] no-underline hover:underline underline-offset-4 sm:text-[13px]"
       >{t.nav.cta}</a
     >
@@ -163,7 +164,7 @@ const behanceUrl = "https://www.behance.net/anthony-profit";
       <span class="font-serif-italic text-[20px] leading-none">Anthony</span><span class="font-display text-[20px] leading-none tracking-[-0.02em]">PROFIT</span>
     </a>
     <div class="flex items-center gap-4">
-      <a href={`${homeHref}#contact`} data-menu-link class="font-mono text-[12px] uppercase tracking-[0.18em] no-underline hover:underline underline-offset-4">{t.nav.cta}</a>
+      <a href={contactHref} data-menu-link class="font-mono text-[12px] uppercase tracking-[0.18em] no-underline hover:underline underline-offset-4">{t.nav.cta}</a>
       <span class="font-mono inline-flex items-center gap-1 text-[11px] uppercase tracking-[0.18em]">
         <a href={enHref} hreflang="en" aria-current={lang === "en" ? "page" : undefined} class:list={["no-underline hover:underline underline-offset-4", lang === "en" ? "font-bold" : "opacity-60"]}>EN</a>
         <span aria-hidden="true" class="opacity-60">/</span>

@@ -1,0 +1,14 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import Nav from "~/components/Nav.astro";
+import CTA from "~/components/CTA.astro";
+
+const lang = "fr" as const;
+---
+
+<BaseLayout lang={lang} pathname="/contact/" altPath="/en/contact/">
+  <Nav lang={lang} altLang="en" altLangPath="/en/contact/" />
+  <main id="main-content">
+    <CTA lang={lang} headingLevel={1} />
+  </main>
+</BaseLayout>
