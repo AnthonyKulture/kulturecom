@@ -2,6 +2,7 @@
 import type { Lang } from "~/i18n/ui";
 import { ui } from "~/i18n/ui";
 import { splitTitle } from "~/lib/text-split";
+import { getServices } from "~/lib/services-data";
 import Eyebrow from "~/components/Eyebrow.astro";
 
 interface Props {
@@ -11,23 +12,8 @@ interface Props {
 const { lang } = Astro.props;
 const t = ui[lang];
 
-const items = [
-  {
-    label: t.services["item1.label"],
-    title: t.services["item1.title"],
-    body: t.services["item1.body"],
-  },
-  {
-    label: t.services["item2.label"],
-    title: t.services["item2.title"],
-    body: t.services["item2.body"],
-  },
-  {
-    label: t.services["item3.label"],
-    title: t.services["item3.title"],
-    body: t.services["item3.body"],
-  },
-];
+// Shared with Services.astro via src/lib/services-data.ts (single source of truth).
+const items = getServices(t);
 
 // Per-word SSR splitter shared via `src/lib/text-split.ts`.
 
