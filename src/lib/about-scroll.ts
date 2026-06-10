@@ -140,6 +140,9 @@ export function initAboutScroll(): void {
     pin: true,
     scrub: 1,
     anticipatePin: 1,
+    // Recompute the pin span on refresh (URL-bar/resize, late font/layout shifts) so a
+    // fast scroll never lands on a stale pin geometry — matches every other trigger.
+    invalidateOnRefresh: true,
     animation: tl,
   });
 

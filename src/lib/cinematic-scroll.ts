@@ -271,13 +271,33 @@ export function initCinematicScroll(): void {
     return;
   }
 
-  // --- rAF gating: renderFrame is assigned at boot; the loop is a no-op until then,
-  //     and parks itself whenever the stage is off-screen or the tab is hidden. ---
-  let running = false;
+  // --- rAF gating with "settle-then-park". renderFrame is assigned at boot; the
+  //     loop is a no-op until then. While the section is IN RANGE it renders every
+  //     frame; once we LEAVE range it keeps rendering until the scrubbed timeline's
+  //     eased playhead has reached a rest extreme (progress 0 or 1), THEN hides the
+  //     stage and parks. This is what makes a FAST scroll clean: the gate's onToggle
+  //     fires INSTANTLY at the boundary, but the `scrub:1` playhead lags ~1s — so a
+  //     fast scroll to the pin used to hide the stage MID-cross-dissolve (the cylinder
+  //     vanishing before the calm photo had resolved over it). Now the fondu finishes
+  //     off the boundary and the stage hides invisibly under the fully-resolved photo
+  //     (or, leaving upward, behind the opaque About). ---
+  let inRange = false;
   let rafId = 0;
   let renderFrame: (() => void) | null = null;
+  // The scrubbed timeline's eased playhead has caught up to an end of its range.
+  // (`tl` is defined below; the loop only ever runs after that, so this is safe.)
+  const scrubSettled = (): boolean => {
+    const p = tl.progress();
+    return p <= 0.001 || p >= 0.999;
+  };
   const loop = (): void => {
-    if (!running || document.hidden || !renderFrame) {
+    if (document.hidden || !renderFrame) {
+      rafId = 0;
+      return;
+    }
+    // Out of range AND the scrub has caught up → safe to hide the stage and park.
+    if (!inRange && scrubSettled()) {
+      setStageVisible(false);
       rafId = 0;
       return;
     }
@@ -420,9 +440,22 @@ export function initCinematicScroll(): void {
     start: "top bottom",
     ...endConfig,
     onToggle: (self) => {
-      running = self.isActive;
-      setStageVisible(self.isActive);
-      if (running) startLoop();
+      inRange = self.isActive;
+      if (inRange) {
+        // Entering → show the stage + render.
+        setStageVisible(true);
+        startLoop();
+      } else if (!renderFrame) {
+        // Leaving with NO WebGL loop (fallback / not yet booted) → nothing to settle,
+        // so hide immediately (the old behaviour; settle-then-park only applies when a
+        // cylinder is actually rendering).
+        setStageVisible(false);
+      } else {
+        // Leaving WITH a live WebGL loop → DO NOT hide now. Keep rendering so the scrub
+        // can finish the cross-dissolve; loop() hides + parks once scrubSettled()
+        // (settle-then-park, above). This is what kills the fast-scroll flash.
+        startLoop();
+      }
     },
   });
 
@@ -481,7 +514,10 @@ export function initCinematicScroll(): void {
       "webglcontextlost",
       (e) => {
         e.preventDefault();
-        running = false;
+        // Context lost — stop the WebGL loop (null renderFrame trips the loop guard)
+        // and show the static fallback. Visibility stays gate-managed: with renderFrame
+        // now null, the gate's no-WebGL branch hides the stage on leave.
+        renderFrame = null;
         showFallback();
       },
       { once: true }
@@ -600,7 +636,7 @@ export function initCinematicScroll(): void {
         particles.push(particle);
       }
 
-      // --- The render frame (gated by `running` via the loop above). ---
+      // --- The render frame (gated by `inRange` + settle-then-park via the loop above). ---
       let lastRotation = rotationAnim.y;
       renderFrame = () => {
         camera.position.set(cameraAnim.x, cameraAnim.y, cameraAnim.z);
@@ -643,12 +679,12 @@ export function initCinematicScroll(): void {
 
       // The atlas may finish while the stage is already in view (e.g. a reload scrolled into
       // the sequence/cover) — the gate's onToggle won't fire for an already-active trigger, so
-      // seed `running` from the live rects: the spacer has entered AND the screen-stack hasn't
+      // seed `inRange` from the live rects: the spacer has entered AND the screen-stack hasn't
       // pinned/covered yet (its top still below the viewport top).
       const sRect = spacer!.getBoundingClientRect();
       const stackTop = screenStack ? screenStack.getBoundingClientRect().top : sRect.bottom;
       if (sRect.top < window.innerHeight && stackTop > 0) {
-        running = true;
+        inRange = true;
         setStageVisible(true);
       }
       startLoop();

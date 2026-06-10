@@ -28,7 +28,26 @@ export function initSmoothScroll(): void {
   if (typeof window === "undefined") return;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  const lenis = new Lenis({ lerp: 0.1 });
+  // `lerp: 0.1` bounds the DESKTOP wheel/keyboard/scrollbar velocity (Lenis drives
+  // those) so a hard flick can't make the scrubbed timelines skip. MOBILE touch was
+  // left native (`syncTouch` off) — but a fast fling then out-runs the `scrub:1`
+  // timelines and blows PAST a pinned sequence (Hero, screen-stack) before it can
+  // play, and races ahead of the instant render-gates → coupe sèche / flash.
+  // Route touch through Lenis to BOUND the fling: the scroll position lerps toward
+  // the finger (capping per-frame travel and stretching the fling over a longer,
+  // controlled duration), so the timelines + gates stay synced to what's on screen.
+  // Tuned CONSERVATIVE to stay close to the native feel (syncTouchLerp ≈ the wheel
+  // lerp; touchMultiplier 1 = natural sensitivity) — this is the "plafonner la
+  // vélocité" choice, not heavy glide. Knobs if a fling still feels too fast on a
+  // real device: lower `touchMultiplier` (~0.85) or raise the pinned `scrub`.
+  // NB: costs some INP (touch goes through JS) — measured; revert `syncTouch:false`
+  // if it regresses. Under prefers-reduced-motion Lenis is never created (native).
+  const lenis = new Lenis({
+    lerp: 0.1,
+    syncTouch: true,
+    syncTouchLerp: 0.1,
+    touchMultiplier: 1,
+  });
   // Expose the instance: about-scroll.ts routes the "clic" CTA + #contact links
   // through `window.__lenis.scrollTo` (and falls back to native scroll if absent).
   (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
