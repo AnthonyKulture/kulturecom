@@ -48,10 +48,10 @@ const IMAGES = [
   "/hero-slides/eden-rock.webp",
   "/hero-slides/sunbeachhouse.webp",
   "/hero-slides/royal-yacht.avif",
-  "/hero-slides/vaulk.webp",
+  "/hero-slides/slide-02.webp",
   "/hero-slides/bucket-regatta-2927.webp",
   "/hero-slides/slide-05.webp",
-  "/hero-slides/slide-08.webp",
+  "/hero-slides/slide-04.webp",
   "/hero-slides/slide-11.webp",
   "/hero-slides/slide-13.webp",
   "/hero-slides/slide-17.webp",
@@ -537,7 +537,11 @@ export function initCinematicScroll(): void {
 
     // --- Build the atlas: every image cover-drawn into one wide canvas texture. ---
     const hardwareLimit = gl.getParameter(gl.MAX_TEXTURE_SIZE) as number;
-    const safeLimit = dimensions.mobile ? 2048 : Math.min(hardwareLimit, 8192);
+    // Desktop cap raised 8192 → 16384: at 8192 the 12-image atlas was downscaled to
+    // ~683px per cell (scale ≈ 0.67), softening even the high-res sources. 16384 lets
+    // the atlas hold full 1024px cells (scale = 1) so HD images render sharp at the
+    // close-up climax. Guarded by the real GPU MAX_TEXTURE_SIZE; mobile stays 2048.
+    const safeLimit = dimensions.mobile ? 2048 : Math.min(hardwareLimit, 16384);
     const numImages = IMAGES.length;
     const totalWidthOriginal = imageConfig.width * numImages;
     const heightOriginal = imageConfig.height;
