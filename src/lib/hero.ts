@@ -100,26 +100,28 @@ export function initHero(): void {
     if (carouselImgs[0] && slidesSources[0]) {
       carouselImgs.forEach((img) => (img.src = slidesSources[0]));
     }
+    document.dispatchEvent(new CustomEvent("hero:revealed"));
     return;
   }
 
+  const onAllDone = () => {
+    // Trigger the per-word blur cascade via the parent attribute.
+    // The CSS animation-delay on each word handles the stagger.
+    if (subtitle) subtitle.setAttribute("data-words-revealed", "");
+    if (carouselImgs.length && slidesSources.length) {
+      startCarousel(carouselImgs, slidesSources);
+    }
+    // Signal hero-transition.ts that the arrival cascade is done, so it can
+    // attach its scroll-scrub fades to these elements WITHOUT snapping them
+    // visible mid-cascade (which is what used to erase this whole animation).
+    document.dispatchEvent(new CustomEvent("hero:revealed"));
+  };
+
   const start = () => {
     if (isMobile) {
-      runMobileSequence(lines, baselines, figure, figcap, bottomCue, () => {
-        // Trigger the per-word blur cascade via the parent attribute.
-        // The CSS animation-delay on each word handles the stagger.
-        if (subtitle) subtitle.setAttribute("data-words-revealed", "");
-        if (carouselImgs.length && slidesSources.length) {
-          startCarousel(carouselImgs, slidesSources);
-        }
-      });
+      runMobileSequence(lines, baselines, figure, figcap, bottomCue, onAllDone);
     } else {
-      runDesktopSequence(lines, inlines, sideLabel, bottomCue, () => {
-        if (subtitle) subtitle.setAttribute("data-words-revealed", "");
-        if (carouselImgs.length && slidesSources.length) {
-          startCarousel(carouselImgs, slidesSources);
-        }
-      });
+      runDesktopSequence(lines, inlines, sideLabel, bottomCue, onAllDone);
     }
   };
 

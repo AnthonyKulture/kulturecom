@@ -11,44 +11,25 @@ interface Props {
 const { lang, chapterKey } = Astro.props;
 const t = ui[lang];
 const chapter = t[chapterKey] as Record<string, string>;
-// About 2 uses a full-bleed parallax photo background (Monte Carlo) with a
-// dark overlay; text is fixed to cream to remain readable. The Eyebrow
-// component is rendered in `variant="dark"` mode (current color + opacity)
-// to harmonize with the surrounding cream-on-ink palette.
+// About 2 is now TRANSPARENT: the calm Promesse photo + its scrim live on the
+// fixed [data-promesse-photo] layer behind the screen-stack (the cylinder
+// cross-dissolves into it). This section only carries the cream text, which
+// writes in over that held photo once the stack pins (driven by about-scroll.ts).
+// The Eyebrow uses `variant="dark"` to harmonize with the cream-on-ink palette.
 ---
 
 <section
   data-about-chapter
   data-about-chapter-key={chapterKey}
   data-surface="dark"
-  class="relative flex h-full min-h-[100dvh] flex-col justify-between overflow-hidden bg-[var(--color-bg)] text-[var(--color-ink)] px-4 pt-10 pb-10 sm:px-6 sm:pt-14 sm:pb-14 md:px-12 md:pt-16 md:pb-16"
+  class="relative flex h-full min-h-[100dvh] flex-col justify-between overflow-hidden text-[var(--color-ink)] [text-shadow:0_1px_24px_rgba(0,0,0,0.55)] px-4 pt-10 pb-10 sm:px-6 sm:pt-14 sm:pb-14 md:px-12 md:pt-16 md:pb-16"
   aria-label={chapter.eyebrow}
 >
-  <!-- Parallax photo background (animated via about-scroll.ts).
-       Height 200% of section → 100dvh of vertical headroom for parallax
-       traversal. object-cover crops gracefully on portrait viewports. -->
-  <img
-    data-about-parallax
-    src="/about/kulturecom-webdesign.webp"
-    alt=""
-    aria-hidden="true"
-    width="2400"
-    height="3600"
-    loading="eager"
-    decoding="async"
-    fetchpriority="low"
-    class="pointer-events-none absolute left-0 right-0 top-0 z-0 h-[200%] w-full object-cover will-change-transform"
-    style="transform: translate3d(0, 0, 0);"
-  />
-
-  <!-- Dark overlay for text contrast over the photo -->
-  <div
-    aria-hidden="true"
-    class="pointer-events-none absolute inset-0 z-[1] bg-black/45"
-  ></div>
+  {/* Contrast comes from (a) the soft gradient scrim baked into the [data-promesse-photo] layer
+      and (b) the inherited text-shadow on this section — so the image keeps no flat dark filter. */}
 
   <!-- TOP : eyebrow left + accent echo right -->
-  <header class="relative z-10 flex items-start justify-between gap-4 shrink-0">
+  <header data-about2-reveal class="relative z-10 flex items-start justify-between gap-4 shrink-0">
     <Eyebrow label={chapter.eyebrow} variant="dark" />
     <p class="font-mono text-right text-[11px] uppercase tracking-[0.18em] opacity-60">
       — {chapter.accent}
@@ -56,7 +37,7 @@ const chapter = t[chapterKey] as Record<string, string>;
   </header>
 
   <!-- CENTER : editorial prose + mouse-click CTA -->
-  <div class="relative z-10 flex flex-1 items-center">
+  <div data-about2-reveal class="relative z-10 flex flex-1 items-center">
     <div class="w-full max-w-[36rem] sm:max-w-[44rem] md:max-w-[56rem]">
       <p
         data-about-chapter-line
@@ -108,7 +89,7 @@ const chapter = t[chapterKey] as Record<string, string>;
   </div>
 
   <!-- BOTTOM : thin rule left + giant accent number right -->
-  <div class="relative z-10 flex items-end justify-between gap-4 shrink-0">
+  <div data-about2-reveal class="relative z-10 flex items-end justify-between gap-4 shrink-0">
     <span class="inline-block h-px w-[clamp(40px,8vw,96px)] bg-current opacity-40" aria-hidden="true"></span>
     <span
       class="font-display text-[clamp(80px,16vw,200px)] leading-[0.85] tracking-[-0.04em] opacity-80"

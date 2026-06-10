@@ -137,33 +137,21 @@ export function initHeroTransition(): void {
     if (initFired) return;
     initFired = true;
 
-    // ─── Disable CSS transitions on GSAP targets ──────────────────────
-    // `.anim-in` (added by hero.ts during arrival) declares
-    // `transition: opacity 0.9s, transform 0.9s`. With scrub: 1 firing
-    // many transform/opacity updates per second, every update kicks off
-    // a fresh 0.9s CSS transition — the visual position never catches
-    // up to GSAP's intended value and the H1 lines appear stuck. The
-    // `clip-path` animation on the image works because clip-path is NOT
-    // in `.anim-in`'s transitioned-properties list. Setting an inline
-    // `transition: none` overrides `.anim-in` (inline beats class) and
-    // lets GSAP drive these elements unimpeded.
+    // Scroll-scrub fade targets (H1 halves + peripherals + mobile figure).
+    // Their post-preloader ARRIVAL is owned by hero.ts (the `.anim-in`
+    // cascade + the subtitle word-cascade). We deliberately do NOT touch them
+    // here: a prior version force-snapped them to opacity:1, killed their CSS
+    // transition, and set `data-words-revealed` the instant fonts loaded —
+    // which is WHILE the preloader still covers the screen. The cascade then
+    // ran invisibly behind the overlay, so the hero looked static on arrival.
+    // The scrub fades are attached later, once hero.ts signals `hero:revealed`
+    // (see engageTextFades below), so the arrival cascade plays untouched.
     const allFadeTargets = [
       ...topLines,
       ...bottomLines,
       ...peripherals,
       ...(figure ? [figure] : []),
     ];
-    allFadeTargets.forEach((el) => {
-      el.style.transition = "none";
-    });
-
-    // Force subtitle word-cascade revealed (CSS gates it on this attribute).
-    const subtitle = document.querySelector<HTMLElement>(
-      "[data-hero] [data-hero-subtitle]"
-    );
-    if (subtitle && !subtitle.hasAttribute("data-words-revealed")) {
-      subtitle.setAttribute("data-words-revealed", "");
-    }
 
     // Base scale 1.15 on the transition image — pushes its bounding box
     // edges OFF-SCREEN (-7.5vw to 107.5vw horizontally, -7.5vh to 107.5vh
@@ -184,99 +172,13 @@ export function initHeroTransition(): void {
 
     const tl = gsap.timeline({ defaults: { ease: "none" } });
 
-    // ─── Reveal — Split H1 + image emerges (0 → 0.30) ─────────────────
-    // Using `fromTo` with explicit FROM values + immediateRender (default
-    // true) so GSAP applies the starting state IMMEDIATELY at timeline
-    // creation — overriding any residual .anim-hidden styling from the
-    // Hero arrival. This skips the Hero arrival cascade visually (the
-    // elements snap to opacity 1 / y 0 at trigger creation) but makes
-    // the scroll-driven split + clip-path tweens deterministic.
-
-    // H1 lines move FIRST at constant rate (linear) — they start
-    // immediately at t=0 so the user sees the title splitting before
-    // the image starts emerging from the middle.
-    if (topLines.length > 0) {
-      tl.fromTo(
-        topLines,
-        { y: 0, opacity: 1 },
-        {
-          y: () => -window.innerHeight * 0.6,
-          opacity: 0,
-          duration: 0.30,
-          ease: "none",
-          // NO stagger : the lines must move as ONE rigid block. With a
-          // stagger, the topmost line travels further than those below it
-          // at any given scrub position — harmless going UP (they spread
-          // apart) but it desyncs the group. We keep both halves in
-          // formation so the split reads as a clean parting.
-        },
-        0
-      );
-    }
-
-    if (bottomLines.length > 0) {
-      tl.fromTo(
-        bottomLines,
-        { y: 0, opacity: 1 },
-        {
-          y: () => window.innerHeight * 0.6,
-          opacity: 0,
-          duration: 0.30,
-          ease: "none",
-          // NO stagger : CRITICAL going DOWN. With a stagger the topmost
-          // bottom-line (+ the subtitle, which trails it in DOM order)
-          // travel at different rates, so on mobile — where the bottom
-          // lines and the subtitle are tightly stacked — the faster upper
-          // line crashes into the slower lines below it AND into the
-          // subtitle. Moving the whole bottom group (lines + subtitle) as
-          // one block keeps their gaps constant: no overlap at any scrub
-          // position.
-        },
-        0
-      );
-    }
-
-    if (peripherals.length > 0) {
-      tl.fromTo(
-        peripherals,
-        { opacity: 1 },
-        {
-          opacity: 0,
-          duration: 0.20,
-          ease: "power2.in",
-        },
-        0
-      );
-    }
-
-    // Carousel figure (mobile) : front-loaded fade — `power2.out` (fast
-    // start) over a SHORT window so it's essentially gone by the time the
-    // transition image's clip-path begins to widen (the clip starts at
-    // 0.08 and the figure sits dead-center where the slit opens first).
-    // A slow fade left the carousel visibly hovering over the opening
-    // image; this clears the center early so the big image opens into
-    // clean space.
-    if (figure) {
-      // `y: 0` in BOTH from and to (not just opacity) so immediateRender pins
-      // the figure at its final position the instant the timeline is created
-      // (at fonts.ready — while the preloader still locks scroll). The figure
-      // ships with `.anim-hidden` (translateY(14px)); without this it would sit
-      // 14px low until hero.ts's late arrival reveal (~1.4s) snapped it up,
-      // reading as the image "jumping up a few pixels" right after it appears.
-      // Pinning y here means it's already in its correct place on arrival and
-      // the later reveal is a visual no-op. It still fades out on departure.
-      tl.fromTo(
-        figure,
-        { opacity: 1, y: 0 },
-        {
-          opacity: 0,
-          y: 0,
-          duration: 0.16,
-          ease: "power2.out",
-        },
-        0
-      );
-    }
+    // NOTE — the H1-split / peripheral / mobile-figure scrub fades are NOT
+    // created here. They animate the very elements hero.ts fades in on arrival,
+    // so creating them now (fromTo immediateRender → snap to opacity:1) would
+    // erase the cascade. They're attached in engageTextFades() below, once the
+    // cascade signals `hero:revealed`. Only the image's own tweens (clip-path,
+    // scale, departure) live in the timeline from the start — they don't touch
+    // the cascade elements.
 
     // Image clip-path : DELAYED by 0.08 (~16vh of scroll head-start for
     // the H1 split) and uses `power2.in` ease (slow start, fast end) so
@@ -411,6 +313,55 @@ export function initHeroTransition(): void {
     // script load, BEFORE the pin spacer was injected). Recomputes
     // their cached element positions against the current layout.
     ScrollTrigger.refresh();
+
+    // ─── Attach the H1-split / peripheral scrub fades AFTER the arrival ──
+    // cascade. These animate the SAME elements hero.ts reveals, so we wait for
+    // hero.ts to dispatch `hero:revealed` (cascade complete). By then the
+    // targets sit at opacity:1 / y:0, so each fromTo's immediateRender is a
+    // visual no-op; we first set `transition: none` so the scrub drives them
+    // directly (a live `.anim-in` 0.9s transition fights scrub → stuck lines —
+    // clip-path on the image is unaffected, which is why only TEXT was broken).
+    let textFadesEngaged = false;
+    const engageTextFades = () => {
+      if (textFadesEngaged) return;
+      textFadesEngaged = true;
+      allFadeTargets.forEach((el) => {
+        el.style.transition = "none";
+      });
+      // Top lines (1-3) rise + fade; bottom lines (4-5) + subtitle descend +
+      // fade. NO stagger — each half moves as one rigid block so the split
+      // reads as a clean parting and (going down) nothing overlaps the subtitle.
+      if (topLines.length > 0) {
+        tl.fromTo(
+          topLines,
+          { y: 0, opacity: 1 },
+          { y: () => -window.innerHeight * 0.6, opacity: 0, duration: 0.3, ease: "none" },
+          0
+        );
+      }
+      if (bottomLines.length > 0) {
+        tl.fromTo(
+          bottomLines,
+          { y: 0, opacity: 1 },
+          { y: () => window.innerHeight * 0.6, opacity: 0, duration: 0.3, ease: "none" },
+          0
+        );
+      }
+      if (peripherals.length > 0) {
+        tl.fromTo(peripherals, { opacity: 1 }, { opacity: 0, duration: 0.2, ease: "power2.in" }, 0);
+      }
+      if (figure) {
+        tl.fromTo(figure, { opacity: 1, y: 0 }, { opacity: 0, y: 0, duration: 0.16, ease: "power2.out" }, 0);
+      }
+      // The fades were inserted at position 0 of a live, ScrollTrigger-driven
+      // timeline — refresh so it re-renders at the current scroll progress.
+      ScrollTrigger.refresh();
+    };
+
+    // hero.ts fires this once its arrival cascade finishes. Fallback timeout in
+    // case hero.ts never loads, so a scroll still parts the title.
+    document.addEventListener("hero:revealed", engageTextFades, { once: true });
+    window.setTimeout(engageTextFades, 8000);
   };
 
   // Run setupTimeline ASAP — as soon as fonts are loaded. The preloader

@@ -239,11 +239,12 @@ export function initCinematicScroll(): void {
   // The fixed stage never moves; this tall, normal-flow spacer provides the scroll runway.
   const spacer = section.querySelector<HTMLElement>("[data-cinematic-spacer]");
   if (!canvas || !spacer || !stage) return;
-  // The soft cover feather (after the spacer) and the screen-stack below — used to drive
-  // the timeline by the REAL reveal→cover geometry (the timeline ends at the screen-stack
-  // pin, not the spacer bottom). Both optional: fall back to the spacer-only geometry.
-  const coverFeather = section.querySelector<HTMLElement>("[data-cinematic-cover-feather]");
+  // The screen-stack below — drives the timeline by the REAL geometry (the scrub ends at the
+  // screen-stack's pin, not the spacer bottom). The calm Promesse photo is the cross-dissolve
+  // target: a fixed z:-1 layer that fades in over the dimming cylinder as the stack rises, so
+  // the spinning cylinder turns into the still photo IN PLACE (the fondu). Both optional.
   const screenStack = document.querySelector<HTMLElement>("[data-screen-stack]");
+  const calmPhoto = document.querySelector<HTMLElement>("[data-promesse-photo]");
 
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const isMobile = window.matchMedia("(max-width: 767px)").matches;
@@ -293,31 +294,29 @@ export function initCinematicScroll(): void {
   const initialCameraZ = window.innerWidth < 768 ? 6 : window.innerWidth < 1024 ? 7 : 8;
   const cameraAnim = { x: 0, y: 0, z: initialCameraZ };
   const rotationAnim = { y: 0.5 };
-  // Texture darkness → `uDarkness` uniform (0.3 = the normal look). The cylinder stays LIT
-  // the whole time — the feathers do the soft reveal/cover (About's bottom feather on the
-  // way in, the cover feather on the way out). This value is only nudged a little darker
-  // over the cover window so bright image cells lose their edge as the feather crosses them
-  // (no faint "horizon"). No black emerge — it starts at the normal look.
+  // Texture darkness → `uDarkness` uniform (0.3 = the normal look). The cylinder emerges from
+  // About's bottom feather LIT (0.3) and stays lit through the fly-through; on the way OUT it
+  // dims 0.3 → 1.0 across the fondu so it cross-dissolves to #0b0b0b under the calm photo that
+  // fades in over it (see the FONDU block below). No black emerge on entry — starts at 0.3.
   const darknessAnim = { v: 0.3 };
 
-  // === Reveal→cover geometry — so the timeline is SYNCED to what is actually on screen ===
-  // DOM order: [About wrapper][spacer Hs][cover feather Hf][screen-stack]. The scrub runs
-  // from "spacer top at viewport bottom" to "screen-stack top at viewport top" (its pin) —
-  // range = Hs + Hf + V. As progress p ∈ [0,1]:
-  //   • reveal_end = (V + about-feather 24vh) / range — About + its feather have cleared the
-  //     viewport, the full cylinder is visible. Captions must not start before this, else
-  //     they play behind the still-descending About (the bug being fixed).
-  //   • cover_start = Hs / range — the cover feather's transparent top enters the viewport
-  //     bottom and begins swallowing the lit cylinder.
-  //   • cover_solid = (Hs + Hf) / range — the feather's solid #0b0b0b bottom (= screen-stack
-  //     top) enters; from there the screen-stack covers the rest up to the pin (p = 1).
+  // === Reveal→cross-dissolve geometry — timeline SYNCED to what's on screen ===
+  // DOM order: [About wrapper][spacer Hs][screen-stack]. The scrub runs from "spacer top at
+  // viewport bottom" to "screen-stack top at viewport top" (its pin) — range = Hs + V.
+  // As progress p ∈ [0,1]:
+  //   • reveal_end = (V + about-feather 24vh) / range — About + its bottom feather have cleared
+  //     the viewport, the full cylinder is visible. Captions only start after this.
+  //   • cover_start = Hs / range — the screen-stack's top enters the viewport bottom; its rise
+  //     begins. This is where the FONDU starts: the cylinder slows + dims while the calm photo
+  //     fades in. The stack is transparent, so the cross-dissolve shows through it, in place.
+  //   • cross_end = cover_start + 0.85·(1 − cover_start) — the calm photo is fully resolved
+  //     (cylinder gone). A short settle then runs to the pin (p = 1) where the text writes in.
   const V = window.innerHeight;
   const Hs = spacer.offsetHeight;
-  const Hf = coverFeather ? coverFeather.offsetHeight : 0;
-  const range = Hs + Hf + V;
+  const range = Hs + V;
   const revealEnd = (1.24 * V) / range; // 1.24 = one viewport + the 24vh About bottom feather
   const coverStart = Hs / range;
-  const coverSolid = (Hs + Hf) / range;
+  const crossEnd = coverStart + 0.85 * (1 - coverStart);
 
   // End the scrub at the screen-stack's pin ("top top"), NOT the spacer bottom — that is the
   // exact scroll where About 2 takes over, so the timeline maps 1:1 onto the geometry above.
@@ -345,10 +344,9 @@ export function initCinematicScroll(): void {
     tailHold *= s;
   }
   const flySpan = DUR - headHold - tailHold;
-  // Cover framing: a frame-FILLING front shot (not the small establishing one). If the
-  // cylinder sat small and centred during the cover, its black top margin would be the last
-  // thing the rising feather covered → a dead-black tail before the curtain. Filling the
-  // frame lets the feather swallow the cylinder edge-to-edge, right up to the pin.
+  // Cross-dissolve framing: a frame-FILLING front shot (not the small establishing one) so the
+  // cylinder fills the viewport edge-to-edge as the calm photo fades in over it — the fondu
+  // reads as one full-frame image becoming another, with no black margin peeking at the edges.
   const coverZ = Math.max(4, initialCameraZ * 0.5);
   tl.to(cameraAnim, { z: initialCameraZ, duration: headHold, ease: "none" }) // hold establishing (reveal)
     .to(cameraAnim, { x: 0, y: 4, z: 5, duration: flySpan * 0.28, ease: "cinematicFlow" }) // rise / overhead
@@ -357,29 +355,47 @@ export function initCinematicScroll(): void {
     .to(cameraAnim, { x: 0, y: 0, z: coverZ, duration: flySpan * 0.3, ease: "cinematicSmooth" }) // pull back to a frame-filling cover shot
     .to(cameraAnim, { z: coverZ, duration: tailHold, ease: "none" }); // hold it through the cover
 
-  tl.to(rotationAnim, { y: "+=28.27", duration: DUR, ease: "none" }, 0);
+  // Spin: steady through the fly-through, then DECELERATE to a near-stop across the fondu —
+  // "le cylindre ralentit sa rotation et se fond". Two tweens so the tail can ease-out.
+  tl.to(rotationAnim, { y: `+=${28.27 * coverStart}`, duration: coverStart * DUR, ease: "none" }, 0);
+  tl.to(
+    rotationAnim,
+    { y: `+=${28.27 * (1 - coverStart) * 0.55}`, ease: "power2.out", duration: (crossEnd - coverStart) * DUR },
+    coverStart * DUR
+  );
 
-  // Dissolve the cylinder fully to the site background (#0b0b0b) over the cover window:
-  // 0.3 → 1.0 across [cover_start, cover_solid] (complements the feather; kills any horizon
-  // on bright image cells). It reaches FULL dissolve at cover_solid and holds 1.0 to the end,
-  // so the cinematic's exit state — and the whole [cover_solid → pin] handoff zone — is solid
-  // site-black. This is what kills the mobile "cylinder flash": the stage's visibility gate is
-  // instant (onToggle) while this dim is scrubbed, so a momentum bounce / scroll-up near the
-  // pin re-exposes the stage; with the cylinder dissolved to #0b0b0b that re-exposure is
-  // invisible against the About 2 backdrop (it used to flash the still-lit cylinder + particles).
+  // FONDU — the cylinder cross-dissolves into the calm Promesse photo across the stack's rise.
+  //  • the calm photo layer (fixed z:-1, ABOVE the cylinder stage) fades opacity 0 → 1 over the
+  //    window. The OPAQUE photo is what covers the cylinder, so it's a real cross-dissolve (you
+  //    see the textured cylinder BECOME the photo). Its vertical PARALLAX (a top→bottom drift of
+  //    the tall inner image while the message is read) is owned by about-scroll.ts.
+  //  • uDarkness only dims 0.3 → 0.7 (LINEAR) over the same window — a soft dim so the bright
+  //    project cells don't fight the calm photo at the 50/50 blend, while the cylinder stays
+  //    visibly textured through it (a hard dim-to-black would hide the cylinder before the photo
+  //    arrived → "fade through black", not a fondu). No flash risk: the photo is the cover and is
+  //    scrubbed in lockstep, so a momentum bounce just runs the cross-dissolve smoothly backwards.
+  // Both finish by cross_end; a short settle holds to the pin, where the screen-stack text writes in.
+  if (calmPhoto) {
+    tl.fromTo(
+      calmPhoto,
+      { opacity: 0 },
+      { opacity: 1, ease: "power1.inOut", duration: (crossEnd - coverStart) * DUR },
+      coverStart * DUR
+    );
+  }
   tl.to(
     darknessAnim,
-    { v: 1.0, ease: "power2.in", duration: Math.max(0.4, (coverSolid - coverStart) * DUR) },
+    { v: 0.7, ease: "none", duration: (crossEnd - coverStart) * DUR },
     coverStart * DUR
   );
 
   // Captions — all four land inside the fully-visible window [reveal_end, cover_start], so the
   // FIRST one is actually seen (it no longer plays behind the descending About). The LAST
-  // ("Kulturecom") holds to cover_start, then fades over [cover_start, cover_solid] — dissolving
-  // WITH the rising cover, integrated, never held alone on dead black.
+  // ("Kulturecom") holds to cover_start, then fades over the first part of the fondu — gone by
+  // mid-cross-dissolve as the cylinder gives way to the photo, never held alone.
   const w0 = revealEnd * DUR;
   const w1 = coverStart * DUR;
-  const wCover = coverSolid * DUR;
+  const wCover = w1 + (crossEnd - coverStart) * DUR * 0.6;
   const N = captions.length || 1;
   const slot = (w1 - w0) / N;
   captions.forEach((cap, i) => {
@@ -394,10 +410,11 @@ export function initCinematicScroll(): void {
       .to(cap, { opacity: 0, duration: slot * 0.25, ease: "cinematicSmooth" }, at + slot * 0.75);
   });
 
-  // Gate the render loop AND the stage's visibility on the spacer→screen-stack span. The
-  // stage MUST stay rendered until the screen-stack pins (its opaque backdrop then covers it),
-  // because the cover feather's transparent half only reads as "cylinder" — not the cream body
-  // — while the stage is still visible behind it. Same start/endTrigger as the timeline → lockstep.
+  // Gate the render loop AND the cylinder stage's visibility on the spacer→screen-stack span.
+  // The stage stays rendered until the pin; by then the cylinder is dimmed to #0b0b0b and the
+  // calm photo (a separate z:-1 layer, opacity-driven by the timeline above) has fully faded in
+  // over it, so hiding the stage at the pin is invisible — the photo is already the background.
+  // Same start/endTrigger as the timeline → lockstep.
   ScrollTrigger.create({
     trigger: spacer,
     start: "top bottom",

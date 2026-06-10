@@ -38,6 +38,16 @@
        timeline backward (Projects letter-mask shrinks back, exposing the
        previous Services layer). Safari filters those events natively. */
     overscroll-behavior: none;
+    /* Clip horizontal overflow at the document ROOT (not just body). The
+       hero-transition image is `position: fixed` and gets scaled past the
+       viewport by hero-transition.ts; being fixed, it escapes `body`'s
+       `overflow-x: hidden` and inflates the mobile LAYOUT viewport
+       (`window.innerWidth` 390→437). That stretches every `fixed left/right:0`
+       element — the smart nav and the mobile menu — to the inflated width,
+       pushing the burger / ✕ close button off the right edge once you scroll
+       down. `clip` (not `hidden`) clips without creating a scroll container, so
+       `overflow-y` stays `visible` and Lenis / ScrollTrigger are untouched. */
+    overflow-x: clip;
     /* Smooth scroll for in-page anchor links (e.g. the nav's #contact CTA).
        The reduced-motion block below disables it. */
     scroll-behavior: smooth;
@@ -111,6 +121,23 @@
       opacity 0.9s var(--ease-power3),
       transform 0.9s var(--ease-power3);
   }
+}
+
+/* iOS Safari sub-pixel repaint fix for the centered Hero title.
+   The title is mathematically centered and its layout position is constant
+   (verified to 0.01px in Chromium AND WebKit, first-load + reload) — but on a
+   real iPhone the reveal cascade (.anim-in transform) and the scroll-transition
+   GSAP transforms flip each line on/off a GPU compositing layer "as the hero
+   loads", and iOS Safari repaints layer-promoted centered text a sub-pixel
+   sideways. At DPR 3 that reads as the title "se replace" horizontally by a few
+   device px. Pinning the lines + inline figure to a STABLE layer up-front
+   (backface-visibility + will-change, which don't touch the translateY value)
+   keeps compositing constant so the text never re-snaps. */
+[data-hero] [data-anim-line],
+[data-hero] [data-anim-figure] {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
 }
 
 /* === Dark surface — inverted color scheme ===

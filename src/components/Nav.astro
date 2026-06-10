@@ -19,6 +19,21 @@ const homeHref = lang === "fr" ? "/" : "/en/";
 // the parent page.
 const frHref = lang === "fr" ? "/" : altLangPath;
 const enHref = lang === "en" ? "/en/" : altLangPath;
+
+// Mobile full-screen menu — labels + the items shown as big display links.
+// "Discutons" + the lang switcher stay on the header (here AND mirrored in the
+// open overlay), so only the section links go inside the burger menu.
+const menuLabel = lang === "fr" ? "Ouvrir le menu" : "Open menu";
+const closeLabel = lang === "fr" ? "Fermer le menu" : "Close menu";
+const menuItems = [
+  { n: "01", label: t.nav.work, href: workHref },
+  { n: "02", label: t.nav.about, href: aboutHref },
+  { n: "03", label: "Contact", href: `${homeHref}#contact` },
+];
+const email = t.footer["contact.email"];
+const linkedinUrl = "https://www.linkedin.com/in/anthony-profit/";
+const githubUrl = "https://github.com/anthony-profit";
+const behanceUrl = "https://www.behance.net/anthony-profit";
 ---
 
 {/* Smart nav — `fixed` so it survives scroll. mix-blend-mode: difference
@@ -103,8 +118,159 @@ const enHref = lang === "en" ? "/en/" : altLangPath;
         >FR</a
       >
     </span>
+
+    {/* Burger — opens the full-screen mobile menu (mobile only; desktop uses
+        the inline Work/About links above). Discutons + the lang switcher stay
+        on the header in both states (mirrored inside the open overlay). */}
+    <button
+      type="button"
+      data-menu-toggle
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      aria-label={menuLabel}
+      class="burger -mr-1 grid h-10 w-7 place-items-center text-[var(--color-bg)] sm:hidden"
+    >
+      <span class="burger-box" aria-hidden="true">
+        <span class="burger-line"></span>
+        <span class="burger-line"></span>
+      </span>
+    </button>
   </div>
 </nav>
+
+{/* ===== Full-screen mobile menu ===== mobile only (`sm:hidden`). Dark surface
+    (cream-on-ink via `data-surface="dark"`). Revealed with a circle clip-path
+    growing FROM the burger (top-right) — the same clip vocabulary as the
+    Contact reveal — then the big display links rise out of their masks in a
+    stagger, accent numbers + footer fading last. Starts `inert` (closed); the
+    script below toggles `data-menu-open` on <html> (CSS drives the animation),
+    locks scroll (+ Lenis), traps focus, and closes on Esc / link tap. */}
+<div
+  id="mobile-menu"
+  data-mobile-menu
+  data-surface="dark"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Menu"
+  aria-hidden="true"
+  inert
+  class="mobile-menu fixed inset-0 z-[90] flex flex-col bg-[var(--color-bg)] text-[var(--color-ink)] sm:hidden"
+>
+  {/* Top bar — mirrors the header so Discutons + the switcher stay reachable
+      while the menu is open; brand left, close (✕) right. */}
+  <div class="flex shrink-0 items-center justify-between px-4 py-4">
+    <a href={homeHref} data-menu-link aria-label="Anthony Profit" class="inline-flex items-baseline gap-0 no-underline">
+      <span class="font-serif-italic text-[20px] leading-none">Anthony</span><span class="font-display text-[20px] leading-none tracking-[-0.02em]">PROFIT</span>
+    </a>
+    <div class="flex items-center gap-4">
+      <a href={`${homeHref}#contact`} data-menu-link class="font-mono text-[12px] uppercase tracking-[0.18em] no-underline hover:underline underline-offset-4">{t.nav.cta}</a>
+      <span class="font-mono inline-flex items-center gap-1 text-[11px] uppercase tracking-[0.18em]">
+        <a href={enHref} hreflang="en" aria-current={lang === "en" ? "page" : undefined} class:list={["no-underline hover:underline underline-offset-4", lang === "en" ? "font-bold" : "opacity-60"]}>EN</a>
+        <span aria-hidden="true" class="opacity-60">/</span>
+        <a href={frHref} hreflang="fr" aria-current={lang === "fr" ? "page" : undefined} class:list={["no-underline hover:underline underline-offset-4", lang === "fr" ? "font-bold" : "opacity-60"]}>FR</a>
+      </span>
+      <button type="button" data-menu-close aria-label={closeLabel} class="burger burger--close grid h-10 w-7 place-items-center">
+        <span class="burger-box" aria-hidden="true">
+          <span class="burger-line"></span>
+          <span class="burger-line"></span>
+        </span>
+      </button>
+    </div>
+  </div>
+
+  {/* Big section links */}
+  <nav class="flex flex-1 flex-col justify-center gap-2 px-4" aria-label={lang === "fr" ? "Menu principal" : "Main menu"}>
+    {menuItems.map((it, i) => (
+      <a href={it.href} data-menu-link class="menu-link flex items-baseline gap-4 no-underline" style={`--d:${(0.2 + i * 0.07).toFixed(2)}s`}>
+        <span class="menu-num font-mono text-[12px] tracking-[0.18em] text-[var(--color-accent)]">{it.n}</span>
+        <span class="menu-mask">
+          <span class="menu-inner font-display text-[clamp(44px,15vw,88px)] uppercase leading-[0.95] tracking-[-0.04em]">{it.label}</span>
+        </span>
+      </a>
+    ))}
+  </nav>
+
+  {/* Footer — email + socials */}
+  <div class="menu-foot flex shrink-0 flex-col gap-3 px-4 pb-10">
+    <a href={`mailto:${email}`} data-menu-link class="font-mono text-[13px] lowercase tracking-[0.05em] no-underline hover:underline underline-offset-4">{email}</a>
+    <div class="flex gap-5 font-mono text-[11px] uppercase tracking-[0.18em]">
+      <a href={githubUrl} target="_blank" rel="noopener" class="no-underline hover:underline underline-offset-4 opacity-80 hover:opacity-100">GitHub</a>
+      <a href={linkedinUrl} target="_blank" rel="noopener" class="no-underline hover:underline underline-offset-4 opacity-80 hover:opacity-100">LinkedIn</a>
+      <a href={behanceUrl} target="_blank" rel="noopener" class="no-underline hover:underline underline-offset-4 opacity-80 hover:opacity-100">Behance</a>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  /* Burger icon — two lines using currentColor (so the nav's mix-blend-difference
+     keeps it legible over light/dark sections). The overlay's close button reuses
+     the same box but is locked to an ✕. */
+  .burger-box {
+    position: relative;
+    display: block;
+    width: 26px;
+    height: 12px;
+  }
+  .burger-line {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: currentColor;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .burger-line:nth-child(1) { top: 0; }
+  .burger-line:nth-child(2) { bottom: 0; }
+  .burger--close .burger-line:nth-child(1) { top: 50%; transform: translateY(-50%) rotate(45deg); }
+  .burger--close .burger-line:nth-child(2) { bottom: 50%; transform: translateY(50%) rotate(-45deg); }
+
+  /* Overlay — circle reveal from the burger (top-right). Closed = collapsed +
+     non-interactive; the `inert` attribute (toggled by JS) keeps it out of the
+     tab order / a11y tree when closed. */
+  .mobile-menu {
+    clip-path: circle(0% at calc(100% - 32px) 36px);
+    pointer-events: none;
+    transition: clip-path 0.55s cubic-bezier(0.7, 0, 0.84, 0);
+    will-change: clip-path;
+  }
+  html[data-menu-open="true"] .mobile-menu {
+    clip-path: circle(150% at calc(100% - 32px) 36px);
+    pointer-events: auto;
+    transition: clip-path 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Big links rise out of a mask; numbers + footer fade up. Per-row delay comes
+     from `--d` on each `.menu-link` (inherited by the number); the footer has its
+     own. Delays apply only while opening — closing snaps back together. */
+  .menu-mask { display: block; overflow: hidden; padding-block: 0.08em; }
+  .menu-inner {
+    display: block;
+    transform: translateY(115%);
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+  .menu-num,
+  .menu-foot {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.5s ease-out, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .menu-foot { --d: 0.46s; }
+  html[data-menu-open="true"] .menu-inner { transform: translateY(0); transition-delay: var(--d); }
+  html[data-menu-open="true"] .menu-num,
+  html[data-menu-open="true"] .menu-foot { opacity: 1; transform: none; transition-delay: var(--d); }
+
+  /* Lock background scroll while the menu is open (belt-and-braces with the JS
+     Lenis stop, for the brief window before the script runs / if JS is slow). */
+  html[data-menu-open="true"] body { overflow: hidden; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-menu { transition: none; }
+    .menu-inner { transition: none; transform: none; }
+    .menu-num, .menu-foot { transition: none; opacity: 1; transform: none; }
+    .burger-line { transition: none; }
+  }
+</style>
 
 <script>
   // Smart-nav scroll behavior — visible at top, hide on scroll-down, show
@@ -146,5 +312,79 @@ const enHref = lang === "en" ? "/en/" : altLangPath;
       },
       { passive: true }
     );
+  })();
+</script>
+
+<script>
+  // Mobile full-screen menu — open/close + a11y. The CSS (above) does the
+  // animation off `html[data-menu-open]`; this only flips state, locks scroll
+  // (pausing Lenis so the pinned timelines don't scrub underneath), manages
+  // focus (move in on open, trap, restore on close) and closes on Esc / tap.
+  (() => {
+    const root = document.documentElement;
+    const toggle = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
+    const menu = document.querySelector<HTMLElement>("[data-mobile-menu]");
+    if (!toggle || !menu) return;
+    const closeBtn = menu.querySelector<HTMLButtonElement>("[data-menu-close]");
+    const lenis = () =>
+      (window as unknown as { __lenis?: { stop?: () => void; start?: () => void } }).__lenis;
+
+    const focusables = (): HTMLElement[] =>
+      Array.from(
+        menu.querySelectorAll<HTMLElement>("a[href], button:not([disabled])")
+      ).filter((el) => el.offsetParent !== null || el === closeBtn);
+
+    let open = false;
+    const setOpen = (v: boolean): void => {
+      if (v === open) return;
+      open = v;
+      root.dataset.menuOpen = v ? "true" : "false";
+      toggle.setAttribute("aria-expanded", v ? "true" : "false");
+      menu.setAttribute("aria-hidden", v ? "false" : "true");
+      if (v) menu.removeAttribute("inert");
+      else menu.setAttribute("inert", "");
+      const l = lenis();
+      if (v) l?.stop?.();
+      else l?.start?.();
+      // Move focus in on open (close button), back to the burger on close.
+      if (v) (closeBtn ?? focusables()[0])?.focus();
+      else toggle.focus();
+    };
+
+    toggle.addEventListener("click", () => setOpen(true));
+    closeBtn?.addEventListener("click", () => setOpen(false));
+    // A tap on any menu link closes the overlay; navigation (or the #contact
+    // capture-scroll in about-scroll.ts) then proceeds on the now-visible page.
+    menu.querySelectorAll<HTMLElement>("[data-menu-link]").forEach((a) =>
+      a.addEventListener("click", () => setOpen(false))
+    );
+
+    document.addEventListener("keydown", (e) => {
+      if (!open) return;
+      if (e.key === "Escape") {
+        e.preventDefault();
+        setOpen(false);
+        return;
+      }
+      if (e.key === "Tab") {
+        const f = focusables();
+        if (!f.length) return;
+        const first = f[0];
+        const last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    });
+
+    // Safety: if the viewport grows to desktop while open (rotation / resize),
+    // close so the overlay (display:none at ≥640px) can't trap state.
+    window.matchMedia("(min-width: 640px)").addEventListener("change", (m) => {
+      if (m.matches) setOpen(false);
+    });
   })();
 </script>

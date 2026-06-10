@@ -86,20 +86,11 @@ const getPositionClasses = (position: CaptionPos): string => {
   </div>
 
   {/* Scroll runway (normal flow) between About and the screen-stack — drives the
-      scrubbed timeline. Transparent, so the fixed stage shows through it. */}
+      scrubbed timeline. Transparent, so the fixed stage shows through it. The cylinder no
+      longer covers into black at the end: it CROSS-DISSOLVES into the calm Promesse photo
+      ([data-promesse-photo], a fixed z:-1 sibling that sits above this stage). Over the
+      screen-stack's rise the spin slows, the cylinder dims (uDarkness) and the photo fades
+      in — a fondu enchaîné, in place. The old exit cover feather (which swallowed the
+      cylinder to black before a curtain) is gone; the fondu replaces both it and the curtain. */}
   <div data-cinematic-spacer aria-hidden="true" class="h-[200svh] md:h-[320svh]"></div>
-
-  {/* Exit cover feather — the mirror of the About bottom feather. A static, normal-flow
-      transparent→#0b0b0b gradient sitting just before the screen-stack: as it scrolls up
-      over the fixed stage it softly swallows the (still-lit, spinning) cylinder into the
-      site black — a soft cover edge, no hard line, no pre-dissolved dead black. Its solid
-      bottom joins the screen-stack's #0b0b0b backdrop seamlessly. MUST stay a dumb block
-      (no z-index / transform / opacity / isolation) so it never forms a stacking context
-      over the z:-1 stage; it paints over the stage purely because the stage is z-index:-1. */}
-  <div
-    data-cinematic-cover-feather
-    aria-hidden="true"
-    class="pointer-events-none h-[48svh] bg-gradient-to-b from-transparent to-[#0b0b0b]"
-  >
-  </div>
 </section>
