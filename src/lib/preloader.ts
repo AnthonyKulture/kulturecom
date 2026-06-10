@@ -41,6 +41,7 @@
  *            preloader removed at 400ms with no translate/scale.
  */
 import gsap from "gsap";
+import { prefersReducedMotion } from "./env";
 
 const TYPEWRITER_DURATION_MS = 2500;
 const FADE_AROUND_DURATION_MS = 600;
@@ -73,7 +74,7 @@ export function initPreloader(): void {
     return;
   }
 
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduced = prefersReducedMotion();
 
   const nameEl = el.querySelector<HTMLElement>("[data-preloader-name]");
   const letters = Array.from(

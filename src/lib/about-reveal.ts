@@ -33,6 +33,7 @@
  */
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { prefersReducedMotion } from "./env";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -44,7 +45,7 @@ export function initAboutReveal(): void {
   );
   if (sections.length === 0) return;
 
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduced = prefersReducedMotion();
 
   if (reduced) {
     // Words carry opacity/transform only now (blur lives on the chapter

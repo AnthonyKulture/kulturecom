@@ -7,16 +7,17 @@
  */
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { prefersReducedMotion, isMobileViewport } from "./env";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export function initProjectsMobile(): void {
   if (typeof window === "undefined") return;
 
-  const isMobile = window.matchMedia("(max-width: 639px)").matches;
+  const isMobile = isMobileViewport();
   if (!isMobile) return;
 
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduced = prefersReducedMotion();
   const cards = Array.from(
     document.querySelectorAll<HTMLElement>("[data-project-card-mobile]")
   );

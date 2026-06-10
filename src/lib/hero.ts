@@ -15,6 +15,8 @@
  * `prefers-reduced-motion` is respected (instant reveal + no carousel).
  */
 
+import { prefersReducedMotion, isMobileViewport } from "./env";
+
 const LINE_DELAY = 130; // ms between line reveals (mobile + desktop)
 const BASELINE_DELAY = 60; // ms after a line before its baseline traces
 const INLINE_DELAY = 80; // ms between inline element reveals (desktop)
@@ -27,8 +29,8 @@ export function initHero(): void {
   const hero = document.querySelector<HTMLElement>("[data-hero]");
   if (!hero) return;
 
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const isMobile = window.matchMedia("(max-width: 639px)").matches;
+  const reduced = prefersReducedMotion();
+  const isMobile = isMobileViewport();
 
   const slidesSources = JSON.parse(
     hero.querySelector("[data-carousel-sources]")?.textContent ?? "[]"

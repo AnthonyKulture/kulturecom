@@ -78,6 +78,7 @@
  */
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { prefersReducedMotion } from "./env";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -95,7 +96,7 @@ export function initHeroTransition(): void {
   );
   if (!pinTrigger || !transitionImg) return;
 
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduced = prefersReducedMotion();
   if (reduced) {
     transitionImg.style.display = "none";
     return;

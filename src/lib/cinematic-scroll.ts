@@ -27,6 +27,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CustomEase } from "gsap/CustomEase";
 import { Renderer, Camera, Transform, Texture, Program, Mesh, Geometry } from "ogl";
+import { prefersReducedMotion } from "./env";
 
 gsap.registerPlugin(ScrollTrigger, CustomEase);
 
@@ -246,7 +247,7 @@ export function initCinematicScroll(): void {
   const screenStack = document.querySelector<HTMLElement>("[data-screen-stack]");
   const calmPhoto = document.querySelector<HTMLElement>("[data-promesse-photo]");
 
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduced = prefersReducedMotion();
   const isMobile = window.matchMedia("(max-width: 767px)").matches;
 
   const setStageVisible = (v: boolean): void => {

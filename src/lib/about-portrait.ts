@@ -16,6 +16,7 @@
  */
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { prefersReducedMotion, isMobileViewport } from "./env";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -27,7 +28,7 @@ export function initAboutPortrait(): void {
 
   // The portrait is DESKTOP-ONLY (hidden on mobile via `hidden md:block` in
   // AboutPortrait.astro); skip all of its scroll wiring on small screens.
-  if (window.matchMedia("(max-width: 639px)").matches) return;
+  if (isMobileViewport()) return;
 
   const sections = Array.from(
     document.querySelectorAll<HTMLElement>("[data-about-chapter-section]")
@@ -62,9 +63,7 @@ export function initAboutPortrait(): void {
   const endY = () =>
     docTop(last) + last.offsetHeight - window.innerHeight * 0.85;
 
-  const reduced = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-  ).matches;
+  const reduced = prefersReducedMotion();
 
   if (reduced) {
     gsap.set(portrait, { opacity: 0 });

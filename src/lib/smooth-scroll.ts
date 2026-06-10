@@ -21,12 +21,13 @@
 import Lenis from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { prefersReducedMotion } from "./env";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export function initSmoothScroll(): void {
   if (typeof window === "undefined") return;
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (prefersReducedMotion()) return;
 
   // `lerp: 0.1` bounds the DESKTOP wheel/keyboard/scrollbar velocity (Lenis drives
   // those) so a hard flick can't make the scrubbed timelines skip. MOBILE touch was

@@ -25,6 +25,7 @@
  */
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { prefersReducedMotion, isMobileViewport } from "./env";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -77,8 +78,8 @@ export function initAboutScroll(): void {
   const promessePhoto = document.querySelector<HTMLElement>("[data-promesse-photo]");
   const promessePhotoImg = document.querySelector<HTMLElement>("[data-promesse-photo-img]");
 
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const isMobile = window.matchMedia("(max-width: 639px)").matches;
+  const reduced = prefersReducedMotion();
+  const isMobile = isMobileViewport();
 
   if (reduced) {
     gsap.set(about2Reveal, { opacity: 1, y: 0 });
