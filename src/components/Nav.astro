@@ -326,8 +326,7 @@ const behanceUrl = "https://www.behance.net/anthony-profit";
     const menu = document.querySelector<HTMLElement>("[data-mobile-menu]");
     if (!toggle || !menu) return;
     const closeBtn = menu.querySelector<HTMLButtonElement>("[data-menu-close]");
-    const lenis = () =>
-      (window as unknown as { __lenis?: { stop?: () => void; start?: () => void } }).__lenis;
+    const lenis = () => window.__lenis;
 
     const focusables = (): HTMLElement[] =>
       Array.from(

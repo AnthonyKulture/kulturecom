@@ -50,7 +50,7 @@ export function initSmoothScroll(): void {
   });
   // Expose the instance: about-scroll.ts routes the "clic" CTA + #contact links
   // through `window.__lenis.scrollTo` (and falls back to native scroll if absent).
-  (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
+  window.__lenis = lenis;
 
   // Keep ScrollTrigger in sync with Lenis' interpolated scroll position.
   lenis.on("scroll", ScrollTrigger.update);
@@ -72,7 +72,7 @@ export function initSmoothScroll(): void {
   // `/#contact` / `/en/#contact`, so we compare the resolved pathname rather
   // than matching `href^="#"`.
   document.addEventListener("click", (e) => {
-    const link = (e.target as HTMLElement | null)?.closest<HTMLAnchorElement>(
+    const link = (e.target as Element | null)?.closest<HTMLAnchorElement>(
       "a[href]"
     );
     if (!link) return;

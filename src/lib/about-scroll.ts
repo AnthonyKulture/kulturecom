@@ -156,8 +156,7 @@ export function initAboutScroll(): void {
       (mainTrigger.end - mainTrigger.start);
 
   const scrollToY = (y: number): void => {
-    const lenis = (window as unknown as { __lenis?: { scrollTo: (t: number) => void } })
-      .__lenis;
+    const lenis = window.__lenis;
     if (lenis) lenis.scrollTo(y);
     else window.scrollTo({ top: y, behavior: "smooth" });
   };
@@ -174,7 +173,7 @@ export function initAboutScroll(): void {
   document.addEventListener(
     "click",
     (e) => {
-      const link = (e.target as HTMLElement | null)?.closest<HTMLAnchorElement>(
+      const link = (e.target as Element | null)?.closest<HTMLAnchorElement>(
         "a[href]"
       );
       if (!link) return;
