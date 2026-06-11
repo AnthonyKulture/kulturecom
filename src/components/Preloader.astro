@@ -27,10 +27,17 @@ const DISPLAY_LETTERS = Array.from("PROFIT");
       mix-blend-difference as Nav.astro so the morph hand-off is color-perfect.
       `transform-origin: 0 0` + `will-change: transform` enable the FLIP morph. */}
   <div class="absolute inset-0 flex items-center justify-center px-4 pointer-events-none">
+    {/* Solid ink (not mix-blend-difference): the preloader bg is always cream,
+        so the mark is always black here — identical to the nav logo at the
+        handoff (also black on the cream hero top). Dropping the blend group +
+        will-change layers stops them rasterizing the italic glyph to its tight
+        leading-none box, which clipped the "A" serifs during the typewriter.
+        Geometry is unchanged, so the morph still lands exactly on the nav logo
+        (the morph tween's force3D provides its own GPU layer). */}
     <div
       data-preloader-name
-      class="inline-flex items-baseline gap-0 whitespace-nowrap leading-none text-[clamp(40px,11vw,144px)] text-[var(--color-bg)] mix-blend-difference"
-      style="transform-origin: 0 0; will-change: transform;"
+      class="inline-flex items-baseline gap-0 whitespace-nowrap leading-none text-[clamp(40px,11vw,144px)] text-[var(--color-ink)]"
+      style="transform-origin: 0 0;"
     ><span class="font-serif-italic">{SERIF_LETTERS.map((c) => (<span class="preloader-letter">{c}</span>))}</span><span class="font-display tracking-[-0.02em]">{DISPLAY_LETTERS.map((c) => (<span class="preloader-letter">{c}</span>))}</span></div>
   </div>
 
@@ -41,19 +48,19 @@ const DISPLAY_LETTERS = Array.from("PROFIT");
   <div data-preloader-loading class="absolute inset-0 pointer-events-none">
     <!-- Top-left label -->
     <span
-      class="font-mono absolute left-4 top-4 text-[10px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)] sm:left-6 sm:top-6 sm:text-[11px] md:left-12 md:top-12"
+      class="font-mono absolute left-4 top-4 text-[11px] uppercase tracking-[0.2em] text-[var(--color-ink-muted)] sm:left-6 sm:top-6 sm:text-[12px] md:left-12 md:top-12"
     >{lang === "fr" ? "Chargement" : "Loading"}</span>
 
-    <!-- Bottom-right percentage readout -->
+    <!-- Bottom-right percentage readout (large, prominent) -->
     <span
       data-preloader-percent
-      class="font-mono absolute bottom-5 right-4 text-[11px] tabular-nums tracking-[0.12em] text-[var(--color-ink)] sm:right-6 sm:text-[12px] md:right-12"
+      class="font-mono absolute bottom-7 right-4 text-[clamp(22px,3vw,38px)] font-medium tabular-nums tracking-[0.01em] text-[var(--color-ink)] sm:right-6 md:right-12"
       aria-hidden="true"
     >0%</span>
 
     <!-- Full-width bottom progress bar (track + scaleX fill) -->
     <div
-      class="absolute inset-x-0 bottom-0 h-[6px] bg-[var(--color-border)]"
+      class="absolute inset-x-0 bottom-0 h-3 bg-[var(--color-border)]"
       aria-hidden="true"
     >
       <span

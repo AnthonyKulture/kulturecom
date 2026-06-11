@@ -238,7 +238,6 @@
   display: inline-block;
   opacity: 0;
   transform: translateY(8px);
-  will-change: opacity, transform;
 }
 
 /* === Word-split scroll reveal utility (mask reveal) ===
