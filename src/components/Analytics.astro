@@ -1,9 +1,11 @@
 ---
-// Google Analytics 4 (gtag.js) — loaded site-wide from BaseLayout <head>.
+// Google Analytics 4 (gtag.js) with Consent Mode v2 — loaded site-wide from
+// BaseLayout <head>.
 //
-// RGPD/CNIL: this currently fires unconditionally. For full compliance it
-// should be gated behind a consent banner (Consent Mode v2: default `denied`,
-// then `gtag('consent','update',…)` once the visitor accepts). See ACTION-PLAN.md.
+// RGPD/CNIL: consent defaults to `denied`, so NO analytics cookies are set
+// until the visitor accepts via the banner (Consent.astro). Until then GA4
+// runs in cookieless mode. A prior "granted" choice (localStorage) is restored
+// before the first hit. The banner calls gtag('consent','update',…).
 //
 // is:inline keeps Astro from bundling/hoisting these — gtag must run as-is.
 ---
@@ -11,6 +13,20 @@
 <script is:inline>
   window.dataLayer = window.dataLayer || [];
   function gtag(){ dataLayer.push(arguments); }
+  // Consent Mode v2 — deny by default (RGPD/CNIL).
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: 'denied',
+    wait_for_update: 500,
+  });
+  // Restore a previously granted choice before the first measurement hit.
+  try {
+    if (localStorage.getItem('ap-consent') === 'granted') {
+      gtag('consent', 'update', { analytics_storage: 'granted' });
+    }
+  } catch (e) {}
   gtag('js', new Date());
   gtag('config', 'G-W64W3JKY43');
 </script>

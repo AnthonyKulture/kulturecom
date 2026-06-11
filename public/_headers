@@ -4,6 +4,7 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
   X-Frame-Options: SAMEORIGIN
+  Link: </sitemap-index.xml>; rel="sitemap", </llms.txt>; rel="service-doc"
 
 /*.webp
   Cache-Control: public, max-age=31536000, immutable

@@ -1,0 +1,90 @@
+---
+// RGPD/CNIL consent banner. Shown until the visitor accepts or declines; the
+// choice is stored in localStorage ('ap-consent'). "Accept" calls Consent Mode
+// v2 update → granted (GA4 may then set cookies); "Decline" keeps it denied
+// (GA4 stays cookieless). Pairs with Analytics.astro.
+import type { Lang } from "~/i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+const t =
+  lang === "fr"
+    ? {
+        text: "Ce site utilise des cookies de mesure d'audience (Google Analytics) pour comprendre son trafic.",
+        accept: "Accepter",
+        decline: "Refuser",
+        privacy: "En savoir plus",
+        privacyHref: "/confidentialite/",
+        aria: "Consentement aux cookies",
+      }
+    : {
+        text: "This site uses analytics cookies (Google Analytics) to understand its traffic.",
+        accept: "Accept",
+        decline: "Decline",
+        privacy: "Learn more",
+        privacyHref: "/en/privacy/",
+        aria: "Cookie consent",
+      };
+---
+
+<div
+  data-consent-banner
+  hidden
+  role="region"
+  aria-label={t.aria}
+  class="fixed bottom-3 left-3 right-3 z-[90] mx-auto max-w-[var(--container-wide)] border border-[var(--color-ink)]/15 bg-[var(--color-bg)] px-4 py-4 text-[var(--color-ink)] shadow-[0_8px_40px_rgba(0,0,0,0.12)] sm:bottom-5 sm:left-auto sm:right-5 sm:max-w-[420px] sm:px-5 sm:py-5"
+>
+  <p class="text-[13px] leading-[1.5] text-[var(--color-ink)]/85">
+    {t.text}{" "}
+    <a
+      href={t.privacyHref}
+      class="underline underline-offset-2 hover:text-[var(--color-accent)]"
+      >{t.privacy}</a
+    >
+  </p>
+  <div class="mt-4 flex items-center gap-3">
+    <button
+      type="button"
+      data-consent-accept
+      class="font-mono inline-flex items-center bg-[var(--color-ink)] px-5 py-2.5 text-[11px] uppercase tracking-[0.16em] text-[var(--color-bg)] transition-colors duration-200 hover:bg-[var(--color-accent)]"
+      >{t.accept}</button
+    >
+    <button
+      type="button"
+      data-consent-decline
+      class="font-mono inline-flex items-center px-2 py-2.5 text-[11px] uppercase tracking-[0.16em] text-[var(--color-ink)]/70 underline underline-offset-4 transition-colors duration-200 hover:text-[var(--color-ink)]"
+      >{t.decline}</button
+    >
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    var KEY = "ap-consent";
+    var el = document.querySelector("[data-consent-banner]");
+    if (!el) return;
+    var stored = null;
+    try {
+      stored = localStorage.getItem(KEY);
+    } catch (e) {}
+    if (stored !== "granted" && stored !== "denied") el.hidden = false;
+
+    function choose(value) {
+      try {
+        localStorage.setItem(KEY, value);
+      } catch (e) {}
+      if (value === "granted" && typeof window.gtag === "function") {
+        window.gtag("consent", "update", { analytics_storage: "granted" });
+      }
+      el.hidden = true;
+    }
+
+    var accept = el.querySelector("[data-consent-accept]");
+    var decline = el.querySelector("[data-consent-decline]");
+    if (accept) accept.addEventListener("click", function () { choose("granted"); });
+    if (decline) decline.addEventListener("click", function () { choose("denied"); });
+  })();
+</script>

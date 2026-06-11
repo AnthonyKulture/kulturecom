@@ -3,6 +3,7 @@ import "~/styles/global.css";
 import Preloader from "~/components/Preloader.astro";
 import Footer from "~/components/Footer.astro";
 import Analytics from "~/components/Analytics.astro";
+import Consent from "~/components/Consent.astro";
 import type { Lang } from "~/i18n/ui";
 import { ui } from "~/i18n/ui";
 import { getRoute } from "~/i18n/routes";
@@ -193,7 +194,6 @@ const jsonLd = { "@context": "https://schema.org", "@graph": graph };
     <meta name="description" content={pageDescription} />
     {noindex && <meta name="robots" content="noindex" />}
 
-    <meta name="keywords" content={dict.meta.keywords} />
     <meta name="author" content="Anthony Profit" />
 
     <link rel="canonical" href={canonical} />
@@ -261,5 +261,6 @@ const jsonLd = { "@context": "https://schema.org", "@graph": graph };
     <Preloader lang={lang} />
     <slot />
     <Footer lang={lang} />
+    <Consent lang={lang} />
   </body>
 </html>
