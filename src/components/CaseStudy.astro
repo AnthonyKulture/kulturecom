@@ -1,0 +1,261 @@
+---
+import type { Lang } from "~/i18n/ui";
+import { ui } from "~/i18n/ui";
+import { getCaseStudy, caseStudyPath } from "~/lib/case-studies";
+import CTA from "~/components/CTA.astro";
+
+interface Props {
+  lang: Lang;
+  slug: string;
+}
+
+const { lang, slug } = Astro.props;
+const t = ui[lang];
+const cs = getCaseStudy(t, slug);
+// getStaticPaths only ever passes a known slug; fail loudly if that contract breaks.
+if (!cs) throw new Error(`Unknown case study slug: ${slug}`);
+
+const isFr = lang === "fr";
+const pathname = caseStudyPath(slug, lang);
+const canonical = new URL(pathname, Astro.site).toString();
+const workIndexPath = isFr ? "/projets/" : "/en/work/";
+const homeUrl = new URL(isFr ? "/" : "/en/", Astro.site).toString();
+const workIndexUrl = new URL(workIndexPath, Astro.site).toString();
+const heroImageAbs = new URL(cs.image, Astro.site).toString();
+
+// Prev / next titles for the bottom pager.
+const dict = t.projects as Record<string, string>;
+const prevTitle = dict[`${cs.prev.key}.title`];
+const nextTitle = dict[`${cs.next.key}.title`];
+
+const liveHost = cs.liveUrl.replace(/^https?:\/\//, "").replace(/\/$/, "");
+
+const l = isFr
+  ? {
+      eyebrow: "Étude de cas",
+      back: "Tous les projets",
+      breadcrumb: "Fil d'Ariane",
+      client: "Client",
+      role: "Rôle",
+      stack: "Stack",
+      live: "Site en ligne",
+      result: "Le résultat en bref",
+      pager: "Autres études de cas",
+      prev: "Précédent",
+      next: "Suivant",
+    }
+  : {
+      eyebrow: "Case study",
+      back: "All projects",
+      breadcrumb: "Breadcrumb",
+      client: "Client",
+      role: "Role",
+      stack: "Stack",
+      live: "Live site",
+      result: "The outcome, in short",
+      pager: "More case studies",
+      prev: "Previous",
+      next: "Next",
+    };
+
+// Self-contained structured data: a CreativeWork (Anthony as creator, the client
+// as the entity it's `about`) + a 3-level breadcrumb. Lives in the body, which
+// Google reads for JSON-LD just like the head.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CreativeWork",
+      "@id": `${canonical}#case`,
+      "name": `${cs.title} — ${l.eyebrow}`,
+      "headline": cs.headline,
+      "url": canonical,
+      "inLanguage": isFr ? "fr-FR" : "en-US",
+      "image": heroImageAbs,
+      "keywords": cs.tag,
+      "creator": {
+        "@type": "Person",
+        "name": "Anthony Profit",
+        "url": new URL("/", Astro.site).toString(),
+      },
+      "about": {
+        "@type": "Organization",
+        "name": cs.title,
+        "url": cs.liveUrl,
+      },
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${canonical}#breadcrumb`,
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": isFr ? "Accueil" : "Home", "item": homeUrl },
+        { "@type": "ListItem", "position": 2, "name": isFr ? "Projets" : "Work", "item": workIndexUrl },
+        { "@type": "ListItem", "position": 3, "name": cs.title, "item": canonical },
+      ],
+    },
+  ],
+};
+
+const mediaLabel = `${cs.title} — ${cs.tag}`;
+---
+
+<main id="main-content" class="bg-[var(--color-bg)] text-[var(--color-ink)]">
+
+  {/* ========== HERO ========== */}
+  <section class="relative px-4 pt-32 pb-12 sm:px-6 sm:pt-40 sm:pb-16 md:px-12 md:pt-48 md:pb-20">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      {/* Back link + eyebrow */}
+      <nav aria-label={l.breadcrumb} class="mb-6">
+        <a
+          href={workIndexPath}
+          class="font-mono inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)] no-underline hover:text-[var(--color-ink)]"
+        >
+          <span aria-hidden="true">←</span>{l.back}
+        </a>
+      </nav>
+
+      <p class="font-mono mb-4 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
+        <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
+        {l.eyebrow} · {cs.num}
+      </p>
+
+      <h1 class="font-display text-[clamp(36px,7vw,120px)] uppercase leading-[0.92] tracking-[-0.04em] text-[var(--color-ink)]">
+        {cs.headline}
+      </h1>
+
+      <p class="font-serif-italic mt-8 max-w-[46ch] text-[clamp(18px,2vw,28px)] leading-tight text-[var(--color-ink)]">
+        {cs.subtitle}
+      </p>
+
+      {/* Meta strip — client / role / stack / live link */}
+      <dl class="font-mono mt-12 grid grid-cols-2 gap-6 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)] sm:grid-cols-4 sm:gap-8">
+        <div>
+          <dt class="opacity-60">{l.client}</dt>
+          <dd class="mt-1 normal-case tracking-normal text-[var(--color-ink)]">{cs.client}</dd>
+        </div>
+        <div>
+          <dt class="opacity-60">{l.role}</dt>
+          <dd class="mt-1 normal-case tracking-normal text-[var(--color-ink)]">{cs.roleMeta}</dd>
+        </div>
+        <div>
+          <dt class="opacity-60">{l.stack}</dt>
+          <dd class="mt-1 normal-case tracking-normal text-[var(--color-ink)]">{cs.stack}</dd>
+        </div>
+        <div>
+          <dt class="opacity-60">{l.live}</dt>
+          <dd class="mt-1">
+            <a
+              href={cs.liveUrl}
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center gap-1 normal-case tracking-normal text-[var(--color-ink)] underline underline-offset-4 hover:text-[var(--color-accent)]"
+            >
+              {liveHost}<span aria-hidden="true">↗</span>
+            </a>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  {/* ========== HERO MEDIA ========== */}
+  <section class="px-4 sm:px-6 md:px-12">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <div class="relative aspect-[16/10] w-full overflow-hidden bg-[var(--color-border)] sm:aspect-[16/9]">
+        {cs.video ? (
+          <video
+            src={cs.video}
+            poster={cs.image}
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            aria-label={mediaLabel}
+            class="absolute inset-0 block h-full w-full object-cover"
+          />
+        ) : (
+          <img
+            src={cs.image}
+            alt={mediaLabel}
+            width="1600"
+            height="900"
+            loading="eager"
+            class="absolute inset-0 block h-full w-full object-cover"
+          />
+        )}
+      </div>
+    </div>
+  </section>
+
+  {/* ========== METRIC (proof strip) ========== */}
+  <section class="px-4 sm:px-6 md:px-12">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <p class="flex items-center gap-3 border-b border-[var(--color-border)] py-8 font-display text-[clamp(20px,3vw,40px)] uppercase leading-[1.05] tracking-[-0.02em] text-[var(--color-ink)] sm:py-10">
+        <span aria-hidden="true" class="inline-block h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--color-accent)]"></span>
+        {cs.metric}
+      </p>
+    </div>
+  </section>
+
+  {/* ========== NARRATIVE (context → challenge → role → approach → result) ========== */}
+  <section class="relative px-4 py-20 sm:px-6 sm:py-28 md:px-12 md:py-32">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <ol class="flex flex-col gap-14 sm:gap-20">
+        {cs.sections.map((s, i) => (
+          <li class="grid grid-cols-1 gap-4 border-t border-[var(--color-border)] pt-8 sm:grid-cols-[220px_1fr] sm:gap-12">
+            <div class="flex items-baseline gap-4 sm:flex-col sm:gap-2">
+              <span class="font-display text-[clamp(36px,4vw,64px)] leading-none tracking-[-0.04em] text-[var(--color-accent)]">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <h2 class="font-mono text-[12px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
+                {s.label}
+              </h2>
+            </div>
+            <p class="max-w-[68ch] text-[clamp(16px,1.35vw,21px)] leading-[1.7] text-[var(--color-ink)]">
+              {s.body}
+            </p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  {/* ========== PREV / NEXT PAGER ========== */}
+  <section class="px-4 pb-20 sm:px-6 sm:pb-28 md:px-12 md:pb-32">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <p class="font-mono mb-6 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-subtle)]">
+        {l.pager}
+      </p>
+      <div class="grid grid-cols-1 gap-px overflow-hidden border border-[var(--color-border)] sm:grid-cols-2">
+        <a
+          href={caseStudyPath(cs.prev.slug, lang)}
+          class="group flex flex-col gap-2 bg-[var(--color-bg)] p-6 no-underline transition-colors hover:bg-[var(--color-border)]/40 sm:p-8"
+        >
+          <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
+            <span aria-hidden="true">←</span> {l.prev}
+          </span>
+          <span class="font-display text-[clamp(22px,2.4vw,36px)] uppercase leading-[1] tracking-[-0.03em] text-[var(--color-ink)]">
+            {prevTitle}
+          </span>
+        </a>
+        <a
+          href={caseStudyPath(cs.next.slug, lang)}
+          class="group flex flex-col items-start gap-2 bg-[var(--color-bg)] p-6 no-underline transition-colors hover:bg-[var(--color-border)]/40 sm:items-end sm:p-8 sm:text-right"
+        >
+          <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
+            {l.next} <span aria-hidden="true">→</span>
+          </span>
+          <span class="font-display text-[clamp(22px,2.4vw,36px)] uppercase leading-[1] tracking-[-0.03em] text-[var(--color-ink)]">
+            {nextTitle}
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {/* Contact — same section as home / about for a consistent close. */}
+  <CTA lang={lang} />
+
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+</main>

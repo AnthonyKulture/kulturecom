@@ -1,0 +1,20 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import Nav from "~/components/Nav.astro";
+import CaseStudy from "~/components/CaseStudy.astro";
+import { CASE_STUDIES } from "~/lib/case-studies";
+
+export function getStaticPaths() {
+  return CASE_STUDIES.map((c) => ({ params: { slug: c.slug } }));
+}
+
+const lang = "en" as const;
+const { slug } = Astro.params;
+const pathname = `/en/work/${slug}/`;
+const altPath = `/projets/${slug}/`;
+---
+
+<BaseLayout lang={lang} pathname={pathname} altPath={altPath}>
+  <Nav lang={lang} altLang="fr" altLangPath={altPath} />
+  <CaseStudy lang={lang} slug={slug!} />
+</BaseLayout>

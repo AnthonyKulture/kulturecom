@@ -85,6 +85,74 @@ export const routes: Record<string, RouteMeta> = {
       "Politique de confidentialité d'anthonyprofit.com — données collectées, finalités, base légale, durée de conservation et vos droits (RGPD).",
   },
 
+  // ---- FR · services ----
+  "/creation-site-internet/": {
+    lang: "fr",
+    alt: "/en/web-development/",
+    crumb: "Création de site internet",
+    title: `Création de site internet sur-mesure à Nice | Anthony Profit`,
+    description:
+      "Création de site internet sur-mesure sur la Côte d'Azur : design, développement Astro/React et performance. Sites rapides, accessibles, sans template. Devis sur brief.",
+  },
+  "/seo-geo/": {
+    lang: "fr",
+    alt: "/en/seo-geo/",
+    crumb: "SEO & GEO",
+    title: `SEO & GEO : référencement Google et IA | Anthony Profit`,
+    description:
+      "Référencement technique SEO et GEO près de Nice : audit, Core Web Vitals, Schema.org, llms.txt. Être trouvé sur Google et cité par ChatGPT, Perplexity et les AI Overviews.",
+  },
+  "/identite-de-marque/": {
+    lang: "fr",
+    alt: "/en/brand-design/",
+    crumb: "Identité de marque",
+    title: `Identité de marque & direction artistique | Anthony Profit`,
+    description:
+      "Création d'identité de marque sur la Côte d'Azur : logo, brand system, typographie et déclinaisons web, print et social. Une image cohérente qui rend votre marque crédible.",
+  },
+
+  // ---- FR · études de cas ----
+  "/projets/surly/": {
+    lang: "fr",
+    alt: "/en/work/surly/",
+    crumb: "Surly",
+    title: `Surly — marketplace banque & assurance | Étude de cas`,
+    description:
+      "Étude de cas Surly : marketplace banque & assurance co-fondée et développée sur React + Supabase. Architecture, full-stack et growth — 1 600 consultants, 8 entreprises clientes.",
+  },
+  "/projets/eden-rock-yacht-rental/": {
+    lang: "fr",
+    alt: "/en/work/eden-rock-yacht-rental/",
+    crumb: "Eden Rock Yacht Rental",
+    title: `Eden Rock Yacht Rental — identité & site | Étude de cas`,
+    description:
+      "Étude de cas Eden Rock Yacht Rental : étendre une marque hôtelière iconique de Saint-Barth au yachting. Identité, site WordPress et SEO pour une clientèle internationale.",
+  },
+  "/projets/sun-beach-house/": {
+    lang: "fr",
+    alt: "/en/work/sun-beach-house/",
+    crumb: "Sun Beach House",
+    title: `Sun Beach House — villas de luxe à Saint-Barth | Étude de cas`,
+    description:
+      "Étude de cas Sun Beach House : identité, site éditorial Next.js + Sanity et SEO/GEO pour une agence de villas de prestige à Saint-Barthélemy. Visible sur Google et dans les IA.",
+  },
+  "/projets/royal-yacht-international/": {
+    lang: "fr",
+    alt: "/en/work/royal-yacht-international/",
+    crumb: "Royal Yacht International",
+    title: `Royal Yacht International — courtier superyachts | Étude de cas`,
+    description:
+      "Étude de cas Royal Yacht International : refonte d'identité, site WordPress et SEO pour un courtier de superyachts à Monaco. Crédibilité et visibilité internationale.",
+  },
+  "/projets/vaulk/": {
+    lang: "fr",
+    alt: "/en/work/vaulk/",
+    crumb: "Vaulk",
+    title: `Vaulk — abris durcis NRBC | Étude de cas web & 3D`,
+    description:
+      "Étude de cas Vaulk : site éditorial et cinématographique pour un concepteur d'abris de protection civile. Next.js, Strapi, intégration 3D et vidéo au scroll. Livré en 3 mois.",
+  },
+
   // ---- EN ----
   "/en/": {
     lang: "en",
@@ -137,6 +205,74 @@ export const routes: Record<string, RouteMeta> = {
     title: `Privacy policy | Anthony Profit`,
     description:
       "Privacy policy for anthonyprofit.com — data collected, purposes, legal basis, retention and your rights (GDPR).",
+  },
+
+  // ---- EN · services ----
+  "/en/web-development/": {
+    lang: "en",
+    alt: "/creation-site-internet/",
+    crumb: "Web development",
+    title: `Custom web development on the French Riviera | Anthony Profit`,
+    description:
+      "Custom website development near Nice: design, Astro/React development and performance. Fast, accessible sites, no templates. Quoted on a written brief.",
+  },
+  "/en/seo-geo/": {
+    lang: "en",
+    alt: "/seo-geo/",
+    crumb: "SEO & GEO",
+    title: `Technical SEO & GEO: rank on Google and AI | Anthony Profit`,
+    description:
+      "Technical SEO and GEO near Nice: audit, Core Web Vitals, Schema.org, llms.txt. Get found on Google and cited by ChatGPT, Perplexity and AI Overviews.",
+  },
+  "/en/brand-design/": {
+    lang: "en",
+    alt: "/identite-de-marque/",
+    crumb: "Brand identity",
+    title: `Brand identity & art direction | Anthony Profit`,
+    description:
+      "Brand identity design on the French Riviera: logo, brand system, typography and web/print/social applications. A coherent image that makes your brand credible.",
+  },
+
+  // ---- EN · case studies ----
+  "/en/work/surly/": {
+    lang: "en",
+    alt: "/projets/surly/",
+    crumb: "Surly",
+    title: `Surly — banking & insurance marketplace | Case study`,
+    description:
+      "Surly case study: a banking & insurance marketplace co-founded and built on React + Supabase. Architecture, full-stack and growth — 1,600 consultants, 8 enterprise clients.",
+  },
+  "/en/work/eden-rock-yacht-rental/": {
+    lang: "en",
+    alt: "/projets/eden-rock-yacht-rental/",
+    crumb: "Eden Rock Yacht Rental",
+    title: `Eden Rock Yacht Rental — identity & site | Case study`,
+    description:
+      "Eden Rock Yacht Rental case study: extending an iconic St Barth hospitality brand into yachting. Identity, WordPress site and SEO for an international clientele.",
+  },
+  "/en/work/sun-beach-house/": {
+    lang: "en",
+    alt: "/projets/sun-beach-house/",
+    crumb: "Sun Beach House",
+    title: `Sun Beach House — luxury villas in St Barth | Case study`,
+    description:
+      "Sun Beach House case study: identity, an editorial Next.js + Sanity site and SEO/GEO for a prestige villa agency in Saint Barthélemy. Visible on Google and in AI answers.",
+  },
+  "/en/work/royal-yacht-international/": {
+    lang: "en",
+    alt: "/projets/royal-yacht-international/",
+    crumb: "Royal Yacht International",
+    title: `Royal Yacht International — superyacht broker | Case study`,
+    description:
+      "Royal Yacht International case study: brand redesign, WordPress site and SEO for a Monaco superyacht broker. Credibility and international visibility.",
+  },
+  "/en/work/vaulk/": {
+    lang: "en",
+    alt: "/projets/vaulk/",
+    crumb: "Vaulk",
+    title: `Vaulk — CBRN-hardened shelters | Web & 3D case study`,
+    description:
+      "Vaulk case study: an editorial, cinematic site for a designer of civil-protection shelters. Next.js, Strapi, scroll-driven 3D and video. Shipped in 3 months.",
   },
 };
 

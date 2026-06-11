@@ -9,6 +9,7 @@ const stack = [
   {
     label: "01",
     title: "Design",
+    href: "/identite-de-marque/",
     items: [
       "Figma + Design tokens",
       "Direction artistique éditoriale",
@@ -19,6 +20,7 @@ const stack = [
   {
     label: "02",
     title: "Code",
+    href: "/creation-site-internet/",
     items: [
       "Astro, React, TypeScript",
       "Tailwind CSS v4",
@@ -30,6 +32,7 @@ const stack = [
   {
     label: "03",
     title: "SEO",
+    href: "/seo-geo/",
     items: [
       "Search Console + Ahrefs",
       "Audit technique + Core Web Vitals",
@@ -105,7 +108,7 @@ const refuse = [
           </div>
           <div>
             <dt class="opacity-60">Localisation</dt>
-            <dd class="mt-1 text-[var(--color-ink)]">Paris / Remote</dd>
+            <dd class="mt-1 text-[var(--color-ink)]">Nice / Côte d'Azur</dd>
           </div>
           <div>
             <dt class="opacity-60">Délai réponse</dt>
@@ -161,7 +164,7 @@ const refuse = [
                   {s.label}
                 </span>
                 <h3 class="font-sans mt-2 text-[clamp(22px,2.5vw,32px)] font-medium tracking-normal text-[var(--color-ink)]">
-                  {s.title}
+                  <a href={s.href} class="no-underline hover:text-[var(--color-accent)]">{s.title}</a>
                 </h3>
                 <ul class="mt-6 space-y-2 text-[clamp(14px,1.1vw,16px)] text-[var(--color-ink-muted)]">
                   {s.items.map((item) => (

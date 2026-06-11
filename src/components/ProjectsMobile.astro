@@ -13,6 +13,10 @@ const t = ui[lang];
 
 // Shared with Projects.astro via src/lib/projects-data.ts (single source of truth).
 const items = getProjects(t);
+
+// Each card links to its case-study page (/projets/<slug>/ ↔ /en/work/<slug>/).
+const workBase = lang === "fr" ? "/projets/" : "/en/work/";
+const caseLabel = lang === "fr" ? "Voir l'étude de cas" : "Read the case study";
 ---
 
 <section
@@ -33,6 +37,7 @@ const items = getProjects(t);
     {
       items.map((p) => (
         <li data-project-card-mobile class="flex flex-col">
+          <a href={`${workBase}${p.slug}/`} class="flex flex-col no-underline text-[var(--color-ink)]">
           <div class="relative aspect-[4/5] overflow-hidden">
             {p.video ? (
               <video
@@ -85,6 +90,10 @@ const items = getProjects(t);
           <p class="mt-1.5 text-[13px] leading-relaxed text-[var(--color-ink-muted)]">
             {p.summary}
           </p>
+          <span class="font-mono mt-3 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink)] underline underline-offset-4">
+            {caseLabel}<span aria-hidden="true">→</span>
+          </span>
+          </a>
         </li>
       ))
     }

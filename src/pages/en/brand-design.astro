@@ -1,0 +1,12 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import Nav from "~/components/Nav.astro";
+import ServicePage from "~/components/ServicePage.astro";
+
+const lang = "en" as const;
+---
+
+<BaseLayout lang={lang} pathname="/en/brand-design/" altPath="/identite-de-marque/">
+  <Nav lang={lang} altLang="fr" altLangPath="/identite-de-marque/" />
+  <ServicePage lang={lang} id="brand" />
+</BaseLayout>

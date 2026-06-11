@@ -14,6 +14,9 @@ const t = ui[lang];
 // Shared with ProjectsMobile.astro via src/lib/projects-data.ts (single source
 // of truth). Display order: Surly → Eden Rock → Sun Beach House → Royal Yacht → Vaulk.
 const projects = getProjects(t);
+
+// Each card links to its case-study page (/projets/<slug>/ ↔ /en/work/<slug>/).
+const workBase = lang === "fr" ? "/projets/" : "/en/work/";
 ---
 
 <section
@@ -41,7 +44,12 @@ const projects = getProjects(t);
     <div class="mt-[clamp(20px,3vh,40px)] grid grid-cols-5 gap-3 md:gap-5 flex-1 min-h-0">
       {
         projects.map((p) => (
-          <article data-project-card class="group flex flex-col min-h-0">
+          <article data-project-card class="flex flex-col min-h-0">
+            <a
+              href={`${workBase}${p.slug}/`}
+              aria-label={`${p.title} — ${lang === "fr" ? "étude de cas" : "case study"}`}
+              class="group flex h-full min-h-0 flex-col no-underline"
+            >
             <div class="relative flex-1 min-h-0 overflow-hidden">
               {p.video ? (
                 <video
@@ -101,6 +109,7 @@ const projects = getProjects(t);
                 {p.tag}
               </span>
             </div>
+            </a>
           </article>
         ))
       }

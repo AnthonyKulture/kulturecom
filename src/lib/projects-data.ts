@@ -1,9 +1,11 @@
 import type { Lang } from "~/i18n/ui";
 import { ui } from "~/i18n/ui";
+import { CASE_STUDIES } from "~/lib/case-studies";
 
 type Translations = (typeof ui)[Lang];
 
 export interface ProjectEntry {
+  slug: string;
   title: string;
   client: string;
   tag: string;
@@ -16,67 +18,25 @@ export interface ProjectEntry {
 }
 
 /**
- * Single source of truth for the project list, shared by the desktop
- * (Projects.astro) and mobile (ProjectsMobile.astro) layouts so the data can
- * never drift between the two.
+ * Grid entries (short fields) for the desktop (Projects.astro) and mobile
+ * (ProjectsMobile.astro) layouts. Built from CASE_STUDIES — the single source
+ * of truth for slug / asset / order — so the grid and the case-study detail
+ * pages can never drift. `slug` lets each card link to its case study.
  *
  * Display order: Surly → Eden Rock → Sun Beach House → Royal Yacht → Vaulk.
- * The i18n keys (project1..project5) stay tied to the project ENTITY; the `num`
- * label reflects the on-page POSITION.
  */
 export function getProjects(t: Translations): ProjectEntry[] {
-  return [
-    {
-      title: t.projects["project1.title"],
-      client: t.projects["project1.client"],
-      tag: t.projects["project1.tag"],
-      problem: t.projects["project1.problem"],
-      summary: t.projects["project1.summary"],
-      metric: t.projects["project1.metric"],
-      image: "/hero-slides/surly-superman.webp",
-      num: "01",
-    },
-    {
-      title: t.projects["project5.title"],
-      client: t.projects["project5.client"],
-      tag: t.projects["project5.tag"],
-      problem: t.projects["project5.problem"],
-      summary: t.projects["project5.summary"],
-      metric: t.projects["project5.metric"],
-      image: "/hero-slides/eden-rock.webp",
-      num: "02",
-    },
-    {
-      title: t.projects["project3.title"],
-      client: t.projects["project3.client"],
-      tag: t.projects["project3.tag"],
-      problem: t.projects["project3.problem"],
-      summary: t.projects["project3.summary"],
-      metric: t.projects["project3.metric"],
-      image: "/hero-slides/sunbeachhouse.webp",
-      num: "03",
-    },
-    {
-      title: t.projects["project4.title"],
-      client: t.projects["project4.client"],
-      tag: t.projects["project4.tag"],
-      problem: t.projects["project4.problem"],
-      summary: t.projects["project4.summary"],
-      metric: t.projects["project4.metric"],
-      image: "/hero-slides/royal-yacht.avif",
-      num: "04",
-    },
-    {
-      title: t.projects["project2.title"],
-      client: t.projects["project2.client"],
-      tag: t.projects["project2.tag"],
-      problem: t.projects["project2.problem"],
-      summary: t.projects["project2.summary"],
-      metric: t.projects["project2.metric"],
-      image: "/hero-slides/vaulk.webp",
-      video:
-        "https://fabulous-event-3b100f58f8.media.strapiapp.com/header_desktop_video_v2_59a6bf4363.webm",
-      num: "05",
-    },
-  ];
+  const p = t.projects as Record<string, string>;
+  return CASE_STUDIES.map((c) => ({
+    slug: c.slug,
+    title: p[`${c.key}.title`],
+    client: p[`${c.key}.client`],
+    tag: p[`${c.key}.tag`],
+    problem: p[`${c.key}.problem`],
+    summary: p[`${c.key}.summary`],
+    metric: p[`${c.key}.metric`],
+    image: c.image,
+    num: c.num,
+    video: c.video,
+  }));
 }
