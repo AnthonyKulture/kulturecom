@@ -2,90 +2,176 @@
 import "~/styles/global.css";
 import Preloader from "~/components/Preloader.astro";
 import Footer from "~/components/Footer.astro";
+import Analytics from "~/components/Analytics.astro";
 import type { Lang } from "~/i18n/ui";
 import { ui } from "~/i18n/ui";
+import { getRoute } from "~/i18n/routes";
 
 interface Props {
   lang: Lang;
   pathname?: string;
-  // Explicit hreflang counterpart URL. The default below assumes the alt-lang
-  // page lives at the same slug under (or without) the `/en` prefix — true for
-  // the homepage, but NOT for pages with localized slugs (e.g. `/projets/` ↔
-  // `/en/work/`). Those pass `altPath` so the hreflang alternate resolves to
-  // the real translated URL instead of a 404.
+  // Per-page overrides. When omitted, they resolve from the central route map
+  // (src/i18n/routes.ts) and fall back to the site-wide i18n defaults.
+  title?: string;
+  description?: string;
+  // hreflang counterpart URL. Resolved from routes.ts by `pathname`; the
+  // prefix-swap default below is only a last resort for unlisted routes.
   altPath?: string;
+  // Emit <meta name="robots" content="noindex"> (used by the 404 pages).
+  noindex?: boolean;
 }
 
-const { lang, pathname = "/", altPath: altPathProp } = Astro.props;
+const {
+  lang,
+  pathname = "/",
+  title,
+  description,
+  altPath: altPathProp,
+  noindex = false,
+} = Astro.props;
 const dict = ui[lang];
+const route = getRoute(pathname);
+
+const pageTitle = title ?? route?.title ?? dict.meta.title;
+const pageDescription =
+  description ?? route?.description ?? dict.meta.description;
 
 const altLang: Lang = lang === "fr" ? "en" : "fr";
 const altPath =
   altPathProp ??
+  route?.alt ??
   (altLang === "fr"
     ? pathname.replace(/^\/en/, "") || "/"
     : `/en${pathname === "/" ? "" : pathname}`);
 
 const canonical = new URL(pathname, Astro.site).toString();
-// og.svg is a placeholder (supports Twitter/Discord/Slack). For best Facebook
-// + LinkedIn compatibility, export to PNG 1200×630 and update the reference.
-const ogImage = new URL("/og.svg", Astro.site).toString();
+// 1200×630 PNG — renders on every platform (Facebook + LinkedIn included; SVG
+// OG images don't). Rasterized from og.svg; see public/og.png.
+const ogImage = new URL("/og.png", Astro.site).toString();
 
-// External profile URLs — replace with real ones once available (also referenced
-// in Footer.astro). These power the JSON-LD `sameAs` array for Knowledge Graph.
+// External profile URLs (also referenced in Footer.astro). These power the
+// JSON-LD `sameAs` array for the Knowledge Graph.
 const linkedinUrl = "https://www.linkedin.com/in/anthony-profit/";
-const githubUrl = "https://github.com/anthony-profit";
+const instagramUrl = "https://www.instagram.com/antho_profit/";
+const behanceUrl = "https://www.behance.net/anthonyprofit";
 
-// Structured data — Person + ProfessionalService + WebSite.
-// Serialized as a JSON-LD `@graph` so all three entities share the same script
-// block and can cross-reference each other via @id.
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Person",
-      "@id": `${Astro.site}#person`,
-      "name": "Anthony Profit",
-      "url": Astro.site?.toString(),
-      "image": ogImage,
-      "jobTitle": lang === "fr"
-        ? "Freelance développeur web, SEO & brand designer"
-        : "Freelance web developer, SEO & brand designer",
-      "description": dict.meta.description,
-      "knowsAbout": [
-        "Web development",
-        "Frontend engineering",
-        "SEO",
-        "Technical SEO",
-        "Brand design",
-        "Astro",
-        "React",
-        "TypeScript",
+// Structured data — site entity graph (Person + ProfessionalService +
+// WebSite) plus a per-route WebPage / BreadcrumbList (and an ItemList of real
+// cases on the work page). One JSON-LD `@graph` so nodes cross-reference by @id.
+const personId = `${Astro.site}#person`;
+const serviceId = `${Astro.site}#service`;
+const websiteId = `${Astro.site}#website`;
+const homeUrl = new URL("/", Astro.site).toString();
+const enHomeUrl = new URL("/en/", Astro.site).toString();
+
+// Real client case studies — outbound entity links strengthen the work page
+// for both classic SEO and AI citation. Names are stable across locales.
+const PROJECT_CASES = [
+  { name: "Surly", url: "https://surly.fr" },
+  { name: "Eden Rock Yacht Rental", url: "https://edenrockyachtrental.com" },
+  { name: "Sun Beach House", url: "https://sun-beach-house.com" },
+  { name: "Royal Yacht International", url: "https://royalyachtinternational.com" },
+  { name: "Vaulk", url: "https://vaulk.com" },
+];
+
+const graph: Record<string, any>[] = [
+  {
+    "@type": "Person",
+    "@id": personId,
+    "name": "Anthony Profit",
+    "url": Astro.site?.toString(),
+    "image": ogImage,
+    "jobTitle": lang === "fr"
+      ? "Freelance développeur web, SEO & brand designer"
+      : "Freelance web developer, SEO & brand designer",
+    "description": dict.meta.description,
+    "knowsAbout": [
+      "Web development",
+      "Frontend engineering",
+      "SEO",
+      "Technical SEO",
+      "Brand design",
+      "Astro",
+      "React",
+      "TypeScript",
+    ],
+    "sameAs": [linkedinUrl, instagramUrl, behanceUrl],
+  },
+  {
+    "@type": "ProfessionalService",
+    "@id": serviceId,
+    "name": "Anthony Profit",
+    "url": Astro.site?.toString(),
+    "image": ogImage,
+    "description": dict.meta.description,
+    "provider": { "@id": personId },
+    "email": "contact@kulturecom.fr",
+    "telephone": "+33 6 60 50 16 82",
+    "areaServed": { "@type": "Country", "name": "France" },
+    "serviceType": ["Web Development", "SEO", "Brand Design"],
+    "priceRange": "€€€",
+  },
+  {
+    "@type": "WebSite",
+    "@id": websiteId,
+    "url": Astro.site?.toString(),
+    "name": "Anthony Profit",
+    "inLanguage": [lang === "fr" ? "fr-FR" : "en-US"],
+    "publisher": { "@id": personId },
+  },
+];
+
+// Per-route page node (+ breadcrumb, + project ItemList on the work page).
+if (route?.pageType) {
+  const webPageId = `${canonical}#webpage`;
+  const webPage: Record<string, any> = {
+    "@type": route.pageType,
+    "@id": webPageId,
+    "url": canonical,
+    "name": pageTitle,
+    "description": pageDescription,
+    "isPartOf": { "@id": websiteId },
+    "about": { "@id": personId },
+    "inLanguage": lang === "fr" ? "fr-FR" : "en-US",
+  };
+
+  if (route.crumb) {
+    const breadcrumbId = `${canonical}#breadcrumb`;
+    graph.push({
+      "@type": "BreadcrumbList",
+      "@id": breadcrumbId,
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": lang === "fr" ? "Accueil" : "Home",
+          "item": lang === "fr" ? homeUrl : enHomeUrl,
+        },
+        { "@type": "ListItem", "position": 2, "name": route.crumb, "item": canonical },
       ],
-      "sameAs": [linkedinUrl, githubUrl],
-    },
-    {
-      "@type": "ProfessionalService",
-      "@id": `${Astro.site}#service`,
-      "name": "Anthony Profit",
-      "url": Astro.site?.toString(),
-      "image": ogImage,
-      "description": dict.meta.description,
-      "provider": { "@id": `${Astro.site}#person` },
-      "areaServed": { "@type": "Country", "name": "France" },
-      "serviceType": ["Web Development", "SEO", "Brand Design"],
-      "priceRange": "€€€",
-    },
-    {
-      "@type": "WebSite",
-      "@id": `${Astro.site}#website`,
-      "url": Astro.site?.toString(),
-      "name": "Anthony Profit",
-      "inLanguage": [lang === "fr" ? "fr-FR" : "en-US"],
-      "publisher": { "@id": `${Astro.site}#person` },
-    },
-  ],
-};
+    });
+    webPage.breadcrumb = { "@id": breadcrumbId };
+  }
+
+  if (route.pageType === "CollectionPage") {
+    const itemListId = `${canonical}#projects`;
+    graph.push({
+      "@type": "ItemList",
+      "@id": itemListId,
+      "itemListElement": PROJECT_CASES.map((p, i) => ({
+        "@type": "ListItem",
+        "position": i + 1,
+        "name": p.name,
+        "url": p.url,
+      })),
+    });
+    webPage.mainEntity = { "@id": itemListId };
+  }
+
+  graph.push(webPage);
+}
+
+const jsonLd = { "@context": "https://schema.org", "@graph": graph };
 ---
 
 <!doctype html>
@@ -93,8 +179,19 @@ const jsonLd = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>{dict.meta.title}</title>
-    <meta name="description" content={dict.meta.description} />
+
+    <!-- Favicons + brand theme color -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#efe9dc" />
+
+    <!-- Google Analytics 4 -->
+    <Analytics />
+
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    {noindex && <meta name="robots" content="noindex" />}
 
     <meta name="keywords" content={dict.meta.keywords} />
     <meta name="author" content="Anthony Profit" />
@@ -110,19 +207,20 @@ const jsonLd = {
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content={dict.meta.siteName} />
-    <meta property="og:title" content={dict.meta.title} />
-    <meta property="og:description" content={dict.meta.description} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
     <meta property="og:locale" content={lang === "fr" ? "fr_FR" : "en_US"} />
     <meta property="og:locale:alternate" content={lang === "fr" ? "en_US" : "fr_FR"} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={dict.meta.ogImageAlt} />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={dict.meta.title} />
-    <meta name="twitter:description" content={dict.meta.description} />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content={dict.meta.ogImageAlt} />
 

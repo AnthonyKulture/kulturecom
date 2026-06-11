@@ -12,7 +12,14 @@ export default defineConfig({
       prefixDefaultLocale: false,
     },
   },
-  integrations: [react(), sitemap()],
+  integrations: [
+    react(),
+    sitemap({
+      // Keep error pages out of the sitemap — the EN /404/ is a routable page
+      // that returns 200, so @astrojs/sitemap would otherwise list it.
+      filter: (page) => !/\/404\/?$/.test(page),
+    }),
+  ],
   vite: {
     plugins: [tailwindcss()],
   },

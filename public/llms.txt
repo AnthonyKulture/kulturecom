@@ -27,3 +27,29 @@
 - [Accueil FR](https://anthonyprofit.com/) — page principale, présentation complète
 - [À propos](https://anthonyprofit.com/a-propos/) — parcours, méthode, engagements
 - [Homepage EN](https://anthonyprofit.com/en/) — English version
+
+---
+
+# Anthony Profit — Kulturecom (English)
+
+> Freelance designer & developer on the French Riviera. Custom websites built to be visible on Google and in AI answers (ChatGPT, Perplexity, Google AI Overviews). Three crafts: design, digital experience, SEO + GEO.
+
+## Services (EN)
+
+- **Design** — Editorial art direction, brand systems, design tokens. Identity crafted for the brand, usable across web/print/social. No bought theme, no recycled template.
+- **Digital experience** — Astro, React, Lighthouse ≥ 95. Fast, accessible, performant sites. Core Web Vitals all green.
+- **SEO + GEO** — Technical audit, content cluster, Schema.org, llms.txt. Classic SEO for Google + optimization for generative engines: ChatGPT, Perplexity, Google AI Overviews.
+
+## Cases (EN)
+
+- [Surly](https://surly.fr) — Banking & insurance marketplace. Co-founder & CTO. Stack: React · Supabase. 1,600 consultants listed, 8 enterprise clients, still active since 2022.
+- [Vaulk](https://vaulk.com) — CBRN-hardened shelters made in France, deployable in 7 days. Editorial, cinematic site. Stack: Next.js · Strapi · scroll-driven 3D. Shipped in 3 months.
+- [Sun Beach House](https://sun-beach-house.com) — Independent luxury villa agency in Saint Barthélemy since 1996. Identity, editorial site, ongoing SEO + GEO. Stack: Next.js · Sanity Studio · Mux video.
+- [Royal Yacht International](https://royalyachtinternational.com) — Monaco-based superyacht broker. Charter, sales, management, construction. Brand redesign + WordPress site + SEO.
+- [Eden Rock Yacht Rental](https://edenrockyachtrental.com) — Yachting extension of Eden Rock – St Barths (hospitality icon since 1953). Identity + WordPress site + SEO.
+
+## Contact (EN)
+
+- Email: contact@kulturecom.fr
+- WhatsApp: +33 6 60 50 16 82
+- Reply within 48 business hours
