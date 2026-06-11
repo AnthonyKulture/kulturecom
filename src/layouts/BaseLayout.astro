@@ -1,6 +1,7 @@
 ---
 import "~/styles/global.css";
 import Preloader from "~/components/Preloader.astro";
+import Rideau from "~/components/Rideau.astro";
 import Footer from "~/components/Footer.astro";
 import Analytics from "~/components/Analytics.astro";
 import Consent from "~/components/Consent.astro";
@@ -191,6 +192,28 @@ const jsonLd = { "@context": "https://schema.org", "@graph": graph };
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
 
+    {/* Page-transition curtain (src/components/Rideau.astro) — decide the
+        initial cover/idle state BEFORE first paint. On a transition-entry the
+        one-shot `ap-rideau` flag is set: paint the page beneath the covering
+        ink panel (no flash) and let rideau.ts sweep it out. The flag is cleared
+        immediately so a failed module load can't leave the curtain stuck on the
+        next reload. Reduced motion / no support → always idle (panel hidden). */}
+    <script is:inline>
+      (function () {
+        try {
+          var reduce = window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+          ).matches;
+          var entering =
+            !reduce && sessionStorage.getItem("ap-rideau") === "1";
+          sessionStorage.removeItem("ap-rideau");
+          document.documentElement.dataset.rideau = entering ? "cover" : "idle";
+        } catch (e) {
+          document.documentElement.dataset.rideau = "idle";
+        }
+      })();
+    </script>
+
     <!-- Favicons + brand theme color -->
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
@@ -269,6 +292,7 @@ const jsonLd = { "@context": "https://schema.org", "@graph": graph };
       {lang === "en" ? "Skip to content" : "Aller au contenu"}
     </a>
     <Preloader lang={lang} />
+    <Rideau />
     <slot />
     <Footer lang={lang} />
     <Consent lang={lang} />

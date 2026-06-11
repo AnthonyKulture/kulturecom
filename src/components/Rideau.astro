@@ -1,0 +1,58 @@
+---
+// Page-transition curtain (see src/lib/rideau.ts). A single fixed ink panel
+// that sweeps up to cover before a navigation and out the top to reveal the
+// next page. No SPA routing — every page still does a real full load, so the
+// WebGL hero / Lenis / ScrollTrigger / preloader stack is left untouched.
+//
+// The initial cover/idle state is decided by an inline <head> script in
+// BaseLayout (it reads the one-shot `ap-rideau` flag BEFORE first paint), so
+// the panel must already exist in the DOM with its visibility driven purely by
+// the `data-rideau` attribute on <html> — no JS needed for the entry state.
+---
+
+<div data-rideau-panel aria-hidden="true"></div>
+
+<style is:global>
+  [data-rideau-panel] {
+    position: fixed;
+    inset: 0;
+    z-index: 95; /* above nav (50), mobile menu & consent (90); below preloader (100) */
+    background: var(--color-ink);
+    transform: scaleY(0);
+    transform-origin: center bottom;
+    will-change: transform;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  /* Visible whenever the curtain is covering or animating. */
+  [data-rideau="cover"] [data-rideau-panel],
+  [data-rideau="leave"] [data-rideau-panel] {
+    visibility: visible;
+  }
+
+  /* Entry state: fully covering, ready to sweep out the top. Set before first
+     paint by the inline <head> script — the new page paints beneath it. */
+  [data-rideau="cover"] [data-rideau-panel] {
+    transform: scaleY(1);
+    transform-origin: center top;
+  }
+
+  /* On a transition-entry the once-per-session preloader is skip-pathed and
+     removed by its own script anyway; hide its cream layer up front so it can
+     never flash before the ink curtain. */
+  [data-rideau="cover"] #preloader {
+    display: none !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-rideau-panel] {
+      display: none !important;
+    }
+  }
+</style>
+
+<script>
+  import { initRideau } from "~/lib/rideau";
+  initRideau();
+</script>
