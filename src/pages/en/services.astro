@@ -1,0 +1,12 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import Nav from "~/components/Nav.astro";
+import ServicesHub from "~/components/ServicesHub.astro";
+
+const lang = "en" as const;
+---
+
+<BaseLayout lang={lang} pathname="/en/services/" altPath="/services/">
+  <Nav lang={lang} altLang="fr" altLangPath="/services/" />
+  <ServicesHub lang={lang} />
+</BaseLayout>

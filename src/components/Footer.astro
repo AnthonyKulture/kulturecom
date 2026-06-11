@@ -11,7 +11,10 @@ const t = ui[lang];
 
 const contactHref = lang === "fr" ? "/contact/" : "/en/contact/";
 const workHref = lang === "fr" ? "/projets/" : "/en/work/";
+const servicesHref = lang === "fr" ? "/services/" : "/en/services/";
 const aboutHref = lang === "fr" ? "/a-propos/" : "/en/about/";
+const mentionsHref = lang === "fr" ? "/mentions-legales/" : "/en/legal-notice/";
+const privacyHref = lang === "fr" ? "/confidentialite/" : "/en/privacy/";
 
 const linkedinUrl = "https://www.linkedin.com/in/anthony-profit/";
 const instagramUrl = "https://www.instagram.com/antho_profit/";
@@ -56,8 +59,8 @@ const lastNameHtml = wrapLettersShuffled("PROFIT.", 500, 60, new Set(["."]));
 
 const currentYear = "2026";
 const navLabels = lang === "en"
-  ? { projects: "WORK", about: "ABOUT", contact: "CONTACT" }
-  : { projects: "PROJETS", about: "À PROPOS", contact: "CONTACT" };
+  ? { projects: "WORK", services: "SERVICES", about: "ABOUT", contact: "CONTACT" }
+  : { projects: "PROJETS", services: "SERVICES", about: "À PROPOS", contact: "CONTACT" };
 ---
 
 <footer
@@ -86,6 +89,18 @@ const navLabels = lang === "en"
           style="transition-delay:120ms"
           class="text-[var(--color-ink)]/70"
         >© {currentYear}</p>
+        <a
+          data-footer-top
+          style="transition-delay:200ms"
+          href={mentionsHref}
+          class="mt-2 text-[var(--color-ink)]/70 no-underline hover:text-[var(--color-ink)] hover:underline underline-offset-4"
+        >{t.footer["legal.mentions"]}</a>
+        <a
+          data-footer-top
+          style="transition-delay:260ms"
+          href={privacyHref}
+          class="text-[var(--color-ink)]/70 no-underline hover:text-[var(--color-ink)] hover:underline underline-offset-4"
+        >{t.footer["legal.privacy"]}</a>
       </div>
 
       {/* Center : social */}
@@ -116,7 +131,7 @@ const navLabels = lang === "en"
         >BEHANCE</a>
       </div>
 
-      {/* Right : nav — Work · About · Contact. */}
+      {/* Right : nav — Work · Services · About · Contact. */}
       <div class="flex flex-col gap-1.5 sm:items-end">
         <a
           data-footer-top
@@ -126,7 +141,13 @@ const navLabels = lang === "en"
         >{navLabels.projects}</a>
         <a
           data-footer-top
-          style="transition-delay:720ms"
+          style="transition-delay:680ms"
+          href={servicesHref}
+          class="text-[var(--color-ink)] no-underline hover:underline underline-offset-4"
+        >{navLabels.services}</a>
+        <a
+          data-footer-top
+          style="transition-delay:760ms"
           href={aboutHref}
           class="text-[var(--color-ink)] no-underline hover:underline underline-offset-4"
         >{navLabels.about}</a>

@@ -308,3 +308,16 @@ export function getServicePage(id: ServiceId, lang: Lang): ServicePage | null {
   }));
   return { ...meta, content: CONTENT[id][lang], related };
 }
+
+/** Compact list of all services for the /services/ hub page. */
+export function getAllServicePages(
+  lang: Lang
+): { id: ServiceId; name: string; eyebrow: string; lead: string; path: string }[] {
+  return SERVICE_PAGES.map((s) => ({
+    id: s.id,
+    name: CONTENT[s.id][lang].name,
+    eyebrow: CONTENT[s.id][lang].eyebrow,
+    lead: CONTENT[s.id][lang].lead,
+    path: s.path[lang],
+  }));
+}

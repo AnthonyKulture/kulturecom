@@ -86,6 +86,15 @@ export const routes: Record<string, RouteMeta> = {
   },
 
   // ---- FR · services ----
+  "/services/": {
+    lang: "fr",
+    alt: "/en/services/",
+    crumb: "Services",
+    pageType: "WebPage",
+    title: `Services — web, SEO & brand design | Anthony Profit`,
+    description:
+      "Trois services, un seul interlocuteur : création de site internet sur-mesure, SEO & GEO, et identité de marque. Sur la Côte d'Azur, pour la France et l'international.",
+  },
   "/creation-site-internet/": {
     lang: "fr",
     alt: "/en/web-development/",
@@ -208,6 +217,15 @@ export const routes: Record<string, RouteMeta> = {
   },
 
   // ---- EN · services ----
+  "/en/services/": {
+    lang: "en",
+    alt: "/services/",
+    crumb: "Services",
+    pageType: "WebPage",
+    title: `Services — web, SEO & brand design | Anthony Profit`,
+    description:
+      "Three services, one point of contact: custom web development, SEO & GEO, and brand identity. On the French Riviera, for France and internationally.",
+  },
   "/en/web-development/": {
     lang: "en",
     alt: "/creation-site-internet/",

@@ -11,6 +11,7 @@ interface Props {
 const { lang, altLangPath, altLang } = Astro.props;
 const t = ui[lang];
 const workHref = lang === "fr" ? "/projets/" : "/en/work/";
+const servicesHref = lang === "fr" ? "/services/" : "/en/services/";
 const aboutHref = lang === "fr" ? "/a-propos/" : "/en/about/";
 const homeHref = lang === "fr" ? "/" : "/en/";
 const contactHref = lang === "fr" ? "/contact/" : "/en/contact/";
@@ -28,8 +29,9 @@ const menuLabel = lang === "fr" ? "Ouvrir le menu" : "Open menu";
 const closeLabel = lang === "fr" ? "Fermer le menu" : "Close menu";
 const menuItems = [
   { n: "01", label: t.nav.work, href: workHref },
-  { n: "02", label: t.nav.about, href: aboutHref },
-  { n: "03", label: "Contact", href: contactHref },
+  { n: "02", label: t.nav.services, href: servicesHref },
+  { n: "03", label: t.nav.about, href: aboutHref },
+  { n: "04", label: "Contact", href: contactHref },
 ];
 const email = t.footer["contact.email"];
 const linkedinUrl = "https://www.linkedin.com/in/anthony-profit/";
@@ -79,6 +81,12 @@ const behanceUrl = "https://www.behance.net/anthonyprofit";
       href={workHref}
       class="font-mono hidden text-[12px] uppercase tracking-[0.18em] text-[var(--color-bg)] no-underline hover:underline underline-offset-4 sm:inline-block sm:text-[13px]"
       >{t.nav.work}</a
+    >
+    {/* Services — hidden on mobile to save horizontal space (reachable via menu/footer) */}
+    <a
+      href={servicesHref}
+      class="font-mono hidden text-[12px] uppercase tracking-[0.18em] text-[var(--color-bg)] no-underline hover:underline underline-offset-4 sm:inline-block sm:text-[13px]"
+      >{t.nav.services}</a
     >
     {/* About — hidden on mobile to save horizontal space */}
     <a

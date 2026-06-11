@@ -1,0 +1,83 @@
+---
+import type { Lang } from "~/i18n/ui";
+import { getAllServicePages } from "~/lib/service-pages";
+import CTA from "~/components/CTA.astro";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const isFr = lang === "fr";
+const services = getAllServicePages(lang);
+
+const l = isFr
+  ? {
+      eyebrow: "Services",
+      h1a: "Trois axes,",
+      h1b: "un seul interlocuteur.",
+      lead: "Design, développement et SEO/GEO — pensés ensemble. Choisissez un angle, ou prenez les trois sous une seule main, sur la Côte d'Azur comme à distance.",
+      more: "En savoir plus",
+    }
+  : {
+      eyebrow: "Services",
+      h1a: "Three crafts,",
+      h1b: "one point of contact.",
+      lead: "Design, development and SEO/GEO — thought together. Pick one angle, or take all three under a single hand, on the French Riviera or remotely.",
+      more: "Learn more",
+    };
+---
+
+<main id="main-content" class="bg-[var(--color-bg)] text-[var(--color-ink)]">
+
+  {/* ========== HERO ========== */}
+  <section class="relative px-4 pt-32 pb-16 sm:px-6 sm:pt-40 sm:pb-20 md:px-12 md:pt-48 md:pb-24">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <p class="font-mono mb-4 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
+        <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
+        {l.eyebrow}
+      </p>
+      <h1 class="font-display text-[clamp(40px,9vw,140px)] uppercase leading-[0.92] tracking-[-0.04em] text-[var(--color-ink)]">
+        <span class="block">{l.h1a}</span>
+        <span class="block opacity-70">{l.h1b}</span>
+      </h1>
+      <p class="font-serif-italic mt-8 max-w-[48ch] text-[clamp(18px,2vw,28px)] leading-tight text-[var(--color-ink)]">
+        {l.lead}
+      </p>
+    </div>
+  </section>
+
+  {/* ========== SERVICE LIST ========== */}
+  <section class="relative px-4 pb-8 sm:px-6 md:px-12">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <ol class="flex flex-col">
+        {services.map((s, i) => (
+          <li>
+            <a
+              href={s.path}
+              class="group grid grid-cols-1 gap-4 border-t border-[var(--color-border)] py-10 no-underline sm:grid-cols-[80px_1fr_auto] sm:items-baseline sm:gap-10 sm:py-14"
+            >
+              <span class="font-mono text-[12px] uppercase tracking-[0.18em] text-[var(--color-accent)]">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <div>
+                <h2 class="font-display text-[clamp(28px,4.5vw,64px)] uppercase leading-[0.95] tracking-[-0.03em] text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)]">
+                  {s.name}
+                </h2>
+                <p class="mt-4 max-w-[60ch] text-[clamp(15px,1.2vw,18px)] leading-[1.6] text-[var(--color-ink-muted)]">
+                  {s.lead}
+                </p>
+              </div>
+              <span class="font-mono inline-flex items-center gap-2 self-start text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink)] sm:self-center">
+                {l.more}<span aria-hidden="true" class="transition-transform group-hover:translate-x-1">→</span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  {/* Contact — consistent close. */}
+  <CTA lang={lang} />
+</main>
