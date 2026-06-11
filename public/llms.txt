@@ -24,6 +24,6 @@
 
 ## Optional
 
-- [Accueil FR](https://kulturecom.fr/) — page principale, présentation complète
-- [À propos](https://kulturecom.fr/a-propos/) — parcours, méthode, engagements
-- [Homepage EN](https://kulturecom.fr/en/) — English version
+- [Accueil FR](https://anthonyprofit.com/) — page principale, présentation complète
+- [À propos](https://anthonyprofit.com/a-propos/) — parcours, méthode, engagements
+- [Homepage EN](https://anthonyprofit.com/en/) — English version
