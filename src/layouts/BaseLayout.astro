@@ -55,6 +55,8 @@ const ogImage = new URL("/og.png", Astro.site).toString();
 const linkedinUrl = "https://www.linkedin.com/in/anthony-profit/";
 const instagramUrl = "https://www.instagram.com/antho_profit/";
 const behanceUrl = "https://www.behance.net/anthonyprofit";
+// Google Business Profile (canonical CID URL) — powers the local entity link.
+const gbpUrl = "https://www.google.com/maps?cid=13963690267531536578";
 
 // Structured data — site entity graph (Person + ProfessionalService +
 // WebSite) plus a per-route WebPage / BreadcrumbList (and an ItemList of real
@@ -108,9 +110,17 @@ const graph: Record<string, any>[] = [
     "provider": { "@id": personId },
     "email": "contact@kulturecom.fr",
     "telephone": "+33 6 60 50 16 82",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Nice",
+      "addressRegion": "Provence-Alpes-Côte d'Azur",
+      "addressCountry": "FR",
+    },
     "areaServed": { "@type": "Country", "name": "France" },
     "serviceType": ["Web Development", "SEO", "Brand Design"],
     "priceRange": "€€€",
+    "hasMap": gbpUrl,
+    "sameAs": [gbpUrl],
   },
   {
     "@type": "WebSite",
