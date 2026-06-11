@@ -2,26 +2,26 @@
  * Preloader logic — typewriter + morph to nav logo. One continuous sequence
  * with the hero arrival : no perceptible gap at the hand-off.
  *
- *  Phase 1 — Typewriter (0 → 2.5s) : the 13 letters of "Anthony" (serif italic)
+ *  Phase 1 — Typewriter (0 → 1.3s) : the 13 letters of "Anthony" (serif italic)
  *            + "PROFIT" (display caps) are revealed one-by-one in the center
  *            of the viewport. Each letter fades opacity 0 → 1, slides up 8px,
  *            and un-blurs over 200ms; staggers are spaced so the last letter
- *            resolves at the 2.5s mark.
+ *            resolves at the 1.3s mark.
  *
- *  Phase 2 — Fade-around (2.5 → 3.1s) : every `[data-preloader-around]`
+ *  Phase 2 — Fade-around (1.3 → 1.7s) : every `[data-preloader-around]`
  *            element (top + bottom marquees, 4 cycling slide images, top-left
  *            "Loading" label, bottom-right "anthony.profit / 2026" label)
- *            fades to opacity 0 over 600ms. The slide-cycling intervals are
+ *            fades to opacity 0 over 400ms. The slide-cycling intervals are
  *            cleared at the start of this phase. The center brand mark stays
  *            at full size.
  *
- *  Phase 3 — Morph (3.1 → 4.0s) : a FLIP-style transform animates the brand
+ *  Phase 3 — Morph (1.7 → 2.6s) : a FLIP-style transform animates the brand
  *            mark from its centered/big state to the exact bounding box of
  *            the Nav.astro brand link (top-left, ~28px on desktop). We measure
  *            both bboxes at the moment the phase starts so the target tracks
  *            the actual breakpoint padding/size. 900ms with power3.inOut.
  *
- *  Phase 4 — Hand-off (4.0s, ONE frame) : `preloader:done` is dispatched
+ *  Phase 4 — Hand-off (2.6s, ONE frame) : `preloader:done` is dispatched
  *            and the preloader root is removed in the same tick. The
  *            preloader name's morphed bbox lands EXACTLY on the static
  *            Nav logo's bbox (z-50, same typo, same cream source, same
@@ -43,8 +43,8 @@
 import gsap from "gsap";
 import { prefersReducedMotion } from "./env";
 
-const TYPEWRITER_DURATION_MS = 2500;
-const FADE_AROUND_DURATION_MS = 600;
+const TYPEWRITER_DURATION_MS = 1300;
+const FADE_AROUND_DURATION_MS = 400;
 const MORPH_DURATION_MS = 900;
 const SLIDE_INTERVAL_MS = 200;
 
@@ -242,13 +242,21 @@ export function initPreloader(): void {
     );
   };
 
-  // Wait for fonts so the bbox measurements (which drive the morph scale)
-  // reflect the final font metrics rather than the fallback's. Small budget
-  // — fonts are already <link rel="preload">'d by the base layout, so this
-  // usually resolves within a few ms.
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(startTimeline);
-  } else {
+  // Start the intro once fonts are ready — but CAP the wait so slow font
+  // loading can't delay the whole sequence (and the LCP painting behind it).
+  // The morph (phase 3) re-measures bboxes ~3s later, by which point fonts
+  // have loaded, so the morph scale stays accurate even if we start on the cap.
+  const FONT_WAIT_CAP_MS = 800;
+  const fontsReady =
+    document.fonts && document.fonts.ready
+      ? document.fonts.ready
+      : Promise.resolve();
+  let started = false;
+  const startOnce = () => {
+    if (started) return;
+    started = true;
     startTimeline();
-  }
+  };
+  fontsReady.then(startOnce);
+  window.setTimeout(startOnce, FONT_WAIT_CAP_MS);
 }
