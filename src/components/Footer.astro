@@ -211,7 +211,10 @@ const navLabels = lang === "en"
   // IntersectionObserver-driven reveal. Two-stage:
   //   1. footer crosses ~50% visibility   → name letters reveal (Anthony +
   //      PROFIT., each letter has its own SSR-shuffled transition-delay)
-  //   2. footer crosses ~95% visibility   → top items cascade reveal
+  //   2. footer crosses ~70% visibility   → top items cascade reveal
+  //      (was 0.95, but the footer is h-[100lvh]; on mobile the visible viewport
+  //       is shorter than lvh when the URL bar shows, so 95% was unreachable and
+  //       the links never revealed — only the name. 0.7 is reachable everywhere.)
   // No GSAP, no ScrollTrigger, no pin. Pure DOM + CSS — no timing conflicts
   // with the rest of the page's GSAP work.
   const footer = document.querySelector<HTMLElement>("[data-site-footer]");
@@ -227,7 +230,7 @@ const navLabels = lang === "en"
             footer.dataset.nameRevealed = "true";
             nameRevealed = true;
           }
-          if (!topRevealed && ratio >= 0.95) {
+          if (!topRevealed && ratio >= 0.7) {
             footer.dataset.topRevealed = "true";
             topRevealed = true;
           }

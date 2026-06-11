@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "~/layouts/BaseLayout.astro";
 import Nav from "~/components/Nav.astro";
+import CTA from "~/components/CTA.astro";
 
 const lang = "fr" as const;
 
@@ -240,32 +241,9 @@ const refuse = [
       </div>
     </section>
 
-    <!-- ========== MINI CTA ========== -->
-    <section data-surface="dark" class="relative bg-[var(--color-bg)] text-[var(--color-ink)] px-4 py-20 sm:px-6 sm:py-28 md:px-12 md:py-32">
-      <div class="mx-auto w-full max-w-[var(--container-wide)]">
-        <p class="font-mono mb-6 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
-          <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
-          Étape suivante
-        </p>
-        <p class="font-display max-w-[20ch] text-[clamp(28px,5vw,72px)] uppercase leading-[0.95] tracking-[-0.04em] text-[var(--color-ink)]">
-          On en discute ?
-        </p>
-        <div class="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-baseline sm:gap-8">
-          <a
-            href="mailto:hello@anthonyprofit.com?subject=Projet%20%E2%80%94%20j%27aimerais%20discuter"
-            class="font-display inline-flex items-center gap-3 bg-[var(--color-accent)] px-6 py-4 text-[clamp(16px,1.4vw,20px)] uppercase text-[var(--color-ink)] no-underline transition-colors duration-200 hover:bg-[var(--color-ink)] hover:text-[var(--color-bg)] sm:px-8 sm:py-5"
-          >
-            Écrire à Anthony
-            <span aria-hidden="true" class="text-[1.2em] leading-none">→</span>
-          </a>
-          <a
-            href="/"
-            class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)] hover:text-[var(--color-ink)] underline underline-offset-4"
-            >← Retour au portfolio</a
-          >
-        </div>
-      </div>
-    </section>
+    {/* Contact — the same section as the home / contact page, for a consistent
+        text + visual treatment across the site (replaces the old mini-CTA). */}
+    <CTA lang={lang} />
 
   </main>
 </BaseLayout>
