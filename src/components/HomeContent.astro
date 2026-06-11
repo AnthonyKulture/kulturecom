@@ -161,11 +161,15 @@ const { lang, altLang, altLangPath } = Astro.props;
       >
         <AboutChapter lang={lang} chapterKey="about2" />
       </div>
-      {/* Contact — revealed over About 2 with the circle clip-path. CTA is responsive
-          and has an opaque cream background, so one layer covers desktop and mobile. */}
+      {/* Contact — revealed over About 2 with the circle clip-path. The cream bg lives
+          on the LAYER (not just the CTA inside): the stack is h-[100lvh] but CTA is
+          min-h-[100dvh], so on mobile (URL bar shown, dvh < lvh) the CTA is shorter than
+          the stack and the strip below it would expose the fixed Promesse photo (z:-1)
+          as the pin releases toward the footer. The layer bg fills the full 100lvh so the
+          revealed contact covers down to the footer with no gap. */}
       <div
         data-screen-layer="cta"
-        class="absolute inset-0 z-30"
+        class="absolute inset-0 z-30 bg-[var(--color-bg)]"
         style="clip-path: circle(0% at 100% 100%);"
       >
         <CTA lang={lang} />
