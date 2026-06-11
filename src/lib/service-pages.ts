@@ -99,7 +99,7 @@ const CONTENT: Record<ServiceId, Record<Lang, ServicePageContent>> = {
       relatedTitle: "Autres services",
       faqTitle: "Questions fréquentes",
       faq: [
-        { q: "Combien coûte un site sur-mesure ?", a: "Chaque projet est chiffré après un brief écrit — le prix dépend du nombre de pages, des fonctionnalités et du CMS. Je ne donne pas de devis sans cadrage, mais un site vitrine premium démarre généralement à partir de quelques milliers d'euros." },
+        { q: "Combien coûte un site sur-mesure ?", a: "Chaque projet est chiffré après un brief écrit — le prix dépend du nombre de pages, des fonctionnalités et du CMS. Je ne donne pas de devis sans cadrage : le tarif d'un site vitrine premium est établi sur mesure, selon le périmètre de votre projet." },
         { q: "Quels sont les délais ?", a: "Comptez 4 à 8 semaines pour un site vitrine sur-mesure, davantage selon la complexité (e-commerce, plateforme, 3D). Le planning est fixé au cadrage." },
         { q: "Utilisez-vous WordPress ?", a: "Selon le besoin. Pour les sites éditoriaux performants je privilégie Astro ou Next.js avec un CMS headless ; pour des clients qui veulent gérer eux-mêmes sur un écosystème connu, WordPress reste pertinent." },
         { q: "Le code m'appartient-il ?", a: "Oui, entièrement. À la livraison, vous récupérez le dépôt et tous les accès. Aucun verrou propriétaire." },
