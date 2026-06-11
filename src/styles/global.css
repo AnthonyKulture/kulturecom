@@ -231,34 +231,14 @@
   will-change: opacity;
 }
 
-/* Per-letter initial state for the central brand mark. The JS staggers
-   each letter to opacity 1 / y 0 / blur 0 over ~4s (typewriter phase). */
+/* Per-letter initial state for the central brand mark. The JS staggers each
+   letter to opacity 1 / y 0 over the typewriter phase — opacity + translate
+   only (no blur) for a smooth, cheap cascade. */
 .preloader-letter {
   display: inline-block;
   opacity: 0;
   transform: translateY(8px);
-  filter: blur(4px);
-  will-change: opacity, transform, filter;
-}
-
-/* Marquees inside preloader (and reusable elsewhere) */
-.marquee__track {
-  animation: marquee-scroll 22s linear infinite;
-  will-change: transform;
-}
-.marquee__track--reverse {
-  animation-direction: reverse;
-}
-.marquee__track--fast {
-  animation-duration: 16s;
-}
-@keyframes marquee-scroll {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(-50%, 0, 0);
-  }
+  will-change: opacity, transform;
 }
 
 /* === Word-split scroll reveal utility (mask reveal) ===
@@ -405,9 +385,6 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-  }
-  .marquee__track {
-    animation: none !important;
   }
   /* Word-reveal: bypass the blur cascade and show all words instantly. */
   .word-animate {

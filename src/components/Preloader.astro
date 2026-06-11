@@ -7,179 +7,60 @@ interface Props {
 
 const { lang } = Astro.props;
 
-// Words for marquees
-const words = ["Web", "SEO", "Design", "Brand", "Dev"];
-// Repeat enough to fill 2x viewport, ensuring seamless infinite scroll
-const marqueeWords = Array.from({ length: 8 }, () => words).flat();
-
-const slideSources = Array.from(
-  { length: 20 },
-  (_, i) => `/hero-slides/slide-${String(i + 1).padStart(2, "0")}.webp`
-);
-
 // Brand mark — same dual-typo as Nav.astro: "Anthony" in serif italic glued
 // to "PROFIT" in display caps. Letters are SSR-split into `.preloader-letter`
-// spans so the JS can stagger their opacity/blur reveal (typewriter phase).
+// spans so the JS can stagger their opacity reveal (typewriter phase, which
+// only runs AFTER the loading bar reaches 100% and fonts are ready).
 const SERIF_LETTERS = Array.from("Anthony");
 const DISPLAY_LETTERS = Array.from("PROFIT");
 ---
 
 <div
   id="preloader"
-  class="preloader fixed inset-0 z-[100] flex flex-col overflow-hidden bg-[var(--color-bg)]"
+  class="preloader fixed inset-0 z-[100] overflow-hidden bg-[var(--color-bg)]"
   aria-busy="true"
   aria-label={lang === "fr" ? "Chargement" : "Loading"}
   role="status"
 >
-  <!-- TOP MARQUEE -->
-  <div
-    data-preloader-around
-    class="marquee marquee--top relative flex shrink-0 items-center overflow-hidden border-b border-[var(--color-border)] py-3"
-    aria-hidden="true"
-  >
-    <div class="marquee__track flex items-center gap-[clamp(20px,3vw,48px)] whitespace-nowrap pr-[clamp(20px,3vw,48px)]">
-      {
-        [...marqueeWords, ...marqueeWords].map((w) => (
-          <span class="font-display text-[clamp(20px,2.4vw,36px)] uppercase leading-none text-[var(--color-ink)]">
-            {w}
-            <span class="ml-[clamp(20px,3vw,48px)] inline-block align-middle opacity-40">·</span>
-          </span>
-        ))
-      }
-    </div>
+  {/* Center brand mark — MASKED (letters opacity 0) during loading, then typed
+      in and morphed to the Nav logo. Same dual-typo + cream source +
+      mix-blend-difference as Nav.astro so the morph hand-off is color-perfect.
+      `transform-origin: 0 0` + `will-change: transform` enable the FLIP morph. */}
+  <div class="absolute inset-0 flex items-center justify-center px-4 pointer-events-none">
+    <div
+      data-preloader-name
+      class="inline-flex items-baseline gap-0 whitespace-nowrap leading-none text-[clamp(40px,11vw,144px)] text-[var(--color-bg)] mix-blend-difference"
+      style="transform-origin: 0 0; will-change: transform;"
+    ><span class="font-serif-italic">{SERIF_LETTERS.map((c) => (<span class="preloader-letter">{c}</span>))}</span><span class="font-display tracking-[-0.02em]">{DISPLAY_LETTERS.map((c) => (<span class="preloader-letter">{c}</span>))}</span></div>
   </div>
 
-  {/* MAIN AREA — NO overflow-hidden here. The cycling slide containers
-      have their own overflow-hidden, labels don't overflow, and the
-      centered brand mark MUST be able to escape this box during the
-      morph (it travels from center to viewport top-left ~28px, which
-      sits ABOVE this main area's top edge — the top marquee occupies
-      ~50-60px of viewport height). Clipping it here makes the morph
-      end visually clip the name as it crosses the boundary, which
-      reads as "the logo disappears before reappearing as the nav".
-      The preloader root keeps its overflow-hidden to bound everything
-      at the viewport edges. */}
-  <div class="relative flex-1">
+  {/* Loading UI — architectural: top-left label, bottom-right %, full-width
+      bottom bar. The JS drives the bar (scaleX) + percent from real asset
+      progress. Fades out as one unit when loading completes, before the
+      typewriter. */}
+  <div data-preloader-loading class="absolute inset-0 pointer-events-none">
     <!-- Top-left label -->
     <span
-      data-preloader-around
-      class="font-mono absolute left-4 top-4 text-[10px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)] sm:left-6 sm:top-6 sm:text-[11px] sm:tracking-[0.18em] md:left-12 md:top-12"
-    >
-      {lang === "fr" ? "Chargement" : "Loading"}
-    </span>
+      class="font-mono absolute left-4 top-4 text-[10px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)] sm:left-6 sm:top-6 sm:text-[11px] md:left-12 md:top-12"
+    >{lang === "fr" ? "Chargement" : "Loading"}</span>
 
-    <!-- Top-right SVG (cycling) -->
-    <div
-      data-preloader-around
-      class="absolute right-4 top-4 aspect-[4/5] w-[44px] overflow-hidden sm:right-6 sm:top-6 sm:w-[clamp(60px,8vw,110px)] md:right-12 md:top-12"
-      aria-hidden="true"
-    >
-      <img
-        data-preloader-slide
-        data-cycle-offset="0"
-        src={slideSources[0]}
-        alt=""
-        width="200"
-        height="250"
-        class="block h-full w-full object-cover"
-      />
-    </div>
-
-    <!-- Mid-left SVG — hidden on mobile to avoid overlap with center counter -->
-    <div
-      data-preloader-around
-      class="absolute left-6 top-1/2 hidden aspect-[4/5] w-[clamp(70px,9vw,120px)] -translate-y-1/2 overflow-hidden md:left-12 md:block"
-      aria-hidden="true"
-    >
-      <img
-        data-preloader-slide
-        data-cycle-offset="2"
-        src={slideSources[2]}
-        alt=""
-        width="200"
-        height="250"
-        class="block h-full w-full object-cover"
-      />
-    </div>
-
-    <!-- Mid-right SVG — hidden on mobile -->
-    <div
-      data-preloader-around
-      class="absolute right-6 top-1/2 hidden aspect-[4/5] w-[clamp(70px,9vw,120px)] -translate-y-1/2 overflow-hidden md:right-12 md:block"
-      aria-hidden="true"
-    >
-      <img
-        data-preloader-slide
-        data-cycle-offset="4"
-        src={slideSources[4]}
-        alt=""
-        width="200"
-        height="250"
-        class="block h-full w-full object-cover"
-      />
-    </div>
-
-    <!-- Center brand mark — same dual-typo as the Nav.astro logo: serif
-         italic "Anthony" glued to display caps "PROFIT". Letters are split
-         into per-character `.preloader-letter` spans; the JS staggers their
-         opacity/blur reveal over 4s (typewriter phase), then morphs the
-         whole block to the exact position of the nav logo. -->
-    <div class="absolute inset-0 flex items-center justify-center px-4 pointer-events-none">
-      {/* Source color = cream (`var(--color-bg)`), blended via difference
-          against the cream backdrop = |cream - cream| = (0, 0, 0) pure
-          BLACK. Same technique as the Nav.astro logo (also updated to
-          cream source) — both render identically as pure black on the
-          cream Hero/Preloader bg, so the preloader→nav hand-off is color-
-          perfect. On dark sections the same blend produces near-cream
-          (|cream - ink| ≈ 228, 222, 209), keeping the nav legible. */}
-      <div
-        data-preloader-name
-        class="inline-flex items-baseline gap-0 whitespace-nowrap leading-none text-[clamp(40px,11vw,144px)] text-[var(--color-bg)] mix-blend-difference"
-        style="transform-origin: 0 0; will-change: transform;"
-      ><span class="font-serif-italic">{SERIF_LETTERS.map((c) => (<span class="preloader-letter">{c}</span>))}</span><span class="font-display tracking-[-0.02em]">{DISPLAY_LETTERS.map((c) => (<span class="preloader-letter">{c}</span>))}</span></div>
-    </div>
-
-    <!-- Bottom-left SVG -->
-    <div
-      data-preloader-around
-      class="absolute bottom-4 left-4 aspect-[4/5] w-[44px] overflow-hidden sm:bottom-6 sm:left-6 sm:w-[clamp(60px,8vw,110px)] md:bottom-12 md:left-12"
-      aria-hidden="true"
-    >
-      <img
-        data-preloader-slide
-        data-cycle-offset="6"
-        src={slideSources[6]}
-        alt=""
-        width="200"
-        height="250"
-        class="block h-full w-full object-cover"
-      />
-    </div>
-
-    <!-- Bottom-right label -->
+    <!-- Bottom-right percentage readout -->
     <span
-      data-preloader-around
-      class="font-mono absolute bottom-4 right-4 text-[10px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)] sm:bottom-6 sm:right-6 sm:text-[11px] sm:tracking-[0.18em] md:bottom-12 md:right-12"
-    >
-      anthony.profit / 2026
-    </span>
-  </div>
+      data-preloader-percent
+      class="font-mono absolute bottom-5 right-4 text-[11px] tabular-nums tracking-[0.12em] text-[var(--color-ink)] sm:right-6 sm:text-[12px] md:right-12"
+      aria-hidden="true"
+    >0%</span>
 
-  <!-- BOTTOM MARQUEE (reverse direction) -->
-  <div
-    data-preloader-around
-    class="marquee marquee--bottom relative flex shrink-0 items-center overflow-hidden border-t border-[var(--color-border)] py-3"
-    aria-hidden="true"
-  >
-    <div class="marquee__track marquee__track--reverse flex items-center gap-[clamp(20px,3vw,48px)] whitespace-nowrap pr-[clamp(20px,3vw,48px)]">
-      {
-        [...marqueeWords, ...marqueeWords].map((w) => (
-          <span class="font-serif-italic text-[clamp(18px,2vw,32px)] lowercase leading-none text-[var(--color-ink)]">
-            {w}
-            <span class="ml-[clamp(20px,3vw,48px)] inline-block align-middle opacity-40">·</span>
-          </span>
-        ))
-      }
+    <!-- Full-width bottom progress bar (track + scaleX fill) -->
+    <div
+      class="absolute inset-x-0 bottom-0 h-[6px] bg-[var(--color-border)]"
+      aria-hidden="true"
+    >
+      <span
+        data-preloader-bar
+        class="block h-full w-full origin-left bg-[var(--color-ink)] will-change-transform"
+        style="transform: scaleX(0);"
+      ></span>
     </div>
   </div>
 </div>
