@@ -5,6 +5,11 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
   X-Frame-Options: SAMEORIGIN
   Link: </sitemap-index.xml>; rel="sitemap", </llms.txt>; rel="service-doc"
+  # Edge-cache HTML for 5 min, serve stale up to 1 day while revalidating. A new
+  # Pages deploy purges the edge cache, so fresh content still appears on deploy;
+  # this only spares the origin round-trip on repeat visits. Hashed assets keep
+  # their own immutable 1-year rule (more specific paths below win).
+  Cache-Control: public, max-age=300, stale-while-revalidate=86400
 
 /*.webp
   Cache-Control: public, max-age=31536000, immutable

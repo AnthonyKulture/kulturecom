@@ -1,6 +1,6 @@
 # Anthony Profit — Kulturecom
 
-> Designer & développeur freelance sur la Côte d'Azur. Sites sur-mesure pensés pour être visibles sur Google comme dans les réponses des IA (ChatGPT, Perplexity, Google AI Overviews). Trois axes : design, expérience digitale, SEO + GEO.
+> Designer & développeur freelance sur la Côte d'Azur (Nice). Sites sur-mesure pensés pour être visibles sur Google comme dans les réponses des IA (ChatGPT, Perplexity, Google AI Overviews). Trois axes : design, expérience digitale, SEO + GEO. — Mis à jour : 2026-06-16.
 
 ## Services
 
@@ -21,6 +21,18 @@
 - Email : contact@kulturecom.fr
 - WhatsApp : +33 6 60 50 16 82
 - Réponse sous 48 h ouvrées
+
+## Services (détail)
+
+- [Services](https://anthonyprofit.com/services/) — les trois offres, un seul interlocuteur
+- [Création de site internet](https://anthonyprofit.com/creation-site-internet/) — développement sur-mesure Astro/React, performance, SEO natif
+- [SEO & GEO](https://anthonyprofit.com/seo-geo/) — référencement Google + visibilité dans les IA (ChatGPT, Perplexity, AI Overviews)
+- [Identité de marque](https://anthonyprofit.com/identite-de-marque/) — direction artistique, brand system, déclinaisons
+
+## Blog
+
+- [SEO, GEO & ChatGPT](https://anthonyprofit.com/blog/seo-geo-apparaitre-dans-chatgpt/) — pourquoi votre entreprise n'apparaît pas dans ChatGPT, et comment y remédier (SEO moderne + GEO + dev sur-mesure).
+- [Référencement à Nice](https://anthonyprofit.com/blog/referencement-nice-dominer-google-et-ia/) — le système en 3 couches (SEO classique, Local Pack/Maps, visibilité IA) pour dominer son marché local sur la Côte d'Azur.
 
 ## Optional
 
@@ -47,6 +59,18 @@
 - [Sun Beach House](https://sun-beach-house.com) — Independent luxury villa agency in Saint Barthélemy since 1996. Identity, editorial site, ongoing SEO + GEO. Stack: Next.js · Sanity Studio · Mux video.
 - [Royal Yacht International](https://royalyachtinternational.com) — Monaco-based superyacht broker. Charter, sales, management, construction. Brand redesign + WordPress site + SEO.
 - [Eden Rock Yacht Rental](https://edenrockyachtrental.com) — Yachting extension of Eden Rock – St Barths (hospitality icon since 1953). Identity + WordPress site + SEO.
+
+## Services detail (EN)
+
+- [Services](https://anthonyprofit.com/en/services/) — three offers, one point of contact
+- [Web development](https://anthonyprofit.com/en/web-development/) — custom Astro/React build, performance, native SEO
+- [SEO & GEO](https://anthonyprofit.com/en/seo-geo/) — Google ranking + visibility in AI engines (ChatGPT, Perplexity, AI Overviews)
+- [Brand identity](https://anthonyprofit.com/en/brand-design/) — art direction, brand system, applications
+
+## Blog (EN)
+
+- [SEO, GEO & ChatGPT](https://anthonyprofit.com/en/blog/seo-geo-appear-in-chatgpt/) — why your business doesn't show up in ChatGPT, and how to fix it (modern SEO + GEO + custom dev).
+- [Local SEO in Nice](https://anthonyprofit.com/en/blog/rank-on-google-in-nice-local-seo/) — the 3-layer system (classic SEO, Local Pack/Maps, AI visibility) to dominate your local market on the French Riviera.
 
 ## Contact (EN)
 
