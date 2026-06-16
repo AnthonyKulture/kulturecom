@@ -1,0 +1,53 @@
+---
+// Editorial, text-forward list item for the blog index + tag pages. No image
+// dependency — date · reading time, title, description, tags.
+import type { Lang } from "~/i18n/ui";
+import type { Post } from "~/lib/blog";
+import { postPath, readingMinutes, formatDate } from "~/lib/blog";
+
+interface Props {
+  post: Post;
+  lang: Lang;
+}
+
+const { post, lang } = Astro.props;
+const d = post.data;
+const minutes = readingMinutes(post.body);
+const readLabel = lang === "fr" ? `${minutes} min de lecture` : `${minutes} min read`;
+---
+
+<article class="border-t border-[var(--color-border)]">
+  <a
+    href={postPath(post)}
+    class="group block py-8 no-underline sm:py-10"
+  >
+    <div
+      class="font-mono mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] uppercase tracking-[0.16em] text-[var(--color-ink-subtle)]"
+    >
+      <time datetime={d.pubDate.toISOString()}>{formatDate(d.pubDate, lang)}</time>
+      <span aria-hidden="true">·</span>
+      <span>{readLabel}</span>
+    </div>
+    <h2
+      class="font-display text-[clamp(24px,3.4vw,40px)] uppercase leading-[1.02] tracking-[-0.04em] text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)]"
+    >
+      {d.title}
+    </h2>
+    <p
+      class="mt-4 max-w-[60ch] text-[clamp(15px,1.2vw,17px)] leading-[1.6] text-[var(--color-ink-muted)]"
+    >
+      {d.description}
+    </p>
+    {
+      d.tags.length > 0 && (
+        <ul class="mt-5 flex flex-wrap gap-2">
+          {d.tags.map((t) => (
+            <li class="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--color-ink-subtle)]">
+              #{t}
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </a>
+</article>

@@ -13,6 +13,7 @@ const contactHref = lang === "fr" ? "/contact/" : "/en/contact/";
 const workHref = lang === "fr" ? "/projets/" : "/en/work/";
 const servicesHref = lang === "fr" ? "/services/" : "/en/services/";
 const aboutHref = lang === "fr" ? "/a-propos/" : "/en/about/";
+const blogHref = lang === "fr" ? "/blog/" : "/en/blog/";
 const mentionsHref = lang === "fr" ? "/mentions-legales/" : "/en/legal-notice/";
 const privacyHref = lang === "fr" ? "/confidentialite/" : "/en/privacy/";
 
@@ -59,8 +60,8 @@ const lastNameHtml = wrapLettersShuffled("PROFIT.", 500, 60, new Set(["."]));
 
 const currentYear = "2026";
 const navLabels = lang === "en"
-  ? { projects: "WORK", services: "SERVICES", about: "ABOUT", contact: "CONTACT" }
-  : { projects: "PROJETS", services: "SERVICES", about: "À PROPOS", contact: "CONTACT" };
+  ? { projects: "WORK", services: "SERVICES", about: "ABOUT", journal: "JOURNAL", contact: "CONTACT" }
+  : { projects: "PROJETS", services: "SERVICES", about: "À PROPOS", journal: "JOURNAL", contact: "CONTACT" };
 ---
 
 <footer
@@ -153,7 +154,13 @@ const navLabels = lang === "en"
         >{navLabels.about}</a>
         <a
           data-footer-top
-          style="transition-delay:840ms"
+          style="transition-delay:820ms"
+          href={blogHref}
+          class="text-[var(--color-ink)] no-underline hover:underline underline-offset-4"
+        >{navLabels.journal}</a>
+        <a
+          data-footer-top
+          style="transition-delay:900ms"
           href={contactHref}
           class="text-[var(--color-ink)] no-underline hover:underline underline-offset-4"
         >{navLabels.contact}</a>

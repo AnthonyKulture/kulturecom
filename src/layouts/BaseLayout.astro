@@ -18,7 +18,9 @@ interface Props {
   description?: string;
   // hreflang counterpart URL. Resolved from routes.ts by `pathname`; the
   // prefix-swap default below is only a last resort for unlisted routes.
-  altPath?: string;
+  // Pass `null` to declare NO counterpart (e.g. an untranslated blog post or a
+  // tag archive) — the alt-lang hreflang line is then omitted entirely.
+  altPath?: string | null;
   // Emit <meta name="robots" content="noindex"> (used by the 404 pages).
   noindex?: boolean;
 }
@@ -39,6 +41,9 @@ const pageDescription =
   description ?? route?.description ?? dict.meta.description;
 
 const altLang: Lang = lang === "fr" ? "en" : "fr";
+// `altPath === null` means the page has no localized counterpart → skip the
+// alt-lang hreflang link below (only self + x-default are emitted).
+const hasCounterpart = altPathProp !== null;
 const altPath =
   altPathProp ??
   route?.alt ??
@@ -233,8 +238,18 @@ const jsonLd = { "@context": "https://schema.org", "@graph": graph };
     {/* hreflang: self + other lang + x-default. Google accepts just other+default,
         but emitting self too is the safer pattern for SERP signal consistency. */}
     <link rel="alternate" hreflang={lang} href={canonical} />
-    <link rel="alternate" hreflang={altLang} href={new URL(altPath, Astro.site).toString()} />
+    {hasCounterpart && (
+      <link rel="alternate" hreflang={altLang} href={new URL(altPath, Astro.site).toString()} />
+    )}
     <link rel="alternate" hreflang="x-default" href={new URL("/", Astro.site).toString()} />
+
+    {/* RSS autodiscovery — locale feed for the blog (src/pages/[en/]rss.xml.ts). */}
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Anthony Profit — Journal"
+      href={new URL(lang === "fr" ? "/rss.xml" : "/en/rss.xml", Astro.site).toString()}
+    />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />

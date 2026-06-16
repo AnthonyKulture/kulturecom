@@ -1,0 +1,91 @@
+---
+// Inline, in-article CTA card linking a post to one of the service pages —
+// this is the SEO → lead bridge (the reason the blog is MDX). Drop it into any
+// .mdx post: <ServiceCTA service="seo-geo" lang="fr" />.
+import type { Lang } from "~/i18n/ui";
+
+type ServiceId = "seo-geo" | "creation-site-internet" | "identite-de-marque";
+
+interface Props {
+  service: ServiceId;
+  lang: Lang;
+  /** Optional override for the lead line. */
+  text?: string;
+}
+
+const { service, lang, text } = Astro.props;
+
+// Per-service, per-locale label + href + default lead. Hrefs mirror
+// src/i18n/routes.ts (localized EN slugs).
+const SERVICES: Record<
+  ServiceId,
+  Record<Lang, { name: string; href: string; lead: string }>
+> = {
+  "seo-geo": {
+    fr: {
+      name: "SEO & GEO",
+      href: "/seo-geo/",
+      lead: "Être trouvé sur Google et cité par ChatGPT, Perplexity et les AI Overviews.",
+    },
+    en: {
+      name: "SEO & GEO",
+      href: "/en/seo-geo/",
+      lead: "Get found on Google and cited by ChatGPT, Perplexity and AI Overviews.",
+    },
+  },
+  "creation-site-internet": {
+    fr: {
+      name: "Création de site sur-mesure",
+      href: "/creation-site-internet/",
+      lead: "Un site rapide, accessible et pensé SEO/GEO dès l'architecture — sans template.",
+    },
+    en: {
+      name: "Custom web development",
+      href: "/en/web-development/",
+      lead: "A fast, accessible site engineered for SEO/GEO from the architecture up — no template.",
+    },
+  },
+  "identite-de-marque": {
+    fr: {
+      name: "Identité de marque",
+      href: "/identite-de-marque/",
+      lead: "Une image cohérente qui rend votre marque crédible, en ligne comme ailleurs.",
+    },
+    en: {
+      name: "Brand identity",
+      href: "/en/brand-design/",
+      lead: "A coherent image that makes your brand credible, online and beyond.",
+    },
+  },
+};
+
+const s = SERVICES[service][lang];
+const eyebrow = lang === "fr" ? "Service" : "Service";
+const ctaLabel = lang === "fr" ? "Voir le service" : "View the service";
+---
+
+<aside
+  class="not-prose my-12 border border-[var(--color-border)] bg-[var(--color-bg-shade)] p-6 sm:p-8"
+>
+  <p
+    class="font-mono mb-3 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]"
+  >
+    <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
+    {eyebrow}
+  </p>
+  <p
+    class="font-display text-[clamp(20px,2.4vw,30px)] uppercase leading-[1] tracking-[-0.03em] text-[var(--color-ink)]"
+  >
+    {s.name}
+  </p>
+  <p class="mt-3 max-w-[52ch] text-[clamp(14px,1.1vw,16px)] leading-[1.6] text-[var(--color-ink-muted)]">
+    {text ?? s.lead}
+  </p>
+  <a
+    href={s.href}
+    class="group mt-5 inline-flex items-center gap-3 bg-[var(--color-ink)] px-5 py-3 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-bg)] no-underline transition-colors duration-200 hover:bg-[var(--color-accent)]"
+  >
+    {ctaLabel}
+    <span aria-hidden="true" class="transition-transform duration-300 ease-out group-hover:translate-x-1">→</span>
+  </a>
+</aside>

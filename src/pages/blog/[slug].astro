@@ -1,0 +1,41 @@
+---
+import { render } from "astro:content";
+import BlogPostLayout from "~/layouts/BlogPostLayout.astro";
+import {
+  getPosts,
+  getTranslation,
+  getRelatedPosts,
+  postPath,
+  readingMinutes,
+  type Post,
+} from "~/lib/blog";
+
+export async function getStaticPaths() {
+  const posts = await getPosts("fr");
+  return posts.map((post) => ({ params: { slug: post.data.slug }, props: { post } }));
+}
+
+interface Props {
+  post: Post;
+}
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+
+const lang = "fr" as const;
+const pathname = `/blog/${post.data.slug}/`;
+const translation = await getTranslation(post);
+const related = await getRelatedPosts(post);
+---
+
+<BlogPostLayout
+  post={post}
+  headings={headings}
+  readingTime={readingMinutes(post.body)}
+  related={related}
+  lang={lang}
+  pathname={pathname}
+  hreflangAltPath={translation ? postPath(translation) : null}
+  navAltLangPath={translation ? postPath(translation) : "/en/blog/"}
+>
+  <Content />
+</BlogPostLayout>

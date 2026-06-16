@@ -85,6 +85,17 @@ export const routes: Record<string, RouteMeta> = {
       "Politique de confidentialité d'anthonyprofit.com — données collectées, finalités, base légale, durée de conservation et vos droits (RGPD).",
   },
 
+  // ---- FR · blog ----
+  "/blog/": {
+    lang: "fr",
+    alt: "/en/blog/",
+    crumb: "Journal",
+    pageType: "WebPage",
+    title: `Blog SEO, GEO & développement web | Anthony Profit`,
+    description:
+      "Articles et méthodes sur le SEO, le GEO (optimisation pour ChatGPT, Perplexity & les AI Overviews) et la création de sites web sur-mesure. Par Anthony Profit, Nice.",
+  },
+
   // ---- FR · services ----
   "/services/": {
     lang: "fr",
@@ -214,6 +225,17 @@ export const routes: Record<string, RouteMeta> = {
     title: `Privacy policy | Anthony Profit`,
     description:
       "Privacy policy for anthonyprofit.com — data collected, purposes, legal basis, retention and your rights (GDPR).",
+  },
+
+  // ---- EN · blog ----
+  "/en/blog/": {
+    lang: "en",
+    alt: "/blog/",
+    crumb: "Journal",
+    pageType: "WebPage",
+    title: `Blog: SEO, GEO & web development | Anthony Profit`,
+    description:
+      "Articles and playbooks on SEO, GEO (optimization for ChatGPT, Perplexity & AI Overviews) and custom web development. By Anthony Profit, French Riviera.",
   },
 
   // ---- EN · services ----

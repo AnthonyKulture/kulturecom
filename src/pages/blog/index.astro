@@ -1,0 +1,109 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import Nav from "~/components/Nav.astro";
+import PostCard from "~/components/blog/PostCard.astro";
+import { getPosts, getTags, tagPath } from "~/lib/blog";
+
+const lang = "fr" as const;
+const pathname = "/blog/";
+const altPath = "/en/blog/";
+
+const posts = await getPosts(lang);
+const tags = await getTags(lang);
+
+const site = Astro.site;
+const blogUrl = new URL(pathname, site).toString();
+const personId = `${site}#person`;
+
+// Blog + nested BlogPosting list (ids match each post's own #article node).
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Blog",
+      "@id": `${blogUrl}#blog`,
+      name: "Journal — SEO, GEO & développement web",
+      url: blogUrl,
+      inLanguage: "fr-FR",
+      publisher: { "@id": personId },
+      blogPost: posts.map((p) => {
+        const url = new URL(`/blog/${p.data.slug}/`, site).toString();
+        return {
+          "@type": "BlogPosting",
+          "@id": `${url}#article`,
+          headline: p.data.title,
+          url,
+          datePublished: p.data.pubDate.toISOString(),
+        };
+      }),
+    },
+  ],
+};
+---
+
+<BaseLayout lang={lang} pathname={pathname} altPath={altPath}>
+  <Nav lang={lang} altLang="en" altLangPath={altPath} />
+
+  <main
+    id="main-content"
+    class="bg-[var(--color-bg)] text-[var(--color-ink)] px-4 pt-28 pb-24 sm:px-6 sm:pt-36 md:px-12 md:pt-44"
+  >
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      {/* Header */}
+      <header class="mb-12 sm:mb-16">
+        <p
+          class="font-mono mb-5 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]"
+        >
+          <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
+          Journal
+        </p>
+        <h1
+          class="font-display text-[clamp(40px,8vw,120px)] uppercase leading-[0.92] tracking-[-0.04em] text-[var(--color-ink)]"
+        >
+          SEO, GEO &amp; développement web
+        </h1>
+        <p
+          class="font-serif-italic mt-8 max-w-[52ch] text-[clamp(18px,2vw,28px)] leading-tight text-[var(--color-ink-muted)]"
+        >
+          Analyses, méthodes et retours d'expérience sur le référencement,
+          l'optimisation pour les moteurs d'IA (GEO) et la création de sites
+          sur-mesure.
+        </p>
+      </header>
+
+      {/* Tag filter */}
+      {
+        tags.length > 0 && (
+          <nav
+            aria-label="Thèmes"
+            class="mb-14 flex flex-wrap gap-2 border-y border-[var(--color-border)] py-5"
+          >
+            {tags.map((t) => (
+              <a
+                href={tagPath(lang, t.slug)}
+                class="font-mono inline-block border border-[var(--color-border)] px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] text-[var(--color-ink-muted)] no-underline transition-colors hover:border-[var(--color-ink)] hover:text-[var(--color-ink)]"
+              >
+                {t.name} <span class="text-[var(--color-ink-subtle)]">({t.count})</span>
+              </a>
+            ))}
+          </nav>
+        )
+      }
+
+      {/* Post list */}
+      {
+        posts.length > 0 ? (
+          <div class="border-b border-[var(--color-border)]">
+            {posts.map((post) => (
+              <PostCard post={post} lang={lang} />
+            ))}
+          </div>
+        ) : (
+          <p class="text-[var(--color-ink-muted)]">Premiers articles à venir.</p>
+        )
+      }
+    </div>
+  </main>
+
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+</BaseLayout>

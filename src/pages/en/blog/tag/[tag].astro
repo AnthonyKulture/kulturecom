@@ -1,0 +1,73 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import Nav from "~/components/Nav.astro";
+import PostCard from "~/components/blog/PostCard.astro";
+import { getTags, getPostsByTag, TAG_INDEX_MIN } from "~/lib/blog";
+
+export async function getStaticPaths() {
+  const tags = await getTags("en");
+  return tags.map((t) => ({
+    params: { tag: t.slug },
+    props: { tagName: t.name, count: t.count },
+  }));
+}
+
+interface Props {
+  tagName: string;
+  count: number;
+}
+const lang = "en" as const;
+const { tag } = Astro.params;
+const { tagName, count } = Astro.props;
+const posts = await getPostsByTag(lang, tag!);
+const pathname = `/en/blog/tag/${tag}/`;
+
+const noindex = count < TAG_INDEX_MIN;
+const title = `${tagName} — SEO, GEO & web articles | Anthony Profit`;
+const description = `All articles on ${tagName.toLowerCase()}: search optimization, GEO (AI optimization) and custom web development. By Anthony Profit.`;
+---
+
+<BaseLayout
+  lang={lang}
+  pathname={pathname}
+  title={title}
+  description={description}
+  altPath={null}
+  noindex={noindex}
+>
+  <Nav lang={lang} altLang="fr" altLangPath="/blog/" />
+
+  <main
+    id="main-content"
+    class="bg-[var(--color-bg)] text-[var(--color-ink)] px-4 pt-28 pb-24 sm:px-6 sm:pt-36 md:px-12 md:pt-44"
+  >
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <nav
+        aria-label="Breadcrumb"
+        class="font-mono mb-8 flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-[var(--color-ink-subtle)]"
+      >
+        <a href="/en/" class="no-underline hover:text-[var(--color-ink)]">Home</a>
+        <span aria-hidden="true">/</span>
+        <a href="/en/blog/" class="no-underline hover:text-[var(--color-ink)]">Journal</a>
+      </nav>
+
+      <header class="mb-12 sm:mb-16">
+        <p
+          class="font-mono mb-5 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]"
+        >
+          <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
+          Topic
+        </p>
+        <h1
+          class="font-display text-[clamp(40px,8vw,110px)] uppercase leading-[0.92] tracking-[-0.04em] text-[var(--color-ink)]"
+        >
+          {tagName}
+        </h1>
+      </header>
+
+      <div class="border-b border-t border-[var(--color-border)]">
+        {posts.map((post) => <PostCard post={post} lang={lang} />)}
+      </div>
+    </div>
+  </main>
+</BaseLayout>
