@@ -42,11 +42,10 @@ const jsonLd = {
       "serviceType": c.name,
       "url": canonical,
       "description": c.lead,
-      "provider": {
-        "@type": "Person",
-        "name": "Anthony Profit",
-        "url": new URL("/", Astro.site).toString(),
-      },
+      // Reference the global #person entity (emitted by BaseLayout on every
+      // page) instead of a blank node, so the Service joins the entity graph
+      // that Google's Knowledge Panel + AI citation rely on.
+      "provider": { "@id": `${Astro.site}#person` },
       "areaServed": { "@type": "Country", "name": "France" },
       "inLanguage": isFr ? "fr-FR" : "en-US",
     },

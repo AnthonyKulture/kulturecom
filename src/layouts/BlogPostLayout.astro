@@ -45,6 +45,10 @@ const ogImage = new URL("/og.png", site).toString();
 const imageUrl = d.cover ? new URL(d.cover, site).toString() : ogImage;
 const personId = `${site}#person`;
 const websiteId = `${site}#website`;
+const orgId = `${site}#org`;
+
+// Word count (build-time) — a quality/depth signal for AI citation weighting.
+const wordCount = (post.body ?? "").trim().split(/\s+/).filter(Boolean).length;
 
 const labels = isFr
   ? {
@@ -91,8 +95,9 @@ const blogPosting: Record<string, unknown> = {
   datePublished: d.pubDate.toISOString(),
   dateModified: (d.updatedDate ?? d.pubDate).toISOString(),
   author: { "@type": "Person", "@id": personId, name: d.author, url: homeUrl },
-  publisher: { "@id": personId },
+  publisher: { "@id": orgId },
   image: imageUrl,
+  wordCount,
   inLanguage: isFr ? "fr-FR" : "en-US",
   mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
   isPartOf: { "@id": websiteId },
@@ -125,6 +130,7 @@ const updatedStr = d.updatedDate ? formatDate(d.updatedDate, lang) : null;
   title={pageTitle}
   description={d.description}
   altPath={hreflangAltPath}
+  ogImage={d.cover}
 >
   <Nav lang={lang} altLang={altLang} altLangPath={navAltLangPath} />
 

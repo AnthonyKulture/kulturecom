@@ -35,6 +35,7 @@ export const routes: Record<string, RouteMeta> = {
   "/": {
     lang: "fr",
     alt: "/en/",
+    pageType: "WebPage",
     title: `${SITE} — Freelance développeur web, SEO & brand design`,
     description:
       "Freelance développeur web, stratégie SEO et brand design. Sites sur-mesure pour PME, B2B et marques créatives. 8 ans d'expérience. Disponible Q4 2026.",
@@ -177,6 +178,7 @@ export const routes: Record<string, RouteMeta> = {
   "/en/": {
     lang: "en",
     alt: "/",
+    pageType: "WebPage",
     title: `${SITE} — Freelance web developer, SEO & brand design`,
     description:
       "Freelance web developer, SEO strategy and brand design. Custom websites for SMBs, B2B and creative brands. 8 years of experience. Available Q4 2026.",

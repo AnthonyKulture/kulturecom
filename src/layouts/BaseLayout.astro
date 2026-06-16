@@ -21,6 +21,9 @@ interface Props {
   // Pass `null` to declare NO counterpart (e.g. an untranslated blog post or a
   // tag archive) — the alt-lang hreflang line is then omitted entirely.
   altPath?: string | null;
+  // Per-page social image (og:image / twitter:image). Defaults to /og.png.
+  // Blog posts pass their cover here so shares use the article image.
+  ogImage?: string;
   // Emit <meta name="robots" content="noindex"> (used by the 404 pages).
   noindex?: boolean;
 }
@@ -31,6 +34,7 @@ const {
   title,
   description,
   altPath: altPathProp,
+  ogImage: ogImageProp,
   noindex = false,
 } = Astro.props;
 const dict = ui[lang];
@@ -55,6 +59,9 @@ const canonical = new URL(pathname, Astro.site).toString();
 // 1200×630 PNG — renders on every platform (Facebook + LinkedIn included; SVG
 // OG images don't). Rasterized from og.svg; see public/og.png.
 const ogImage = new URL("/og.png", Astro.site).toString();
+// Social/share image — a per-page override (e.g. a blog post cover) falls back
+// to the site OG banner. The schema brand images keep using `ogImage`.
+const socialImage = new URL(ogImageProp ?? "/og.png", Astro.site).toString();
 
 // External profile URLs (also referenced in Footer.astro). These power the
 // JSON-LD `sameAs` array for the Knowledge Graph.
@@ -70,6 +77,7 @@ const gbpUrl = "https://www.google.com/maps?cid=13963690267531536578";
 const personId = `${Astro.site}#person`;
 const serviceId = `${Astro.site}#service`;
 const websiteId = `${Astro.site}#website`;
+const orgId = `${Astro.site}#org`;
 const homeUrl = new URL("/", Astro.site).toString();
 const enHomeUrl = new URL("/en/", Astro.site).toString();
 
@@ -105,11 +113,13 @@ const graph: Record<string, any>[] = [
       "TypeScript",
     ],
     "sameAs": [linkedinUrl, instagramUrl, behanceUrl],
+    "worksFor": { "@id": serviceId },
   },
   {
     "@type": "ProfessionalService",
     "@id": serviceId,
     "name": "Anthony Profit",
+    "alternateName": "Kulturecom",
     "url": Astro.site?.toString(),
     "image": ogImage,
     "description": dict.meta.description,
@@ -122,11 +132,17 @@ const graph: Record<string, any>[] = [
       "addressRegion": "Provence-Alpes-Côte d'Azur",
       "addressCountry": "FR",
     },
-    "areaServed": { "@type": "Country", "name": "France" },
+    // City-level areaServed sharpens relevance for "Nice"/"Côte d'Azur" queries
+    // (LLMs + local pack score city entities higher than a bare Country).
+    "areaServed": [
+      { "@type": "City", "name": "Nice", "sameAs": "https://www.wikidata.org/wiki/Q33959" },
+      { "@type": "AdministrativeArea", "name": "Côte d'Azur" },
+      { "@type": "Country", "name": "France" },
+    ],
     "serviceType": ["Web Development", "SEO", "Brand Design"],
     "priceRange": "€€€",
     "hasMap": gbpUrl,
-    "sameAs": [gbpUrl],
+    "sameAs": [gbpUrl, linkedinUrl, behanceUrl],
   },
   {
     "@type": "WebSite",
@@ -135,6 +151,24 @@ const graph: Record<string, any>[] = [
     "name": "Anthony Profit",
     "inLanguage": [lang === "fr" ? "fr-FR" : "en-US"],
     "publisher": { "@id": personId },
+  },
+  {
+    // Organization entity — used as the `publisher` of BlogPosting (Google's
+    // Article rich result requires an Organization publisher with a logo). The
+    // logo is the square 180×180 app icon (Google wants a real logo, not the
+    // 1200×630 OG banner).
+    "@type": "Organization",
+    "@id": orgId,
+    "name": "Anthony Profit",
+    "alternateName": "Kulturecom",
+    "url": Astro.site?.toString(),
+    "logo": {
+      "@type": "ImageObject",
+      "url": new URL("/apple-touch-icon.png", Astro.site).toString(),
+      "width": 180,
+      "height": 180,
+    },
+    "sameAs": [linkedinUrl, instagramUrl, behanceUrl, gbpUrl],
   },
 ];
 
@@ -259,7 +293,7 @@ const jsonLd = { "@context": "https://schema.org", "@graph": graph };
     <meta property="og:description" content={pageDescription} />
     <meta property="og:locale" content={lang === "fr" ? "fr_FR" : "en_US"} />
     <meta property="og:locale:alternate" content={lang === "fr" ? "en_US" : "fr_FR"} />
-    <meta property="og:image" content={ogImage} />
+    <meta property="og:image" content={socialImage} />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -269,7 +303,7 @@ const jsonLd = { "@context": "https://schema.org", "@graph": graph };
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={pageDescription} />
-    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image" content={socialImage} />
     <meta name="twitter:image:alt" content={dict.meta.ogImageAlt} />
 
     <!-- Structured data (JSON-LD) — Person + ProfessionalService + WebSite -->
@@ -294,8 +328,12 @@ const jsonLd = { "@context": "https://schema.org", "@graph": graph };
     />
 
     {/* Preload first carousel slide — likely LCP on mobile (inline image
-        inside the H1, 180-260 px square, larger pixel area than the headline). */}
-    <link rel="preload" as="image" href="/hero-slides/slide-01.webp" type="image/webp" />
+        inside the H1, 180-260 px square, larger pixel area than the headline).
+        HOME ONLY — inner pages don't render the hero, so preloading it there
+        just wasted ~55 KB of priority bandwidth. */}
+    {(pathname === "/" || pathname === "/en/") && (
+      <link rel="preload" as="image" href="/hero-slides/slide-01.webp" type="image/webp" />
+    )}
   </head>
   <body>
     {/* Keyboard skip link (WCAG 2.4.1). Hidden until the user tabs to it.
