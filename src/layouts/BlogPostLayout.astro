@@ -328,13 +328,18 @@ const updatedStr = d.updatedDate ? formatDate(d.updatedDate, lang) : null;
   .prose-blog p {
     margin-bottom: 1.4rem;
   }
-  .prose-blog a {
+  /* Scope link styling to TEXT containers only. A bare `.prose-blog a` rule
+     (specificity 0,1,1) outranks the Tailwind `text-[…]` utilities (0,1,0) on
+     embedded components, which forced the dark <ServiceCTA> button's label to
+     the ink color → black text on its black background. Restricting the rule to
+     p/li/blockquote leaves component buttons to their own utility colors. */
+  .prose-blog :is(p, li, blockquote) a {
     color: var(--color-ink);
     text-decoration: underline;
     text-underline-offset: 3px;
     text-decoration-color: var(--color-accent);
   }
-  .prose-blog a:hover {
+  .prose-blog :is(p, li, blockquote) a:hover {
     color: var(--color-accent);
   }
   .prose-blog strong {
