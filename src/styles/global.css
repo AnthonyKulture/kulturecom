@@ -60,7 +60,17 @@
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
+    /* `clip`, NOT `hidden` — same reasoning as the html rule above. With
+       `overflow-x: hidden`, `overflow-y` computes to `auto`, which turns the
+       BODY into a scroll container. Combined with the root's `overflow-x: clip`
+       (which stops body→viewport overflow propagation), Chrome then scrolls
+       NEITHER the viewport nor the body on a wheel — native scroll is dead on
+       every page WITHOUT Lenis (i.e. every page but the home). The home only
+       appeared to work because Lenis scrolls programmatically. `clip` clips the
+       horizontal overflow without creating a scroll container, so `overflow-y`
+       stays `visible` and the viewport scrolls natively again. Safari/touch
+       propagate differently and were unaffected. */
+    overflow-x: clip;
     overscroll-behavior: none;
   }
 
