@@ -92,7 +92,16 @@ type Block = {
   plainTitle: string;
   titleHtml: string;
   descHtml: string;
+  href: string;
 };
+
+// Each teaser links to its dedicated service page (svc1 Art direction →
+// brand, svc2 Web dev, svc3 SEO/GEO). Localized slugs per src/i18n/routes.ts.
+const SERVICE_LINKS =
+  lang === "fr"
+    ? ["/identite-de-marque/", "/creation-site-internet/", "/seo-geo/"]
+    : ["/en/brand-design/", "/en/web-development/", "/en/seo-geo/"];
+const ctaLabel = lang === "fr" ? "Découvrir" : "Explore";
 
 // The About section is now the three service teasers only — the personal intro
 // block was removed. Same scroll-reveal sequence, but
@@ -107,6 +116,7 @@ const services: Block[] = ([1, 2, 3] as const).map((n) => ({
     `<span class="about-service-num">${tAbout[`svc${n}.num`]}</span>` +
     wrapWords(tAbout[`svc${n}.title`]),
   descHtml: wrapBodyWords(tAbout[`svc${n}.desc`]),
+  href: SERVICE_LINKS[n - 1],
 }));
 
 const chapters: Block[] = services;
@@ -156,6 +166,17 @@ const chapters: Block[] = services;
             ]}
             set:html={chapter.descHtml}
           />
+          {/* Per-teaser CTA → the matching service page. Fades in/out with the
+              body (src/lib/about-reveal.ts) and rides the same parallax since
+              it sits inside [data-about-chapter-content]. */}
+          <a
+            data-about-svc-cta
+            href={chapter.href}
+            class="about-cta group mt-7 inline-flex w-fit items-center gap-3 border border-[var(--color-ink)] px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink)] no-underline transition-colors duration-200 hover:bg-[var(--color-ink)] hover:text-[var(--color-bg)] md:mt-9"
+          >
+            {ctaLabel}
+            <span aria-hidden="true" class="transition-transform duration-300 ease-out group-hover:translate-x-1">→</span>
+          </a>
         </div>
       </section>
     );

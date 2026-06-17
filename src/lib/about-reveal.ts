@@ -63,6 +63,12 @@ export function initAboutReveal(): void {
     if (allBodyWords.length > 0) {
       gsap.set(allBodyWords, { opacity: 1, y: 0 });
     }
+    const allCtas = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-about-svc-cta]")
+    );
+    if (allCtas.length > 0) {
+      gsap.set(allCtas, { opacity: 1, pointerEvents: "auto" });
+    }
     // Parallax targets snap to neutral so they don't carry a Y offset
     // when scroll-driven motion is disabled.
     const allTextContents = Array.from(
@@ -112,6 +118,7 @@ export function initAboutReveal(): void {
     const bodyEl = section.querySelector<HTMLElement>(
       "[data-about-chapter-body]"
     );
+    const ctaEl = section.querySelector<HTMLElement>("[data-about-svc-cta]");
     if (titleWords.length === 0 && bodyWords.length === 0) return;
 
     // Blur is applied ONCE to the whole title/body BLOCK (one layer each)
@@ -313,6 +320,15 @@ export function initAboutReveal(): void {
         inBody
       );
     }
+    // Service CTA — fades in just after the body. pointerEvents toggles with
+    // opacity so the (transparent) button can't capture clicks off-peak.
+    if (ctaEl) {
+      tl.to(
+        ctaEl,
+        { opacity: 1, pointerEvents: "auto", duration: 0.08, ease: "power2.out" },
+        inBody + 0.04
+      );
+    }
 
     // ─── Plateau (reading time) ────────────────────────────────────────
     // Title fully in by ~0.40, body by ~0.40. Both hold through center
@@ -365,6 +381,13 @@ export function initAboutReveal(): void {
       tl.to(
         bodyEl,
         { filter: "blur(6px)", duration: 0.10, ease: "power2.in" },
+        outBody
+      );
+    }
+    if (ctaEl) {
+      tl.to(
+        ctaEl,
+        { opacity: 0, pointerEvents: "none", duration: 0.08, ease: "power2.in" },
         outBody
       );
     }

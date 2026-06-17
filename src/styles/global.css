@@ -357,6 +357,14 @@
   will-change: filter;
 }
 
+/* Per-teaser service CTA — starts hidden + non-interactive; src/lib/about-reveal.ts
+   fades it in/out (and toggles pointer-events) in step with the body so it never
+   eats clicks while transparent. Under reduced motion / no JS it stays visible. */
+.about-cta {
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* Modifier — words that lived inside an <em> tag in the i18n string
    render as Instrument Serif italic, slightly larger, for the editorial
    mixed-typography emphasis the design calls for. */
@@ -412,6 +420,11 @@
     opacity: 1 !important;
     transform: none !important;
     filter: none !important;
+  }
+  /* Service CTAs — visible + clickable when motion is reduced. */
+  .about-cta {
+    opacity: 1 !important;
+    pointer-events: auto !important;
   }
   /* Preloader letters — skip the typewriter cascade. */
   .preloader-letter {
