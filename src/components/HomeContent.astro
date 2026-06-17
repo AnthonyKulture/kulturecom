@@ -57,9 +57,11 @@ const { lang, altLang, altLangPath } = Astro.props;
       </div>
       <img
         data-hero-transition-image
-        src="/hero-slides/hero-image.jpeg"
+        src="/hero-slides/hero-image.webp"
         alt=""
         aria-hidden="true"
+        decoding="async"
+        fetchpriority="low"
         class="pointer-events-none fixed inset-0 z-30 h-full w-full object-cover"
         style="will-change: transform, clip-path; clip-path: inset(50% 0 50% 0);"
       />
