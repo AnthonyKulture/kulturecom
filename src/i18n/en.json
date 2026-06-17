@@ -86,20 +86,6 @@
     "body.cta": "click",
     "accent": "02"
   },
-  "services": {
-    "eyebrow": "Services",
-    "title.line1": "Three crafts,",
-    "title.line2": "one point of contact.",
-    "item1.label": "01",
-    "item1.title": "Design",
-    "item1.body": "Editorial art direction, brand systems, design tokens. An identity crafted for your brand — usable across web, print and social. Not a bought theme, not a recycled template. A signature that holds for 10 years, not 10 months.",
-    "item2.label": "02",
-    "item2.title": "Digital Experience",
-    "item2.body": "Astro, React, Lighthouse ≥ 95. Fast, accessible, performant sites — with no visual compromise. Core Web Vitals all green. An interface that loads before competitors finish their hero. Architecture built to last.",
-    "item3.label": "03",
-    "item3.title": "SEO + GEO",
-    "item3.body": "Technical audit, content cluster, Schema.org, llms.txt. Classic SEO for Google + optimization for generative engines: ChatGPT, Perplexity, Google AI Overviews. Indexed, structured to be cited — not just listed."
-  },
   "projects": {
     "eyebrow": "Selection",
     "title.line1": "A few projects",

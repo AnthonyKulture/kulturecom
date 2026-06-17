@@ -86,20 +86,6 @@
     "body.cta": "clic",
     "accent": "02"
   },
-  "services": {
-    "eyebrow": "Services",
-    "title.line1": "Trois axes,",
-    "title.line2": "un seul interlocuteur.",
-    "item1.label": "01",
-    "item1.title": "Design",
-    "item1.body": "Direction artistique éditoriale, brand systems, design tokens. Une identité conçue pour votre marque — déclinable sur web, print et social. Pas un thème acheté, pas un template recyclé. Une signature qui résiste à 10 ans, pas à 10 mois.",
-    "item2.label": "02",
-    "item2.title": "Expérience digitale",
-    "item2.body": "Astro, React, Lighthouse ≥ 95. Sites rapides, accessibles, performants — sans compromis sur le visuel. Core Web Vitals au vert. Une interface qui charge avant que le concurrent ait fini son hero. Architecture pensée pour durer.",
-    "item3.label": "03",
-    "item3.title": "SEO + GEO",
-    "item3.body": "Audit technique, content cluster, Schema.org, llms.txt. SEO classique pour Google + optimisation pour les moteurs génératifs : ChatGPT, Perplexity, Google AI Overviews. Indexé, structuré pour être cité — pas juste listé."
-  },
   "projects": {
     "eyebrow": "Sélection",
     "title.line1": "Quelques projets",
