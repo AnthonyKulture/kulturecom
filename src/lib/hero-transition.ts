@@ -1,7 +1,7 @@
 /**
  * Hero → About scroll-driven transition.
  *
- *  Pin the Hero (via `[data-hero-pin]`) for +=200% of scroll while a GSAP
+ *  Pin the Hero (via `[data-hero-pin]`) for +=140% of scroll while a GSAP
  *  timeline scrubs against the scroll position. Page doesn't actually move
  *  during the pin — the timeline animates instead.
  *
@@ -47,10 +47,11 @@
  *           the glue note at the departure block. About paints over the
  *           blurred image during the overlap window (z-60 > z-30).
  *
- *  Pin config : `pinSpacing: false` + `end: "+=100%"` (= 100vh = Hero
- *           height). About sits at its natural DOM position (scroll 100vh)
- *           and arrives at viewport top exactly when the pin releases.
- *           The +50vh initial translateY on About keeps it below the
+ *  Pin config : `pinSpacing: false` + `end: "+=140%"` (= 140vh ; the pin
+ *           element is `min-h-[140dvh]` so pin distance = element height =
+ *           About's DOM offset). About sits at its natural DOM position
+ *           (scroll 140vh) and arrives at viewport top exactly when the pin
+ *           releases. The +32vh initial translateY on About keeps it below the
  *           viewport during reveal + settle so the image stays full-screen
  *           ALONE. NO cream visible at any point in the sequence.
  *
@@ -78,7 +79,7 @@
  */
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { prefersReducedMotion } from "./env";
+import { prefersReducedMotion, isLowEndDevice } from "./env";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -171,6 +172,13 @@ export function initHeroTransition(): void {
     // shrink — across the whole sequence.
     gsap.set(transitionImg, { scale: 1.15, transformOrigin: "center center" });
 
+    // Per-frame blur on this fixed full-viewport image is the heaviest paint on
+    // the page. Skip it where it can't be afforded (small / high-DPR / low-core);
+    // the image then lifts off sharp — the backdrop ink + seam feather still keep
+    // the raccord dark, so no cream is ever exposed, and the spatial glue math is
+    // untouched (blur is a separate, purely cosmetic tween).
+    const cheapMotion = isLowEndDevice();
+
     const tl = gsap.timeline({ defaults: { ease: "none" } });
 
     // NOTE — the H1-split / peripheral / mobile-figure scrub fades are NOT
@@ -243,19 +251,18 @@ export function initHeroTransition(): void {
     //
     // The math forces LINEAR ease on both Y tweens :
     //   - Image moves via translateY only (one source of motion)
-    //   - About moves via translateY (50vh, eased) + natural scroll
-    //     (45vh, ALWAYS linear since scroll position is linear with p)
+    //   - About moves via translateY (32vh, eased) + natural scroll
+    //     (63vh = 0.45·140vh pin, ALWAYS linear since scroll is linear with p)
     //
     // With matching expo.inOut on translateY, About's combined motion
-    // is mixed-curve (eased + linear) while image's is pure-eased. At
-    // p=0.7, expo.inOut(0.7) ≈ 0.97 → image moves 97vh while About moves
-    // only 48.5+31.5 = 80vh. The 17vh gap exposes the cream.
+    // is mixed-curve (eased + linear) while image's is pure-eased — they
+    // drift apart mid-departure and a gap exposes the cream.
     //
     // Fix : linear ease on BOTH translateY tweens. Both rise 95vh total
-    // (image translate 95vh = About translate 50vh + scroll 45vh). Image
+    // (image translate 95vh = About translate 32vh + scroll 63vh). Image
     // bottom and About top move at IDENTICAL rate, separated by a
-    // constant 12.5vh overlap (image extends below About top, About z-60
-    // paints over).
+    // constant overlap (image extends below About top, About z-60 paints
+    // over).
     //
     // Blur stays on `expo.inOut` (modern smooth-fast-smooth feel) — split
     // into its own tween since it has no spatial sync constraint.
@@ -268,19 +275,24 @@ export function initHeroTransition(): void {
       },
       0.55
     );
-    tl.to(
-      transitionImg,
-      {
-        // 8px (was 24px): the departure blur is repainted every scrub frame on
-        // a fixed full-viewport image — repaint cost scales with radius×area,
-        // so this is the single most expensive frame on the site. 8px still
-        // reads as a motion-blur on the lifting photo at ~1/3 the cost.
-        filter: "blur(8px)",
-        duration: 0.45,
-        ease: "expo.inOut",
-      },
-      0.55
-    );
+    if (!cheapMotion) {
+      // Blur RAMPS quickly (0.55 → 0.65) to a constant 5px, then HOLDS at that
+      // radius for the rest of the rise. Animating the blur RADIUS re-rasterizes a
+      // full-viewport gaussian EVERY frame — the dominant cost of this transition,
+      // and it bites even on a capable Retina Mac (DPR 2, where cheapMotion is
+      // false). Holding the radius constant lets the compositor cache the blurred
+      // bitmap and just translate it on the GPU, so only the short ramp (~10% of
+      // the departure) pays the raster cost — not the whole 0.55→1.0 rise. 5px
+      // (was 8px, ramped over the full 0.45) is cheaper and still reads as a
+      // motion-blur on the lifting photo. GSAP holds the end value after the tween
+      // completes (no later blur tween touches it), so the radius stays 5px through
+      // the rest of the rise and reverses correctly on scroll-back.
+      tl.to(
+        transitionImg,
+        { filter: "blur(5px)", duration: 0.10, ease: "power2.out" },
+        0.55
+      );
+    }
 
     const aboutWrapper = document.querySelector<HTMLElement>(
       "[data-about-wrapper]"
@@ -288,7 +300,14 @@ export function initHeroTransition(): void {
     if (aboutWrapper) {
       tl.fromTo(
         aboutWrapper,
-        { y: () => window.innerHeight * 0.5 },
+        // A0 = 0.32 (was 0.50). About's total rise over the departure is
+        // 0.45·P (natural scroll, P = pin distance) + A0 (this translate). With
+        // the runway now 140vh, natural scroll alone covers 0.45·140 = 63vh, so
+        // A0 drops to 95−63 = 32vh to keep image-bottom glued to About-top and
+        // About just off-screen (~95vh) at departure start. The image rise stays
+        // 95vh (unchanged below). Verify the seam frame-by-frame; nudge A0 if a
+        // cream sliver appears.
+        { y: () => window.innerHeight * 0.32 },
         {
           y: 0,
           duration: 0.45,
@@ -301,10 +320,20 @@ export function initHeroTransition(): void {
     ScrollTrigger.create({
       trigger: pinTrigger,
       start: "top top",
-      end: "+=100%",
+      // +=140% (was +=100%): stretch the whole reveal+settle+departure over 40%
+      // more scroll so each wheel notch / fling advances a smaller slice of the
+      // timeline — fewer big per-frame deltas (smoother) and the user can't
+      // "skip" the cinematic moment as easily (guidage). The pin element is
+      // min-h-[140dvh] to match: pin distance = element height = About's DOM
+      // offset, which the glue math (departure block) depends on.
+      end: "+=140%",
       pin: true,
       pinSpacing: false,
-      scrub: 1,
+      // 1.5 (was 1): the timeline glides toward the scroll position over a longer
+      // catch-up, so a violent scroll is absorbed into a smooth slide instead of a
+      // jump. Doesn't touch the glue (it changes catch-up timing, not the relative
+      // rates of the two linear Y tweens).
+      scrub: 1.5,
       invalidateOnRefresh: true,
       anticipatePin: 1,
       animation: tl,

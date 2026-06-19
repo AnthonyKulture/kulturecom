@@ -15,3 +15,15 @@ export const prefersReducedMotion = (): boolean =>
 /** True on the mobile layout (< 640px), matching Tailwind's `sm` breakpoint. */
 export const isMobileViewport = (): boolean =>
   window.matchMedia("(max-width: 639px)").matches;
+
+/**
+ * Coarse "can't afford a per-frame blur()" check. Animating `filter: blur()`
+ * on a fixed full-viewport image every scrub frame is the heaviest paint on the
+ * page; on small viewports, high-DPR panels (the blur is recomputed at device
+ * pixels), or low-core CPUs it drops frames. Used to skip those blur tweens
+ * (the spatial choreography is untouched — blur is purely cosmetic).
+ */
+export const isLowEndDevice = (): boolean =>
+  isMobileViewport() ||
+  window.devicePixelRatio > 2 ||
+  (navigator.hardwareConcurrency ?? 8) <= 4;

@@ -29,15 +29,17 @@ const { lang, altLang, altLangPath } = Astro.props;
         rises off-screen + blurs while About wipes up in lockstep — a single
         fused arc, no separate sections. The transition image is
         fixed-positioned and floats above the Hero. */}
-    {/* `min-h-[100dvh]` on the PIN element (not the Hero <section> inside it)
+    {/* `min-h-[140dvh]` on the PIN element (not the Hero <section> inside it)
         keeps the pin/seam geometry locked to the live viewport: data-hero-pin
-        height = dvh = innerHeight = the pin distance (`end:"+=100%"`), so
-        About's DOM offset always equals the pin distance — no seam gap when the
-        mobile URL bar collapses. The Hero <section> is `min-h-[100svh]`
+        height = 1.4·innerHeight = the pin distance (`end:"+=140%"`), so About's
+        DOM offset always equals the pin distance — no seam gap when the mobile
+        URL bar collapses. The runway is +40% (was 100dvh / `+=100%`) so the
+        hero→image→services transition spans more scroll: smoother per frame and
+        harder to "skip" on a fast scroll. The Hero <section> is `min-h-[100svh]`
         (stable), so the centered H1 does NOT re-center downward when dvh grows:
         the extra height is added BELOW the svh hero (cream, covered during the
         transition) instead of dropping the title a few px on arrival. */}
-    <div data-hero-pin class="relative min-h-[100dvh]">
+    <div data-hero-pin class="relative min-h-[140dvh]">
       <Hero lang={lang} />
       {/* Departure backdrop — opaque ink layer BEHIND the transition image
           (z-20, between the hero text z-10 and the image z-30). Faded 0→1 by
@@ -63,7 +65,7 @@ const { lang, altLang, altLangPath } = Astro.props;
         decoding="async"
         fetchpriority="low"
         class="pointer-events-none fixed inset-0 z-30 h-full w-full object-cover"
-        style="will-change: transform, clip-path; clip-path: inset(50% 0 50% 0);"
+        style="will-change: transform, clip-path; clip-path: inset(50% 0 50% 0); contain: paint;"
       />
     </div>
 

@@ -38,16 +38,21 @@ export function initSmoothScroll(): void {
   // the finger (capping per-frame travel and stretching the fling over a longer,
   // controlled duration), so the timelines + gates stay synced to what's on screen.
   // Tuned CONSERVATIVE to stay close to the native feel (syncTouchLerp ≈ the wheel
-  // lerp; touchMultiplier 1 = natural sensitivity) — this is the "plafonner la
-  // vélocité" choice, not heavy glide. Knobs if a fling still feels too fast on a
-  // real device: lower `touchMultiplier` (~0.85) or raise the pinned `scrub`.
+  // lerp) — this is the "plafonner la vélocité" choice, not heavy glide. The wheel +
+  // touch multipliers sit at 0.9 ("modéré"): one notch / one fling injects ~10% less
+  // travel, so a violent gesture can't shove a giant progress delta through the
+  // pinned hero scrub (the saccade). Lower them further (~0.85/0.8) for stronger
+  // guidance, or raise the pinned `scrub` — both reduce per-frame deltas, don't
+  // over-apply both. `lerp`/`syncTouchLerp` left at 0.1 (they affect the whole-site
+  // feel); only tighten those if 0.9 isn't enough.
   // NB: costs some INP (touch goes through JS) — measured; revert `syncTouch:false`
   // if it regresses. Under prefers-reduced-motion Lenis is never created (native).
   const lenis = new Lenis({
     lerp: 0.1,
+    wheelMultiplier: 0.9,
     syncTouch: true,
     syncTouchLerp: 0.1,
-    touchMultiplier: 1,
+    touchMultiplier: 0.9,
   });
   // Expose the instance: about-scroll.ts routes the "clic" CTA + #contact links
   // through `window.__lenis.scrollTo` (and falls back to native scroll if absent).

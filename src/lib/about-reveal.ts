@@ -127,8 +127,11 @@ export function initAboutReveal(): void {
     // The words themselves animate opacity + translate only (cheap, GPU-
     // composited). The words' own opacity:0 (CSS) hides them until the cascade,
     // so there's no FOUC despite the block starting un-blurred in markup.
-    if (titleEl) gsap.set(titleEl, { filter: "blur(8px)" });
-    if (bodyEl) gsap.set(bodyEl, { filter: "blur(6px)" });
+    // Radii kept modest (5px / 4px, was 8px / 6px): the IN sharpen and OUT
+    // re-blur ramp the radius every scrub frame, so a smaller gaussian is cheaper
+    // to re-rasterize — still reads as a clean "sharpens into focus" pull.
+    if (titleEl) gsap.set(titleEl, { filter: "blur(5px)" });
+    if (bodyEl) gsap.set(bodyEl, { filter: "blur(4px)" });
 
     // The intro (statement 0) starts revealing at 0.72 viewport of scroll —
     // DURING the
@@ -156,18 +159,24 @@ export function initAboutReveal(): void {
     // viewport (big black gap below). docTop() restores the true `top bottom`
     // → `bottom top` IN-PEAK-OUT bell-curve, so the block is sharp when it sits
     // at viewport CENTER.
+    // Chapter 0 uses ABSOLUTE-pixel starts calibrated to the hero pin release
+    // (now at 1.4·innerHeight, since the pin runway is +=140% — see
+    // hero-transition.ts). Shifted +0.40·innerHeight from the old 0.72/2.0
+    // (which were tuned for a 100vh pin) so ch0 still begins revealing ~0.28·vh
+    // before release and holds the same 1.28·vh window. Chapters 1-4 use
+    // docTop() (offsetTop) and auto-track the taller pin — no change needed.
     const triggerStart =
       idx === 0
-        ? () => window.innerHeight * 0.72
+        ? () => window.innerHeight * 1.12
         : () => docTop(section) - window.innerHeight;
     const triggerEnd =
       idx === 0
-        ? () => window.innerHeight * 2
+        ? () => window.innerHeight * 2.4
         : () => docTop(section) + section.offsetHeight;
 
-    // Chapter 0 has half the trigger range of other chapters (its reveal
-    // spans the single 100vh window from pin-release [innerHeight] to
-    // scroll-out [2*innerHeight], vs the 200vh top-bottom→bottom-top range
+    // Chapter 0 has a shorter trigger range than other chapters (its reveal
+    // spans the ~1.28·vh window from just before pin-release [1.12·vh] to
+    // scroll-out [2.4·vh], vs the 200vh top-bottom→bottom-top range
     // of chapters 1-4). It uses the same parallax magnitude as the others
     // (mult 1). A previous 2x value sat the content very low to leave a big
     // dark band above it, but that read as "trop de vide" under the rising
@@ -353,7 +362,7 @@ export function initAboutReveal(): void {
     if (titleEl) {
       tl.to(
         titleEl,
-        { filter: "blur(8px)", duration: 0.15, ease: "power2.in" },
+        { filter: "blur(5px)", duration: 0.15, ease: "power2.in" },
         outTitle
       );
     }
@@ -380,7 +389,7 @@ export function initAboutReveal(): void {
     if (bodyEl) {
       tl.to(
         bodyEl,
-        { filter: "blur(6px)", duration: 0.10, ease: "power2.in" },
+        { filter: "blur(4px)", duration: 0.10, ease: "power2.in" },
         outBody
       );
     }
