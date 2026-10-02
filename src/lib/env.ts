@@ -4,7 +4,7 @@
  * mobile-breakpoint strings live in exactly one place.
  *
  * NB: the cinematic stage uses a different `(max-width: 767px)` threshold and
- * ServicesTrail/Nav attach `(min-width: 640px)` change-listeners — those are
+ * the hero image trail/Nav track `(min-width: 640px)` live — those are
  * intentionally NOT funneled through here (different semantics).
  */
 
