@@ -76,7 +76,7 @@ export function initAboutScroll(): void {
   // PARALLAX vertically: it travels from the top of the photo toward the bottom "au rythme du
   // scroll" as the message is read. The image is h-[200%], so a big yPercent drift shows no edge.
   const promessePhoto = document.querySelector<HTMLElement>("[data-promesse-photo]");
-  const promessePhotoImg = document.querySelector<HTMLElement>("[data-promesse-photo-img]");
+  const promessePhotoImg = document.querySelector<HTMLImageElement>("[data-promesse-photo-img]");
 
   const reduced = prefersReducedMotion();
   const isMobile = isMobileViewport();
@@ -89,6 +89,10 @@ export function initAboutScroll(): void {
     if (ctaLayer) ctaLayer.style.clipPath = "circle(150% at 100% 100%)";
     return;
   }
+
+  // Decode the photo ahead of time (off the main thread): it is first painted when the cylinder
+  // starts cross-dissolving into it, mid-scroll — an on-demand decode there stalled ~200 ms.
+  promessePhotoImg?.decode().catch(() => {});
 
   // Initial states — text hidden (writes in once the stack pins); photo at the TOP of its travel;
   // circle closed.

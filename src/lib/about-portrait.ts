@@ -30,6 +30,10 @@ export function initAboutPortrait(): void {
   // AboutPortrait.astro); skip all of its scroll wiring on small screens.
   if (isMobileViewport()) return;
 
+  // Decode it ahead of time (off the main thread): it is first painted as it fades in at the
+  // hero pin release, mid-scroll — an on-demand decode there stalls that frame.
+  portrait.querySelector("img")?.decode().catch(() => {});
+
   const sections = Array.from(
     document.querySelectorAll<HTMLElement>("[data-about-chapter-section]")
   );

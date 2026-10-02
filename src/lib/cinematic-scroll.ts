@@ -10,10 +10,10 @@
  *    pin:true) for a fixed scrub distance and the canvas is `position:absolute`
  *    inside it — so the WebGL only ever covers the viewport WHILE this section is on
  *    screen, never the whole page.
- *  - WebGL boots LAZILY (IntersectionObserver, one viewport early) and the rAF render
- *    loop is GATED to the section's visibility + tab focus, so the GPU is idle
- *    everywhere else on the page (this site deliberately lazy-loads and keeps mobile
- *    touch native for INP — same budget discipline).
+ *  - WebGL boots in idle time once the hero has arrived (IntersectionObserver, one
+ *    viewport early, as the fallback) and the rAF render loop is GATED to the section's
+ *    visibility + tab focus — and skips the draw when nothing moved — so the GPU is idle
+ *    everywhere else on the page.
  *
  * Effect: 12 project images are drawn side-by-side into one canvas atlas, uploaded as
  * a single texture wrapped around a cylinder. A scrubbed GSAP timeline flies the
@@ -129,24 +129,24 @@ const particleFragment = /* glsl */ `
 /** Draw an image with object-fit: cover behaviour into a sub-rect of a 2D canvas. */
 function drawImageCover(
   ctx: CanvasRenderingContext2D,
-  img: HTMLImageElement,
+  img: ImageBitmap,
   x: number,
   y: number,
   w: number,
   h: number
 ): void {
-  const imgRatio = img.naturalWidth / img.naturalHeight;
+  const imgRatio = img.width / img.height;
   const canvasRatio = w / h;
   let sourceX = 0;
   let sourceY = 0;
-  let sourceWidth = img.naturalWidth;
-  let sourceHeight = img.naturalHeight;
+  let sourceWidth = img.width;
+  let sourceHeight = img.height;
   if (imgRatio > canvasRatio) {
-    sourceWidth = img.naturalHeight * canvasRatio;
-    sourceX = (img.naturalWidth - sourceWidth) / 2;
+    sourceWidth = img.height * canvasRatio;
+    sourceX = (img.width - sourceWidth) / 2;
   } else {
-    sourceHeight = img.naturalWidth / canvasRatio;
-    sourceY = (img.naturalHeight - sourceHeight) / 2;
+    sourceHeight = img.width / canvasRatio;
+    sourceY = (img.height - sourceHeight) / 2;
   }
   // Flip vertically so the texture maps right-side up on the cylinder UVs.
   ctx.save();
@@ -285,6 +285,8 @@ export function initCinematicScroll(): void {
   let inRange = false;
   let rafId = 0;
   let renderFrame: (() => void) | null = null;
+  // renderFrame skips the draw when nothing moved; set this to force the next one.
+  let forceDraw = true;
   // The scrubbed timeline's eased playhead has caught up to an end of its range.
   // (`tl` is defined below; the loop only ever runs after that, so this is safe.)
   const scrubSettled = (): boolean => {
@@ -445,6 +447,7 @@ export function initCinematicScroll(): void {
       if (inRange) {
         // Entering → show the stage + render.
         setStageVisible(true);
+        forceDraw = true;
         startLoop();
       } else if (!renderFrame) {
         // Leaving with NO WebGL loop (fallback / not yet booted) → nothing to settle,
@@ -460,23 +463,37 @@ export function initCinematicScroll(): void {
     },
   });
 
-  // Lazy WebGL boot — one viewport early so the atlas is ready by the time it shows.
+  // WebGL boot. Context creation + shader compile + atlas are main-thread work that used to
+  // land mid-scroll (one viewport early = right as the hero pin releases) and froze the page.
+  // So boot while the visitor reads the hero (idle time after its arrival cascade); the
+  // IntersectionObserver, one viewport early, stays as the fallback for fast scrollers.
   let booted = false;
+  const startBoot = (): void => {
+    if (booted) return;
+    booted = true;
+    io.disconnect();
+    try {
+      boot();
+    } catch (err) {
+      console.error("Cinematic: WebGL boot failed, showing fallback.", err);
+      showFallback();
+    }
+  };
   const io = new IntersectionObserver(
     (entries) => {
-      if (booted || !entries.some((e) => e.isIntersecting)) return;
-      booted = true;
-      io.disconnect();
-      try {
-        boot();
-      } catch (err) {
-        console.error("Cinematic: WebGL boot failed, showing fallback.", err);
-        showFallback();
-      }
+      if (entries.some((e) => e.isIntersecting)) startBoot();
     },
     { rootMargin: "100% 0px" }
   );
   io.observe(spacer);
+  document.addEventListener(
+    "hero:revealed",
+    () => {
+      if ("requestIdleCallback" in window) requestIdleCallback(startBoot, { timeout: 2000 });
+      else setTimeout(startBoot, 200);
+    },
+    { once: true }
+  );
 
   function boot(): void {
     const cylinderConfig = {
@@ -497,13 +514,16 @@ export function initCinematicScroll(): void {
     };
     const dimensions = getResponsiveDimensions();
 
+    const dpr = Math.min(window.devicePixelRatio, 2);
     const renderer = new Renderer({
       canvas: canvas as HTMLCanvasElement,
       width: window.innerWidth,
       height: window.innerHeight,
-      dpr: Math.min(window.devicePixelRatio, 2),
+      dpr,
       alpha: true,
-      antialias: true,
+      // MSAA only below DPR 2. On Retina the jaggies are half a CSS pixel (invisible), but 4×
+      // multisampling this full-viewport canvas saturated an Intel iGPU: 39 → 59 fps without it.
+      antialias: dpr < 2,
     });
     const gl = renderer.gl;
     // Match the site's near-black (#0b0b0b) used by the dark About sections, rather
@@ -563,31 +583,34 @@ export function initCinematicScroll(): void {
     const textureAspectRatio = imageConfig.height / (imageConfig.width * numImages);
     const heightCorrection = (circumference * textureAspectRatio) / cylinderConfig.height;
 
-    const imageElements: (HTMLImageElement | null)[] = new Array(numImages).fill(null);
     let settled = 0;
     const onSettle = (): void => {
       settled++;
-      if (settled !== numImages) return;
-      // Draw whatever loaded; any failed cell stays black rather than blanking all.
-      imageElements.forEach((img, i) => {
-        if (!img) return;
-        const xPos = Math.floor((i / numImages) * atlas.width);
-        const xEnd = Math.floor(((i + 1) / numImages) * atlas.width);
-        drawImageCover(ctx, img, xPos, 0, xEnd - xPos, atlas.height);
-      });
-      buildScene();
+      if (settled === numImages) buildScene();
     };
-    IMAGES.forEach((src, index) => {
-      const img = new Image();
-      img.onload = () => {
-        imageElements[index] = img;
-        onSettle();
-      };
-      img.onerror = () => {
-        console.error("Cinematic: image failed to load:", src);
-        onSettle();
-      };
-      img.src = src;
+    // fetch + createImageBitmap decodes OFF the main thread. Drawing plain <img>s here forced a
+    // synchronous decode of all 12 images in a single task (~0.6 s on an Intel iGPU Mac) that
+    // froze the scroll. Each cell is drawn as soon as its own bitmap is ready, so the remaining
+    // (cheap) draws are spread out. A failed cell stays black rather than blanking all.
+    // When the cells are smaller than the design size (mobile: ~170 px), the decoder also
+    // downscales each image to the cell height, so the GPU isn't fed tens of MB of full-size
+    // bitmaps for tiny cells (that upload blocked the main thread ~0.2 s on a mid-range phone).
+    const decodeOptions: ImageBitmapOptions | undefined =
+      atlas.height < imageConfig.height
+        ? { resizeHeight: atlas.height, resizeQuality: "high" }
+        : undefined;
+    IMAGES.forEach((src, i) => {
+      fetch(src)
+        .then((res) => res.blob())
+        .then((blob) => createImageBitmap(blob, decodeOptions))
+        .then((bitmap) => {
+          const xPos = Math.floor((i / numImages) * atlas.width);
+          const xEnd = Math.floor(((i + 1) / numImages) * atlas.width);
+          drawImageCover(ctx, bitmap, xPos, 0, xEnd - xPos, atlas.height);
+          bitmap.close();
+        })
+        .catch(() => console.error("Cinematic: image failed to load:", src))
+        .finally(onSettle);
     });
 
     let lastWidth = window.innerWidth;
@@ -617,6 +640,15 @@ export function initCinematicScroll(): void {
       cylinder.scale.set(dimensions.cylinderScale, dimensions.cylinderScale, dimensions.cylinderScale);
 
       // --- Velocity-reactive line particles. ---
+      // ONE program for all lines: their opacity is always identical (same target, same lerp
+      // from 0), so sharing it saves 11 shader compiles at boot.
+      const lineProgram = new Program(gl, {
+        vertex: particleVertex,
+        fragment: particleFragment,
+        uniforms: { uColor: { value: [1, 1, 1] }, uOpacity: { value: 0 } },
+        transparent: true,
+        depthTest: true,
+      });
       for (let i = 0; i < particleConfig.numParticles; i++) {
         const { geometry: lineGeometry, userData } = createParticleGeometry(
           gl,
@@ -624,13 +656,6 @@ export function initCinematicScroll(): void {
           i,
           cylinderConfig.height
         );
-        const lineProgram = new Program(gl, {
-          vertex: particleVertex,
-          fragment: particleFragment,
-          uniforms: { uColor: { value: [1, 1, 1] }, uOpacity: { value: 0 } },
-          transparent: true,
-          depthTest: true,
-        });
         const particle = new Mesh(gl, {
           geometry: lineGeometry,
           program: lineProgram,
@@ -643,6 +668,7 @@ export function initCinematicScroll(): void {
 
       // --- The render frame (gated by `inRange` + settle-then-park via the loop above). ---
       let lastRotation = rotationAnim.y;
+      let lastDrawn = "";
       renderFrame = () => {
         camera.position.set(cameraAnim.x, cameraAnim.y, cameraAnim.z);
         camera.lookAt([0, 0, 0]);
@@ -657,12 +683,11 @@ export function initCinematicScroll(): void {
         // Fade the line particles out as the cover dim ramps in (darknessAnim 0.3 → 0.5
         // over the cover window), so no faint motion lines linger above the rising feather.
         const particleFade = Math.max(0, 1 - (darknessAnim.v - 0.3) / 0.2);
+        const targetOpacity = (isRotating ? Math.min(speed * 3, 0.95) : 0) * particleFade;
+        const opacity = lineProgram.uniforms.uOpacity;
+        opacity.value += (targetOpacity - opacity.value) * 0.15;
         particles.forEach((particle) => {
           const ud = particle.userData;
-          const targetOpacity =
-            (isRotating ? Math.min(speed * 3, 0.95) : 0) * particleFade;
-          const cur = particle.program.uniforms.uOpacity.value as number;
-          particle.program.uniforms.uOpacity.value = cur + (targetOpacity - cur) * 0.15;
           if (!isRotating) return;
           ud.baseAngle += velocity * ud.speed * 1.5;
           const segments = particleConfig.segments;
@@ -677,8 +702,20 @@ export function initCinematicScroll(): void {
           particle.geometry.attributes.position.needsUpdate = true;
         });
 
+        // Draw only when something visible changed: once the scrub settles (scroll idle) the
+        // frame is static, so the canvas keeps its last frame and the GPU stays idle.
+        const state = `${cameraAnim.x} ${cameraAnim.y} ${cameraAnim.z} ${rotationAnim.y} ${darknessAnim.v} ${opacity.value.toFixed(3)}`;
+        if (!forceDraw && state === lastDrawn) return;
+        forceDraw = false;
+        lastDrawn = state;
         renderer.render({ scene, camera });
       };
+
+      // Pre-warm while the stage is still hidden: this first draw uploads the atlas texture and
+      // links the shaders now (at boot) rather than on the first visible frame, mid-scroll.
+      // The texture then lives on the GPU, so the 2D atlas copy (~50 MB on desktop) is dropped.
+      renderFrame();
+      atlas.width = atlas.height = 0;
 
       window.addEventListener("resize", handleResize);
 
@@ -705,6 +742,7 @@ export function initCinematicScroll(): void {
 
       renderer.setSize(currentWidth, window.innerHeight);
       camera.perspective({ fov: dims.fov, aspect: currentWidth / window.innerHeight });
+      forceDraw = true; // resizing cleared the drawing buffer
       if (!cylinder) return;
       if (dims.mobile) {
         cylinder.scale.set(dims.cylinderScale, dims.cylinderScale * heightCorrection, dims.cylinderScale);

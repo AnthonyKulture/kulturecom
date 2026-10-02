@@ -87,7 +87,7 @@ export function initHeroTransition(): void {
   if (typeof window === "undefined") return;
 
   const pinTrigger = document.querySelector<HTMLElement>("[data-hero-pin]");
-  const transitionImg = document.querySelector<HTMLElement>(
+  const transitionImg = document.querySelector<HTMLImageElement>(
     "[data-hero-transition-image]"
   );
   // Opaque ink layer behind the image; fades in just before the image lifts
@@ -102,6 +102,10 @@ export function initHeroTransition(): void {
     transitionImg.style.display = "none";
     return;
   }
+
+  // Decode the full-screen photo ahead of time (off the main thread): it is first painted as
+  // the clip opens, on the very first scroll — an on-demand decode there stalls that frame.
+  transitionImg.decode().catch(() => {});
 
   // Top H1 lines (1-3): pushed UP during phase 1.
   const topLines = Array.from(
@@ -385,7 +389,12 @@ export function initHeroTransition(): void {
       }
       // The fades were inserted at position 0 of a live, ScrollTrigger-driven
       // timeline — refresh so it re-renders at the current scroll progress.
-      ScrollTrigger.refresh();
+      // At scroll 0 (the usual case: the cascade ends before any scroll) the
+      // fromTo's immediate render already shows that state, so skip the
+      // page-wide refresh — a forced re-measure of every trigger (~60 ms on
+      // desktop, ~300 ms on a mid-range phone) right as the visitor starts to
+      // scroll.
+      if (window.scrollY > 0) ScrollTrigger.refresh();
     };
 
     // hero.ts fires this once its arrival cascade finishes. Fallback timeout in

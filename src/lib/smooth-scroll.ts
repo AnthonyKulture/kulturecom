@@ -47,6 +47,8 @@ export function initSmoothScroll(): void {
   // feel); only tighten those if 0.9 isn't enough.
   // NB: costs some INP (touch goes through JS) — measured; revert `syncTouch:false`
   // if it regresses. Under prefers-reduced-motion Lenis is never created (native).
+  // Re-tested Oct 2026 (after the main-thread perf pass): native touch still brings
+  // back the cream flash at the hero pin release on fast flings — keep it on.
   const lenis = new Lenis({
     lerp: 0.1,
     wheelMultiplier: 0.9,
