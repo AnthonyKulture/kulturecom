@@ -254,10 +254,11 @@ const jsonLd = { "@context": "https://schema.org", "@graph": graph };
       })();
     </script>
 
-    <!-- Favicons + brand theme color -->
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <!-- Favicons + brand theme color. `?v=` busts the 1-year immutable cache
+         set on *.svg / *.png in public/_headers — bump it when the icons change. -->
+    <link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png?v=2" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" />
     <meta name="theme-color" content="#efe9dc" />
 
     <!-- Google Analytics 4 -->

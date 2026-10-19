@@ -28,8 +28,7 @@ const behanceUrl = "https://www.behance.net/anthonyprofit";
 const wrapLettersShuffled = (
   s: string,
   baseMs: number = 0,
-  stepMs: number = 70,
-  accentChars: Set<string> = new Set()
+  stepMs: number = 70
 ): string => {
   const chars = Array.from(s);
   const delays = chars.map((_, i) => baseMs + i * stepMs);
@@ -40,12 +39,8 @@ const wrapLettersShuffled = (
   }
   return chars
     .map((c, i) => {
-      const isAccent = accentChars.has(c);
-      const innerClass = isAccent
-        ? "footer-letter-inner text-[var(--color-accent)]"
-        : "footer-letter-inner";
       const ch = c === " " ? "&nbsp;" : c;
-      return `<span class="footer-letter-mask"><span class="${innerClass}" style="transition-delay:${delays[i]}ms">${ch}</span></span>`;
+      return `<span class="footer-letter-mask"><span class="footer-letter-inner" style="transition-delay:${delays[i]}ms">${ch}</span></span>`;
     })
     .join("");
 };
@@ -53,10 +48,8 @@ const wrapLettersShuffled = (
 // First name letters cascade across ~0.5s (7 letters × 70ms ≈ 490ms span,
 // each with a 0.6s ease) = total ~1.1s for the whole word.
 const firstNameHtml = wrapLettersShuffled("Anthony", 0, 70);
-// Last name + period start AFTER the first name is mostly done. The dot
-// uses the accent color and is glued to the last letter (no space, same
-// flex item via the whitespace-nowrap parent span).
-const lastNameHtml = wrapLettersShuffled("PROFIT.", 500, 60, new Set(["."]));
+// Last name starts AFTER the first name is mostly done.
+const lastNameHtml = wrapLettersShuffled("PROFIT", 500, 60);
 
 const currentYear = "2026";
 const navLabels = lang === "en"
