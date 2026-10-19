@@ -4,5 +4,5 @@
   <text x="80" y="320" font-family="Archivo Black, sans-serif" font-size="120" font-weight="900" fill="#0b0b0b" letter-spacing="-5">FREELANCE</text>
   <text x="80" y="440" font-family="Archivo Black, sans-serif" font-size="120" font-weight="900" fill="#0b0b0b" letter-spacing="-5">WEB · SEO · BRAND</text>
   <text x="80" y="570" font-family="monospace" font-size="22" fill="#5a5a5a" letter-spacing="3">DISPONIBLE — RÉSERVATIONS Q4 2026</text>
-  <line x1="80" y1="150" x2="180" y2="150" stroke="#c14a1d" stroke-width="3"/>
+  <line x1="80" y1="150" x2="180" y2="150" stroke="#74714f" stroke-width="3"/>
 </svg>
