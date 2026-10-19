@@ -1,0 +1,12 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import Nav from "~/components/Nav.astro";
+import ServicePage from "~/components/ServicePage.astro";
+
+const lang = "fr" as const;
+---
+
+<BaseLayout lang={lang} pathname="/outils-applications-ia/" altPath="/en/apps-ai-tools/">
+  <Nav lang={lang} altLang="en" altLangPath="/en/apps-ai-tools/" />
+  <ServicePage lang={lang} id="apps" />
+</BaseLayout>

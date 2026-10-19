@@ -103,9 +103,9 @@ export const routes: Record<string, RouteMeta> = {
     alt: "/en/services/",
     crumb: "Services",
     pageType: "WebPage",
-    title: `Services — web, SEO & brand design | Anthony Profit`,
+    title: `Services — web, apps & IA, SEO & brand | Anthony Profit`,
     description:
-      "Trois services, un seul interlocuteur : création de site internet sur-mesure, SEO & GEO, et identité de marque. Sur la Côte d'Azur, pour la France et l'international.",
+      "Quatre services, un seul interlocuteur : site sur-mesure, outils, apps & IA, SEO & GEO (dont ChatGPT Ads) et identité de marque. Côte d'Azur, France et international.",
   },
   "/creation-site-internet/": {
     lang: "fr",
@@ -119,9 +119,9 @@ export const routes: Record<string, RouteMeta> = {
     lang: "fr",
     alt: "/en/seo-geo/",
     crumb: "SEO & GEO",
-    title: `SEO & GEO : référencement Google et IA | Anthony Profit`,
+    title: `SEO, GEO & ChatGPT Ads : Google et IA | Anthony Profit`,
     description:
-      "Référencement technique SEO et GEO près de Nice : audit, Core Web Vitals, Schema.org, llms.txt. Être trouvé sur Google et cité par ChatGPT, Perplexity et les AI Overviews.",
+      "SEO et GEO près de Nice : audit technique, Schema.org, llms.txt et campagnes ChatGPT Ads. Être trouvé sur Google et cité par ChatGPT, Perplexity et les AI Overviews.",
   },
   "/identite-de-marque/": {
     lang: "fr",
@@ -130,6 +130,14 @@ export const routes: Record<string, RouteMeta> = {
     title: `Identité de marque & direction artistique | Anthony Profit`,
     description:
       "Création d'identité de marque sur la Côte d'Azur : logo, brand system, typographie et déclinaisons web, print et social. Une image cohérente qui rend votre marque crédible.",
+  },
+  "/outils-applications-ia/": {
+    lang: "fr",
+    alt: "/en/apps-ai-tools/",
+    crumb: "Outils, apps & IA",
+    title: `Outils, applications & IA sur-mesure à Nice | Anthony Profit`,
+    description:
+      "Outils métier, applications web et mobiles et IA intégrée (Claude, OpenAI) près de Nice. Automatisations et API pour gagner du temps. Devis sur brief.",
   },
 
   // ---- FR · études de cas ----
@@ -246,9 +254,9 @@ export const routes: Record<string, RouteMeta> = {
     alt: "/services/",
     crumb: "Services",
     pageType: "WebPage",
-    title: `Services — web, SEO & brand design | Anthony Profit`,
+    title: `Services — web, apps & AI, SEO & brand | Anthony Profit`,
     description:
-      "Three services, one point of contact: custom web development, SEO & GEO, and brand identity. On the French Riviera, for France and internationally.",
+      "Four services, one point of contact: custom websites, tools, apps & AI, SEO & GEO (incl. ChatGPT Ads) and brand identity. French Riviera, France and international.",
   },
   "/en/web-development/": {
     lang: "en",
@@ -262,9 +270,9 @@ export const routes: Record<string, RouteMeta> = {
     lang: "en",
     alt: "/seo-geo/",
     crumb: "SEO & GEO",
-    title: `Technical SEO & GEO: rank on Google and AI | Anthony Profit`,
+    title: `SEO, GEO & ChatGPT Ads: rank on Google and AI | Anthony Profit`,
     description:
-      "Technical SEO and GEO near Nice: audit, Core Web Vitals, Schema.org, llms.txt. Get found on Google and cited by ChatGPT, Perplexity and AI Overviews.",
+      "SEO and GEO near Nice: technical audit, Schema.org, llms.txt and ChatGPT Ads campaigns. Get found on Google and cited by ChatGPT, Perplexity and AI Overviews.",
   },
   "/en/brand-design/": {
     lang: "en",
@@ -273,6 +281,14 @@ export const routes: Record<string, RouteMeta> = {
     title: `Brand identity & art direction | Anthony Profit`,
     description:
       "Brand identity design on the French Riviera: logo, brand system, typography and web/print/social applications. A coherent image that makes your brand credible.",
+  },
+  "/en/apps-ai-tools/": {
+    lang: "en",
+    alt: "/outils-applications-ia/",
+    crumb: "Tools, apps & AI",
+    title: `Custom tools, apps & AI development | Anthony Profit`,
+    description:
+      "Business tools, web and mobile apps and built-in AI (Claude, OpenAI) near Nice. Automations and API integrations that save your team time. Quoted on a brief.",
   },
 
   // ---- EN · case studies ----

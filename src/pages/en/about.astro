@@ -39,6 +39,19 @@ const stack = [
       "Schema.org + AI search readiness",
       "Content cluster + on-page",
       "GA4 + server-side tracking",
+      "ChatGPT Ads + conversion tracking",
+    ],
+  },
+  {
+    label: "04",
+    title: "Apps & AI",
+    href: "/en/apps-ai-tools/",
+    items: [
+      "Claude / OpenAI APIs (LLM, RAG)",
+      "Next.js, React, Node",
+      "Supabase / PostgreSQL",
+      "n8n, Make, Zapier",
+      "iOS / Android mobile apps",
     ],
   },
 ];
@@ -151,11 +164,11 @@ const refuse = [
             Stack
           </p>
           <h2 class="font-display text-[clamp(28px,5vw,72px)] uppercase leading-[0.95] tracking-[-0.04em] text-[var(--color-ink)]">
-            Three crafts, <br />aligned tools.
+            Four crafts, <br />aligned tools.
           </h2>
         </header>
 
-        <div class="grid gap-10 md:grid-cols-3 md:gap-12">
+        <div class="grid gap-10 md:grid-cols-2 md:gap-12 lg:grid-cols-4">
           {
             stack.map((s) => (
               <article class="border-t border-[var(--color-border)] pt-6">

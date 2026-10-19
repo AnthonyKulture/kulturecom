@@ -4,7 +4,11 @@
 // .mdx post: <ServiceCTA service="seo-geo" lang="fr" />.
 import type { Lang } from "~/i18n/ui";
 
-type ServiceId = "seo-geo" | "creation-site-internet" | "identite-de-marque";
+type ServiceId =
+  | "seo-geo"
+  | "creation-site-internet"
+  | "identite-de-marque"
+  | "outils-applications-ia";
 
 interface Props {
   service: ServiceId;
@@ -55,6 +59,18 @@ const SERVICES: Record<
       name: "Brand identity",
       href: "/en/brand-design/",
       lead: "A coherent image that makes your brand credible, online and beyond.",
+    },
+  },
+  "outils-applications-ia": {
+    fr: {
+      name: "Outils, apps & IA",
+      href: "/outils-applications-ia/",
+      lead: "Des outils métier, des apps et une IA branchée sur vos données pour en finir avec les tâches répétitives.",
+    },
+    en: {
+      name: "Tools, apps & AI",
+      href: "/en/apps-ai-tools/",
+      lead: "Business tools, apps and AI wired into your data, to get rid of repetitive tasks.",
     },
   },
 };

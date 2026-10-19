@@ -1,12 +1,13 @@
 # Anthony Profit — Kulturecom
 
-> Designer & développeur freelance sur la Côte d'Azur (Nice). Sites sur-mesure pensés pour être visibles sur Google comme dans les réponses des IA (ChatGPT, Perplexity, Google AI Overviews). Trois axes : design, expérience digitale, SEO + GEO. — Mis à jour : 2026-06-16.
+> Designer & développeur freelance sur la Côte d'Azur (Nice). Sites sur-mesure pensés pour être visibles sur Google comme dans les réponses des IA (ChatGPT, Perplexity, Google AI Overviews). Quatre axes : design, expérience digitale, outils/apps & IA, SEO + GEO (dont ChatGPT Ads). — Mis à jour : 2026-10-19.
 
 ## Services
 
 - **Design** — Direction artistique éditoriale, brand systems, design tokens. Identité conçue pour la marque, déclinable web/print/social. Pas de thème acheté, pas de template recyclé.
 - **Expérience digitale** — Astro, React, Lighthouse ≥ 95. Sites rapides, accessibles, performants. Core Web Vitals au vert.
-- **SEO + GEO** — Audit technique, content cluster, Schema.org, llms.txt. SEO classique pour Google + optimisation pour les moteurs génératifs : ChatGPT, Perplexity, Google AI Overviews.
+- **SEO + GEO** — Audit technique, content cluster, Schema.org, llms.txt. SEO classique pour Google + optimisation pour les moteurs génératifs : ChatGPT, Perplexity, Google AI Overviews. Campagnes ChatGPT Ads (annonces sponsorisées sous les réponses de ChatGPT, ouvertes en France depuis fin août 2026).
+- **Outils, apps & IA** — Outils métier, back-offices, portails clients, applications web et mobiles (iOS / Android). IA intégrée (API Claude / OpenAI : assistants sur documents, RAG, agents), automatisations et intégrations (n8n, Make, Zapier, API). Stack : Next.js · React · Node · Supabase / PostgreSQL.
 
 ## Cases
 
@@ -24,10 +25,11 @@
 
 ## Services (détail)
 
-- [Services](https://anthonyprofit.com/services/) — les trois offres, un seul interlocuteur
+- [Services](https://anthonyprofit.com/services/) — les quatre offres, un seul interlocuteur
 - [Création de site internet](https://anthonyprofit.com/creation-site-internet/) — développement sur-mesure Astro/React, performance, SEO natif
-- [SEO & GEO](https://anthonyprofit.com/seo-geo/) — référencement Google + visibilité dans les IA (ChatGPT, Perplexity, AI Overviews)
+- [SEO & GEO](https://anthonyprofit.com/seo-geo/) — référencement Google + visibilité dans les IA (ChatGPT, Perplexity, AI Overviews) + campagnes ChatGPT Ads
 - [Identité de marque](https://anthonyprofit.com/identite-de-marque/) — direction artistique, brand system, déclinaisons
+- [Outils, apps & IA](https://anthonyprofit.com/outils-applications-ia/) — outils métier, apps web et mobiles, IA intégrée, automatisations et intégrations
 
 ## Blog
 
@@ -44,13 +46,14 @@
 
 # Anthony Profit — Kulturecom (English)
 
-> Freelance designer & developer on the French Riviera. Custom websites built to be visible on Google and in AI answers (ChatGPT, Perplexity, Google AI Overviews). Three crafts: design, digital experience, SEO + GEO.
+> Freelance designer & developer on the French Riviera. Custom websites built to be visible on Google and in AI answers (ChatGPT, Perplexity, Google AI Overviews). Four crafts: design, digital experience, tools/apps & AI, SEO + GEO (incl. ChatGPT Ads).
 
 ## Services (EN)
 
 - **Design** — Editorial art direction, brand systems, design tokens. Identity crafted for the brand, usable across web/print/social. No bought theme, no recycled template.
 - **Digital experience** — Astro, React, Lighthouse ≥ 95. Fast, accessible, performant sites. Core Web Vitals all green.
-- **SEO + GEO** — Technical audit, content cluster, Schema.org, llms.txt. Classic SEO for Google + optimization for generative engines: ChatGPT, Perplexity, Google AI Overviews.
+- **SEO + GEO** — Technical audit, content cluster, Schema.org, llms.txt. Classic SEO for Google + optimization for generative engines: ChatGPT, Perplexity, Google AI Overviews. ChatGPT Ads campaigns (sponsored ads below ChatGPT answers, open in Europe since late August 2026).
+- **Tools, apps & AI** — Business tools, back-offices, client portals, web and mobile apps (iOS / Android). Built-in AI (Claude / OpenAI APIs: document assistants, RAG, agents), automations and integrations (n8n, Make, Zapier, APIs). Stack: Next.js · React · Node · Supabase / PostgreSQL.
 
 ## Cases (EN)
 
@@ -62,10 +65,11 @@
 
 ## Services detail (EN)
 
-- [Services](https://anthonyprofit.com/en/services/) — three offers, one point of contact
+- [Services](https://anthonyprofit.com/en/services/) — four offers, one point of contact
 - [Web development](https://anthonyprofit.com/en/web-development/) — custom Astro/React build, performance, native SEO
-- [SEO & GEO](https://anthonyprofit.com/en/seo-geo/) — Google ranking + visibility in AI engines (ChatGPT, Perplexity, AI Overviews)
+- [SEO & GEO](https://anthonyprofit.com/en/seo-geo/) — Google ranking + visibility in AI engines (ChatGPT, Perplexity, AI Overviews) + ChatGPT Ads campaigns
 - [Brand identity](https://anthonyprofit.com/en/brand-design/) — art direction, brand system, applications
+- [Tools, apps & AI](https://anthonyprofit.com/en/apps-ai-tools/) — business tools, web and mobile apps, built-in AI, automations and integrations
 
 ## Blog (EN)
 

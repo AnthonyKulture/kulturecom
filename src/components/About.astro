@@ -9,10 +9,10 @@ interface Props {
 const { lang } = Astro.props;
 const t = ui[lang];
 
-// About — three service teasers: Direction artistique & design / Développement
-// web sur-mesure / SEO & GEO technique. Each is a full-bleed text block in
+// About — four service teasers: Direction artistique & design / Développement
+// web sur-mesure / SEO & GEO technique / Outils, apps & IA. Each is a full-bleed text block in
 // normal flow that reveals on scroll (GSAP ScrollTrigger, `src/lib/about-reveal.ts`),
-// shown as a large serif-italic title prefixed by a mono index (01/02/03).
+// shown as a large serif-italic title prefixed by a mono index (01–04).
 // (`data-about-variant` still drives the styling; the personal intro block that
 // used the brutalist display treatment was removed.)
 //
@@ -28,6 +28,12 @@ const t = ui[lang];
 // stagger opacity/transform per word; the blur lives on the title/body
 // CONTAINER. `<em>` phrases become serif italic per word via the `--italic`
 // modifier. Service titles also carry a leading `.about-service-num` span.
+// Re-attach the spaces that surrounded a segment in the source string, so
+// punctuation right after an <em> phrase stays glued to it ("Google," not
+// "Google ,") while words on either side of the phrase keep their space.
+const withEdgeSpaces = (part: string, html: string): string =>
+  (/^\s/.test(part) ? " " : "") + html + (/\s$/.test(part) ? " " : "");
+
 const wrapWords = (s: string): string => {
   // Split on <em>…</em> tokens so emphasised words render in serif italic
   // (`--italic` modifier) while the rest follow the title's base font. On the
@@ -43,14 +49,17 @@ const wrapWords = (s: string): string => {
       const cls = emMatch
         ? "about-reveal-word about-reveal-word--italic"
         : "about-reveal-word";
-      return text
-        .split(/\s+/)
-        .filter(Boolean)
-        .map((w) => `<span class="${cls}">${w}</span>`)
-        .join(" ");
+      return withEdgeSpaces(
+        part,
+        text
+          .split(/\s+/)
+          .filter(Boolean)
+          .map((w) => `<span class="${cls}">${w}</span>`)
+          .join(" ")
+      );
     })
     .filter(Boolean)
-    .join(" ");
+    .join("");
 };
 
 // Per-word reveal for the description, with <em>...</em> tokens preserved
@@ -75,14 +84,17 @@ const wrapBodyWords = (s: string): string => {
       const cls = emMatch
         ? "about-body-word about-body-word--italic"
         : "about-body-word";
-      return text
-        .split(/\s+/)
-        .filter(Boolean)
-        .map((w) => `<span class="${cls}">${w}</span>`)
-        .join(" ");
+      return withEdgeSpaces(
+        part,
+        text
+          .split(/\s+/)
+          .filter(Boolean)
+          .map((w) => `<span class="${cls}">${w}</span>`)
+          .join(" ")
+      );
     })
     .filter(Boolean)
-    .join(" ");
+    .join("");
 };
 
 const tAbout = t.about as Record<string, string>;
@@ -96,20 +108,21 @@ type Block = {
 };
 
 // Each teaser links to its dedicated service page (svc1 Art direction →
-// brand, svc2 Web dev, svc3 SEO/GEO). Localized slugs per src/i18n/routes.ts.
+// brand, svc2 Web dev, svc3 SEO/GEO, svc4 Tools/apps/AI). Localized slugs per
+// src/i18n/routes.ts.
 const SERVICE_LINKS =
   lang === "fr"
-    ? ["/identite-de-marque/", "/creation-site-internet/", "/seo-geo/"]
-    : ["/en/brand-design/", "/en/web-development/", "/en/seo-geo/"];
+    ? ["/identite-de-marque/", "/creation-site-internet/", "/seo-geo/", "/outils-applications-ia/"]
+    : ["/en/brand-design/", "/en/web-development/", "/en/seo-geo/", "/en/apps-ai-tools/"];
 const ctaLabel = lang === "fr" ? "Découvrir" : "Explore";
 
-// The About section is now the three service teasers only — the personal intro
+// The About section is now the four service teasers only — the personal intro
 // block was removed. Same scroll-reveal sequence, but
-// a serif-italic title prefixed by a mono index (01/02/03), echoing the
+// a serif-italic title prefixed by a mono index (01–04), echoing the
 // dedicated Services section. The index span is baked into the title HTML so it
 // rides the container blur reveal (it is NOT an `.about-reveal-word`, so it sits
 // at opacity 1 and sharpens with the block instead of cascading word-by-word).
-const services: Block[] = ([1, 2, 3] as const).map((n) => ({
+const services: Block[] = ([1, 2, 3, 4] as const).map((n) => ({
   variant: "service",
   plainTitle: tAbout[`svc${n}.title`],
   titleHtml:
@@ -125,7 +138,7 @@ const chapters: Block[] = services;
 <div data-surface="dark" class="relative bg-[var(--color-bg)] text-[var(--color-ink)]">
   {chapters.map((chapter) => {
     // Each service is sized to its own content with EQUAL vertical padding, so
-    // the gap between the three teasers is constant. (Fixed-height slots with
+    // the gap between the teasers is constant. (Fixed-height slots with
     // centred content made the gaps look uneven because the copy lengths
     // differ.) `isIntro` is kept only for the title/body styling branches below
     // — every block is a service now.

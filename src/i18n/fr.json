@@ -66,7 +66,10 @@
     "svc2.desc": "Des sites conçus et codés <em>à la main</em>, sans template. Rapides, soignés, animés — taillés pour votre marque, et pour personne d'autre.",
     "svc3.num": "03",
     "svc3.title": "SEO & GEO technique",
-    "svc3.desc": "Être <em>trouvé sur Google</em> et cité par les IA (ChatGPT, Gemini). Un site qui n'est pas seulement beau, mais visible là où vos clients cherchent vraiment aujourd'hui.",
+    "svc3.desc": "Être <em>trouvé sur Google</em>, cité par les IA (ChatGPT, Gemini) et visible jusque dans <em>ChatGPT Ads</em>. Un site qui n'est pas seulement beau, mais visible là où vos clients cherchent vraiment aujourd'hui.",
+    "svc4.num": "04",
+    "svc4.title": "Outils, apps & IA",
+    "svc4.desc": "Des outils métier, des applications web et mobiles et une <em>IA branchée sur vos données</em>. Moins de tâches répétitives, plus de temps pour votre métier.",
     "scroll": "↓ Continuer"
   },
   "cinematic": {
