@@ -36,9 +36,9 @@ export const routes: Record<string, RouteMeta> = {
     lang: "fr",
     alt: "/en/",
     pageType: "WebPage",
-    title: `${SITE} — Freelance développeur web, SEO & brand design`,
+    title: `${SITE} — Freelance développeur web, apps & IA, SEO & brand design`,
     description:
-      "Freelance développeur web, stratégie SEO et brand design. Sites sur-mesure pour PME, B2B et marques créatives. 8 ans d'expérience. Disponible Q4 2026.",
+      "Freelance développeur web, apps & IA, SEO et brand design. Sites et applications sur-mesure pour PME, B2B et marques créatives. 8 ans d'expérience. Disponible Q4 2026.",
   },
   "/a-propos/": {
     lang: "fr",
@@ -187,9 +187,9 @@ export const routes: Record<string, RouteMeta> = {
     lang: "en",
     alt: "/",
     pageType: "WebPage",
-    title: `${SITE} — Freelance web developer, SEO & brand design`,
+    title: `${SITE} — Freelance web developer, apps & AI, SEO & brand design`,
     description:
-      "Freelance web developer, SEO strategy and brand design. Custom websites for SMBs, B2B and creative brands. 8 years of experience. Available Q4 2026.",
+      "Freelance web developer, apps & AI, SEO and brand design. Custom websites and apps for SMBs, B2B and creative brands. 8 years of experience. Available Q4 2026.",
   },
   "/en/about/": {
     lang: "en",
