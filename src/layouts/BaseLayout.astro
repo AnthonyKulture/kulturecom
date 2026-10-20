@@ -8,6 +8,9 @@ import Consent from "~/components/Consent.astro";
 import type { Lang } from "~/i18n/ui";
 import { ui } from "~/i18n/ui";
 import { getRoute } from "~/i18n/routes";
+import { SERVICE_PAGES } from "~/lib/service-pages";
+import { caseStudyPath } from "~/lib/case-studies";
+import { AREA_SERVED } from "~/lib/schema";
 
 interface Props {
   lang: Lang;
@@ -56,6 +59,11 @@ const altPath =
     : `/en${pathname === "/" ? "" : pathname}`);
 
 const canonical = new URL(pathname, Astro.site).toString();
+// x-default → the FR (default locale) version of this page; an EN page with no
+// FR counterpart is its own default.
+const xDefault =
+  lang === "fr" || !hasCounterpart ? canonical : new URL(altPath, Astro.site).toString();
+const isHome = pathname === "/" || pathname === "/en/";
 // 1200×630 PNG — renders on every platform (Facebook + LinkedIn included; SVG
 // OG images don't). Rasterized from og.svg; see public/og.png.
 const ogImage = new URL("/og.png", Astro.site).toString();
@@ -77,18 +85,19 @@ const gbpUrl = "https://www.google.com/maps?cid=13963690267531536578";
 const personId = `${Astro.site}#person`;
 const serviceId = `${Astro.site}#service`;
 const websiteId = `${Astro.site}#website`;
-const orgId = `${Astro.site}#org`;
 const homeUrl = new URL("/", Astro.site).toString();
 const enHomeUrl = new URL("/en/", Astro.site).toString();
+const githubUrl = "https://github.com/AnthonyKulture";
 
-// Real client case studies — outbound entity links strengthen the work page
-// for both classic SEO and AI citation. Names are stable across locales.
+// Real client case studies — on the work page the ItemList points to OUR
+// localized case-study pages (crawlable, citable); the client site lives in
+// each case study's own schema. Names are stable across locales.
 const PROJECT_CASES = [
-  { name: "Surly", url: "https://surly.fr" },
-  { name: "Eden Rock Yacht Rental", url: "https://edenrockyachtrental.com" },
-  { name: "Sun Beach House", url: "https://sun-beach-house.com" },
-  { name: "Royal Yacht International", url: "https://royalyachtinternational.com" },
-  { name: "Vaulk", url: "https://vaulk.com" },
+  { name: "Surly", slug: "surly" },
+  { name: "Eden Rock Yacht Rental", slug: "eden-rock-yacht-rental" },
+  { name: "Sun Beach House", slug: "sun-beach-house" },
+  { name: "Royal Yacht International", slug: "royal-yacht-international" },
+  { name: "Vaulk", slug: "vaulk" },
 ];
 
 const graph: Record<string, any>[] = [
@@ -97,16 +106,18 @@ const graph: Record<string, any>[] = [
     "@id": personId,
     "name": "Anthony Profit",
     "url": Astro.site?.toString(),
-    "image": ogImage,
+    "image": new URL("/about/anthony-portrait.webp", Astro.site).toString(),
     "jobTitle": lang === "fr"
       ? "Freelance développeur web, apps & IA, SEO & brand designer"
       : "Freelance web developer, apps & AI, SEO & brand designer",
     "description": dict.meta.description,
+    "knowsLanguage": ["fr", "en"],
     "knowsAbout": [
       "Web development",
       "Frontend engineering",
       "SEO",
       "Technical SEO",
+      "Generative Engine Optimization",
       "Brand design",
       "Web and mobile applications",
       "AI integration",
@@ -116,20 +127,40 @@ const graph: Record<string, any>[] = [
       "React",
       "TypeScript",
     ],
-    "sameAs": [linkedinUrl, instagramUrl, behanceUrl],
+    "sameAs": [linkedinUrl, instagramUrl, behanceUrl, githubUrl],
     "worksFor": { "@id": serviceId },
   },
   {
+    // THE business entity (one node, not a separate Organization): it is the
+    // publisher of the site and the blog, and the provider of the 4 services.
+    // ProfessionalService is an Organization subtype, so it qualifies as an
+    // Article publisher with its logo. Registry facts (SIREN, registration
+    // date) are those already published on the legal notice page.
     "@type": "ProfessionalService",
     "@id": serviceId,
     "name": "Anthony Profit",
     "alternateName": "Kulturecom",
     "url": Astro.site?.toString(),
+    "logo": {
+      "@type": "ImageObject",
+      "url": new URL("/logo-512.png", Astro.site).toString(),
+      "width": 512,
+      "height": 512,
+    },
     "image": ogImage,
     "description": dict.meta.description,
-    "provider": { "@id": personId },
+    "founder": { "@id": personId },
+    "foundingDate": "2019-05-12",
+    "identifier": { "@type": "PropertyValue", "propertyID": "SIREN", "value": "850723552" },
     "email": "contact@kulturecom.fr",
     "telephone": "+33 6 60 50 16 82",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer service",
+      "email": "contact@kulturecom.fr",
+      "telephone": "+33 6 60 50 16 82",
+      "availableLanguage": ["fr", "en"],
+    },
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Nice",
@@ -139,41 +170,29 @@ const graph: Record<string, any>[] = [
     },
     // City-level areaServed sharpens relevance for "Nice"/"Côte d'Azur" queries
     // (LLMs + local pack score city entities higher than a bare Country).
-    "areaServed": [
-      { "@type": "City", "name": "Nice", "sameAs": "https://www.wikidata.org/wiki/Q33959" },
-      { "@type": "AdministrativeArea", "name": "Côte d'Azur" },
-      { "@type": "Country", "name": "France" },
-    ],
-    "serviceType": ["Web Development", "SEO", "Brand Design", "App & AI Development"],
+    "areaServed": AREA_SERVED,
+    // The 4 services, by the @id each service page gives its Service node
+    // (localized URLs), so the business ↔ service link exists both ways.
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Services",
+      "itemListElement": SERVICE_PAGES.map((s) => ({
+        "@type": "Offer",
+        "itemOffered": { "@id": `${new URL(s.path[lang], Astro.site)}#service` },
+      })),
+    },
     "priceRange": "€€€",
     "hasMap": gbpUrl,
-    "sameAs": [gbpUrl, linkedinUrl, behanceUrl],
+    "sameAs": [gbpUrl, linkedinUrl, instagramUrl, behanceUrl, githubUrl],
   },
   {
     "@type": "WebSite",
     "@id": websiteId,
     "url": Astro.site?.toString(),
     "name": "Anthony Profit",
-    "inLanguage": [lang === "fr" ? "fr-FR" : "en-US"],
-    "publisher": { "@id": personId },
-  },
-  {
-    // Organization entity — used as the `publisher` of BlogPosting (Google's
-    // Article rich result requires an Organization publisher with a logo). The
-    // logo is the square 180×180 app icon (Google wants a real logo, not the
-    // 1200×630 OG banner).
-    "@type": "Organization",
-    "@id": orgId,
-    "name": "Anthony Profit",
     "alternateName": "Kulturecom",
-    "url": Astro.site?.toString(),
-    "logo": {
-      "@type": "ImageObject",
-      "url": new URL("/apple-touch-icon.png", Astro.site).toString(),
-      "width": 180,
-      "height": 180,
-    },
-    "sameAs": [linkedinUrl, instagramUrl, behanceUrl, gbpUrl],
+    "inLanguage": ["fr-FR", "en-US"],
+    "publisher": { "@id": serviceId },
   },
 ];
 
@@ -218,7 +237,7 @@ if (route?.pageType) {
         "@type": "ListItem",
         "position": i + 1,
         "name": p.name,
-        "url": p.url,
+        "url": new URL(caseStudyPath(p.slug, lang), Astro.site).toString(),
       })),
     });
     webPage.mainEntity = { "@id": itemListId };
@@ -281,7 +300,9 @@ const jsonLd = { "@context": "https://schema.org", "@graph": graph };
     {hasCounterpart && (
       <link rel="alternate" hreflang={altLang} href={new URL(altPath, Astro.site).toString()} />
     )}
-    <link rel="alternate" hreflang="x-default" href={new URL("/", Astro.site).toString()} />
+    {/* x-default = the FR (default-locale) version of THIS page, not the home:
+        it must stay inside the page's own hreflang cluster. */}
+    <link rel="alternate" hreflang="x-default" href={xDefault} />
 
     {/* RSS autodiscovery — locale feed for the blog (src/pages/[en/]rss.xml.ts). */}
     <link
@@ -315,29 +336,19 @@ const jsonLd = { "@context": "https://schema.org", "@graph": graph };
     <!-- Structured data (JSON-LD) — Person + ProfessionalService + WebSite -->
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
 
-    <!-- Fonts: Archivo Black (display) + Geist (body) + Instrument Serif italic + Geist Mono -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Preload Archivo Black woff2 (LCP-critical: H1 Hero + section H2 displays).
-         The URL is from Google Fonts' current v23 — if Google rotates it, the
-         preload silently 404s and the CSS-loaded font kicks in as fallback. -->
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      crossorigin
-      href="https://fonts.gstatic.com/s/archivoblack/v23/HTxqL289NzCGg4MzN6KJ7eW6OY6P-R7z.woff2"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@1&display=swap"
-      rel="stylesheet"
-    />
+    {/* Fonts are self-hosted (@font-face in global.css). Preload the three
+        above-the-fold faces — display H1 (Archivo Black), body (Geist), lead
+        (Instrument Serif italic) — so text paints in the right font without a
+        third-party round trip. Geist Mono (small labels) loads on demand. */}
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/archivo-black-latin.woff2" />
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/geist-latin.woff2" />
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/instrument-serif-italic-latin.woff2" />
 
     {/* Preload first carousel slide — likely LCP on mobile (inline image
         inside the H1, 180-260 px square, larger pixel area than the headline).
         HOME ONLY — inner pages don't render the hero, so preloading it there
         just wasted ~55 KB of priority bandwidth. */}
-    {(pathname === "/" || pathname === "/en/") && (
+    {isHome && (
       <link rel="preload" as="image" href="/hero-slides/slide-01.webp" type="image/webp" />
     )}
   </head>
@@ -350,7 +361,10 @@ const jsonLd = { "@context": "https://schema.org", "@graph": graph };
     >
       {lang === "en" ? "Skip to content" : "Aller au contenu"}
     </a>
-    <Preloader lang={lang} />
+    {/* The intro preloader is the HOME's opening act only. On inner pages it
+        held paid / search visitors behind a ~3 s full-screen overlay (scroll
+        locked) and pulled home-only assets — they now get the content at once. */}
+    {isHome && <Preloader lang={lang} />}
     <Rideau />
     <slot />
     <Footer lang={lang} />

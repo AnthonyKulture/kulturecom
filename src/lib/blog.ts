@@ -12,7 +12,7 @@ const SHOW_DRAFTS = !import.meta.env.PROD;
 /** A tag archive page is left `noindex` until it lists at least this many
  *  posts — stops thin, near-empty cluster pages from bloating the index while
  *  the blog is young. The links still work; only indexability is gated. */
-export const TAG_INDEX_MIN = 2;
+export const TAG_INDEX_MIN = 3;
 
 const publishable = (p: Post): boolean => SHOW_DRAFTS || p.data.draft !== true;
 

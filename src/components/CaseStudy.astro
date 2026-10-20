@@ -2,6 +2,7 @@
 import type { Lang } from "~/i18n/ui";
 import { ui } from "~/i18n/ui";
 import { getCaseStudy, caseStudyPath } from "~/lib/case-studies";
+import { SERVICE_PAGES, getServicePage } from "~/lib/service-pages";
 import CTA from "~/components/CTA.astro";
 
 interface Props {
@@ -30,6 +31,13 @@ const nextTitle = dict[`${cs.next.key}.title`];
 
 const liveHost = cs.liveUrl.replace(/^https?:\/\//, "").replace(/\/$/, "");
 
+// Services this case is proof for (the reverse of SERVICE_PAGES.proofSlugs):
+// links each case study back to its service pages.
+const relatedServices = SERVICE_PAGES.filter((m) => m.proofSlugs.includes(cs.slug)).map((m) => ({
+  name: getServicePage(m.id, lang)!.content.name,
+  path: m.path[lang],
+}));
+
 const l = isFr
   ? {
       eyebrow: "Étude de cas",
@@ -40,6 +48,7 @@ const l = isFr
       stack: "Stack",
       live: "Site en ligne",
       result: "Le résultat en bref",
+      services: "Services mobilisés",
       pager: "Autres études de cas",
       prev: "Précédent",
       next: "Suivant",
@@ -53,6 +62,7 @@ const l = isFr
       stack: "Stack",
       live: "Live site",
       result: "The outcome, in short",
+      services: "Services involved",
       pager: "More case studies",
       prev: "Previous",
       next: "Next",
@@ -218,6 +228,28 @@ const mediaLabel = `${cs.title} — ${cs.tag}`;
           </li>
         ))}
       </ol>
+    </div>
+  </section>
+
+  {/* ========== SERVICES INVOLVED ========== */}
+  <section class="px-4 pb-12 sm:px-6 sm:pb-16 md:px-12">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <h2 class="font-mono mb-6 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
+        {l.services}
+      </h2>
+      <div class="grid grid-cols-1 gap-px overflow-hidden border border-[var(--color-border)] sm:grid-cols-2 lg:grid-cols-3">
+        {relatedServices.map((s) => (
+          <a
+            href={s.path}
+            class="group flex items-center justify-between gap-4 bg-[var(--color-bg)] p-6 no-underline transition-colors hover:bg-[var(--color-border)]/40 sm:p-8"
+          >
+            <span class="font-display text-[clamp(20px,2.2vw,32px)] uppercase leading-[1] tracking-[-0.03em] text-[var(--color-ink)]">
+              {s.name}
+            </span>
+            <span aria-hidden="true" class="font-mono text-[var(--color-accent)]">→</span>
+          </a>
+        ))}
+      </div>
     </div>
   </section>
 

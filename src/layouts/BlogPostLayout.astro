@@ -45,7 +45,7 @@ const ogImage = new URL("/og.png", site).toString();
 const imageUrl = d.cover ? new URL(d.cover, site).toString() : ogImage;
 const personId = `${site}#person`;
 const websiteId = `${site}#website`;
-const orgId = `${site}#org`;
+const serviceId = `${site}#service`;
 
 // Word count (build-time) — a quality/depth signal for AI citation weighting.
 const wordCount = (post.body ?? "").trim().split(/\s+/).filter(Boolean).length;
@@ -90,12 +90,14 @@ const showToc = toc.length >= 3;
 const blogPosting: Record<string, unknown> = {
   "@type": "BlogPosting",
   "@id": `${canonical}#article`,
-  headline: d.title.slice(0, 110),
+  // Full H1 when it fits Google's ~110-char headline guidance, else the short
+  // SEO title — never a cut mid-word.
+  headline: d.title.length <= 110 ? d.title : (d.metaTitle ?? d.title),
   description: d.description,
   datePublished: d.pubDate.toISOString(),
   dateModified: (d.updatedDate ?? d.pubDate).toISOString(),
   author: { "@type": "Person", "@id": personId, name: d.author, url: homeUrl },
-  publisher: { "@id": orgId },
+  publisher: { "@id": serviceId },
   image: imageUrl,
   wordCount,
   inLanguage: isFr ? "fr-FR" : "en-US",
@@ -111,7 +113,7 @@ const breadcrumb = {
   itemListElement: [
     { "@type": "ListItem", position: 1, name: labels.home, item: homeUrl },
     { "@type": "ListItem", position: 2, name: labels.blog, item: blogUrl },
-    { "@type": "ListItem", position: 3, name: d.title, item: canonical },
+    { "@type": "ListItem", position: 3, name: d.metaTitle ?? d.title, item: canonical },
   ],
 };
 
@@ -142,7 +144,7 @@ const updatedStr = d.updatedDate ? formatDate(d.updatedDate, lang) : null;
       {/* Breadcrumb */}
       <nav
         aria-label={isFr ? "Fil d'Ariane" : "Breadcrumb"}
-        class="font-mono mb-8 flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-[var(--color-ink-subtle)]"
+        class="font-mono mb-8 flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-[var(--color-ink-muted)]"
       >
         <a href={isFr ? "/" : "/en/"} class="no-underline hover:text-[var(--color-ink)]">{labels.home}</a>
         <span aria-hidden="true">/</span>
@@ -168,7 +170,7 @@ const updatedStr = d.updatedDate ? formatDate(d.updatedDate, lang) : null;
           {d.description}
         </p>
         <div
-          class="font-mono mt-7 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] uppercase tracking-[0.16em] text-[var(--color-ink-subtle)]"
+          class="font-mono mt-7 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] uppercase tracking-[0.16em] text-[var(--color-ink-muted)]"
         >
           <time datetime={d.pubDate.toISOString()}>{formatDate(d.pubDate, lang)}</time>
           <span aria-hidden="true">·</span>
@@ -224,7 +226,7 @@ const updatedStr = d.updatedDate ? formatDate(d.updatedDate, lang) : null;
       {
         d.tags.length > 0 && (
           <div class="mt-14 border-t border-[var(--color-border)] pt-6">
-            <p class="font-mono mb-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-subtle)]">
+            <p class="font-mono mb-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
               {labels.tags}
             </p>
             <ul class="flex flex-wrap gap-2">
@@ -267,7 +269,7 @@ const updatedStr = d.updatedDate ? formatDate(d.updatedDate, lang) : null;
       {
         related.length > 0 && (
           <section class="mt-16">
-            <p class="font-mono mb-5 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-subtle)]">
+            <p class="font-mono mb-5 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
               {labels.related}
             </p>
             <ul class="flex flex-col divide-y divide-[var(--color-border)] border-t border-[var(--color-border)]">

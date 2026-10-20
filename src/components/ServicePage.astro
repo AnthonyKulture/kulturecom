@@ -5,6 +5,8 @@ import type { ServiceId } from "~/lib/service-pages";
 import { getServicePage } from "~/lib/service-pages";
 import { getCaseStudy, caseStudyPath } from "~/lib/case-studies";
 import CTA from "~/components/CTA.astro";
+import { AREA_SERVED } from "~/lib/schema";
+import { getPosts, postPath } from "~/lib/blog";
 
 interface Props {
   lang: Lang;
@@ -28,10 +30,27 @@ const proof = sp.proofSlugs
   .filter((x): x is NonNullable<typeof x> => x !== null);
 
 const labels = isFr
-  ? { breadcrumb: "Fil d'Ariane", availability: "Disponibilité Q4 2026 · Nice / Côte d'Azur · France" }
-  : { breadcrumb: "Breadcrumb", availability: "Available Q4 2026 · Nice / French Riviera · France" };
+  ? {
+      breadcrumb: "Fil d'Ariane",
+      availability: "Disponibilité Q4 2026 · Nice / Côte d'Azur · France",
+      cta: "Décrire mon projet",
+      response: "Réponse sous 48 h ouvrées",
+      guides: "Guides liés",
+    }
+  : {
+      breadcrumb: "Breadcrumb",
+      availability: "Available Q4 2026 · Nice / French Riviera · France",
+      cta: "Tell me about your project",
+      response: "Reply within 2 business days",
+      guides: "Related guides",
+    };
 
-// Structured data — Service + FAQPage + 2-level breadcrumb. Self-contained.
+// Blog articles that support this service (frontmatter `pillar`) — the
+// topic-cluster link from the service page down to its guides.
+const guides = (await getPosts(lang)).filter((p) => p.data.pillar === id);
+
+// Structured data — Service + FAQPage + 2-level breadcrumb. Joined to the global
+// graph (BaseLayout) by @id: the business (#service) provides the service.
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
@@ -42,16 +61,17 @@ const jsonLd = {
       "serviceType": c.name,
       "url": canonical,
       "description": c.lead,
-      // Reference the global #person entity (emitted by BaseLayout on every
-      // page) instead of a blank node, so the Service joins the entity graph
-      // that Google's Knowledge Panel + AI citation rely on.
-      "provider": { "@id": `${Astro.site}#person` },
-      "areaServed": { "@type": "Country", "name": "France" },
+      // The global business entity (BaseLayout, every page) provides the
+      // service, and lists it back in its hasOfferCatalog.
+      "provider": { "@id": `${Astro.site}#service` },
+      "areaServed": AREA_SERVED,
+      "isPartOf": { "@id": `${Astro.site}#website` },
       "inLanguage": isFr ? "fr-FR" : "en-US",
     },
     {
       "@type": "FAQPage",
       "@id": `${canonical}#faq`,
+      "inLanguage": isFr ? "fr-FR" : "en-US",
       "mainEntity": c.faq.map((f) => ({
         "@type": "Question",
         "name": f.q,
@@ -80,13 +100,29 @@ const jsonLd = {
         {c.eyebrow}
       </p>
       <h1 class="font-display text-[clamp(40px,8vw,140px)] uppercase leading-[0.92] tracking-[-0.04em] text-[var(--color-ink)]">
+        {/* Trailing space so text extractors read "Création de site", not
+            "Création desite" (the lines are separate block spans). */}
         {c.h1Lines.map((line, i) => (
-          <span class:list={["block", i > 0 && "opacity-70"]}>{line}</span>
+          <span class:list={["block", i > 0 && "opacity-70"]}>{line}{i < c.h1Lines.length - 1 ? " " : ""}</span>
         ))}
       </h1>
       <p class="font-serif-italic mt-8 max-w-[46ch] text-[clamp(18px,2vw,28px)] leading-tight text-[var(--color-ink)]">
         {c.lead}
       </p>
+      {/* Primary CTA above the fold — paid / search visitors shouldn't have to
+          scroll past six sections to reach the contact block (#contact, CTA.astro). */}
+      <div class="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3">
+        <a
+          href="#contact"
+          class="group font-mono inline-flex items-center gap-3 bg-[var(--color-ink)] px-6 py-4 text-[12px] uppercase tracking-[0.18em] text-[var(--color-bg)] no-underline transition-colors duration-200 hover:bg-[var(--color-accent)]"
+        >
+          {labels.cta}
+          <span aria-hidden="true" class="transition-transform duration-300 ease-out group-hover:translate-x-1">→</span>
+        </a>
+        <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
+          {labels.response}
+        </span>
+      </div>
       <p class="font-mono mt-8 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
         {labels.availability}
       </p>
@@ -106,10 +142,10 @@ const jsonLd = {
   <section class="relative bg-[var(--color-bg)] px-4 py-24 sm:px-6 sm:py-32 md:px-12 md:py-40">
     <div class="mx-auto w-full max-w-[var(--container-wide)]">
       <header class="mb-12 sm:mb-16">
-        <p class="font-mono mb-3 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
+        <h2 class="font-mono mb-3 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
           <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
           {c.includesTitle}
-        </p>
+        </h2>
       </header>
       <ul class="grid gap-px overflow-hidden border border-[var(--color-border)] sm:grid-cols-2 lg:grid-cols-3">
         {c.includes.map((item) => (
@@ -126,10 +162,10 @@ const jsonLd = {
   <section data-surface="dark" class="relative bg-[var(--color-bg)] text-[var(--color-ink)] px-4 py-24 sm:px-6 sm:py-32 md:px-12 md:py-40">
     <div class="mx-auto w-full max-w-[var(--container-wide)]">
       <header class="mb-16 sm:mb-20">
-        <p class="font-mono mb-3 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
+        <h2 class="font-mono mb-3 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
           <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
           {c.methodTitle}
-        </p>
+        </h2>
       </header>
       <ol class="flex flex-col gap-12 sm:gap-16">
         {c.method.map((step) => (
@@ -138,9 +174,9 @@ const jsonLd = {
               {step.n}
             </span>
             <div>
-              <h2 class="font-sans text-[clamp(20px,2.2vw,28px)] font-medium tracking-normal text-[var(--color-ink)]">
+              <h3 class="font-sans text-[clamp(20px,2.2vw,28px)] font-medium tracking-normal text-[var(--color-ink)]">
                 {step.title}
-              </h2>
+              </h3>
               <p class="mt-3 max-w-[60ch] text-[clamp(15px,1.2vw,17px)] leading-[1.65] text-[var(--color-ink-muted)]">
                 {step.body}
               </p>
@@ -155,10 +191,10 @@ const jsonLd = {
   <section class="relative bg-[var(--color-bg)] px-4 py-24 sm:px-6 sm:py-32 md:px-12 md:py-40">
     <div class="mx-auto w-full max-w-[var(--container-wide)]">
       <header class="mb-12 sm:mb-16">
-        <p class="font-mono mb-3 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
+        <h2 class="font-mono mb-3 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
           <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
           {c.proofTitle}
-        </p>
+        </h2>
       </header>
       <div class="grid gap-6 sm:grid-cols-3 sm:gap-5">
         {proof.map((p) => (
@@ -189,10 +225,10 @@ const jsonLd = {
   <section data-surface="dark" class="relative bg-[var(--color-bg)] text-[var(--color-ink)] px-4 py-24 sm:px-6 sm:py-32 md:px-12 md:py-40">
     <div class="mx-auto w-full max-w-[var(--container-wide)]">
       <header class="mb-12 sm:mb-16">
-        <p class="font-mono mb-3 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
+        <h2 class="font-mono mb-3 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
           <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
           {c.faqTitle}
-        </p>
+        </h2>
       </header>
       <dl class="flex flex-col">
         {c.faq.map((f) => (
@@ -209,12 +245,38 @@ const jsonLd = {
     </div>
   </section>
 
+  {/* ========== RELATED GUIDES (blog cluster) ========== */}
+  {guides.length > 0 && (
+    <section class="relative bg-[var(--color-bg)] px-4 pt-20 sm:px-6 sm:pt-28 md:px-12 md:pt-32">
+      <div class="mx-auto w-full max-w-[var(--container-wide)]">
+        <h2 class="font-mono mb-6 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
+          {labels.guides}
+        </h2>
+        <ul class="grid grid-cols-1 gap-px overflow-hidden border border-[var(--color-border)] sm:grid-cols-2">
+          {guides.map((g) => (
+            <li class="bg-[var(--color-bg)]">
+              <a
+                href={postPath(g)}
+                class="group flex h-full items-start justify-between gap-4 p-6 no-underline transition-colors hover:bg-[var(--color-border)]/40 sm:p-8"
+              >
+                <span class="font-sans text-[clamp(17px,1.5vw,22px)] font-medium leading-snug text-[var(--color-ink)]">
+                  {g.data.title}
+                </span>
+                <span aria-hidden="true" class="font-mono pt-1 text-[var(--color-accent)]">→</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
   {/* ========== RELATED SERVICES ========== */}
   <section class="relative bg-[var(--color-bg)] px-4 pt-20 pb-4 sm:px-6 sm:pt-28 md:px-12 md:pt-32">
     <div class="mx-auto w-full max-w-[var(--container-wide)]">
-      <p class="font-mono mb-6 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-subtle)]">
+      <h2 class="font-mono mb-6 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
         {c.relatedTitle}
-      </p>
+      </h2>
       <div class="grid grid-cols-1 gap-px overflow-hidden border border-[var(--color-border)] sm:grid-cols-2 lg:grid-cols-3">
         {sp.related.map((r) => (
           <a

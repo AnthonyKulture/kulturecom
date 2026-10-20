@@ -35,6 +35,10 @@ const blog = defineCollection({
     /** Display tags; also generate /blog/tag/<slug>/ archive pages. */
     tags: z.array(z.string()).default([]),
 
+    /** Service page this article supports (topic cluster): it is listed in
+        that page's "Guides liés" block. Ids from src/lib/service-pages.ts. */
+    pillar: z.enum(["web", "seo", "brand", "apps"]).optional(),
+
     // ── Dates / authorship ─────────────────────────────────────────────
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),

@@ -1,83 +1,49 @@
-# Anthony Profit — Kulturecom
+# Anthony Profit (Kulturecom)
 
-> Designer & développeur freelance sur la Côte d'Azur (Nice). Sites sur-mesure pensés pour être visibles sur Google comme dans les réponses des IA (ChatGPT, Perplexity, Google AI Overviews). Quatre axes : design, expérience digitale, outils/apps & IA, SEO + GEO (dont ChatGPT Ads). — Mis à jour : 2026-10-19.
+> Designer et développeur web freelance à Nice (Côte d'Azur, France), sous le nom Kulturecom. Quatre expertises sous une seule main : sites internet sur-mesure, outils / apps & IA, SEO & GEO (dont campagnes ChatGPT Ads), identité de marque. Site bilingue FR/EN. Mis à jour : 2026-10-19.
+
+Anthony Profit conçoit des sites et des outils pensés pour être trouvés sur Google et cités dans les réponses des IA (ChatGPT, Perplexity, Gemini, Google AI Overviews). Basé à Nice (06000), il travaille avec des PME, des marques B2B et des créateurs partout en France et à l'international. Contact : contact@kulturecom.fr · WhatsApp +33 6 60 50 16 82 · réponse sous 48 h ouvrées. Texte intégral des pages clés : https://anthonyprofit.com/llms-full.txt
 
 ## Services
 
-- **Design** — Direction artistique éditoriale, brand systems, design tokens. Identité conçue pour la marque, déclinable web/print/social. Pas de thème acheté, pas de template recyclé.
-- **Expérience digitale** — Astro, React, Lighthouse ≥ 95. Sites rapides, accessibles, performants. Core Web Vitals au vert.
-- **SEO + GEO** — Audit technique, content cluster, Schema.org, llms.txt. SEO classique pour Google + optimisation pour les moteurs génératifs : ChatGPT, Perplexity, Google AI Overviews. Campagnes ChatGPT Ads (annonces sponsorisées sous les réponses de ChatGPT, ouvertes en France depuis fin août 2026).
-- **Outils, apps & IA** — Outils métier, back-offices, portails clients, applications web et mobiles (iOS / Android). IA intégrée (API Claude / OpenAI : assistants sur documents, RAG, agents), automatisations et intégrations (n8n, Make, Zapier, API). Stack : Next.js · React · Node · Supabase / PostgreSQL.
+- [Création de site internet](https://anthonyprofit.com/creation-site-internet/): sites vitrines et éditoriaux sur-mesure, design + développement Astro / React / TypeScript, Core Web Vitals au vert, accessibilité WCAG AA, SEO natif, CMS headless.
+- [Outils, apps & IA](https://anthonyprofit.com/outils-applications-ia/): outils métier, back-offices, portails clients, apps web et mobiles (iOS / Android), IA intégrée (API Claude / OpenAI : assistants sur documents, RAG, agents), automatisations n8n / Make / Zapier. Stack : Next.js · React · Node · Supabase / PostgreSQL.
+- [SEO & GEO](https://anthonyprofit.com/seo-geo/): référencement Google + visibilité dans les IA (llms.txt, Schema.org, citabilité) + campagnes ChatGPT Ads (annonces sponsorisées sous les réponses de ChatGPT, ouvertes aux annonceurs en France depuis fin août 2026).
+- [Identité de marque](https://anthonyprofit.com/identite-de-marque/): direction artistique, logo, brand system, typographie, déclinaisons web / print / social.
+- [Tous les services](https://anthonyprofit.com/services/): les quatre expertises et un seul interlocuteur.
 
-## Cases
+## Études de cas
 
-- [Surly](https://surly.fr) — Marketplace banque & assurance. Co-fondateur & CTO. Stack : React · Supabase. 1 600 consultants référencés, 8 entreprises clientes, projet toujours actif depuis 2022.
-- [Vaulk](https://vaulk.com) — Abris durcis NRBC conçus en France, livrables en 7 jours. Site éditorial cinématographique. Stack : Next.js · Strapi · intégration 3D au scroll. Livré en 3 mois.
-- [Sun Beach House](https://sun-beach-house.com) — Agence indépendante de villas de luxe à Saint-Barthélemy depuis 1996. Identité, site éditorial, SEO + GEO en continu. Stack : Next.js · Sanity Studio · vidéo Mux.
-- [Royal Yacht International](https://royalyachtinternational.com) — Courtier de superyachts basé à Monaco. Charter, vente, gestion, construction. Refonte d'identité + site WordPress + SEO.
-- [Eden Rock Yacht Rental](https://edenrockyachtrental.com) — Extension yachting d'Eden Rock – St Barths (hospitality icon depuis 1953). Identité + site WordPress + SEO.
+- [Surly](https://anthonyprofit.com/projets/surly/): marketplace banque & assurance co-fondée, Anthony Profit en est le CTO depuis 2022. React · Supabase. 1 600 consultants référencés, 8 entreprises clientes, projet toujours actif. Site : https://surly.fr
+- [Vaulk](https://anthonyprofit.com/projets/vaulk/): abris durcis NRBC conçus en France, livrables en 7 jours. Site éditorial cinématographique, Next.js · Strapi · 3D au scroll, livré en 3 mois. Site : https://vaulk.com
+- [Sun Beach House](https://anthonyprofit.com/projets/sun-beach-house/): agence indépendante de villas de luxe à Saint-Barthélemy depuis 1996. Identité, site éditorial, SEO + GEO en continu. Next.js · Sanity Studio · vidéo Mux. Site : https://sun-beach-house.com
+- [Royal Yacht International](https://anthonyprofit.com/projets/royal-yacht-international/): courtier de superyachts basé à Monaco (charter, vente, gestion, construction). Refonte d'identité, site WordPress, SEO. Site : https://royalyachtinternational.com
+- [Eden Rock Yacht Rental](https://anthonyprofit.com/projets/eden-rock-yacht-rental/): extension yachting d'Eden Rock – St Barths (icône de l'hôtellerie depuis 1953). Identité, site WordPress, SEO. Site : https://edenrockyachtrental.com
 
-## Contact
+## Guides
 
-- Email : contact@kulturecom.fr
-- WhatsApp : +33 6 60 50 16 82
-- Réponse sous 48 h ouvrées
+- [SEO, GEO & ChatGPT](https://anthonyprofit.com/blog/seo-geo-apparaitre-dans-chatgpt/): pourquoi votre entreprise n'apparaît pas dans ChatGPT, et comment y remédier (SEO moderne + GEO + développement sur-mesure).
+- [Référencement à Nice](https://anthonyprofit.com/blog/referencement-nice-dominer-google-et-ia/): le système en 3 couches (SEO classique, Local Pack / Maps, visibilité IA) pour dominer son marché local sur la Côte d'Azur.
 
-## Services (détail)
+## À propos & contact
 
-- [Services](https://anthonyprofit.com/services/) — les quatre offres, un seul interlocuteur
-- [Création de site internet](https://anthonyprofit.com/creation-site-internet/) — développement sur-mesure Astro/React, performance, SEO natif
-- [SEO & GEO](https://anthonyprofit.com/seo-geo/) — référencement Google + visibilité dans les IA (ChatGPT, Perplexity, AI Overviews) + campagnes ChatGPT Ads
-- [Identité de marque](https://anthonyprofit.com/identite-de-marque/) — direction artistique, brand system, déclinaisons
-- [Outils, apps & IA](https://anthonyprofit.com/outils-applications-ia/) — outils métier, apps web et mobiles, IA intégrée, automatisations et intégrations
+- [À propos](https://anthonyprofit.com/a-propos/): parcours, méthode, stack (Design · Code · SEO · Apps & IA).
+- [Contact](https://anthonyprofit.com/contact/): e-mail et WhatsApp, réponse sous 48 h ouvrées.
+- [Mentions légales](https://anthonyprofit.com/mentions-legales/): Anthony Profit, entrepreneur individuel à Nice, SIREN 850 723 552.
 
-## Blog
+## English
 
-- [SEO, GEO & ChatGPT](https://anthonyprofit.com/blog/seo-geo-apparaitre-dans-chatgpt/) — pourquoi votre entreprise n'apparaît pas dans ChatGPT, et comment y remédier (SEO moderne + GEO + dev sur-mesure).
-- [Référencement à Nice](https://anthonyprofit.com/blog/referencement-nice-dominer-google-et-ia/) — le système en 3 couches (SEO classique, Local Pack/Maps, visibilité IA) pour dominer son marché local sur la Côte d'Azur.
+- [Home (EN)](https://anthonyprofit.com/en/): freelance designer & developer in Nice — custom websites, tools / apps & AI, SEO & GEO (incl. ChatGPT Ads), brand identity.
+- [Web development](https://anthonyprofit.com/en/web-development/): custom Astro / React builds, performance, native SEO.
+- [Tools, apps & AI](https://anthonyprofit.com/en/apps-ai-tools/): business tools, web and mobile apps, built-in AI (Claude / OpenAI APIs), automations and integrations.
+- [SEO & GEO](https://anthonyprofit.com/en/seo-geo/): Google ranking + visibility in AI engines + ChatGPT Ads campaigns (open to advertisers in France and across Europe since late August 2026).
+- [Brand identity](https://anthonyprofit.com/en/brand-design/): art direction, brand system, applications.
+- [Case studies](https://anthonyprofit.com/en/work/): Surly, Vaulk, Sun Beach House, Royal Yacht International, Eden Rock Yacht Rental.
+- [SEO, GEO & ChatGPT (guide)](https://anthonyprofit.com/en/blog/seo-geo-appear-in-chatgpt/): why your business doesn't show up in ChatGPT, and how to fix it.
+- [Local SEO in Nice (guide)](https://anthonyprofit.com/en/blog/rank-on-google-in-nice-local-seo/): the 3-layer system to dominate your local market on the French Riviera.
+- [About](https://anthonyprofit.com/en/about/): background, method, stack.
+- [Contact](https://anthonyprofit.com/en/contact/): e-mail and WhatsApp, reply within 2 business days.
 
 ## Optional
 
-- [Accueil FR](https://anthonyprofit.com/) — page principale, présentation complète
-- [À propos](https://anthonyprofit.com/a-propos/) — parcours, méthode, engagements
-- [Homepage EN](https://anthonyprofit.com/en/) — English version
-
----
-
-# Anthony Profit — Kulturecom (English)
-
-> Freelance designer & developer on the French Riviera. Custom websites built to be visible on Google and in AI answers (ChatGPT, Perplexity, Google AI Overviews). Four crafts: design, digital experience, tools/apps & AI, SEO + GEO (incl. ChatGPT Ads).
-
-## Services (EN)
-
-- **Design** — Editorial art direction, brand systems, design tokens. Identity crafted for the brand, usable across web/print/social. No bought theme, no recycled template.
-- **Digital experience** — Astro, React, Lighthouse ≥ 95. Fast, accessible, performant sites. Core Web Vitals all green.
-- **SEO + GEO** — Technical audit, content cluster, Schema.org, llms.txt. Classic SEO for Google + optimization for generative engines: ChatGPT, Perplexity, Google AI Overviews. ChatGPT Ads campaigns (sponsored ads below ChatGPT answers, open in Europe since late August 2026).
-- **Tools, apps & AI** — Business tools, back-offices, client portals, web and mobile apps (iOS / Android). Built-in AI (Claude / OpenAI APIs: document assistants, RAG, agents), automations and integrations (n8n, Make, Zapier, APIs). Stack: Next.js · React · Node · Supabase / PostgreSQL.
-
-## Cases (EN)
-
-- [Surly](https://surly.fr) — Banking & insurance marketplace. Co-founder & CTO. Stack: React · Supabase. 1,600 consultants listed, 8 enterprise clients, still active since 2022.
-- [Vaulk](https://vaulk.com) — CBRN-hardened shelters made in France, deployable in 7 days. Editorial, cinematic site. Stack: Next.js · Strapi · scroll-driven 3D. Shipped in 3 months.
-- [Sun Beach House](https://sun-beach-house.com) — Independent luxury villa agency in Saint Barthélemy since 1996. Identity, editorial site, ongoing SEO + GEO. Stack: Next.js · Sanity Studio · Mux video.
-- [Royal Yacht International](https://royalyachtinternational.com) — Monaco-based superyacht broker. Charter, sales, management, construction. Brand redesign + WordPress site + SEO.
-- [Eden Rock Yacht Rental](https://edenrockyachtrental.com) — Yachting extension of Eden Rock – St Barths (hospitality icon since 1953). Identity + WordPress site + SEO.
-
-## Services detail (EN)
-
-- [Services](https://anthonyprofit.com/en/services/) — four offers, one point of contact
-- [Web development](https://anthonyprofit.com/en/web-development/) — custom Astro/React build, performance, native SEO
-- [SEO & GEO](https://anthonyprofit.com/en/seo-geo/) — Google ranking + visibility in AI engines (ChatGPT, Perplexity, AI Overviews) + ChatGPT Ads campaigns
-- [Brand identity](https://anthonyprofit.com/en/brand-design/) — art direction, brand system, applications
-- [Tools, apps & AI](https://anthonyprofit.com/en/apps-ai-tools/) — business tools, web and mobile apps, built-in AI, automations and integrations
-
-## Blog (EN)
-
-- [SEO, GEO & ChatGPT](https://anthonyprofit.com/en/blog/seo-geo-appear-in-chatgpt/) — why your business doesn't show up in ChatGPT, and how to fix it (modern SEO + GEO + custom dev).
-- [Local SEO in Nice](https://anthonyprofit.com/en/blog/rank-on-google-in-nice-local-seo/) — the 3-layer system (classic SEO, Local Pack/Maps, AI visibility) to dominate your local market on the French Riviera.
-
-## Contact (EN)
-
-- Email: contact@kulturecom.fr
-- WhatsApp: +33 6 60 50 16 82
-- Reply within 48 business hours
+- [Texte intégral (llms-full.txt)](https://anthonyprofit.com/llms-full.txt): contenu complet des pages services et des guides, en Markdown.

@@ -67,15 +67,16 @@ const behanceUrl = "https://www.behance.net/anthonyprofit";
     aria-label="Anthony Profit"
     class="inline-flex items-baseline gap-0 text-[var(--color-bg)] no-underline hover:[&>span]:underline [&>span]:underline-offset-4"
   >
-    <span class="font-serif-italic text-[20px] leading-none sm:text-[24px] md:text-[28px]"
+    <span class="font-serif-italic text-[20px] leading-none max-[379px]:text-[17px] sm:text-[24px] md:text-[28px]"
       >Anthony</span
-    ><span class="font-display text-[20px] leading-none tracking-[-0.02em] sm:text-[24px] md:text-[28px]"
+    ><span class="font-display text-[20px] leading-none tracking-[-0.02em] max-[379px]:text-[17px] sm:text-[24px] md:text-[28px]"
       >PROFIT</span
     >
   </a>
 
   {/* Right cluster: work · about · contact · lang switcher */}
-  <div class="flex items-center gap-4 sm:gap-5">
+  {/* Below 380px (common Android widths) the logo + "Discutons" collided: tighten. */}
+  <div class="flex items-center gap-4 max-[379px]:gap-3 sm:gap-5">
     {/* Work — hidden on mobile to save horizontal space (reachable via footer) */}
     <a
       href={workHref}

@@ -105,7 +105,7 @@ export const routes: Record<string, RouteMeta> = {
     pageType: "WebPage",
     title: `Services — web, apps & IA, SEO & brand | Anthony Profit`,
     description:
-      "Quatre services, un seul interlocuteur : site sur-mesure, outils, apps & IA, SEO & GEO (dont ChatGPT Ads) et identité de marque. Côte d'Azur, France et international.",
+      "Quatre services, un seul interlocuteur à Nice : site sur-mesure, outils, apps & IA, SEO & GEO (dont ChatGPT Ads) et identité de marque.",
   },
   "/creation-site-internet/": {
     lang: "fr",
@@ -113,23 +113,23 @@ export const routes: Record<string, RouteMeta> = {
     crumb: "Création de site internet",
     title: `Création de site internet sur-mesure à Nice | Anthony Profit`,
     description:
-      "Création de site internet sur-mesure sur la Côte d'Azur : design, développement Astro/React et performance. Sites rapides, accessibles, sans template. Devis sur brief.",
+      "Création de site internet sur-mesure à Nice : design, développement Astro/React et performance. Sites rapides, accessibles, sans template. Devis sur brief.",
   },
   "/seo-geo/": {
     lang: "fr",
     alt: "/en/seo-geo/",
     crumb: "SEO & GEO",
-    title: `SEO, GEO & ChatGPT Ads : Google et IA | Anthony Profit`,
+    title: `Consultant SEO, GEO & ChatGPT Ads à Nice | Anthony Profit`,
     description:
-      "SEO et GEO près de Nice : audit technique, Schema.org, llms.txt et campagnes ChatGPT Ads. Être trouvé sur Google et cité par ChatGPT, Perplexity et les AI Overviews.",
+      "SEO et GEO à Nice : audit technique, Schema.org, llms.txt et campagnes ChatGPT Ads. Être trouvé sur Google et cité par ChatGPT, Perplexity et les AI Overviews.",
   },
   "/identite-de-marque/": {
     lang: "fr",
     alt: "/en/brand-design/",
     crumb: "Identité de marque",
-    title: `Identité de marque & direction artistique | Anthony Profit`,
+    title: `Identité visuelle & de marque à Nice | Anthony Profit`,
     description:
-      "Création d'identité de marque sur la Côte d'Azur : logo, brand system, typographie et déclinaisons web, print et social. Une image cohérente qui rend votre marque crédible.",
+      "Identité visuelle à Nice : logo, brand system, typographie et déclinaisons web, print et social. Une image cohérente qui rend votre marque crédible.",
   },
   "/outils-applications-ia/": {
     lang: "fr",
@@ -256,13 +256,13 @@ export const routes: Record<string, RouteMeta> = {
     pageType: "WebPage",
     title: `Services — web, apps & AI, SEO & brand | Anthony Profit`,
     description:
-      "Four services, one point of contact: custom websites, tools, apps & AI, SEO & GEO (incl. ChatGPT Ads) and brand identity. French Riviera, France and international.",
+      "Four services, one point of contact in Nice: custom websites, tools, apps & AI, SEO & GEO (incl. ChatGPT Ads) and brand identity.",
   },
   "/en/web-development/": {
     lang: "en",
     alt: "/creation-site-internet/",
     crumb: "Web development",
-    title: `Custom web development on the French Riviera | Anthony Profit`,
+    title: `Custom web development in Nice | Anthony Profit`,
     description:
       "Custom website development near Nice: design, Astro/React development and performance. Fast, accessible sites, no templates. Quoted on a written brief.",
   },
@@ -270,7 +270,7 @@ export const routes: Record<string, RouteMeta> = {
     lang: "en",
     alt: "/seo-geo/",
     crumb: "SEO & GEO",
-    title: `SEO, GEO & ChatGPT Ads: rank on Google and AI | Anthony Profit`,
+    title: `SEO, GEO & ChatGPT Ads consultant in Nice | Anthony Profit`,
     description:
       "SEO and GEO near Nice: technical audit, Schema.org, llms.txt and ChatGPT Ads campaigns. Get found on Google and cited by ChatGPT, Perplexity and AI Overviews.",
   },
@@ -278,7 +278,7 @@ export const routes: Record<string, RouteMeta> = {
     lang: "en",
     alt: "/identite-de-marque/",
     crumb: "Brand identity",
-    title: `Brand identity & art direction | Anthony Profit`,
+    title: `Brand identity & visual design in Nice | Anthony Profit`,
     description:
       "Brand identity design on the French Riviera: logo, brand system, typography and web/print/social applications. A coherent image that makes your brand credible.",
   },

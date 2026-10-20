@@ -29,4 +29,23 @@
   } catch (e) {}
   gtag('js', new Date());
   gtag('config', 'G-W64W3JKY43');
+
+  // Lead conversions. The site has no form: a click on an e-mail, WhatsApp or
+  // phone link IS the conversion. Sent as GA4's recommended `generate_lead`
+  // event (mark it as a key event in GA4) so it is attributed to its campaign —
+  // e.g. ChatGPT Ads with utm_source=chatgpt. Only the channel is sent, never
+  // the address/number (no PII in GA4).
+  document.addEventListener('click', function (e) {
+    var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!a) return;
+    var href = a.getAttribute('href') || '';
+    // Cloudflare "Email Address Obfuscation" rewrites mailto: links to
+    // /cdn-cgi/l/email-protection#… — count those as e-mail too.
+    var method =
+      href.indexOf('mailto:') === 0 || href.indexOf('/cdn-cgi/l/email-protection') === 0 ? 'email'
+      : href.indexOf('https://wa.me/') === 0 ? 'whatsapp'
+      : href.indexOf('tel:') === 0 ? 'phone'
+      : '';
+    if (method) gtag('event', 'generate_lead', { method: method });
+  });
 </script>

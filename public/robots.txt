@@ -2,17 +2,43 @@
 User-agent: *
 Allow: /
 
-# AI crawlers — allowed (for AI search visibility)
+# AI crawlers — allowed (for AI search visibility). `*` already allows them;
+# naming them is a guard against a future catch-all rule.
+# OpenAI: GPTBot (training), OAI-SearchBot (ChatGPT search), ChatGPT-User (live fetch)
 User-agent: GPTBot
 Allow: /
 
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic
 User-agent: ClaudeBot
 Allow: /
 
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+# Perplexity
 User-agent: PerplexityBot
 Allow: /
 
+User-agent: Perplexity-User
+Allow: /
+
+# Google (Gemini / AI Overviews), Apple Intelligence, Bing (Copilot + ChatGPT search)
 User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bingbot
 Allow: /
 
 Sitemap: https://anthonyprofit.com/sitemap-index.xml

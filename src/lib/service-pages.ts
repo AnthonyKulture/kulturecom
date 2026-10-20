@@ -82,7 +82,7 @@ const CONTENT: Record<ServiceId, Record<Lang, ServicePageContent>> = {
       intro: [
         "Un site sur-mesure n'est pas un thème acheté qu'on habille à vos couleurs. C'est une architecture pensée pour vos objectifs : convertir, rassurer, durer. Je conçois et développe chaque projet de la première maquette à la mise en ligne — design, code et performance sous une seule main, sans agence à trois équipes qui se renvoient des fichiers.",
         "Stack moderne (Astro, React, TypeScript), Core Web Vitals au vert, accessibilité WCAG AA, et un code que vous possédez entièrement à la livraison. Un site qui charge avant que le concurrent ait fini son animation d'entrée, et qui tient dix ans plutôt que dix mois.",
-        "Basé près de Nice, je travaille avec des PME, des marques B2B techniques et des créateurs partout en France et à l'international.",
+        "Basé à Nice, je travaille avec des PME, des marques B2B techniques et des créateurs partout en France et à l'international.",
       ],
       includesTitle: "Ce qui est inclus",
       includes: [
@@ -118,7 +118,7 @@ const CONTENT: Record<ServiceId, Record<Lang, ServicePageContent>> = {
       intro: [
         "A custom website isn't a bought theme dressed in your colors. It's an architecture built for your goals: convert, reassure, last. I design and develop every project from the first mockup to launch — design, code and performance under a single hand, with no three-team agency passing files around.",
         "Modern stack (Astro, React, TypeScript), green Core Web Vitals, WCAG AA accessibility, and code you fully own on delivery. A site that loads before the competitor finishes its intro animation, and lasts ten years rather than ten months.",
-        "Based near Nice, I work with SMBs, technical B2B brands and creators across France and internationally.",
+        "Based in Nice, I work with SMBs, technical B2B brands and creators across France and internationally.",
       ],
       includesTitle: "What's included",
       includes: [
@@ -140,7 +140,7 @@ const CONTENT: Record<ServiceId, Record<Lang, ServicePageContent>> = {
       relatedTitle: "Other services",
       faqTitle: "Frequently asked questions",
       faq: [
-        { q: "How much does a custom website cost?", a: "Every project is quoted after a written brief — price depends on page count, features and CMS. I don't quote without scoping, but a premium showcase site typically starts in the low thousands of euros." },
+        { q: "How much does a custom website cost?", a: "Every project is quoted after a written brief — price depends on page count, features and CMS. I don't quote without scoping: the price of a premium showcase site is set to measure, based on your project's scope." },
         { q: "How long does it take?", a: "Plan 4 to 8 weeks for a custom showcase site, more for complex builds (e-commerce, platform, 3D). The timeline is set during scoping." },
         { q: "Do you use WordPress?", a: "It depends. For high-performance editorial sites I favor Astro or Next.js with a headless CMS; for clients who want to manage a familiar ecosystem themselves, WordPress remains a fit." },
         { q: "Do I own the code?", a: "Yes, fully. On delivery you get the repository and all access. No proprietary lock-in." },
@@ -157,7 +157,7 @@ const CONTENT: Record<ServiceId, Record<Lang, ServicePageContent>> = {
         "Le SEO ne se résume plus à Google. ChatGPT, Perplexity, Gemini et les AI Overviews répondent désormais aux questions de vos clients en citant des sources. Le GEO (Generative Engine Optimization) consiste à structurer votre site pour qu'il soit cité, pas seulement listé.",
         "Je travaille les deux ensemble : audit technique (crawl, indexation, Core Web Vitals), données structurées Schema.org, llms.txt, architecture de contenu en clusters, et optimisation on-page. Un site indexé, compris par les machines, et préféré par les moteurs.",
         "Depuis fin août 2026, ChatGPT affiche aussi de la publicité en France : ChatGPT Ads. Les annonces apparaissent sous la réponse, marquées « sponsorisé », et n'influencent pas son contenu — OpenAI s'y engage. Le GEO vous fait citer dans la réponse, ChatGPT Ads vous place juste en dessous : je configure et pilote les campagnes, du ciblage par contexte de conversation au suivi des conversions.",
-        "Basé près de Nice, j'accompagne des marques en France et à l'international, du référencement local à la visibilité internationale.",
+        "Basé à Nice, j'accompagne des marques en France et à l'international, du référencement local à la visibilité internationale.",
       ],
       includesTitle: "Ce qui est inclus",
       includes: [
@@ -194,8 +194,8 @@ const CONTENT: Record<ServiceId, Record<Lang, ServicePageContent>> = {
       intro: [
         "SEO is no longer just Google. ChatGPT, Perplexity, Gemini and AI Overviews now answer your customers' questions by citing sources. GEO (Generative Engine Optimization) structures your site to be cited, not just listed.",
         "I work both together: technical audit (crawl, indexing, Core Web Vitals), Schema.org structured data, llms.txt, content cluster architecture, and on-page optimization. A site that's indexed, understood by machines, and preferred by engines.",
-        "Since late August 2026, ChatGPT also shows ads in Europe: ChatGPT Ads. Ads appear below the answer, labeled “sponsored”, and don't influence its content — OpenAI commits to that. GEO gets you cited in the answer, ChatGPT Ads places you right below it: I set up and run the campaigns, from conversation-context targeting to conversion tracking.",
-        "Based near Nice, I work with brands across France and internationally — from local search to international visibility.",
+        "Since late August 2026, ChatGPT also shows ads in France and across Europe: ChatGPT Ads. Ads appear below the answer, labeled “sponsored”, and don't influence its content — OpenAI commits to that. GEO gets you cited in the answer, ChatGPT Ads places you right below it: I set up and run the campaigns, from conversation-context targeting to conversion tracking.",
+        "Based in Nice, I work with brands across France and internationally — from local search to international visibility.",
       ],
       includesTitle: "What's included",
       includes: [

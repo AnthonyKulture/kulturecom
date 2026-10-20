@@ -37,7 +37,7 @@ const subtitleHtml = splitWordsWithDelay(t.hero.subtitle, 30);
   >
     <div class="relative h-full w-full"></div>
   </div>
-  <!-- ========== MOBILE LAYOUT (< 640px) ========== -->
+  {/* ========== MOBILE LAYOUT (< 640px) ========== */}
   {/* Centered title with an inline cycling image between the two halves,
       mirroring the GLD-style hero. No baseline dividers — let the rhythm of
       the type alternation (display caps + italic lowercase) carry the structure. */}
@@ -101,12 +101,10 @@ const subtitleHtml = splitWordsWithDelay(t.hero.subtitle, 30);
     </h1>
   </div>
 
-  <!-- ========== TABLET / DESKTOP LAYOUT (≥ 640px) ==========
+  {/* ========== TABLET / DESKTOP LAYOUT (≥ 640px) ==========
        NOTE: This visual variant is a <div> (not <h1>) to avoid having two H1
        tags in the rendered HTML. The mobile <h1> above is the canonical SEO
-       heading (Google indexes mobile-first). Desktop screen readers still get
-       the page heading via the mobile <h1> which is in the DOM regardless of
-       viewport — only its visual display is gated by `sm:hidden`. -->
+       heading (Google indexes mobile-first). */}
   {/* Desktop title — 5 lines stacked, no inline carousel break.
       The ServicesTrail mouse-follower provides the visual interest behind. */}
   <div
@@ -157,7 +155,7 @@ const subtitleHtml = splitWordsWithDelay(t.hero.subtitle, 30);
     set:html={subtitleHtml}
   />
 
-  <!-- Side italic label — hidden on mobile, original left placement on md+ -->
+  {/* Side italic label — hidden on mobile, original left placement on md+ */}
   <span
     data-anim-inline
     class="anim-hidden font-serif-italic absolute top-1/2 z-10 hidden -translate-y-1/2 text-[clamp(13px,1.2vw,18px)] text-[var(--color-ink)] md:left-8 md:block lg:left-12"

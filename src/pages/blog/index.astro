@@ -13,7 +13,6 @@ const tags = await getTags(lang);
 
 const site = Astro.site;
 const blogUrl = new URL(pathname, site).toString();
-const personId = `${site}#person`;
 
 // Blog + nested BlogPosting list (ids match each post's own #article node).
 const jsonLd = {
@@ -25,7 +24,7 @@ const jsonLd = {
       name: "Journal — SEO, GEO & développement web",
       url: blogUrl,
       inLanguage: "fr-FR",
-      publisher: { "@id": personId },
+      publisher: { "@id": `${site}#service` },
       blogPost: posts.map((p) => {
         const url = new URL(`/blog/${p.data.slug}/`, site).toString();
         return {

@@ -35,9 +35,12 @@ const t =
   hidden
   role="region"
   aria-label={t.aria}
-  class="fixed bottom-3 left-3 right-3 z-[90] mx-auto max-w-[var(--container-wide)] border border-[var(--color-ink)]/15 bg-[var(--color-bg)] px-4 py-4 text-[var(--color-ink)] shadow-[0_8px_40px_rgba(0,0,0,0.12)] sm:bottom-5 sm:left-auto sm:right-5 sm:max-w-[420px] sm:px-5 sm:py-5"
+  class="fixed bottom-0 left-0 right-0 z-[90] mx-auto max-w-[var(--container-wide)] border-t border-[var(--color-ink)]/15 bg-[var(--color-bg)] px-4 py-3 text-[var(--color-ink)] shadow-[0_-8px_30px_rgba(0,0,0,0.08)] sm:bottom-5 sm:left-auto sm:right-5 sm:max-w-[420px] sm:border sm:px-5 sm:py-5 sm:shadow-[0_8px_40px_rgba(0,0,0,0.12)]"
 >
-  <p class="text-[13px] leading-[1.5] text-[var(--color-ink)]/85">
+  {/* Mobile: a compact bar flush with the bottom edge (~105 px, was ~145 px
+      as a floating card) so it doesn't cover the service pages' above-the-fold
+      CTA. ≥ 640px keeps the floating card. */}
+  <p class="text-[12px] leading-[1.45] text-[var(--color-ink)]/85 sm:text-[13px] sm:leading-[1.5]">
     {t.text}{" "}
     <a
       href={t.privacyHref}
@@ -45,7 +48,7 @@ const t =
       >{t.privacy}</a
     >
   </p>
-  <div class="mt-4 flex items-center gap-3">
+  <div class="mt-2.5 flex items-center gap-3 sm:mt-4">
     <button
       type="button"
       data-consent-accept

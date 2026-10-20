@@ -36,12 +36,13 @@ d'article. Renvoie un résumé court et factuel (voir §7).
 Chaque article appartient à **un pilier** et pointe vers **la page service
 correspondante** :
 
-| Pilier | Page service (FR / EN) | `service=` du composant |
-|---|---|---|
-| Création de site sur-mesure | `/creation-site-internet/` · `/en/web-development/` | `creation-site-internet` |
-| SEO & GEO (Google + IA) | `/seo-geo/` · `/en/seo-geo/` | `seo-geo` |
-| Identité de marque / DA | `/identite-de-marque/` · `/en/brand-design/` | `identite-de-marque` |
-| Angle local | (renvoie au pilier pertinent) | — |
+| Pilier | Page service (FR / EN) | `service=` du composant | `pillar:` |
+|---|---|---|---|
+| Création de site sur-mesure | `/creation-site-internet/` · `/en/web-development/` | `creation-site-internet` | `web` |
+| SEO & GEO (Google + IA, ChatGPT Ads) | `/seo-geo/` · `/en/seo-geo/` | `seo-geo` | `seo` |
+| Identité de marque / DA | `/identite-de-marque/` · `/en/brand-design/` | `identite-de-marque` | `brand` |
+| Outils, apps & IA | `/outils-applications-ia/` · `/en/apps-ai-tools/` | `outils-applications-ia` | `apps` |
+| Angle local | (renvoie au pilier pertinent) | — | celui du pilier |
 
 Un article = **1 mot-clé principal**, 1 pilier, des liens internes vers la page
 service du pilier + 1‑2 autres articles existants quand c'est pertinent.
@@ -109,6 +110,7 @@ keywords:
 tags:                          # 2-4, réutilise le vocabulaire existant
   - SEO
   - GEO
+pillar: seo                    # web | seo | brand | apps — liste l'article dans les « Guides liés » de la page service
 pubDate: 2026-06-16            # date du jour (date +%F)
 draft: false                   # false = publié
 ---
@@ -133,13 +135,18 @@ Règles du corps :
   intérieur pour qu'il soit parsé.
 - **Liens internes en markdown** dans la prose : vers la page service du pilier
   et 1‑2 articles voisins. ⚠️ Chemins localisés — FR : `/seo-geo/`,
-  `/creation-site-internet/`, `/identite-de-marque/`, `/projets/`, `/blog/<slug>/`.
+  `/creation-site-internet/`, `/identite-de-marque/`, `/outils-applications-ia/`,
+  `/projets/`, `/blog/<slug>/`.
   EN (slugs différents !) : `/en/seo-geo/`, `/en/web-development/`,
-  `/en/brand-design/`, `/en/work/`, `/en/blog/<slug>/`.
+  `/en/brand-design/`, `/en/apps-ai-tools/`, `/en/work/`, `/en/blog/<slug>/`.
+- Ajoute l'article (FR + EN) à la section « Guides » de `public/llms.txt`
+  (format `- [Titre court](URL absolue): résumé`) ; `/llms-full.txt` se met
+  à jour tout seul au build.
 
 Tout le reste (hreflang, schema BlogPosting + BreadcrumbList, sitemap, RSS,
 sommaire, fil d'Ariane, carte sur l'index) est **automatique** — tu ne touches
-qu'aux 2 fichiers `.mdx`. Ne modifie pas les composants ni le layout.
+qu'aux 2 fichiers `.mdx` (+ la ligne de `public/llms.txt`). Ne modifie pas les
+composants ni le layout.
 
 ## 6. Build, vérification, publication
 
