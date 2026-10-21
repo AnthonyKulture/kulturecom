@@ -84,22 +84,23 @@ const ctaLabel = lang === "fr" ? "Voir le service" : "View the service";
   class="not-prose my-12 border border-[var(--color-border)] bg-[var(--color-bg-shade)] p-6 sm:p-8"
 >
   <p
-    class="font-mono mb-3 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]"
+    class="font-label mb-3 sheet-label text-[13px] uppercase tracking-[0.06em] text-[var(--color-ink-muted)]"
   >
-    <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
-    {eyebrow}
-  </p>
+          <span class="sheet-diamond" aria-hidden="true"></span>
+          <span>{eyebrow}</span>
+          <span class="sheet-leader" aria-hidden="true"></span>
+        </p>
   <p
-    class="font-display text-[clamp(20px,2.4vw,30px)] uppercase leading-[1] tracking-[-0.03em] text-[var(--color-ink)]"
+    class="font-display text-[clamp(20px,2.4vw,30px)] leading-[1] tracking-[-0.03em] text-[var(--color-ink)]"
   >
     {s.name}
   </p>
-  <p class="mt-3 max-w-[52ch] text-[clamp(14px,1.1vw,16px)] leading-[1.6] text-[var(--color-ink-muted)]">
+  <p class="mt-3 max-w-[52ch] text-[clamp(17px,1.1vw,18px)] leading-[1.6] text-[var(--color-ink-muted)]">
     {text ?? s.lead}
   </p>
   <a
     href={s.href}
-    class="group mt-5 inline-flex items-center gap-3 bg-[var(--color-ink)] px-5 py-3 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-bg)] no-underline transition-colors duration-200 hover:bg-[var(--color-accent)]"
+    class="group btn btn-primary mt-5"
   >
     {ctaLabel}
     <span aria-hidden="true" class="transition-transform duration-300 ease-out group-hover:translate-x-1">→</span>

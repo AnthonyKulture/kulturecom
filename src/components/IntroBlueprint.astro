@@ -1,0 +1,204 @@
+---
+// Blueprint entry animation for the home page (see src/lib/intro.ts), on every
+// load (a refresh starts back at the top). The inline script decides BEFORE
+// first paint whether it plays: not with reduced motion. Nothing renders when
+// it doesn't.
+---
+
+<script is:inline>
+  (function () {
+    try {
+      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!reduce) {
+        document.documentElement.classList.add("intro-on");
+        // A refresh starts from the top so the drawing lines up with the page.
+        if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+        window.scrollTo(0, 0);
+      }
+    } catch (e) {}
+  })();
+</script>
+
+<div data-intro class="intro" aria-hidden="true">
+  <div class="intro-grid"></div>
+  <div data-intro-layer class="intro-layer"></div>
+</div>
+
+<style is:global>
+  .intro {
+    display: none;
+  }
+  html.intro-on .intro {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 120;
+    overflow: hidden;
+    /* Blueprint: design-system blue (accent token), white lines. "Paper"
+       (end): the blue fades out and every line and label turns ink. */
+    --ib-ground: var(--color-accent);
+    --ib-tag-ink: var(--color-accent);
+    background-color: var(--color-accent);
+    color: #ffffff;
+    transition:
+      background-color 0.7s var(--ease-power2),
+      color 0.7s var(--ease-power2);
+    /* Failsafe: never stays up if the script doesn't run. */
+    animation: intro-failsafe 0.01s 6s forwards;
+  }
+  @keyframes intro-failsafe {
+    to {
+      visibility: hidden;
+      opacity: 0;
+    }
+  }
+  html.intro-on .intro.intro--paper {
+    --ib-ground: #ffffff;
+    --ib-tag-ink: var(--color-ink);
+    background-color: transparent;
+    color: var(--color-ink);
+  }
+  .intro-grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    background-image:
+      linear-gradient(color-mix(in srgb, currentColor 4.5%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, currentColor 4.5%, transparent) 1px, transparent 1px),
+      linear-gradient(color-mix(in srgb, currentColor 10%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, currentColor 10%, transparent) 1px, transparent 1px);
+    background-size: 20px 20px, 20px 20px, 100px 100px, 100px 100px;
+  }
+  .intro-layer {
+    position: absolute;
+    inset: 0;
+  }
+  .ib-guide {
+    position: absolute;
+    background: color-mix(in srgb, currentColor 55%, transparent);
+  }
+  .ib-guide--v {
+    width: 1px;
+    transform-origin: top;
+  }
+  .ib-guide--h {
+    height: 1px;
+    transform-origin: left;
+  }
+  .ib-margin {
+    position: absolute;
+    background: repeating-linear-gradient(135deg, color-mix(in srgb, currentColor 12%, transparent) 0 1px, transparent 1px 8px);
+  }
+  .ib-measure {
+    position: absolute;
+    height: 9px;
+    border-left: 1px solid color-mix(in srgb, currentColor 80%, transparent);
+    border-right: 1px solid color-mix(in srgb, currentColor 80%, transparent);
+    transform-origin: left;
+  }
+  .ib-measure::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 4px;
+    height: 1px;
+    background: color-mix(in srgb, currentColor 80%, transparent);
+  }
+  .ib-measure .ib-dim {
+    position: absolute;
+    left: 50%;
+    top: -3px;
+    transform: translateX(-50%);
+  }
+  .ib-box {
+    position: absolute;
+  }
+  .ib-fill {
+    position: absolute;
+    inset: 0;
+    border: 1px solid color-mix(in srgb, currentColor 75%, transparent);
+    background: repeating-linear-gradient(135deg, color-mix(in srgb, currentColor 20%, transparent) 0 1px, transparent 1px 7px);
+    transform-origin: left;
+  }
+  .ib-plate {
+    position: absolute;
+    border: 1px solid color-mix(in srgb, currentColor 45%, transparent);
+  }
+  .ib-plate svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .ib-plate line {
+    stroke: color-mix(in srgb, currentColor 45%, transparent);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+  .ib-tag,
+  .ib-dim {
+    font-family: var(--font-label);
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .ib-tag {
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    padding: 3px 5px;
+    border-radius: 0;
+    background: #ffffff;
+    color: var(--ib-tag-ink);
+    box-shadow: 0 0 0 1px currentColor;
+    transition:
+      color 0.7s var(--ease-power2),
+      box-shadow 0.7s var(--ease-power2);
+  }
+  .ib-dim {
+    padding: 2px 5px;
+    border-radius: 0;
+    background: var(--ib-ground);
+    border: 1px solid color-mix(in srgb, currentColor 80%, transparent);
+    transition: background-color 0.7s var(--ease-power2);
+  }
+  .ib-dim--size {
+    position: absolute;
+    right: 4px;
+    bottom: -9px;
+  }
+
+  /* Real hero content: hidden under the blueprint, then rises in. A failsafe
+     shows it anyway after 6 s. */
+  html.intro-on [data-intro-item] {
+    opacity: 0;
+    animation: intro-show 0.01s 6s forwards;
+  }
+  html.intro-on.intro-reveal [data-intro-item] {
+    animation: intro-rise 0.8s var(--ease-power3) both;
+    animation-delay: calc(var(--i, 0) * 70ms);
+  }
+  @keyframes intro-show {
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes intro-rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  import { runIntro } from "~/lib/intro";
+  runIntro();
+</script>

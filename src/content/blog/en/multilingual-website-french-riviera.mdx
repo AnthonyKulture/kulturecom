@@ -1,0 +1,159 @@
+---
+lang: en
+slug: multilingual-website-french-riviera
+translationKey: multilingue-riviera
+title: "Multilingual website on the French Riviera: international SEO, hreflang and AI visibility to reach foreign visitors"
+metaTitle: "Multilingual website on the French Riviera"
+description: "A multilingual website for Nice, Cannes or Monaco: URL structure, hreflang, localized keywords and GEO so tourists find you on Google and in ChatGPT."
+keywords:
+  - multilingual website French Riviera
+  - multilingual website
+  - international SEO
+  - hreflang
+  - website translation Nice
+  - bilingual website
+tags:
+  - SEO
+  - GEO
+  - Local SEO
+pillar: seo
+pubDate: 2026-10-22
+draft: false
+---
+
+import ServiceCTA from "~/components/blog/ServiceCTA.astro";
+import Callout from "~/components/blog/Callout.astro";
+
+A multilingual website on the French Riviera has one job: getting you found by customers who don't search in French, on Google and in ChatGPT alike. That takes a separate URL for each language, reciprocal hreflang tags, and copy written around what each market actually types, instead of a word-for-word translation of the French site.
+
+Foreign demand on the Riviera is huge. According to the [2025 tourism report from the Côte d'Azur Tourism Observatory](https://cotedazurfrance.fr/professionnels-du-tourisme/actualites/bilan-touristique-2025-realise-par-lobservatoire-du-tourisme-de-la-cote-dazur/) (published in January 2026 by Côte d'Azur France Tourisme), the Alpes-Maritimes and Monaco welcomed more than 12 million tourists in 2025, over half of them from abroad. The United States became the top foreign market, with more than 15% of international overnight stays, ahead of the UK, Italy, Germany and Scandinavia. Nice Côte d'Azur airport handled 15.23 million commercial passengers in 2025 (up 3.2%), which makes it France's second airport after Paris, according to Aéroports de la Côte d'Azur. A hotel in Cannes or a boat rental in Antibes with a French-only site is cutting itself off from a large share of its customers.
+
+## Subdirectories, subdomains or ccTLDs: which URL structure should you pick?
+
+Google doesn't name a winner. Its documentation on [multi-regional and multilingual sites](https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites) lists three valid options and one to avoid:
+
+| Structure | Example | Pros | Cons |
+|---|---|---|---|
+| Subdirectory | `myhotel.fr/en/` | Simple, one site to maintain | Country targeting is less obvious to users |
+| Subdomain | `en.myhotel.fr` | Easy to set up | Users can't always tell whether "en" means a language or a country |
+| Country domain (ccTLD) | `myhotel.de` | Very clear geotargeting | Costly, one domain per country, more infrastructure |
+| URL parameter | `myhotel.fr?lang=en` | None | Explicitly not recommended by Google |
+
+For a local business on the Côte d'Azur, I almost always recommend **subdirectories**. You aren't targeting Germany as a country: you're targeting German speakers who come to Nice. A subdirectory keeps all of the domain's authority on one site and needs no extra infrastructure. A ccTLD makes sense for a brand that genuinely sells in another country, with its own offer and prices for that market.
+
+This site uses that structure: French is the default version, English lives under `/en/`, and every page points to its counterpart in the other language.
+
+## How do you get hreflang right?
+
+The hreflang attribute tells Google that a page exists in other languages and where to find each version. Google's [documentation on localized versions](https://developers.google.com/search/docs/specialty/international/localized-versions) sets a few rules that are often ignored.
+
+Return links are mandatory. If the French page points to the English one, the English page must point back. Google puts it plainly: if two pages don't both point to each other, the tags are ignored. Each version must also list itself.
+
+The codes follow fixed standards. The language uses ISO 639-1 (`fr`, `en`, `de`, `it`), the optional region ISO 3166-1 alpha-2 (`en-GB`, `en-US`). The language always comes first, and you can't specify a country on its own.
+
+The `x-default` value is the fallback for users whose language matches none of your versions. On a French/English Riviera site, it usually points to the French version or to a language selector page.
+
+Here is a correct set of tags, identical on both versions:
+
+```html
+<link rel="alternate" hreflang="fr" href="https://myhotel.fr/chambres/" />
+<link rel="alternate" hreflang="en" href="https://myhotel.fr/en/rooms/" />
+<link rel="alternate" hreflang="x-default" href="https://myhotel.fr/chambres/" />
+```
+
+The mistakes I see most often in audits:
+
+- `en-UK` instead of `en-GB`: "UK" is a reserved code and Google ignores it;
+- hreflang tags that all point to the other language's home page instead of the matching page;
+- an English version that doesn't link back to the French one;
+- relative URLs, when Google asks for full addresses including `https://`.
+
+Google doesn't use hreflang, or the HTML `lang` attribute, to work out what language a page is in. It reads the content. A "/en/" page whose main text is still in French is a French page as far as Google is concerned.
+
+## Should you redirect visitors automatically based on their browser language?
+
+No. Google advises against automatically redirecting visitors to a language version based on a guess about their language, whether from their IP address or their browser settings. The visitor loses the choice (an Italian who lives in Monaco and reads French, say), and Googlebot mostly crawls from the United States without an `Accept-Language` header, so an automatic redirect can keep it from ever seeing some versions.
+
+Use separate URLs per language connected by hreflang, plus a visible language switcher. A discreet banner along the lines of "Cette page existe aussi en français" is fine, as long as it doesn't force the switch.
+
+<ServiceCTA service="creation-site-internet" lang="en" text="I build bilingual and multilingual websites with the URL structure and hreflang set up from day one." />
+
+## Translate or localize: why keywords change from one language to the next
+
+[Website translation](/en/web-development/) in Nice that copies the French site sentence by sentence misses how foreign visitors actually search.
+
+Take a Cannes concierge service whose French pages target "location saisonnière Cannes". An American is more likely to type *vacation rental Cannes* or *villa rental Cannes*, a British visitor *holiday rental Cannes*. A German or Italian won't write "Nice" but *Nizza*, and an Italian will say *Costa Azzurra* rather than Côte d'Azur. A German will look for a *Ferienwohnung in Nizza* or a *Ferienvilla an der Côte d'Azur*, rarely a literal translation of "location saisonnière".
+
+The method I use:
+
+1. list the French queries that matter for the business;
+2. for each target language, find the equivalents people really type (a keyword tool set to that country, Google suggestions, local competitors' pages in that language);
+3. rewrite titles, subheadings and meta descriptions around those queries;
+4. adapt the substance, not just the wording: an American customer wants to know whether you speak English on the phone, how long the drive from the airport is, whether the beach is private.
+
+### Is machine translation penalized?
+
+Google doesn't penalize machine translation as such. Its policy on **scaled content abuse**, in the [Google Search spam policies](https://developers.google.com/search/docs/essentials/spam-policies) last updated in August 2026, targets pages generated at scale mainly to manipulate rankings, and explicitly lists automated transformations such as translating when they add little value for users.
+
+Translating ten service pages with a tool, then having someone who knows the language and the trade review and adapt them, is fine. Generating five hundred "villa + town" pages in six languages with no review is not. Google also notes that translating only the menus and footer while leaving the main content in another language makes for a poor experience.
+
+## Google Business Profile, reviews and structured data in each language
+
+For a local search, tourists often see your Google profile before your website. That Google Business Profile is a single listing, whatever the language. Google may show reviews auto-translated into the reader's language, with a link to the original. What you control:
+
+- asking foreign customers for a review, in their language, at the right moment (at check-out, at key handover);
+- replying to each review in the language it was written in: a review in Italian deserves a reply in Italian;
+- keeping your name, address and phone number identical everywhere, including English-language directories and booking platforms.
+
+I cover the profile itself in the [Google Business Profile guide for Nice](/en/blog/nice-google-business-profile-guide/).
+
+For structured data, each language version should carry its own markup, in its own language. Google asks that markup describe the visible content of the page: an English page with a `LocalBusiness` schema whose description is in French sends a mixed signal. Declare the language with the `inLanguage` property where the type supports it, and keep the same facts (address, phone, opening hours) across versions. On this site, every article publishes a `BlogPosting` schema with `inLanguage` set to `fr-FR` or `en-US` depending on the version.
+
+## Why an English version matters for getting recommended by ChatGPT
+
+GEO (*Generative Engine Optimization*) means making a business understandable and citable by generative engines. For a tourist the scenario is ordinary: they ask ChatGPT or Perplexity, in English, *"best seafood restaurant in Villefranche-sur-Mer"* or *"yacht charter Monaco with English-speaking crew"*. The AI answers in their language and relies on the sources it finds.
+
+The available data calls for caution, but it points the same way. In [December 2025](https://www.gsqi.com/marketing-blog/ai-search-hreflang-multilingual-queries/), Glenn Gabe (GSQi) tested multilingual queries across several platforms: Google, Bing and Copilot generally returned the right language version, while ChatGPT and Claude often returned the US English version and Perplexity often picked the wrong one, to the point that he doubts those three use hreflang at all. Weglot, which sells a translation tool (keep that in mind), analyzed more than 1.3 million citations in AI Overviews and ChatGPT across the Spanish and Mexican markets: according to its study, updated in August 2026, sites without an English version were cited far less on English queries, and AI Overviews clearly favored sources written in the language of the query.
+
+My takeaway for the Riviera: if your site only exists in French, the AI has to understand you through another language before it can recommend you to an American, while your competitors may have written in English from the start. A clean English version, with your services, your neighborhood and your strengths stated clearly, gives the AI a page that matches the question being asked. Nothing guarantees a citation, but you remove an obstacle. To check where you stand, see [how to measure your visibility in ChatGPT](/en/blog/measure-ai-visibility-chatgpt/), and for how GEO works in general, [why your business doesn't show up in ChatGPT](/en/blog/seo-geo-appear-in-chatgpt/).
+
+<ServiceCTA service="seo-geo" lang="en" />
+
+## Checklist for a multilingual website on the French Riviera
+
+- A separate URL per language, in a subdirectory (`/en/`, `/it/`, `/de/`).
+- Reciprocal, self-referencing hreflang tags with valid ISO codes and an `x-default`.
+- No automatic redirect by IP or browser language, and a visible language switcher.
+- Copy adapted to each market's queries (Nizza, Costa Azzurra, *vacation rental*…).
+- Translations reviewed by a human, and no pages generated at scale without added value.
+- Reviews requested and answered in the customer's language.
+- Structured data in each language, consistent with the visible content.
+
+If you work in Monaco, the article on [SEO in Monaco](/en/blog/seo-monaco-international/) goes further on that market.
+
+## Frequently asked questions
+
+### How many languages does a French Riviera website need?
+
+Two are enough for most local businesses: French and English, which covers the top two foreign markets (the US and the UK) and is often the shared language for Scandinavian visitors. Add Italian or German if a visible share of your customers speaks it and you can answer them in that language.
+
+### Does hreflang improve Google rankings?
+
+Google doesn't present hreflang as a ranking lever. It helps Google show the right language version to each user, so an English-speaking tourist doesn't land on your French page.
+
+### Can you translate your website with AI?
+
+Yes, as long as you review and adapt the result. Google doesn't penalize machine translation as such, but its scaled content abuse policy targets mass-translated pages that give users nothing.
+
+### Is a bilingual website enough to show up in ChatGPT?
+
+Not on its own. AI assistants also draw on reviews, directories, mentions of your business on other sites and how clearly your information is stated. The English version gives them a source in the same language as the question.
+
+<Callout title="Key takeaways">
+
+- More than half of the Côte d'Azur's tourists come from abroad (Tourism Observatory, 2025 report): an English version is the minimum.
+- Recommended setup for a local business: `/en/` subdirectories, reciprocal hreflang with `x-default`, no automatic redirects.
+- Adapt keywords to each market instead of translating word for word, and have any machine translation reviewed.
+- A page written in the tourist's language gives you a better chance of being cited when they ask an AI in that language.
+
+</Callout>

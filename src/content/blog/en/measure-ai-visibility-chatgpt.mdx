@@ -1,0 +1,190 @@
+---
+lang: en
+slug: measure-ai-visibility-chatgpt
+translationKey: mesurer-visibilite-ia
+title: "How to measure AI visibility: tracking your presence in ChatGPT, Perplexity, Gemini and Google AI Overviews"
+metaTitle: "How to measure AI visibility (ChatGPT, Gemini)"
+description: "Measure AI visibility step by step: a prompt panel, ChatGPT traffic in GA4, Search Console, Bing, AI crawler logs and a simple monthly GEO dashboard."
+keywords:
+  - measure AI visibility
+  - ChatGPT visibility
+  - GEO tracking
+  - ChatGPT traffic GA4
+  - GEO KPIs
+tags:
+  - GEO
+  - AI
+  - SEO
+pillar: seo
+pubDate: 2026-10-22
+draft: false
+---
+
+import ServiceCTA from "~/components/blog/ServiceCTA.astro";
+import Callout from "~/components/blog/Callout.astro";
+
+To measure AI visibility, you combine two sources: what the assistants answer when you ask them your customers' questions, and what your analytics record afterwards (visits, crawlers, conversions). No single tool gives you your ChatGPT visibility, but a small business in Nice, Cannes or Monaco can set up a reliable tracking routine in half a day and keep it going in two or three hours a month.
+
+## Why does measuring AI visibility need its own method?
+
+On Google, you can check a ranking. In ChatGPT or Perplexity, the same question asked twice rarely gets the same answer. In a study published in January 2026, SparkToro and Gumshoe ran 12 prompts nearly 3,000 times through ChatGPT, Claude and Google's AI surfaces, and the same list of brands came back [less than once in a hundred runs](https://searchengineland.com/ai-recommendation-lists-rarely-repeat-study-468076). Their conclusion, which I agree with: your exact rank in an AI answer means little, while **how often you appear** across many runs does mean something.
+
+GEO tracking (GEO stands for *Generative Engine Optimization*, optimising for generative engines) therefore works with rates rather than positions. The question is no longer "am I third?" but "across 30 questions asked three times each, how many answers name me, and with correct details?"
+
+## Step 1: build a panel of 20 to 30 realistic prompts
+
+The panel is the fixed list of questions you test every month. It should sound like what your customers actually type or say to an assistant, not like your SEO keyword list.
+
+Split it into three groups:
+
+| Group | Share of the panel | Examples |
+|---|---|---|
+| Discovery (no brand name) | about 60% | "best seafood restaurant in Cannes", "luxury real estate agency Monaco", "emergency plumber east Nice" |
+| Comparison | about 25% | "which company should I use to charter a yacht in Antibes, and why?", "corporate lawyer in Nice: who should I pick?" |
+| Brand | about 15% | "[your name] Nice reviews", "[your name] opening hours and prices" |
+
+Discovery prompts matter most, because that is where the AI decides whom to recommend to someone who has never heard of you. Brand prompts are mainly there to check accuracy (address, hours, prices, services).
+
+A few rules keep the panel honest:
+
+- use long, conversational phrasing, the way people talk to an assistant ("I'm looking for a seafood place near Le Suquet that isn't too touristy, any ideas?");
+- add the neighbourhood or town when your customers would: Cimiez, the Port, east Nice, Juan-les-Pins, Fontvieille;
+- include a few French prompts as well if you serve both local and international clients, which is common in Monaco and in Cannes during the summer;
+- freeze the panel once it is set, otherwise months stop being comparable. You can add prompts, but don't remove any.
+
+## Step 2: test cleanly, with no history
+
+An assistant that already knows you is more likely to mention you. To see what a stranger sees:
+
+- ChatGPT: logged out, or in a Temporary Chat with no memory;
+- Perplexity and Gemini: private window, logged out where possible;
+- Google: private window, checking the AI Overview at the top of the results, then the AI Mode tab;
+- Copilot: worth adding if your clients live in the Microsoft ecosystem (law firms, corporate clients).
+
+Ask each prompt **three times** per engine, in separate conversations. It feels slow, but it is the only way to get a rate that doesn't hinge on luck. Run the tests from the Riviera: for local queries, the location inferred from your connection changes the answers.
+
+### What to record for each answer
+
+A plain spreadsheet does the job, one row per prompt, engine and run:
+
+| Column | What to record |
+|---|---|
+| Presence | Yes / no: is your business named? |
+| Rank | Position in the list if there is one (1, 2, 3…), read as a hint only |
+| Accuracy | Correct / partly wrong / wrong (address, hours, prices, services) |
+| Cited sources | The linked URLs: your site, your Google profile, TripAdvisor, a directory, a press article… |
+| Competitors | The other names mentioned |
+
+The "Cited sources" column is the one you act on. If Perplexity keeps citing a directory where your listing dates from 2021, you know what to fix first. A wrong opening time is also more urgent than being absent: it costs you customers you had already won.
+
+## Step 3: track ChatGPT traffic in GA4
+
+Being cited is pointless if nobody clicks. In Google Analytics 4, two features work together.
+
+**The built-in "AI Assistant" channel.** Since 13 May 2026, [GA4 automatically groups](https://support.google.com/analytics/answer/9164320?hl=en) visits from recognised assistants (Google names ChatGPT, Gemini and Claude) into an "AI Assistant" channel, with the medium `ai-assistant`. There is nothing to set up, but Google doesn't publish the full list of recognised sources.
+
+**A custom channel group.** To control the list yourself, build your own, as described in [Google Analytics Help](https://support.google.com/analytics/answer/13051316?hl=en):
+
+1. Admin, then Data display, then Channel groups;
+2. "Create new channel group" (it starts from a copy of the default group);
+3. add an "AI assistants" channel with the condition Source "matches regex";
+4. move that channel **above "Referral"**, because GA4 assigns a visit to the first channel it matches;
+5. save it, then read it under Acquisition, Traffic acquisition.
+
+Google's sample regex casts a very wide net. I prefer an explicit list that you extend when a new assistant appears:
+
+```
+chatgpt\.com|openai\.com|perplexity\.ai|gemini\.google\.com|copilot\.microsoft\.com|claude\.ai
+```
+
+A useful bonus: a custom group also applies to past data. A standard property can have two of them on top of the default group.
+
+### The utm_source=chatgpt.com parameter
+
+According to [OpenAI's publisher FAQ](https://help.openai.com/en/articles/12627856-publishers-and-developers-faq), ChatGPT automatically adds `utm_source=chatgpt.com` to the links in its search answers. That is what lets GA4 attribute the visit even without a referrer. The condition is that you let OAI-SearchBot crawl your site (see step 5).
+
+The tagging isn't guaranteed. Between 9 and 15 October 2026, analysts saw ChatGPT links arriving with neither the parameter nor a referrer, so they landed in Direct; the analyst who flagged it later described it as a bug that had been fixed, and OpenAI did not comment. If your ChatGPT traffic drops suddenly while your presence rate holds, look at Direct before drawing conclusions.
+
+Finally, set up your conversions (form, tap-to-call, booking) as key events. AI traffic is often small in volume; what matters is how many of those visits call or book.
+
+<ServiceCTA service="seo-geo" lang="en" text="Want this tracking set up properly (prompt panel, GA4, logs) without losing your evenings to it? It's at the core of my SEO & GEO work." />
+
+## Step 4: what Search Console and Bing show (and what they don't)
+
+**Google Search Console.** Clicks from AI Overviews and AI Mode are counted in the Performance report under the "Web" search type, mixed in with everything else. Since June 2026 Google has added [dedicated generative AI reports](https://developers.google.com/search/blog/2026/06/gen-ai-performance-reports), available to every site worldwide since 31 August 2026. They show **impressions** in AI features on Search and Discover, by page, country, device and date. They show neither clicks nor queries, so you learn which pages Google surfaces in its AI answers, not for which questions.
+
+**Bing Webmaster Tools.** In February 2026 Microsoft launched an "AI Performance" report as a public preview. It counts citations of your pages in Copilot, in Bing's AI summaries and with some partners, along with "grounding queries", the searches the AI ran to fetch your content. No click data there either. For a small business it is free and it is the only official tool that shows citations, so it is worth the ten minutes it takes to sign up.
+
+## Step 5: read your server logs to follow AI crawlers
+
+Your host's logs list every bot visit. They tell you whether AI systems read your site, and which ones. The names to know:
+
+| Crawler | Role (according to its operator) |
+|---|---|
+| OAI-SearchBot | Indexes pages for ChatGPT search. Blocking it removes you from search answers. |
+| ChatGPT-User | Visits a page on a user's request, during a conversation. No automatic crawling. |
+| GPTBot | Collects content that may be used to train OpenAI's models. No effect on ChatGPT search. |
+| PerplexityBot | Indexes pages for Perplexity's results, not for training. |
+| Perplexity-User | Visits a page when a user asks a question; generally ignores robots.txt. |
+| Google-Extended | Not a crawler: a robots.txt token that governs use for Gemini. No effect on Google Search. |
+
+Sources: [OpenAI documentation](https://developers.openai.com/api/docs/bots), Perplexity documentation, [Google documentation](https://developers.google.com/search/docs/crawling-indexing/google-common-crawlers).
+
+ChatGPT-User is the most telling signal: each visit means a user asked something that made ChatGPT go and read your page. A rise on your "prices" or "contact" page is a good leading indicator. Check your robots.txt too: an overly broad rule or a security plugin is enough to block OAI-SearchBot, and the site drops out of ChatGPT search answers without anyone noticing.
+
+## Do you need a paid tracking tool?
+
+Several vendors automate prompt testing:
+
+- Semrush offers an AI Visibility Toolkit;
+- Ahrefs Brand Radar tracks a brand's visibility in LLMs, with a custom prompts module;
+- SE Ranking tracks AI Overviews, AI Mode, ChatGPT and Gemini;
+- Otterly.AI covers ChatGPT, Perplexity, AI Overviews, AI Mode, Gemini and Copilot, among others;
+- Profound is aimed more at large brands, across a long list of engines.
+
+Pricing changes often, so check each vendor's site. My view: for a local business, a 30-prompt panel tested by hand each month is enough to start. A tool pays for itself once you track several locations, several languages or hundreds of prompts. Be wary of any tool showing an "AI rank" to one decimal place; the SparkToro study above explains why.
+
+## The monthly GEO dashboard
+
+Five GEO KPIs are enough. One row per month, one column per metric:
+
+| KPI | Calculation | Source |
+|---|---|---|
+| Presence rate | Answers that name you / total answers | Prompt panel |
+| Share of voice | Your mentions / mentions of all businesses recorded | Prompt panel |
+| Accuracy rate | Error-free answers / answers that name you | Prompt panel |
+| AI traffic | Sessions in the "AI assistants" channel (plus AI impressions in Search Console) | GA4, Search Console |
+| AI conversions | Key events from the AI channel | GA4 |
+
+Add Bing citations and ChatGPT-User visits as notes if you have the logs. Read the trend over three months: a presence rate rising from 10% to 25% on your discovery prompts says more than any single figure.
+
+When the numbers are poor, my guides on [how to appear in ChatGPT](/en/blog/seo-geo-appear-in-chatgpt/) and on [AI Overviews and AI Mode for local businesses](/en/blog/google-ai-overviews-ai-mode-local-business/) cover what to do next. And if you are often cited with the wrong opening hours, start with your [Google Business Profile](/en/blog/nice-google-business-profile-guide/).
+
+<ServiceCTA service="seo-geo" lang="en" text="My Google + AI visibility audit (€390, 5 days) starts from this prompt panel. The monthly SEO/GEO retainer (€490/month) keeps the dashboard up to date." />
+
+## Frequently asked questions
+
+### How do I know if my business appears in ChatGPT?
+
+Ask ChatGPT, logged out or in a Temporary Chat, the questions your customers ask without using your name, three times each, and note whether you are named. Repeat every month with the same list to follow the trend.
+
+### How do I see ChatGPT traffic in GA4?
+
+Open Acquisition, Traffic acquisition, and look at the "AI Assistant" channel Google added in May 2026, or filter on the source chatgpt.com. A custom channel group lets you control which assistants are counted.
+
+### Does Search Console show AI Overviews?
+
+Partly. Since August 2026 every site can see impression reports for Google's AI features, by page. Clicks stay mixed in with regular web traffic and queries are not shown.
+
+### How often should I measure AI visibility?
+
+Once a month is enough for a small business. Answers vary too much from day to day for daily tracking to tell you more than a monthly trend on a fixed panel.
+
+<Callout title="Key takeaways">
+
+- Measure a presence rate across 20 to 30 prompts tested three times, not a rank: AI answers change from one run to the next.
+- Record accuracy and cited sources too, because they tell you what to fix.
+- For traffic: GA4's "AI Assistant" channel, a custom channel group, Search Console's AI reports and Bing's AI Performance report.
+- Logs (OAI-SearchBot, ChatGPT-User, PerplexityBot) show whether AI systems actually read your site.
+
+</Callout>

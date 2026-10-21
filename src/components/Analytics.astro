@@ -30,12 +30,33 @@
   gtag('js', new Date());
   gtag('config', 'G-W64W3JKY43');
 
-  // Lead conversions. The site has no form: a click on an e-mail, WhatsApp or
-  // phone link IS the conversion. Sent as GA4's recommended `generate_lead`
-  // event (mark it as a key event in GA4) so it is attributed to its campaign —
-  // e.g. ChatGPT Ads with utm_source=chatgpt. Only the channel is sent, never
-  // the address/number (no PII in GA4).
+  // First-touch campaign data for this session, sent along with each form /
+  // callback lead (src/lib/lead-form.ts) so a lead can be traced to ChatGPT
+  // Ads (utm_*, oppref), ChatGPT search (utm_source=chatgpt.com), Google…
+  try {
+    if (!sessionStorage.getItem('ap-attrib')) {
+      var q = new URLSearchParams(location.search);
+      var attrib = { landing: location.pathname };
+      ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'oppref', 'gclid'].forEach(function (k) {
+        var v = q.get(k);
+        if (v) attrib[k] = v.slice(0, 120);
+      });
+      if (document.referrer && document.referrer.indexOf(location.origin) !== 0) {
+        attrib.referrer = document.referrer.slice(0, 200);
+      }
+      sessionStorage.setItem('ap-attrib', JSON.stringify(attrib));
+    }
+  } catch (e) {}
+
+  // Lead conversions. A sent form or callback request fires `generate_lead`
+  // from lead-form.ts; a click on an e-mail, WhatsApp or phone link counts too.
+  // GA4's recommended event (mark it as a key event) so it is attributed to its
+  // campaign, e.g. ChatGPT Ads with utm_source=chatgpt. Only the channel is
+  // sent, never the address/number (no PII in GA4). Clicks on the home
+  // "doors" are tracked as `select_door` to see which needs dominate.
   document.addEventListener('click', function (e) {
+    var door = e.target && e.target.closest ? e.target.closest('[data-door]') : null;
+    if (door) gtag('event', 'select_door', { door: door.getAttribute('data-door') });
     var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
     if (!a) return;
     var href = a.getAttribute('href') || '';

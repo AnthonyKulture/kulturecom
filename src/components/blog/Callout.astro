@@ -14,12 +14,12 @@ const { title } = Astro.props;
 >
   {
     title && (
-      <p class="font-mono mb-2 text-[11px] uppercase tracking-[0.18em] text-[var(--color-accent)]">
+      <p class="font-label mb-2 text-[13px] uppercase tracking-[0.06em] text-[var(--color-accent)]">
         {title}
       </p>
     )
   }
-  <div class="callout-body text-[clamp(14px,1.05vw,16px)] leading-[1.6] text-[var(--color-ink)]">
+  <div class="callout-body text-[clamp(17px,1.05vw,18px)] leading-[1.6] text-[var(--color-ink)]">
     <slot />
   </div>
 </aside>

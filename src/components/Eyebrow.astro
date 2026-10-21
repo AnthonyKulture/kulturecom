@@ -1,12 +1,10 @@
 ---
 /**
- * Section eyebrow — mono uppercase label + short accent line.
+ * Section eyebrow — architect sheet label: ◇ LABEL, then a dashed leader.
  *
- * Used at the top of every major section (About, Services, Projects, CTA,
- * AboutChapter) for the same brutalist editorial micro-pattern. The
- * `variant` prop swaps the rendering between light sections (cream bg with
- * olive accent line) and dark sections (inverted: current color, lower
- * opacity). Pass any extra wrapper classes (margins, alignment) via `class`.
+ * Used at the top of major sections (styles: `.sheet-label` in global.css).
+ * `variant="dark"` lowers the opacity for tinted bands. Pass extra wrapper
+ * classes (margins, alignment) via `class`.
  */
 interface Props {
   label: string;
@@ -19,21 +17,11 @@ interface Props {
 
 const { label, variant = "light", class: className = "", ...rest } = Astro.props;
 
-const baseClasses =
-  "font-mono inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em]";
-
-const textClasses =
-  variant === "dark"
-    ? "opacity-70"
-    : "text-[var(--color-ink-muted)]";
-
-const lineClasses =
-  variant === "dark"
-    ? "inline-block h-px w-6 bg-current opacity-60"
-    : "inline-block h-px w-6 bg-[var(--color-accent)]";
+const textClasses = variant === "dark" ? "opacity-70" : "";
 ---
 
-<p {...rest} class:list={[baseClasses, textClasses, className]}>
-  <span aria-hidden="true" class={lineClasses}></span>
-  {label}
+<p {...rest} class:list={["sheet-label", textClasses, className]}>
+  <span aria-hidden="true" class="sheet-diamond"></span>
+  <span>{label}</span>
+  <span aria-hidden="true" class="sheet-leader"></span>
 </p>

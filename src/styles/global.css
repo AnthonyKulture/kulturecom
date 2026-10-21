@@ -1,17 +1,15 @@
 @import "tailwindcss";
 
 /* === Self-hosted fonts (latin subset, from Google Fonts) ===
-   Replaces the render-blocking fonts.googleapis.com stylesheet: no third-party
-   round trip before first paint. Geist / Geist Mono are variable files that
-   cover both 400 and 500. The latin range includes French accents, « », € and
-   œ; glyphs outside it (e.g. "→") fall back to the system font, exactly as they
-   did with Google's CSS. */
+   Two sans-serif families: Urbanist for headings and the logo, Geist for text
+   and labels. Both are variable files (one request each). The latin range
+   covers French accents, « », € and œ. */
 @font-face {
-  font-family: "Archivo Black";
+  font-family: "Urbanist";
   font-style: normal;
-  font-weight: 400;
+  font-weight: 400 700;
   font-display: swap;
-  src: url("/fonts/archivo-black-latin.woff2") format("woff2");
+  src: url("/fonts/urbanist-latin.woff2") format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
@@ -22,43 +20,35 @@
   src: url("/fonts/geist-latin.woff2") format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
-@font-face {
-  font-family: "Geist Mono";
-  font-style: normal;
-  font-weight: 400 500;
-  font-display: swap;
-  src: url("/fonts/geist-mono-latin.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-@font-face {
-  font-family: "Instrument Serif";
-  font-style: italic;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/instrument-serif-italic-latin.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
 
-/* === Brand design tokens — Brutalist editorial (cream + ink) === */
+/* === Brand design tokens — "Riviera": white page, cool greys, one
+   Mediterranean blue accent used sparingly (CTAs, prices, one word). === */
 @theme {
   /* Colors */
-  --color-bg: #efe9dc;
-  --color-bg-shade: #e6dfce;
-  --color-ink: #0b0b0b;
-  --color-ink-muted: #5a5a5a;
-  --color-ink-subtle: #8a8a8a;
-  --color-border: #d4ccba;
-  --color-accent: #74714f; /* olive taupe */
+  --color-bg: #ffffff;
+  --color-bg-shade: #f3f6fa; /* tinted surface: cards, form, bands */
+  --color-ink: #10151d;
+  --color-ink-muted: #556070;
+  --color-ink-subtle: #8a93a1;
+  --color-border: #e2e7ee;
+  --color-accent: #24508c; /* bleu Méditerranée */
+  --color-accent-strong: #1b3f70; /* hover / pressed */
 
-  /* Typography */
+  /* Typography — two sans-serif families */
   --font-display:
-    "Archivo Black", system-ui, -apple-system, sans-serif;
+    "Urbanist", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-sans:
     "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-serif:
-    "Instrument Serif", "Times New Roman", Georgia, serif;
-  --font-mono:
-    "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  /* Small uppercase labels: Geist with tracking (no third family). */
+  --font-label:
+    "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Shape: square corners (90°) everywhere */
+  --radius-card: 0;
+  --radius-field: 0;
+
+  /* Architect lines: hairline colour (blueprint guides, rules, marks) */
+  --color-line: rgb(16 21 29 / 0.14);
 
   /* Easings */
   --ease-power3: cubic-bezier(0.16, 1, 0.3, 1);
@@ -71,32 +61,21 @@
   html {
     color-scheme: light;
     font-family: var(--font-sans);
-    /* Disable rubber-band overscroll on Mac Chrome — without this, scrolling
-       past the bottom of the page causes a brief negative scroll delta, which
-       ScrollTrigger interprets as a reverse scroll and plays the pinned
-       timeline backward (Projects letter-mask shrinks back, exposing the
-       previous Services layer). Safari filters those events natively. */
+    /* No rubber-band overscroll (Mac Chrome) on the cream page. */
     overscroll-behavior: none;
-    /* Clip horizontal overflow at the document ROOT (not just body). The
-       hero-transition image is `position: fixed` and gets scaled past the
-       viewport by hero-transition.ts; being fixed, it escapes `body`'s
-       `overflow-x: hidden` and inflates the mobile LAYOUT viewport
-       (`window.innerWidth` 390→437). That stretches every `fixed left/right:0`
-       element — the smart nav and the mobile menu — to the inflated width,
-       pushing the burger / ✕ close button off the right edge once you scroll
-       down. `clip` (not `hidden`) clips without creating a scroll container, so
-       `overflow-y` stays `visible` and Lenis / ScrollTrigger are untouched. */
+    /* Clip horizontal overflow at the ROOT with `clip` (not `hidden`): no scroll
+       container is created, so the viewport keeps scrolling natively. */
     overflow-x: clip;
-    /* Smooth scroll for in-page anchor links (e.g. the nav's #contact CTA).
-       The reduced-motion block below disables it. */
+    /* Smooth scroll for in-page anchor links (e.g. #contact). The
+       reduced-motion block below disables it. */
     scroll-behavior: smooth;
   }
 
   body {
     background: var(--color-bg);
     color: var(--color-ink);
-    font-size: 16px;
-    line-height: 1.55;
+    font-size: 17px;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     /* `clip`, NOT `hidden` — same reasoning as the html rule above. With
@@ -113,322 +92,200 @@
     overscroll-behavior: none;
   }
 
-  /* Lenis smooth-scroll (src/lib/smooth-scroll.ts). While Lenis is active it
-     adds `.lenis.lenis-smooth` to <html>; we disable the native
-     `scroll-behavior: smooth` above so the two don't fight (Lenis drives anchor
-     scrolling via lenis.scrollTo). Under prefers-reduced-motion Lenis is never
-     initialised, so these classes are absent and native smooth-scroll stands. */
-  html.lenis,
-  html.lenis body {
-    height: auto;
-  }
-  .lenis.lenis-smooth {
-    scroll-behavior: auto !important;
-  }
-  .lenis.lenis-stopped {
-    overflow: hidden;
-  }
-
   ::selection {
-    background: var(--color-ink);
-    color: var(--color-bg);
+    background: var(--color-accent);
+    color: #ffffff;
   }
 
   *:focus-visible {
-    outline: 2px solid var(--color-ink);
+    outline: 2px solid var(--color-accent);
     outline-offset: 3px;
   }
 }
 
 @layer utilities {
+  /* Headings: Urbanist semibold, sentence case, tight tracking. */
   .font-display {
     font-family: var(--font-display);
-    text-transform: uppercase;
-    letter-spacing: -0.04em;
-    line-height: 0.92;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
   }
 
-  .font-serif-italic {
-    font-family: var(--font-serif);
-    font-style: italic;
+  /* Leads and soft emphasis: Urbanist regular (was a serif italic). */
+  .font-lead {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.01em;
   }
+}
 
-  .font-mono {
-    font-family: var(--font-mono);
-  }
-
-  /* Initial state for arrival animation — set on the JS side */
-  .anim-hidden {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-
-  .anim-in {
-    opacity: 1;
-    transform: translateY(0);
+/* === Buttons — one shape for every call to action: pill, Geist medium.
+   Primary = the blue accent; secondary = hairline outline. */
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 24px;
+    border: 1px solid transparent;
+    border-radius: 0;
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.2;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
     transition:
-      opacity 0.9s var(--ease-power3),
-      transform 0.9s var(--ease-power3);
+      background-color 0.2s var(--ease-power3),
+      border-color 0.2s var(--ease-power3),
+      color 0.2s var(--ease-power3),
+      transform 0.2s var(--ease-power3);
+  }
+  .btn:active {
+    transform: scale(0.98);
+  }
+  .btn-primary {
+    background: var(--color-accent);
+    color: #ffffff;
+  }
+  .btn-primary:hover {
+    background: var(--color-accent-strong);
+  }
+  .btn-secondary {
+    border-color: var(--color-border);
+    background: transparent;
+    color: var(--color-ink);
+  }
+  .btn-secondary:hover {
+    border-color: var(--color-ink);
+  }
+  .btn-sm {
+    padding: 10px 18px;
+    font-size: 14px;
   }
 }
 
-/* iOS Safari sub-pixel repaint fix for the centered Hero title.
-   The title is mathematically centered and its layout position is constant
-   (verified to 0.01px in Chromium AND WebKit, first-load + reload) — but on a
-   real iPhone the reveal cascade (.anim-in transform) and the scroll-transition
-   GSAP transforms flip each line on/off a GPU compositing layer "as the hero
-   loads", and iOS Safari repaints layer-promoted centered text a sub-pixel
-   sideways. At DPR 3 that reads as the title "se replace" horizontally by a few
-   device px. Pinning the lines + inline figure to a STABLE layer up-front
-   (backface-visibility + will-change, which don't touch the translateY value)
-   keeps compositing constant so the text never re-snaps. */
-[data-hero] [data-anim-line],
-[data-hero] [data-anim-figure] {
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  will-change: transform;
-}
-
-/* === Dark surface — inverted color scheme ===
-   Any section that paints cream-on-ink. `[data-about]` is the original
-   manifesto hook; `[data-surface="dark"]` generalizes it so every other dark
-   band (Footer, About 2, the About-page story/process/CTA bands) inherits the
-   SAME token values and can use var(--color-ink*)/var(--color-bg) instead of
-   hardcoded hex — keeping one source of truth for the palette. */
-[data-about],
-[data-surface="dark"] {
-  --color-bg: #0b0b0b;
-  --color-ink: #efe9dc;
-  --color-ink-muted: #a8a59c;
-  --color-ink-subtle: #6a6a64;
-  --color-border: #2a2a28;
-}
-
-/* === Mobile hero baselines + full-bleed === */
-.baseline-divider {
-  display: block;
-  width: 100%;
-  height: 1px;
-  background: color-mix(in srgb, var(--color-ink) 22%, transparent);
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 0.6s var(--ease-power3);
-  margin: clamp(6px, 1.5vw, 14px) 0;
-  will-change: transform;
-}
-.baseline-divider.is-drawn {
-  transform: scaleX(1);
-}
-
-.full-bleed-mobile {
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
+/* === Architect lines — very fine drafting marks, like a working sheet ===
+   1. Two dashed vertical guides in the side gutters (tablet and up).
+   2. A dashed rule across the top of every page section.
+   3. `.sheet-label`: ◇ SHEET 02 · NAME, then a dashed leader to the edge.
+   4. `.marks`: crop marks just outside the four corners of a frame. */
+:root {
+  --page-pad: 16px;
 }
 @media (min-width: 640px) {
-  .full-bleed-mobile {
-    width: 100%;
-    margin-left: 0;
-    margin-right: 0;
+  :root { --page-pad: 24px; }
+}
+@media (min-width: 768px) {
+  :root { --page-pad: 48px; }
+  /* Middle of each side gutter, following the centred 96rem column. */
+  body::before {
+    --guide-x: calc(max(var(--page-pad), (100vw - 96rem) / 2 + var(--page-pad)) - var(--page-pad) / 2);
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    pointer-events: none;
+    background:
+      repeating-linear-gradient(to bottom, var(--color-line) 0 3px, transparent 3px 7px) var(--guide-x) 0 / 1px 100% no-repeat,
+      repeating-linear-gradient(to bottom, var(--color-line) 0 3px, transparent 3px 7px) calc(100% - var(--guide-x)) 0 / 1px 100% no-repeat;
   }
 }
 
-/* === Hero scroll-down hint ===
-   Thin vertical track at the bottom of the Hero with a 16px ink segment
-   that slides from above the track to below it on a loop. The
-   overflow:hidden on the track naturally clips the segment at the
-   edges, so the visible motion reads as a downward dash repeating —
-   a non-verbal "scroll down" cue paired with the label above. */
-.hero-scroll-bar__progress {
-  animation: hero-scroll-bar-slide 1.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
-  will-change: transform;
+main > section {
+  position: relative;
 }
-@keyframes hero-scroll-bar-slide {
-  0% {
-    transform: translateY(-100%);
-  }
-  100% {
-    transform: translateY(300%);
-  }
-}
-
-/* === Letter-mask reveal (Projects layer transition) ===
-   A giant `+` glyph acts as a CSS mask: the layer is only visible inside the
-   letter shape. Animating mask-size from 0% to a huge value (via GSAP) makes
-   the `+` grow from the center and "engulf" the viewport, progressively
-   revealing the section beneath. */
-.letter-mask {
-  --mask-svg: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text x='50' y='78' text-anchor='middle' font-family='Archivo Black, sans-serif' font-size='90' font-weight='900' fill='white'>%2B</text></svg>");
-  -webkit-mask-image: var(--mask-svg);
-  mask-image: var(--mask-svg);
-  -webkit-mask-position: center;
-  mask-position: center;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-size: 0%;
-  mask-size: 0%;
-  will-change: mask-size, -webkit-mask-size;
-}
-
-/* === Preloader ===
-   Wrapper holds the cream bg, the marquees, the slide grid and the central
-   brand mark. Exit is now driven by GSAP (opacity tween at the end of the
-   morph phase) instead of the prior clip-path inset curtain — the curtain
-   no longer fits a flow where the brand mark must morph to top-left BEFORE
-   the bg fades. */
-.preloader {
-  will-change: opacity;
-}
-
-/* Per-letter initial state for the central brand mark. The JS staggers each
-   letter to opacity 1 / y 0 over the typewriter phase — opacity + translate
-   only (no blur) for a smooth, cheap cascade. */
-.preloader-letter {
-  display: inline-block;
-  opacity: 0;
-  transform: translateY(8px);
-}
-
-/* === Word-split scroll reveal utility (mask reveal) ===
-   Titles are split into per-word spans at SSR via `src/lib/text-split.ts`.
-   The outer `.split-word` is an inline-block with `overflow: hidden` that
-   acts as a clipping mask; the inner `.split-word-inner` is translated below
-   the wrapper at initial state (yPercent: 110) and rises into view as the
-   GSAP timeline progresses. Used by About manifesto items, Services
-   (desktop + mobile), and any title that needs a mask reveal. Title
-   line-height ≥ 1.15 gives enough vertical room for descenders (p, g, j). */
-.split-word {
-  display: inline-block;
-  vertical-align: top;
-  overflow: hidden;
-}
-.split-word-inner {
-  display: inline-block;
-  will-change: transform;
-}
-
-/* === Word-by-word blur-reveal utility ===
-   Inspired by 21st.dev's digital-serenity hero. Each word fades in from
-   below with a blur-out transition, staggered by an inline animation-delay
-   set in SSR (see `splitWordsWithDelay` in `src/lib/text-split.ts`). The
-   animation is paused until the parent element receives the
-   `data-words-revealed` attribute — once present, every child word starts
-   its own delay-then-animate cycle. The 50% keyframe carries the half-blur
-   "emerging from fog" feel that distinguishes this from a flat fade. */
-@keyframes word-appear {
-  0% {
-    opacity: 0;
-    transform: translateY(20px) scale(0.92);
-    filter: blur(8px);
-  }
-  50% {
-    opacity: 0.8;
-    transform: translateY(6px) scale(0.97);
-    filter: blur(2px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    filter: blur(0);
-  }
-}
-.word-animate {
-  display: inline-block;
-  opacity: 0;
-  margin: 0 0.1em;
-  animation: word-appear 0.8s ease-out forwards;
-  animation-play-state: paused;
-  will-change: opacity, transform;
-}
-[data-words-revealed] .word-animate {
-  animation-play-state: running;
-}
-
-/* === About chapter scroll-driven blur reveal ===
-   Each word of an About chapter title / description is wrapped in a
-   `.about-reveal-word` span by `About.astro` (SSR split-by-whitespace).
-   GSAP ScrollTrigger (`src/lib/about-reveal.ts`) drives opacity / transform
-   / filter on a bell-curve tied to the word's viewport position — visible
-   at center, blurred-out near the 10% top/bottom edges. The initial state
-   below prevents a FOUC between SSR paint and the GSAP `set()` call. */
-.about-reveal-word {
-  display: inline-block;
-  opacity: 0;
-  transform: translateY(30px);
-}
-
-/* Modifier — swaps the per-word brutalist font-display (uppercase, tight
-   tracking) for a softer serif italic on the marked words. Used in i18n
-   strings via <em> tags to emphasize key terms in titles (e.g. "designer
-   and developer" / "concept au code") in the mixed-typography pattern
-   from the reference layout. Inherits the initial state from the base
-   class so the cascade animation still applies. */
-.about-reveal-word--italic {
-  font-family: var(--font-serif);
-  font-style: italic;
-  text-transform: none;
-  letter-spacing: normal;
-  font-weight: 400;
-}
-
-/* About chapter description — per-word reveal container. The block
-   itself no longer carries the initial hidden state — each `.about-body-word`
-   span handles its own opacity/transform/filter so the GSAP stagger can
-   choreograph a word-by-word cascade matching the title's brutalist feel. */
-.about-body-reveal {
-  /* layout-only — visibility lives on `.about-body-word` */
-}
-
-/* Per-word span inside the description. Each word starts hidden + offset
-   + blurred; GSAP ScrollTrigger reveals them in a tight stagger as the
-   body crosses the viewport reading plateau, then re-hides them on exit. */
-.about-body-word {
-  display: inline-block;
-  opacity: 0;
-  transform: translateY(40px);
-}
-
-/* Blur is animated on the chapter title/body CONTAINERS (one layer each) by
-   src/lib/about-reveal.ts, not per word — `will-change: filter` here promotes
-   just those 8 blocks instead of ~200 word spans. */
-[data-about-chapter-title],
-[data-about-chapter-body] {
-  will-change: filter;
-}
-
-/* Per-teaser service CTA — starts hidden + non-interactive; src/lib/about-reveal.ts
-   fades it in/out (and toggles pointer-events) in step with the body so it never
-   eats clicks while transparent. Under reduced motion / no JS it stays visible. */
-.about-cta {
-  opacity: 0;
+main > section:not(:first-child)::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
   pointer-events: none;
+  background: repeating-linear-gradient(to right, var(--color-line) 0 3px, transparent 3px 7px);
 }
 
-/* Modifier — words that lived inside an <em> tag in the i18n string
-   render as Instrument Serif italic, slightly larger, for the editorial
-   mixed-typography emphasis the design calls for. */
-.about-body-word--italic {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 400;
-  font-size: 1.08em;
-  letter-spacing: 0;
-}
-
-/* Service-teaser variant — a mono index ("01") leads the serif-italic title.
-   It's baked into the title HTML by About.astro (not an `.about-reveal-word`),
-   so it rides the container blur reveal at opacity 1 and sharpens with the
-   block instead of cascading word-by-word. The `not-italic` mono num is the
-   brutalist counterpoint to the soft serif title beneath it. */
-.about-service-num {
-  display: block;
-  font-family: var(--font-mono);
-  font-style: normal;
-  font-size: clamp(11px, 0.9vw, 13px);
-  letter-spacing: 0.18em;
+.sheet-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  font-family: var(--font-label);
+  font-size: 13px;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--color-ink) 45%, transparent);
-  margin-bottom: clamp(0.75rem, 1.6vw, 1.4rem);
+  color: var(--color-ink-muted);
+}
+.sheet-diamond {
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  border: 1px solid currentColor;
+  transform: rotate(45deg);
+}
+.sheet-leader {
+  flex: 1;
+  min-width: 24px;
+  height: 1px;
+  background: repeating-linear-gradient(to right, var(--color-line) 0 3px, transparent 3px 7px);
+}
+
+.marks {
+  position: relative;
+}
+.marks::after {
+  --m: var(--color-line);
+  content: "";
+  position: absolute;
+  inset: -10px;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--m), var(--m)) left 0 top 10px / 6px 1px no-repeat,
+    linear-gradient(var(--m), var(--m)) left 10px top 0 / 1px 6px no-repeat,
+    linear-gradient(var(--m), var(--m)) right 0 top 10px / 6px 1px no-repeat,
+    linear-gradient(var(--m), var(--m)) right 10px top 0 / 1px 6px no-repeat,
+    linear-gradient(var(--m), var(--m)) left 0 bottom 10px / 6px 1px no-repeat,
+    linear-gradient(var(--m), var(--m)) left 10px bottom 0 / 1px 6px no-repeat,
+    linear-gradient(var(--m), var(--m)) right 0 bottom 10px / 6px 1px no-repeat,
+    linear-gradient(var(--m), var(--m)) right 10px bottom 0 / 1px 6px no-repeat;
+}
+
+/* === Tinted surface ===
+   Bands that stand apart from the white page (`[data-surface="tint"]`: footer,
+   mobile menu, some service / About bands) re-map the SAME tokens to the pale
+   blue-grey, so components keep using var(--color-bg) / var(--color-ink*). */
+[data-surface="tint"] {
+  --color-bg: #f3f6fa;
+  --color-bg-shade: #e9eef5;
+  --color-border: #dbe2eb;
+}
+
+/* === Page transitions — native cross-document View Transitions (no JS).
+   Browsers without support simply load the next page as before. */
+@view-transition {
+  navigation: auto;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.28s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* === Scroll reveal (src/lib/reveal.ts) — hidden state only once JS has
+   armed it (`html.reveal-on`), so content is never lost without JS. */
+.reveal-on [data-reveal] {
+  transition:
+    opacity 0.8s var(--ease-power3),
+    transform 0.8s var(--ease-power3);
+}
+.reveal-on [data-reveal]:not([data-revealed]) {
+  opacity: 0;
+  transform: translateY(18px);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -442,38 +299,7 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  /* Word-reveal: bypass the blur cascade and show all words instantly. */
-  .word-animate {
-    opacity: 1 !important;
-    transform: none !important;
-    filter: none !important;
-    animation: none !important;
-  }
-  /* About chapter scroll-reveal: skip the bell-curve, show words instantly. */
-  .about-reveal-word {
-    opacity: 1 !important;
-    transform: none !important;
-    filter: none !important;
-  }
-  .about-body-word {
-    opacity: 1 !important;
-    transform: none !important;
-    filter: none !important;
-  }
-  /* Service CTAs — visible + clickable when motion is reduced. */
-  .about-cta {
-    opacity: 1 !important;
-    pointer-events: auto !important;
-  }
-  /* Preloader letters — skip the typewriter cascade. */
-  .preloader-letter {
-    opacity: 1 !important;
-    transform: none !important;
-    filter: none !important;
-  }
-  /* Hero scroll hint — freeze the segment in the middle of the track. */
-  .hero-scroll-bar__progress {
-    animation: none !important;
-    transform: translateY(100%) !important;
+  @view-transition {
+    navigation: none;
   }
 }

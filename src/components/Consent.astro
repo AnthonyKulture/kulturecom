@@ -40,7 +40,7 @@ const t =
   {/* Mobile: a compact bar flush with the bottom edge (~105 px, was ~145 px
       as a floating card) so it doesn't cover the service pages' above-the-fold
       CTA. ≥ 640px keeps the floating card. */}
-  <p class="text-[12px] leading-[1.45] text-[var(--color-ink)]/85 sm:text-[13px] sm:leading-[1.5]">
+  <p class="text-[13px] leading-[1.45] text-[var(--color-ink)]/85 sm:text-[14px] sm:leading-[1.5]">
     {t.text}{" "}
     <a
       href={t.privacyHref}
@@ -52,13 +52,13 @@ const t =
     <button
       type="button"
       data-consent-accept
-      class="font-mono inline-flex items-center bg-[var(--color-ink)] px-5 py-2.5 text-[11px] uppercase tracking-[0.16em] text-[var(--color-bg)] transition-colors duration-200 hover:bg-[var(--color-accent)]"
+      class="btn btn-primary btn-sm"
       >{t.accept}</button
     >
     <button
       type="button"
       data-consent-decline
-      class="font-mono inline-flex items-center px-2 py-2.5 text-[11px] uppercase tracking-[0.16em] text-[var(--color-ink)]/70 underline underline-offset-4 transition-colors duration-200 hover:text-[var(--color-ink)]"
+      class="font-label inline-flex items-center px-2 py-2.5 text-[13px] uppercase tracking-[0.06em] text-[var(--color-ink)]/70 underline underline-offset-4 transition-colors duration-200 hover:text-[var(--color-ink)]"
       >{t.decline}</button
     >
   </div>

@@ -5,8 +5,11 @@ import type { ServiceId } from "~/lib/service-pages";
 import { getServicePage } from "~/lib/service-pages";
 import { getCaseStudy, caseStudyPath } from "~/lib/case-studies";
 import CTA from "~/components/CTA.astro";
+import Eyebrow from "~/components/Eyebrow.astro";
+import ServiceDrawing from "~/components/ServiceDrawing.astro";
 import { AREA_SERVED } from "~/lib/schema";
 import { getPosts, postPath } from "~/lib/blog";
+import { PRICE, formatPrice, fromPrice } from "~/lib/facts";
 
 interface Props {
   lang: Lang;
@@ -32,18 +35,49 @@ const proof = sp.proofSlugs
 const labels = isFr
   ? {
       breadcrumb: "Fil d'Ariane",
-      availability: "Disponibilité Q4 2026 · Nice / Côte d'Azur · France",
+      home: "Accueil",
+      place: "Nice et à distance",
+      callback: "Être rappelé",
       cta: "Décrire mon projet",
-      response: "Réponse sous 48 h ouvrées",
+      response: "Réponse sous 48 h",
+      delivered: "Livré en",
+      offers: "Les formules",
+      offersNote: "Prix nets (TVA non applicable), confirmés par écrit avec le délai après un premier échange.",
+      offersNoteQuote: "Chaque formule est chiffrée sur mesure après un premier échange, avec le délai, par écrit.",
+      delay: "Délai",
+      from: "dès",
+      choose: "Choisir cette formule",
+      onQuote: "Sur devis",
+      more: "En savoir plus :",
       guides: "Guides liés",
     }
   : {
       breadcrumb: "Breadcrumb",
-      availability: "Available Q4 2026 · Nice / French Riviera · France",
+      home: "Home",
+      place: "Nice and remote",
+      callback: "Get a call back",
       cta: "Tell me about your project",
       response: "Reply within 2 business days",
+      delivered: "Delivered in",
+      offers: "Packages",
+      offersNote: "Net prices (no VAT charged), confirmed in writing with the timeline after a first call.",
+      offersNoteQuote: "Each package is quoted to measure after a first call, with the timeline, in writing.",
+      delay: "Timeline",
+      from: "from",
+      choose: "Choose this package",
+      onQuote: "On quote",
+      more: "More about",
       guides: "Related guides",
     };
+
+// Price label of a formula: "390 €", "dès 1 690 €", "dès 490 €/mois".
+const offerPrice = (o: (typeof c.offers)[number]): { from: string; amount: string } =>
+  o.price
+    ? { from: o.from ? labels.from : "", amount: `${formatPrice(PRICE[o.price], lang)}${o.unit ?? ""}` }
+    : { from: "", amount: labels.onQuote };
+const startingPrice = fromPrice(id, lang);
+const sheet = (n: string, fr: string, en: string): string => (isFr ? `Planche ${n} · ${fr}` : `Sheet ${n} · ${en}`);
+const h2 = "font-display text-[clamp(26px,2.8vw,40px)] leading-[1.15] text-[var(--color-ink)]";
 
 // Blog articles that support this service (frontmatter `pillar`) — the
 // topic-cluster link from the service page down to its guides.
@@ -92,65 +126,58 @@ const jsonLd = {
 
 <main id="main-content" class="bg-[var(--color-bg)] text-[var(--color-ink)]">
 
-  {/* ========== HERO ========== */}
-  <section class="relative px-4 pt-32 pb-16 sm:px-6 sm:pt-40 sm:pb-20 md:px-12 md:pt-48 md:pb-24">
-    <div class="mx-auto w-full max-w-[var(--container-wide)]">
-      <p class="font-mono mb-4 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
-        <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
-        {c.eyebrow}
-      </p>
-      <h1 class="font-display text-[clamp(40px,8vw,140px)] uppercase leading-[0.92] tracking-[-0.04em] text-[var(--color-ink)]">
-        {/* Trailing space so text extractors read "Création de site", not
-            "Création desite" (the lines are separate block spans). */}
+  {/* Funnel: what it is → what you get → what it costs → how it works →
+      proof → doubts (FAQ) → contact. The long explanation stays on the page,
+      folded under "En savoir plus" (read by search engines and LLMs). */}
+
+  {/* ========== 1. HERO — what it is, price, how to start ========== */}
+  <section class="px-4 pb-14 pt-24 sm:px-6 md:px-12 md:pb-20 md:pt-32">
+    <div class="mx-auto grid w-full max-w-[var(--container-wide)] gap-10 lg:grid-cols-12 lg:items-center lg:gap-14">
+      <div class="lg:col-span-7">
+      <nav aria-label={labels.breadcrumb} class="text-[15px] text-[var(--color-ink-muted)]">
+        <a href={isFr ? "/" : "/en/"} class="underline-offset-4 hover:underline">{labels.home}</a>
+        <span aria-hidden="true"> / </span>
+        <span aria-current="page" class="text-[var(--color-ink)]">{c.name}</span>
+      </nav>
+      <h1 class="mt-5 max-w-[20ch] font-display text-[clamp(34px,4.4vw,60px)] leading-[1.08] text-balance">
         {c.h1Lines.map((line, i) => (
-          <span class:list={["block", i > 0 && "opacity-70"]}>{line}{i < c.h1Lines.length - 1 ? " " : ""}</span>
+          <span class:list={[i > 0 && "text-[var(--color-ink-muted)]"]}>{line}{i < c.h1Lines.length - 1 ? " " : ""}</span>
         ))}
       </h1>
-      <p class="font-serif-italic mt-8 max-w-[46ch] text-[clamp(18px,2vw,28px)] leading-tight text-[var(--color-ink)]">
+      <p class="mt-5 max-w-[56ch] text-[clamp(18px,1.5vw,21px)] leading-[1.5] text-[var(--color-ink-muted)]">
         {c.lead}
       </p>
-      {/* Primary CTA above the fold — paid / search visitors shouldn't have to
-          scroll past six sections to reach the contact block (#contact, CTA.astro). */}
-      <div class="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3">
-        <a
-          href="#contact"
-          class="group font-mono inline-flex items-center gap-3 bg-[var(--color-ink)] px-6 py-4 text-[12px] uppercase tracking-[0.18em] text-[var(--color-bg)] no-underline transition-colors duration-200 hover:bg-[var(--color-accent)]"
-        >
+      <ul class="mt-7 flex flex-wrap gap-2 text-[15px]" aria-label={labels.offers}>
+        {startingPrice && <li class="fact fact--accent">{startingPrice}</li>}
+        <li class="fact">{labels.delivered} {c.offers[0].delay}</li>
+        <li class="fact">{labels.response}</li>
+        <li class="fact">{labels.place}</li>
+      </ul>
+      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+        <a href="#contact" class="group btn btn-primary">
           {labels.cta}
           <span aria-hidden="true" class="transition-transform duration-300 ease-out group-hover:translate-x-1">→</span>
         </a>
-        <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
-          {labels.response}
-        </span>
+        <button type="button" data-callback-open class="text-[16px] font-medium text-[var(--color-ink)] underline underline-offset-4 hover:text-[var(--color-accent)]">
+          {labels.callback}
+        </button>
       </div>
-      <p class="font-mono mt-8 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
-        {labels.availability}
-      </p>
+      </div>
+      <figure class="marks mx-auto w-full max-w-[420px] lg:col-span-5 lg:max-w-none">
+        <ServiceDrawing id={id} lang={lang} />
+      </figure>
     </div>
   </section>
 
-  {/* ========== INTRO PROSE ========== */}
-  <section data-surface="dark" class="relative bg-[var(--color-bg)] text-[var(--color-ink)] px-4 py-24 sm:px-6 sm:py-32 md:px-12 md:py-40">
-    <div class="mx-auto w-full max-w-[68ch]">
-      <div class="font-sans space-y-6 text-[clamp(16px,1.3vw,20px)] leading-[1.7] text-[var(--color-ink)]">
-        {c.intro.map((p) => <p>{p}</p>)}
-      </div>
-    </div>
-  </section>
-
-  {/* ========== INCLUDES ========== */}
-  <section class="relative bg-[var(--color-bg)] px-4 py-24 sm:px-6 sm:py-32 md:px-12 md:py-40">
+  {/* ========== 2. WHAT YOU GET ========== */}
+  <section class="px-4 py-16 sm:px-6 md:px-12 md:py-24">
     <div class="mx-auto w-full max-w-[var(--container-wide)]">
-      <header class="mb-12 sm:mb-16">
-        <h2 class="font-mono mb-3 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
-          <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
-          {c.includesTitle}
-        </h2>
-      </header>
-      <ul class="grid gap-px overflow-hidden border border-[var(--color-border)] sm:grid-cols-2 lg:grid-cols-3">
+      <Eyebrow label={sheet("01", "Livrables", "Deliverables")} class="mb-6 md:mb-8" />
+      <h2 class={h2}>{c.includesTitle}</h2>
+      <ul class="mt-8 grid gap-x-12 gap-y-4 sm:grid-cols-2 md:mt-10">
         {c.includes.map((item) => (
-          <li class="flex items-start gap-3 bg-[var(--color-bg)] p-6 text-[clamp(15px,1.1vw,17px)] leading-snug text-[var(--color-ink)] sm:p-8">
-            <span aria-hidden="true" class="font-mono shrink-0 pt-0.5 text-[12px] text-[var(--color-accent)]">→</span>
+          <li class="flex items-start gap-3 text-[17px] leading-[1.5] md:text-[18px]">
+            <span aria-hidden="true" class="check"></span>
             <span>{item}</span>
           </li>
         ))}
@@ -158,143 +185,294 @@ const jsonLd = {
     </div>
   </section>
 
-  {/* ========== METHOD ========== */}
-  <section data-surface="dark" class="relative bg-[var(--color-bg)] text-[var(--color-ink)] px-4 py-24 sm:px-6 sm:py-32 md:px-12 md:py-40">
+  {/* ========== 3. PACKAGES — the decision point ========== */}
+  <section data-surface="tint" class="bg-[var(--color-bg)] px-4 py-16 sm:px-6 md:px-12 md:py-24">
     <div class="mx-auto w-full max-w-[var(--container-wide)]">
-      <header class="mb-16 sm:mb-20">
-        <h2 class="font-mono mb-3 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
-          <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
-          {c.methodTitle}
-        </h2>
-      </header>
-      <ol class="flex flex-col gap-12 sm:gap-16">
-        {c.method.map((step) => (
-          <li class="grid grid-cols-1 gap-4 border-t border-[var(--color-border)] pt-8 sm:grid-cols-[140px_1fr] sm:gap-12">
-            <span class="font-display text-[clamp(48px,5vw,80px)] leading-none tracking-[-0.04em] text-[var(--color-accent)]">
-              {step.n}
-            </span>
-            <div>
-              <h3 class="font-sans text-[clamp(20px,2.2vw,28px)] font-medium tracking-normal text-[var(--color-ink)]">
-                {step.title}
-              </h3>
-              <p class="mt-3 max-w-[60ch] text-[clamp(15px,1.2vw,17px)] leading-[1.65] text-[var(--color-ink-muted)]">
-                {step.body}
+      <Eyebrow label={sheet("02", "Formules", "Packages")} class="mb-6 md:mb-8" />
+      <h2 class={h2}>{labels.offers}</h2>
+      <p class="mt-3 max-w-[60ch] text-[16px] text-[var(--color-ink-muted)]">{c.offers.some((o) => o.price) ? labels.offersNote : labels.offersNoteQuote}</p>
+      <div class:list={["mt-8 grid gap-4 md:mt-10", c.offers.length > 2 ? "lg:grid-cols-3" : "md:grid-cols-2"]}>
+        {c.offers.map((o) => {
+          const price = offerPrice(o);
+          return (
+            <article class="offer marks">
+              <h3 class="text-[20px] font-medium leading-snug md:text-[22px]">{o.name}</h3>
+              <p class="mt-3 flex items-baseline gap-2">
+                {price.from && <span class="text-[16px] text-[var(--color-ink-muted)]">{price.from}</span>}
+                <span class="font-display text-[clamp(32px,3vw,40px)] leading-none text-[var(--color-accent)]">{price.amount}</span>
               </p>
-            </div>
+              <p class="mt-2 text-[15px] text-[var(--color-ink-muted)]">{labels.delay} : {o.delay}</p>
+              <ul class="mt-5 flex flex-col gap-2.5 border-t border-[var(--color-border)] pt-5">
+                {o.items.map((it) => (
+                  <li class="flex items-start gap-3 text-[16px] leading-[1.45]">
+                    <span aria-hidden="true" class="check"></span>
+                    <span>{it}</span>
+                  </li>
+                ))}
+              </ul>
+              <a href="#contact" data-need={id} class="btn btn-secondary mt-6 self-start">{labels.choose}</a>
+            </article>
+          );
+        })}
+      </div>
+      {c.offersPerk && (
+        <p class="offers-perk">
+          <span aria-hidden="true" class="sheet-diamond"></span>
+          {c.offersPerk}
+        </p>
+      )}
+    </div>
+  </section>
+
+  {/* ========== 4. HOW IT WORKS ========== */}
+  <section class="px-4 py-16 sm:px-6 md:px-12 md:py-24">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <Eyebrow label={sheet("03", "Méthode", "Method")} class="mb-6 md:mb-8" />
+      <h2 class={h2}>{c.methodTitle}</h2>
+      <ol class="mt-8 grid gap-8 sm:grid-cols-2 md:mt-10 lg:grid-cols-4 lg:gap-6">
+        {c.method.map((step) => (
+          <li class="border-t-2 border-[var(--color-accent)] pt-5">
+            <span class="font-display text-[18px] text-[var(--color-accent)]">{step.n}</span>
+            <h3 class="mt-2 text-[19px] font-medium leading-snug md:text-[20px]">{step.title}</h3>
+            <p class="mt-2 text-[16px] leading-[1.55] text-[var(--color-ink-muted)]">{step.body}</p>
           </li>
         ))}
       </ol>
     </div>
   </section>
 
-  {/* ========== PROOF — featured case studies ========== */}
-  <section class="relative bg-[var(--color-bg)] px-4 py-24 sm:px-6 sm:py-32 md:px-12 md:py-40">
+  {/* ========== 5. PROOF — featured case studies ========== */}
+  <section class="px-4 py-16 sm:px-6 md:px-12 md:py-24">
     <div class="mx-auto w-full max-w-[var(--container-wide)]">
-      <header class="mb-12 sm:mb-16">
-        <h2 class="font-mono mb-3 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
-          <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
-          {c.proofTitle}
-        </h2>
-      </header>
-      <div class="grid gap-6 sm:grid-cols-3 sm:gap-5">
+      <Eyebrow label={sheet("04", "Références", "References")} class="mb-6 md:mb-8" />
+      <h2 class={h2}>{c.proofTitle}</h2>
+      <div class="mt-8 grid gap-6 sm:grid-cols-3 sm:gap-5 md:mt-10">
         {proof.map((p) => (
-          <a href={caseStudyPath(p.slug, lang)} class="group flex flex-col no-underline">
-            <div class="relative aspect-[4/3] overflow-hidden bg-[var(--color-border)]">
+          <a href={caseStudyPath(p.slug, lang)} class="marks group flex flex-col no-underline">
+            <div class="relative aspect-[4/3] overflow-hidden rounded-[var(--radius-card)] bg-[var(--color-bg-shade)]">
               <img
                 src={p.image}
-                alt={`${p.title} — ${p.tag}`}
+                alt={`${p.title} : ${p.headline}`}
                 width="500"
                 height="375"
                 loading="lazy"
                 class="absolute inset-0 block h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
               />
             </div>
-            <h3 class="font-sans mt-3 text-[clamp(15px,1.1vw,18px)] font-medium tracking-normal text-[var(--color-ink)]">
+            <h3 class="mt-4 text-[19px] font-medium text-[var(--color-ink)] group-hover:text-[var(--color-accent)]">
               {p.title}
             </h3>
-            <span class="font-mono mt-1 text-[10px] uppercase tracking-[0.18em] text-[var(--color-ink-subtle)]">
-              {p.tag}
-            </span>
+            <span class="mt-1 text-[15px] text-[var(--color-ink-muted)]">{p.headline}</span>
           </a>
         ))}
       </div>
     </div>
   </section>
 
-  {/* ========== FAQ ========== */}
-  <section data-surface="dark" class="relative bg-[var(--color-bg)] text-[var(--color-ink)] px-4 py-24 sm:px-6 sm:py-32 md:px-12 md:py-40">
+  {/* ========== 6. FAQ — questions visible, answers on demand ========== */}
+  <section data-surface="tint" class="bg-[var(--color-bg)] px-4 py-16 sm:px-6 md:px-12 md:py-24">
     <div class="mx-auto w-full max-w-[var(--container-wide)]">
-      <header class="mb-12 sm:mb-16">
-        <h2 class="font-mono mb-3 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
-          <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
-          {c.faqTitle}
-        </h2>
-      </header>
-      <dl class="flex flex-col">
+      <Eyebrow label={sheet("05", "Questions", "Questions")} class="mb-6 md:mb-8" />
+    </div>
+    <div class="mx-auto grid w-full max-w-[var(--container-wide)] gap-8 md:grid-cols-12 md:gap-10">
+      <h2 class:list={[h2, "md:col-span-4"]}>{c.faqTitle}</h2>
+      <div class="md:col-span-8">
         {c.faq.map((f) => (
-          <div class="grid grid-cols-1 gap-3 border-t border-[var(--color-border)] py-8 sm:grid-cols-[1fr_1.3fr] sm:gap-12">
-            <dt class="font-sans text-[clamp(17px,1.6vw,24px)] font-medium leading-snug text-[var(--color-ink)]">
-              {f.q}
-            </dt>
-            <dd class="max-w-[60ch] text-[clamp(15px,1.2vw,17px)] leading-[1.65] text-[var(--color-ink-muted)]">
-              {f.a}
-            </dd>
-          </div>
+          <details class="qa">
+            <summary>
+              <h3 class="text-[18px] font-medium leading-snug md:text-[19px]">{f.q}</h3>
+              <span class="qa-icon" aria-hidden="true"></span>
+            </summary>
+            <p class="max-w-[65ch] pb-6 text-[17px] leading-[1.6] text-[var(--color-ink-muted)]">{f.a}</p>
+          </details>
         ))}
-      </dl>
+      </div>
     </div>
   </section>
 
-  {/* ========== RELATED GUIDES (blog cluster) ========== */}
-  {guides.length > 0 && (
-    <section class="relative bg-[var(--color-bg)] px-4 pt-20 sm:px-6 sm:pt-28 md:px-12 md:pt-32">
-      <div class="mx-auto w-full max-w-[var(--container-wide)]">
-        <h2 class="font-mono mb-6 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
-          {labels.guides}
-        </h2>
-        <ul class="grid grid-cols-1 gap-px overflow-hidden border border-[var(--color-border)] sm:grid-cols-2">
-          {guides.map((g) => (
-            <li class="bg-[var(--color-bg)]">
-              <a
-                href={postPath(g)}
-                class="group flex h-full items-start justify-between gap-4 p-6 no-underline transition-colors hover:bg-[var(--color-border)]/40 sm:p-8"
-              >
-                <span class="font-sans text-[clamp(17px,1.5vw,22px)] font-medium leading-snug text-[var(--color-ink)]">
-                  {g.data.title}
+  {/* ========== 7. MORE — full explanation (folded), guides, other services ========== */}
+  <section class="px-4 pt-16 sm:px-6 md:px-12 md:pt-20">
+    <div class="mx-auto flex w-full max-w-[var(--container-wide)] flex-col gap-10">
+      <details class="more">
+        <summary class="text-[18px] font-medium">
+          {labels.more} {c.name}
+          <span class="qa-icon" aria-hidden="true"></span>
+        </summary>
+        <div class="mt-5 max-w-[65ch] space-y-5 text-[17px] leading-[1.65] md:text-[18px]">
+          {c.intro.map((p) => <p>{p}</p>)}
+        </div>
+      </details>
+
+      {guides.length > 0 && (
+        <div>
+          <h2 class="text-[22px] font-medium">{labels.guides}</h2>
+          <ul class="mt-4 grid gap-3 sm:grid-cols-2">
+            {guides.map((g) => (
+              <li>
+                <a href={postPath(g)} class="link-card group">
+                  <span class="text-[17px] font-medium leading-snug">{g.data.title}</span>
+                  <span aria-hidden="true" class="text-[var(--color-accent)] transition-transform duration-300 group-hover:translate-x-1">→</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <div>
+        <h2 class="text-[22px] font-medium">{c.relatedTitle}</h2>
+        <ul class="mt-4 grid gap-3 sm:grid-cols-3">
+          {sp.related.map((r) => (
+            <li>
+              <a href={r.path} class="link-card group">
+                <span class="flex flex-col">
+                  <span class="text-[18px] font-medium">{r.name}</span>
+                  {fromPrice(r.id, lang) && <span class="text-[15px] text-[var(--color-ink-muted)]">{fromPrice(r.id, lang)}</span>}
                 </span>
-                <span aria-hidden="true" class="font-mono pt-1 text-[var(--color-accent)]">→</span>
+                <span aria-hidden="true" class="text-[var(--color-accent)] transition-transform duration-300 group-hover:translate-x-1">→</span>
               </a>
             </li>
           ))}
         </ul>
       </div>
-    </section>
-  )}
-
-  {/* ========== RELATED SERVICES ========== */}
-  <section class="relative bg-[var(--color-bg)] px-4 pt-20 pb-4 sm:px-6 sm:pt-28 md:px-12 md:pt-32">
-    <div class="mx-auto w-full max-w-[var(--container-wide)]">
-      <h2 class="font-mono mb-6 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
-        {c.relatedTitle}
-      </h2>
-      <div class="grid grid-cols-1 gap-px overflow-hidden border border-[var(--color-border)] sm:grid-cols-2 lg:grid-cols-3">
-        {sp.related.map((r) => (
-          <a
-            href={r.path}
-            class="group flex items-center justify-between gap-4 bg-[var(--color-bg)] p-6 no-underline transition-colors hover:bg-[var(--color-border)]/40 sm:p-8"
-          >
-            <span class="font-display text-[clamp(20px,2.2vw,32px)] uppercase leading-[1] tracking-[-0.03em] text-[var(--color-ink)]">
-              {r.name}
-            </span>
-            <span aria-hidden="true" class="font-mono text-[var(--color-accent)]">→</span>
-          </a>
-        ))}
-      </div>
     </div>
   </section>
 
-  {/* Contact — consistent close. */}
-  <CTA lang={lang} />
+  {/* Contact — the form opens on the budget step, need pre-selected. */}
+  <CTA lang={lang} need={id} />
 
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
 </main>
+
+<style>
+  .fact {
+    padding: 7px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+    background: var(--color-bg);
+    color: var(--color-ink);
+  }
+  .fact--accent {
+    border-color: transparent;
+    background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+    color: var(--color-accent);
+    font-weight: 500;
+  }
+  /* Check mark drawn with borders (no icon font). */
+  .check {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    margin-top: 0.2em;
+    border-radius: 0;
+    background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+    position: relative;
+  }
+  .check::after {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 3.5px;
+    width: 5px;
+    height: 9px;
+    border: solid var(--color-accent);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  .offer {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    border-radius: 0;
+    background: #ffffff;
+    border: 1px solid var(--color-border);
+  }
+  @media (min-width: 768px) {
+    .offer {
+      padding: 28px;
+    }
+  }
+  /* "Offert avec votre site": a ruled note under the packages, accent diamond. */
+  .offers-perk {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-top: 16px;
+    padding: 16px 20px;
+    border: 1px solid color-mix(in srgb, var(--color-accent) 35%, transparent);
+    background: color-mix(in srgb, var(--color-accent) 5%, #ffffff);
+    font-size: 17px;
+    line-height: 1.45;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+  .offers-perk .sheet-diamond {
+    color: var(--color-accent);
+    background: currentColor;
+    transform: translateY(-1px) rotate(45deg);
+  }
+  .qa {
+    border-bottom: 1px solid var(--color-border);
+  }
+  .qa summary,
+  .more summary {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 20px 0;
+    list-style: none;
+    cursor: pointer;
+  }
+  .more summary {
+    justify-content: flex-start;
+    padding: 0;
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-underline-offset: 5px;
+  }
+  .qa summary::-webkit-details-marker,
+  .more summary::-webkit-details-marker {
+    display: none;
+  }
+  .qa-icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    margin-top: 6px;
+  }
+  .qa-icon::before,
+  .qa-icon::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: currentColor;
+    transition: transform 0.3s var(--ease-power3);
+  }
+  .qa-icon::after {
+    transform: rotate(90deg);
+  }
+  details[open] > summary .qa-icon::after {
+    transform: rotate(0deg);
+  }
+  .link-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    height: 100%;
+    padding: 18px 20px;
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+    color: var(--color-ink);
+    text-decoration: none;
+    transition: border-color 0.2s var(--ease-power3);
+  }
+  .link-card:hover {
+    border-color: color-mix(in srgb, var(--color-accent) 45%, transparent);
+  }
+</style>

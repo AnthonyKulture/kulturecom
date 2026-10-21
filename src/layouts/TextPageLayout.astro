@@ -23,13 +23,14 @@ const { lang, title, pathname, altLang, altLangPath } = Astro.props;
     <article class="mx-auto w-full max-w-[68ch]">
       <header class="mb-12 sm:mb-16">
         <p
-          class="font-mono mb-4 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]"
+          class="font-label mb-4 sheet-label text-[13px] uppercase tracking-[0.06em] text-[var(--color-ink-muted)]"
         >
-          <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
-          {lang === "fr" ? "Légal" : "Legal"}
+          <span class="sheet-diamond" aria-hidden="true"></span>
+          <span>{lang === "fr" ? "Légal" : "Legal"}</span>
+          <span class="sheet-leader" aria-hidden="true"></span>
         </p>
         <h1
-          class="font-display text-[clamp(32px,5vw,72px)] uppercase leading-[0.95] tracking-[-0.04em] text-[var(--color-ink)]"
+          class="font-display text-[clamp(32px,5vw,72px)] leading-[1.05] tracking-[-0.04em] text-[var(--color-ink)]"
         >
           {title}
         </h1>
@@ -90,10 +91,10 @@ const { lang, title, pathname, altLang, altLangPath } = Astro.props;
     color: var(--color-ink);
   }
   .text-page-content .meta {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.75em;
     text-transform: uppercase;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.06em;
     color: var(--color-ink-muted);
     margin-top: 2rem;
   }

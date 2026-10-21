@@ -1,15 +1,19 @@
 # Anthony Profit (Kulturecom)
 
-> Designer et développeur web freelance à Nice (Côte d'Azur, France), sous le nom Kulturecom. Quatre expertises sous une seule main : sites internet sur-mesure, outils / apps & IA, SEO & GEO (dont campagnes ChatGPT Ads), identité de marque. Site bilingue FR/EN. Mis à jour : 2026-10-19.
+> Designer et développeur web freelance à Nice (Côte d'Azur, France), sous le nom Kulturecom. Quatre expertises sous une seule main : sites internet sur-mesure, outils / apps & IA, SEO & GEO (dont campagnes ChatGPT Ads), identité de marque. Site bilingue FR/EN. Mis à jour : 2026-10-22.
 
-Anthony Profit conçoit des sites et des outils pensés pour être trouvés sur Google et cités dans les réponses des IA (ChatGPT, Perplexity, Gemini, Google AI Overviews). Basé à Nice (06000), il travaille avec des PME, des marques B2B et des créateurs partout en France et à l'international. Contact : contact@kulturecom.fr · WhatsApp +33 6 60 50 16 82 · réponse sous 48 h ouvrées. Texte intégral des pages clés : https://anthonyprofit.com/llms-full.txt
+Anthony Profit conçoit des sites et des outils pensés pour être trouvés sur Google et cités dans les réponses des IA (ChatGPT, Perplexity, Gemini, Google AI Overviews). Basé à Nice (06000), il travaille avec des PME, des marques B2B et des créateurs partout en France et à l'international. Contact : contact@kulturecom.fr · WhatsApp +33 6 60 50 16 82 · réponse sous 48 h ouvrées · formulaire et rappel téléphonique sur le site. Prix nets (TVA non applicable, art. 293 B du CGI). Texte intégral des pages clés : https://anthonyprofit.com/llms-full.txt
+
+Avis Google : 5,0/5 sur 17 avis (https://www.google.com/maps?cid=13963690267531536578).
+
+Références clients : Eden Rock Yacht Rental, Royal Yacht International, Sun Beach House, Vaulk, Surly, IBD Monaco, Adaly Yacht, Agence Talisman, Movida, Orcal Motor, CK Atelier, Joseph (Cap 3000), Lou Bantry, Cibo Trattoria, Sana Jardins, Les Cordistes.
 
 ## Services
 
-- [Création de site internet](https://anthonyprofit.com/creation-site-internet/): sites vitrines et éditoriaux sur-mesure, design + développement Astro / React / TypeScript, Core Web Vitals au vert, accessibilité WCAG AA, SEO natif, CMS headless.
-- [Outils, apps & IA](https://anthonyprofit.com/outils-applications-ia/): outils métier, back-offices, portails clients, apps web et mobiles (iOS / Android), IA intégrée (API Claude / OpenAI : assistants sur documents, RAG, agents), automatisations n8n / Make / Zapier. Stack : Next.js · React · Node · Supabase / PostgreSQL.
-- [SEO & GEO](https://anthonyprofit.com/seo-geo/): référencement Google + visibilité dans les IA (llms.txt, Schema.org, citabilité) + campagnes ChatGPT Ads (annonces sponsorisées sous les réponses de ChatGPT, ouvertes aux annonceurs en France depuis fin août 2026).
-- [Identité de marque](https://anthonyprofit.com/identite-de-marque/): direction artistique, logo, brand system, typographie, déclinaisons web / print / social.
+- [Création de site internet](https://anthonyprofit.com/creation-site-internet/): sites vitrines et éditoriaux sur-mesure, design + développement Astro / React / TypeScript, Core Web Vitals au vert, accessibilité WCAG AA, SEO natif, CMS headless. Site une page dès 790 € (1 à 2 semaines), site vitrine 5 à 8 pages dès 1 690 € (3 à 5 semaines), identité de marque offerte.
+- [Outils, apps & IA](https://anthonyprofit.com/outils-applications-ia/): outils métier, back-offices, portails clients, apps web et mobiles (iOS / Android), IA intégrée (API Claude / OpenAI : assistants sur documents, RAG, agents), automatisations n8n / Make / Zapier. Stack : Next.js · React · Node · Supabase / PostgreSQL. Automatisation ou assistant IA dès 690 € (10 jours), outil ou app sur-mesure dès 2 900 €.
+- [SEO & GEO](https://anthonyprofit.com/seo-geo/): référencement Google + visibilité dans les IA (llms.txt, Schema.org, citabilité) + campagnes ChatGPT Ads (annonces sponsorisées sous les réponses de ChatGPT, ouvertes aux annonceurs en France depuis fin août 2026). Audit visibilité Google + IA dès 390 € (5 jours), suivi dès 490 €/mois, lancement ChatGPT Ads dès 490 € (7 jours) hors budget publicitaire.
+- [Identité de marque](https://anthonyprofit.com/identite-de-marque/): direction artistique, logo, brand system, typographie, déclinaisons web / print / social. Logo + mini-charte dès 150 € (1 semaine), identité complète dès 250 € (2 à 3 semaines). Offerte avec la création ou la refonte d'un site.
 - [Tous les services](https://anthonyprofit.com/services/): les quatre expertises et un seul interlocuteur.
 
 ## Études de cas
@@ -24,6 +28,13 @@ Anthony Profit conçoit des sites et des outils pensés pour être trouvés sur 
 
 - [SEO, GEO & ChatGPT](https://anthonyprofit.com/blog/seo-geo-apparaitre-dans-chatgpt/): pourquoi votre entreprise n'apparaît pas dans ChatGPT, et comment y remédier (SEO moderne + GEO + développement sur-mesure).
 - [Référencement à Nice](https://anthonyprofit.com/blog/referencement-nice-dominer-google-et-ia/): le système en 3 couches (SEO classique, Local Pack / Maps, visibilité IA) pour dominer son marché local sur la Côte d'Azur.
+- [ChatGPT Ads](https://anthonyprofit.com/blog/chatgpt-ads-publicite-chatgpt-guide/): la publicité dans ChatGPT, ouverte en France depuis août 2026 (fonctionnement, ciblage contextuel, accès annonceur, commerces azuréens concernés).
+- [AI Overviews et AI Mode](https://anthonyprofit.com/blog/ai-overviews-ai-mode-google-entreprises-locales/): ce que les réponses IA de Google changent pour les entreprises locales de Nice, Cannes et Monaco, et comment y être cité.
+- [Mesurer sa visibilité IA](https://anthonyprofit.com/blog/mesurer-visibilite-ia-chatgpt/): méthode pas à pas (panel de prompts, GA4, Search Console, Bing, logs) pour suivre sa présence dans ChatGPT, Perplexity, Gemini et les aperçus IA.
+- [Référencement à Cannes](https://anthonyprofit.com/blog/referencement-cannes-seo-local/): SEO local et GEO calés sur les grands événements et la clientèle internationale cannoise.
+- [Référencement à Monaco](https://anthonyprofit.com/blog/referencement-monaco-seo-geo/): SEO et GEO pour une clientèle internationale (.mc, hreflang, fiche Google, sources de prestige).
+- [Fiche Google Business Profile à Nice](https://anthonyprofit.com/blog/google-business-profile-nice-guide/): guide opérationnel de la fiche Google (catégories, adresse, avis, horaires spéciaux) et checklist en 15 points.
+- [Site multilingue sur la Côte d'Azur](https://anthonyprofit.com/blog/site-multilingue-cote-azur-hreflang/): structure d'URL, hreflang, adaptation des mots-clés et visibilité IA pour la clientèle étrangère.
 
 ## À propos & contact
 
@@ -41,6 +52,13 @@ Anthony Profit conçoit des sites et des outils pensés pour être trouvés sur 
 - [Case studies](https://anthonyprofit.com/en/work/): Surly, Vaulk, Sun Beach House, Royal Yacht International, Eden Rock Yacht Rental.
 - [SEO, GEO & ChatGPT (guide)](https://anthonyprofit.com/en/blog/seo-geo-appear-in-chatgpt/): why your business doesn't show up in ChatGPT, and how to fix it.
 - [Local SEO in Nice (guide)](https://anthonyprofit.com/en/blog/rank-on-google-in-nice-local-seo/): the 3-layer system to dominate your local market on the French Riviera.
+- [ChatGPT Ads (guide)](https://anthonyprofit.com/en/blog/chatgpt-ads-advertising-guide/): how advertising in ChatGPT works in Europe and which Riviera businesses should test it.
+- [Google AI Overviews & AI Mode (guide)](https://anthonyprofit.com/en/blog/google-ai-overviews-ai-mode-local-business/): what Google's AI answers change for local businesses and how to get cited.
+- [Measure AI visibility (guide)](https://anthonyprofit.com/en/blog/measure-ai-visibility-chatgpt/): a step-by-step method to track presence in ChatGPT, Perplexity, Gemini and AI Overviews.
+- [SEO in Cannes (guide)](https://anthonyprofit.com/en/blog/seo-cannes-local-search/): local SEO and GEO built around Cannes events and international visitors.
+- [SEO in Monaco (guide)](https://anthonyprofit.com/en/blog/seo-monaco-international/): SEO and GEO for an international clientele in the Principality.
+- [Google Business Profile in Nice (guide)](https://anthonyprofit.com/en/blog/nice-google-business-profile-guide/): an operational guide to the Google profile, with a 15-point checklist.
+- [Multilingual website on the French Riviera (guide)](https://anthonyprofit.com/en/blog/multilingual-website-french-riviera/): URL structure, hreflang, keyword adaptation and AI visibility.
 - [About](https://anthonyprofit.com/en/about/): background, method, stack.
 - [Contact](https://anthonyprofit.com/en/contact/): e-mail and WhatsApp, reply within 2 business days.
 

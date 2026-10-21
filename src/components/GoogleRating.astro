@@ -1,0 +1,50 @@
+---
+// "★★★★★ 5,0/5 · 17 avis Google", linked to the Google Business Profile.
+// Used under the contact form heading and in the footer.
+import type { Lang } from "~/i18n/ui";
+import { GOOGLE_PROFILE } from "~/lib/facts";
+
+interface Props {
+  lang: Lang;
+  class?: string;
+  [key: string]: unknown;
+}
+
+const { lang, class: className, ...rest } = Astro.props;
+const rating = GOOGLE_PROFILE.rating.toLocaleString(lang === "fr" ? "fr-FR" : "en-GB", { minimumFractionDigits: 1 });
+const label =
+  lang === "fr"
+    ? `${rating}/5 · ${GOOGLE_PROFILE.reviewCount} avis Google`
+    : `${rating}/5 · ${GOOGLE_PROFILE.reviewCount} Google reviews`;
+---
+
+<a href={GOOGLE_PROFILE.url} target="_blank" rel="noopener" class:list={["g-rating", className]} {...rest}>
+  <span class="g-stars" aria-hidden="true">
+    {[0, 1, 2, 3, 4].map(() => (
+      <svg viewBox="0 0 20 20" width="14" height="14"><path d="M10 1.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3.1-5.4 3.1 1.2-6L1.3 7.8l6.1-.7z" /></svg>
+    ))}
+  </span>
+  <span class="g-label">{label}</span>
+</a>
+
+<style>
+  .g-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+  .g-rating:hover .g-label,
+  .g-rating:focus-visible .g-label {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .g-stars {
+    display: inline-flex;
+    gap: 2px;
+    color: var(--color-accent);
+  }
+  .g-stars svg {
+    fill: currentColor;
+  }
+</style>

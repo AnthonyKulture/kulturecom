@@ -1,134 +1,434 @@
 ---
 import type { Lang } from "~/i18n/ui";
-import { ui } from "~/i18n/ui";
+import { getFormContent } from "~/lib/home-content";
+import { CONTACT } from "~/lib/facts";
 import Eyebrow from "~/components/Eyebrow.astro";
+import GoogleRating from "~/components/GoogleRating.astro";
 
 interface Props {
   lang: Lang;
-  // h2 on the homepage finale (sits under the page context); h1 on the
-  // standalone /contact/ page where this is the main heading. Same classes →
-  // identical render, only the semantic tag differs.
+  // h2 under a page's own h1; h1 on the standalone /contact/ page. Same
+  // classes, only the semantic tag differs.
   headingLevel?: 1 | 2;
+  // Pre-selected need (a service page passes its id): the form then opens on
+  // the contact step, one click shorter.
+  need?: string;
 }
 
-const { lang, headingLevel = 2 } = Astro.props;
-const t = ui[lang];
-
+const { lang, headingLevel = 2, need } = Astro.props;
+const f = getFormContent(lang);
 const Heading = `h${headingLevel}` as "h1" | "h2";
 
-const mailtoHref = `mailto:${t.cta["email.value"]}?subject=${encodeURIComponent(t.cta.subject)}`;
+const mailtoHref = `mailto:${CONTACT.email}?subject=${encodeURIComponent(f.mailSubject)}`;
+const whatsappHref = `https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(f.whatsappMessage)}`;
 
-// WhatsApp deep link: digits only, country code first (no leading +).
-// `wa.me` resolves on both web and mobile apps. Pre-filled message is
-// urlencoded; users see and can edit before sending.
-const whatsappNumber = "33660501682";
-const whatsappHref = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(t.cta["whatsapp.message"])}`;
-
-const projectsHref = lang === "fr" ? "/projets/" : "/en/work/";
+// Strings the client script needs (labels for the prefilled fallback message,
+// validation errors, step counter).
+const clientStrings = {
+  step: f.step,
+  sending: f.sending,
+  submit: f.submit,
+  invalid: f.invalid,
+  needs: Object.fromEntries(f.needs.map((n) => [n.value, n.label])),
+  labels: { name: f.name, email: f.email, phone: f.phone, message: f.message },
+  mailSubject: f.mailSubject,
+  email: CONTACT.email,
+  whatsapp: CONTACT.whatsapp,
+  whatsappMessage: f.whatsappMessage,
+};
 ---
 
 <section
   id="contact"
   data-cta
-  class="relative flex min-h-[100dvh] flex-col justify-center overflow-hidden bg-[var(--color-bg)] text-[var(--color-ink)] px-4 py-20 sm:px-6 md:px-12 scroll-mt-16"
-  aria-label={t.cta.eyebrow}
+  class="relative scroll-mt-16 bg-[var(--color-bg)] px-4 py-20 text-[var(--color-ink)] sm:px-6 md:px-12 md:py-28"
+  aria-labelledby="contact-title"
 >
   <div class="mx-auto w-full max-w-[var(--container-wide)]">
-    <!-- Eyebrow -->
-    <Eyebrow label={t.cta.eyebrow} class="mb-8 sm:mb-12" />
+    <Eyebrow label={lang === "fr" ? "Dernière planche · Contact" : "Last sheet · Contact"} class="mb-8 md:mb-10" />
+  </div>
+  <div class="mx-auto grid w-full max-w-[var(--container-wide)] gap-10 lg:grid-cols-12 lg:gap-14">
+    <div class="lg:col-span-5">
+      <Heading id="contact-title" class="font-display text-[clamp(30px,3.6vw,52px)] leading-[1.1] text-[var(--color-ink)]">
+        <span class="block">{f.title[0]}</span>
+        <span class="block text-[var(--color-ink-muted)]">{f.title[1]}</span>
+      </Heading>
+      <GoogleRating lang={lang} class="mt-5 text-[15px] text-[var(--color-ink)]" />
 
-    <!-- Display title — brutalist 2 lines, reasonable size -->
-    <Heading
-      class="font-display text-[clamp(36px,7vw,96px)] uppercase leading-[0.95] tracking-[-0.04em] text-[var(--color-ink)]"
-    >
-      <span class="block">{t.cta["title.line1"]}</span>
-      <span class="block">{t.cta["title.line2"]}</span>
-    </Heading>
-
-    <!-- 2 contact actions — Email + WhatsApp, label + value in each card.
-         Same brutalist treatment, side by side on sm+, stacked on mobile. -->
-    <div
-      class="mt-10 grid gap-3 sm:mt-16 sm:grid-cols-2 sm:gap-5 max-w-[var(--container-wide)]"
-    >
-      <a
-        href={mailtoHref}
-        class="group relative flex items-center justify-between gap-4 bg-[var(--color-ink)] px-5 py-5 text-[var(--color-bg)] no-underline transition-colors duration-200 hover:bg-[var(--color-accent)] sm:px-7 sm:py-6"
-      >
-        <div class="flex flex-col gap-1">
-          <span class="font-mono text-[10px] uppercase tracking-[0.18em] opacity-70">
-            {t.cta["email.label"]}
-          </span>
-          <span class="font-sans text-[clamp(15px,1.4vw,20px)] font-medium tracking-normal">
-            {t.cta["email.value"]}
-          </span>
-        </div>
-        <svg
-          aria-hidden="true"
-          viewBox="0 0 24 24"
-          width="24"
-          height="24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="square"
-          class="shrink-0 transition-transform duration-300 ease-out group-hover:translate-x-1"
-        >
-          <path d="M5 12 H19" />
-          <path d="M13 6 L19 12 L13 18" />
-        </svg>
-      </a>
-
-      <a
-        href={whatsappHref}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="group relative flex items-center justify-between gap-4 border border-[var(--color-ink)] bg-[var(--color-bg)] px-5 py-5 text-[var(--color-ink)] no-underline transition-colors duration-200 hover:bg-[var(--color-ink)] hover:text-[var(--color-bg)] sm:px-7 sm:py-6"
-      >
-        <div class="flex flex-col gap-1">
-          <span class="font-mono text-[10px] uppercase tracking-[0.18em] opacity-70">
-            {t.cta["whatsapp.label"]}
-          </span>
-          <span class="font-sans text-[clamp(15px,1.4vw,20px)] font-medium tracking-normal">
-            {t.cta["whatsapp.value"]}
-          </span>
-        </div>
-        <svg
-          aria-hidden="true"
-          viewBox="0 0 24 24"
-          width="24"
-          height="24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="square"
-          class="shrink-0 transition-transform duration-300 ease-out group-hover:translate-x-1"
-        >
-          <path d="M5 12 H19" />
-          <path d="M13 6 L19 12 L13 18" />
-        </svg>
-      </a>
+      <div class="mt-8 hidden flex-col gap-3 lg:flex">
+        <p class="font-label text-[13px] uppercase tracking-[0.06em] text-[var(--color-ink-muted)]">{f.orWrite}</p>
+        <a href={mailtoHref} class="alt-contact">{f.emailLabel} <span>{CONTACT.email}</span></a>
+        <a href={whatsappHref} target="_blank" rel="noopener noreferrer" class="alt-contact">{f.whatsappLabel} <span>{CONTACT.phoneDisplay}</span></a>
+        <button type="button" data-callback-open class="alt-contact text-left">{f.callbackLabel} <span aria-hidden="true">→</span></button>
+      </div>
     </div>
 
-    <!-- Secondary CTA — route to the projects page -->
-    <a
-      href={projectsHref}
-      class="group mt-8 inline-flex items-center gap-3 border border-[var(--color-ink)] px-5 py-3 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink)] no-underline transition-colors duration-200 hover:bg-[var(--color-ink)] hover:text-[var(--color-bg)] sm:mt-10 sm:px-7 sm:py-4"
-    >
-      {t.cta["projects.label"]}
-      <svg
-        aria-hidden="true"
-        viewBox="0 0 24 24"
-        width="18"
-        height="18"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="square"
-        class="shrink-0 transition-transform duration-300 ease-out group-hover:translate-x-1"
+    <div class="lg:col-span-7">
+      <form
+        data-lead-form
+        data-need={need}
+        action="/api/lead"
+        method="post"
+        novalidate
+        class="lead-form marks"
+        data-strings={JSON.stringify(clientStrings)}
       >
-        <path d="M5 12 H19" />
-        <path d="M13 6 L19 12 L13 18" />
-      </svg>
-    </a>
+        <input type="hidden" name="type" value="project" />
+        <input type="hidden" name="lang" value={lang} />
+        {/* Honeypot — invisible to people, filled by naive bots. */}
+        <div class="lf-hp" aria-hidden="true">
+          <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+        </div>
+
+        <div class="lf-head">
+          <span data-lf-count class="font-label text-[13px] uppercase tracking-[0.06em]">{f.step} 1/2</span>
+          <span class="lf-bar" aria-hidden="true"><span data-lf-bar></span></span>
+          <button type="button" data-lf-back class="lf-back" hidden>{f.back}</button>
+        </div>
+
+        <fieldset data-step="1" class="lf-step">
+          <legend class="lf-q">{f.needQ}</legend>
+          <div class="lf-chips">
+            {f.needs.map((n) => (
+              <label class="lf-chip">
+                <input type="radio" name="need" value={n.value} checked={need === n.value} />
+                <span>{n.label}</span>
+              </label>
+            ))}
+          </div>
+          <button type="button" data-lf-next class="lf-next">OK <span aria-hidden="true">→</span></button>
+        </fieldset>
+
+        <fieldset data-step="2" class="lf-step">
+          <legend class="lf-q">{f.contactQ}</legend>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div class="lf-field">
+              <label for="lf-name">{f.name}</label>
+              <input id="lf-name" name="name" type="text" autocomplete="given-name" maxlength="80" required aria-describedby="lf-name-err" />
+              <p id="lf-name-err" class="lf-err" hidden></p>
+            </div>
+            <div class="lf-field">
+              <label for="lf-email">{f.email}</label>
+              <input id="lf-email" name="email" type="email" autocomplete="email" maxlength="160" required aria-describedby="lf-email-err" />
+              <p id="lf-email-err" class="lf-err" hidden></p>
+            </div>
+            <div class="lf-field">
+              <label for="lf-phone">{f.phone}</label>
+              <input id="lf-phone" name="phone" type="tel" autocomplete="tel" maxlength="24" aria-describedby="lf-phone-hint lf-phone-err" />
+              <p id="lf-phone-hint" class="lf-hint">{f.phoneHint}</p>
+              <p id="lf-phone-err" class="lf-err" hidden></p>
+            </div>
+            <div class="lf-field sm:col-span-2">
+              <label for="lf-message">{f.message}</label>
+              <textarea id="lf-message" name="message" rows="2" maxlength="1000" aria-describedby="lf-message-hint"></textarea>
+              <p id="lf-message-hint" class="lf-hint">{f.messageHint}</p>
+            </div>
+          </div>
+          <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
+            <p class="text-[15px] text-[var(--color-ink-muted)]">
+              {f.consent} <a href={f.privacyHref} class="underline underline-offset-2">{f.privacy}</a>
+            </p>
+            <button type="submit" data-lf-submit class="lf-submit">
+              <span data-lf-submit-label>{f.submit}</span>
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </fieldset>
+
+        <div data-lf-success class="lf-done" role="status" hidden>
+          <p class="font-display text-[clamp(26px,3vw,40px)]">{f.successTitle}</p>
+          <p class="mt-3 text-[16px] text-[var(--color-ink-muted)]">{f.successBody}</p>
+        </div>
+
+        <div data-lf-error class="lf-done" role="alert" hidden>
+          <p class="font-display text-[clamp(22px,2.6vw,34px)]">{f.errorTitle}</p>
+          <p class="mt-3 text-[16px] text-[var(--color-ink-muted)]">{f.errorBody}</p>
+          <div class="mt-5 flex flex-wrap gap-3">
+            <a data-lf-mail href={mailtoHref} class="lf-submit">{f.emailLabel}</a>
+            <a data-lf-wa href={whatsappHref} target="_blank" rel="noopener noreferrer" class="lf-submit lf-submit--ghost">{f.whatsappLabel}</a>
+          </div>
+        </div>
+      </form>
+
+      <div class="mt-8 flex flex-col gap-3 lg:hidden">
+        <p class="font-label text-[13px] uppercase tracking-[0.06em] text-[var(--color-ink-muted)]">{f.orWrite}</p>
+        <a href={mailtoHref} class="alt-contact">{f.emailLabel} <span>{CONTACT.email}</span></a>
+        <a href={whatsappHref} target="_blank" rel="noopener noreferrer" class="alt-contact">{f.whatsappLabel} <span>{CONTACT.phoneDisplay}</span></a>
+        <button type="button" data-callback-open class="alt-contact text-left">{f.callbackLabel} <span aria-hidden="true">→</span></button>
+      </div>
+    </div>
   </div>
 </section>
+
+<style>
+  .alt-contact {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--color-ink);
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s var(--ease-power3);
+  }
+  .alt-contact span {
+    font-weight: 400;
+    color: var(--color-ink-muted);
+  }
+  .alt-contact:hover,
+  .alt-contact:hover span {
+    color: var(--color-accent);
+  }
+
+  .lead-form {
+    position: relative;
+    padding: 20px;
+    border-radius: 0;
+    background: var(--color-bg-shade);
+  }
+  @media (min-width: 768px) {
+    .lead-form {
+      padding: 36px;
+    }
+  }
+  .lf-hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .lf-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+  .lf-bar {
+    position: relative;
+    flex: 1;
+    height: 3px;
+    border-radius: 0;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--color-ink) 10%, transparent);
+  }
+  .lf-bar span {
+    position: absolute;
+    inset: 0;
+    background: var(--color-accent);
+    transform: scaleX(0.333);
+    transform-origin: left;
+    transition: transform 0.5s var(--ease-power3);
+  }
+  .lf-back {
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    cursor: pointer;
+  }
+  .lf-step {
+    min-width: 0;
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+  .lf-q {
+    margin-bottom: 18px;
+    font-family: var(--font-display);
+    font-size: clamp(22px, 2.2vw, 30px);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+  }
+  .lf-chips {
+    display: grid;
+    gap: 8px;
+  }
+  @media (min-width: 640px) {
+    .lf-chips {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .lf-chip {
+    position: relative;
+    display: block;
+    cursor: pointer;
+  }
+  .lf-chip input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    cursor: pointer;
+  }
+  .lf-chip span {
+    display: flex;
+    align-items: center;
+    min-height: 52px;
+    padding: 12px 16px;
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+    background: #ffffff;
+    font-size: 16px;
+    font-weight: 500;
+    transition:
+      background-color 0.2s var(--ease-power3),
+      color 0.2s var(--ease-power3),
+      border-color 0.2s var(--ease-power3),
+      transform 0.2s var(--ease-power3);
+  }
+  .lf-chip:hover span {
+    border-color: color-mix(in srgb, var(--color-accent) 50%, transparent);
+  }
+  .lf-chip input:focus-visible + span {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+  .lf-chip input:checked + span {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #ffffff;
+  }
+  .lf-chip:active span {
+    transform: scale(0.985);
+  }
+  .lf-next {
+    margin-top: 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    cursor: pointer;
+  }
+  .lf-next:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .lf-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .lf-field label {
+    font-size: 15px;
+    font-weight: 500;
+  }
+  .lf-field input,
+  .lf-field textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--color-border);
+    background: #ffffff;
+    font-size: 16px;
+    color: var(--color-ink);
+    border-radius: 0;
+    transition: border-color 0.2s var(--ease-power3);
+  }
+  .lf-field textarea {
+    resize: vertical;
+  }
+  .lf-field input:focus,
+  .lf-field textarea:focus {
+    border-color: var(--color-accent);
+    outline: 3px solid color-mix(in srgb, var(--color-accent) 20%, transparent);
+    outline-offset: 0;
+  }
+  .lf-field [aria-invalid="true"] {
+    border-color: #9f2f2d;
+  }
+  .lf-hint {
+    font-size: 14px;
+    color: var(--color-ink-muted);
+  }
+  .lf-err {
+    font-size: 14px;
+    color: #9f2f2d;
+  }
+  .lf-submit {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    border-radius: 0;
+    background: var(--color-accent);
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      background-color 0.2s var(--ease-power3),
+      transform 0.2s var(--ease-power3);
+  }
+  .lf-submit:hover {
+    background: var(--color-accent-strong);
+  }
+  .lf-submit:active {
+    transform: scale(0.98);
+  }
+  .lf-submit:disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
+  .lf-submit--ghost {
+    background: #ffffff;
+    color: var(--color-ink);
+    border: 1px solid var(--color-border);
+  }
+  .lf-submit--ghost:hover {
+    background: #ffffff;
+    border-color: var(--color-ink);
+  }
+
+  /* JS on: one step at a time, sliding in. Without JS every field shows and
+     the form posts natively to /api/lead. */
+  .lead-form[data-js] .lf-step {
+    display: none;
+  }
+  .lead-form[data-js] .lf-step[data-current] {
+    display: block;
+    animation: lf-in 0.45s var(--ease-power3) both;
+  }
+  .lead-form:not([data-js]) .lf-step + .lf-step {
+    margin-top: 28px;
+  }
+  .lead-form:not([data-js]) .lf-head,
+  .lead-form:not([data-js]) .lf-next {
+    display: none;
+  }
+  .lead-form[data-done] .lf-head,
+  .lead-form[data-done] .lf-step {
+    display: none !important;
+  }
+  .lf-done:not([hidden]) {
+    animation: lf-in 0.45s var(--ease-power3) both;
+  }
+  @keyframes lf-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lf-bar span,
+    .lf-chip span,
+    .lf-submit {
+      transition: none;
+    }
+    .lead-form[data-js] .lf-step[data-current],
+    .lf-done:not([hidden]) {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  import { initLeadForms } from "~/lib/lead-form";
+  initLeadForms();
+</script>

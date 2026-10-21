@@ -1,6 +1,8 @@
 ---
 import type { Lang } from "~/i18n/ui";
 import { ui } from "~/i18n/ui";
+import { SERVICE_PAGES, getServicePage } from "~/lib/service-pages";
+import GoogleRating from "~/components/GoogleRating.astro";
 
 interface Props {
   lang: Lang;
@@ -16,6 +18,11 @@ const aboutHref = lang === "fr" ? "/a-propos/" : "/en/about/";
 const blogHref = lang === "fr" ? "/blog/" : "/en/blog/";
 const mentionsHref = lang === "fr" ? "/mentions-legales/" : "/en/legal-notice/";
 const privacyHref = lang === "fr" ? "/confidentialite/" : "/en/privacy/";
+
+const services = SERVICE_PAGES.map((sp) => ({
+  name: getServicePage(sp.id, lang)!.content.name,
+  href: sp.path[lang],
+}));
 
 const linkedinUrl = "https://www.linkedin.com/in/anthony-profit/";
 const instagramUrl = "https://www.instagram.com/antho_profit/";
@@ -49,26 +56,26 @@ const wrapLettersShuffled = (
 // each with a 0.6s ease) = total ~1.1s for the whole word.
 const firstNameHtml = wrapLettersShuffled("Anthony", 0, 70);
 // Last name starts AFTER the first name is mostly done.
-const lastNameHtml = wrapLettersShuffled("PROFIT", 500, 60);
+const lastNameHtml = wrapLettersShuffled("Profit", 500, 60);
 
 const currentYear = "2026";
 const navLabels = lang === "en"
-  ? { projects: "WORK", services: "SERVICES", about: "ABOUT", journal: "JOURNAL", contact: "CONTACT" }
-  : { projects: "PROJETS", services: "SERVICES", about: "À PROPOS", journal: "JOURNAL", contact: "CONTACT" };
+  ? { projects: "WORK", services: "SERVICES", about: "ABOUT", journal: "GUIDES", contact: "CONTACT" }
+  : { projects: "RÉALISATIONS", services: "SERVICES", about: "À PROPOS", journal: "GUIDES", contact: "CONTACT" };
 ---
 
 <footer
   data-site-footer
-  data-surface="dark"
+  data-surface="tint"
   class="relative overflow-hidden bg-[var(--color-bg)] text-[var(--color-ink)]"
   aria-label="Pied de page"
 >
-  <div class="relative mx-auto flex h-[100lvh] w-full max-w-[var(--container-wide)] flex-col px-4 pt-12 sm:px-6 sm:pt-16 md:px-12 md:pt-20">
+  <div class="relative mx-auto flex w-full max-w-[var(--container-wide)] flex-col px-4 pt-14 sm:px-6 sm:pt-16 md:px-12 md:pt-20">
 
     {/* TOP ROW — 3 columns: left = contact + year, center = social,
         right = nav. Each item has an inline transition-delay for the
         cascade reveal once `[data-top-revealed]` is set on the footer. */}
-    <div class="grid grid-cols-1 gap-6 sm:grid-cols-3 sm:gap-8 font-mono text-[11px] uppercase tracking-[0.18em] sm:text-[12px]">
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-4 font-label text-[13px] uppercase tracking-[0.06em] sm:text-[14px]">
 
       {/* Left : email + copyright */}
       <div class="flex flex-col gap-1.5">
@@ -83,6 +90,7 @@ const navLabels = lang === "en"
           style="transition-delay:120ms"
           class="text-[var(--color-ink)]/70"
         >© {currentYear} Anthony Profit · Kulturecom<br />{lang === "fr" ? "Nice, Côte d'Azur" : "Nice, French Riviera"}</p>
+        <GoogleRating lang={lang} data-footer-top style="transition-delay:160ms" class="mt-2 text-[var(--color-ink)]" />
         <a
           data-footer-top
           style="transition-delay:200ms"
@@ -97,8 +105,20 @@ const navLabels = lang === "en"
         >{t.footer["legal.privacy"]}</a>
       </div>
 
-      {/* Center : social */}
-      <div class="flex flex-col gap-1.5 sm:items-center">
+      {/* Services : the 4 service pages (internal links on every page). */}
+      <div class="flex flex-col gap-1.5">
+        {services.map((sv, i) => (
+          <a
+            data-footer-top
+            style={`transition-delay:${120 + i * 60}ms`}
+            href={sv.href}
+            class="text-[var(--color-ink)] no-underline hover:underline underline-offset-4"
+          >{sv.name}</a>
+        ))}
+      </div>
+
+      {/* Social */}
+      <div class="flex flex-col gap-1.5 lg:items-center">
         <a
           data-footer-top
           style="transition-delay:240ms"
@@ -126,7 +146,7 @@ const navLabels = lang === "en"
       </div>
 
       {/* Right : nav — Work · Services · About · Contact. */}
-      <div class="flex flex-col gap-1.5 sm:items-end">
+      <div class="flex flex-col gap-1.5 lg:items-end">
         <a
           data-footer-top
           style="transition-delay:600ms"
@@ -160,21 +180,12 @@ const navLabels = lang === "en"
       </div>
     </div>
 
-    {/* SPACER */}
-    <div class="flex-1" />
+    <div class="mt-16 md:mt-24" />
 
     {/* HUGE NAME */}
-    <h2 class="flex flex-wrap items-baseline justify-between gap-x-4 pb-6 leading-[0.85] sm:pb-8 md:pb-10">
-      <span
-        data-footer-name="first"
-        class="font-serif-italic text-[clamp(72px,22vw,320px)]"
-        set:html={firstNameHtml}
-      />
-      <span
-        data-footer-name="last"
-        class="font-display text-[clamp(72px,22vw,320px)] tracking-[-0.04em] whitespace-nowrap"
-        set:html={lastNameHtml}
-      />
+    <h2 class="flex flex-wrap items-baseline gap-x-[0.25em] pb-8 font-display text-[clamp(52px,14vw,210px)] leading-[1.05] tracking-[-0.035em] sm:pb-10 md:pb-12">
+      <span data-footer-name="first" set:html={firstNameHtml} />
+      <span data-footer-name="last" class="whitespace-nowrap" set:html={lastNameHtml} />
     </h2>
   </div>
 </footer>
@@ -189,6 +200,7 @@ const navLabels = lang === "en"
     display: inline-block;
     overflow: hidden;
     vertical-align: top;
+    padding-bottom: 0.12em;
   }
   .footer-letter-inner {
     display: inline-block;

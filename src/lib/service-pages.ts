@@ -1,4 +1,5 @@
 import type { Lang } from "~/i18n/ui";
+import { DELAY, PRICE, formatPrice } from "~/lib/facts";
 
 /**
  * Standalone service / local-SEO landing pages (Reco 2). Distinct from
@@ -21,6 +22,19 @@ export interface ServiceFaq {
   a: string;
 }
 
+/** A priced formula shown in the "Formules" block of a service page. */
+export interface ServiceOffer {
+  name: string;
+  /** Key of the shared price list (src/lib/facts.ts); none → "sur devis". */
+  price?: keyof typeof PRICE;
+  /** true → "dès X €" (starting price of a full project). */
+  from?: boolean;
+  /** e.g. "/mois" for a monthly plan. */
+  unit?: string;
+  delay: string;
+  items: string[];
+}
+
 export interface ServicePageContent {
   /** Short label used for cross-links, breadcrumb and the About-page link. */
   name: string;
@@ -35,6 +49,9 @@ export interface ServicePageContent {
   method: ServiceStep[];
   proofTitle: string;
   relatedTitle: string;
+  offers: ServiceOffer[];
+  /** Optional line under the packages (e.g. brand identity offered with a site). */
+  offersPerk?: string;
   faqTitle: string;
   faq: ServiceFaq[];
 }
@@ -102,12 +119,19 @@ const CONTENT: Record<ServiceId, Record<Lang, ServicePageContent>> = {
       ],
       proofTitle: "Projets liés",
       relatedTitle: "Autres services",
+      offers: [
+        { name: "Site une page", price: "webOnePage", delay: DELAY.webOnePage.fr, items: ["Design et code sur-mesure", "Mobile et rapide (Lighthouse ≥ 95)", "SEO et visibilité IA de base, mise en ligne"] },
+        { name: "Site vitrine", price: "webShowcase", from: true, delay: DELAY.webShowcase.fr, items: ["5 à 8 pages sur-mesure", "Outil d'édition pour être autonome", "SEO complet et 30 jours de suivi"] },
+      ],
+      offersPerk: "Identité de marque offerte : logo, mini-charte ou identité complète, inclus dans la création ou la refonte de votre site.",
       faqTitle: "Questions fréquentes",
       faq: [
-        { q: "Combien coûte un site sur-mesure ?", a: "Chaque projet est chiffré après un brief écrit — le prix dépend du nombre de pages, des fonctionnalités et du CMS. Je ne donne pas de devis sans cadrage : le tarif d'un site vitrine premium est établi sur mesure, selon le périmètre de votre projet." },
-        { q: "Quels sont les délais ?", a: "Comptez 4 à 8 semaines pour un site vitrine sur-mesure, davantage selon la complexité (e-commerce, plateforme, 3D). Le planning est fixé au cadrage." },
-        { q: "Utilisez-vous WordPress ?", a: "Selon le besoin. Pour les sites éditoriaux performants je privilégie Astro ou Next.js avec un CMS headless ; pour des clients qui veulent gérer eux-mêmes sur un écosystème connu, WordPress reste pertinent." },
-        { q: "Le code m'appartient-il ?", a: "Oui, entièrement. À la livraison, vous récupérez le dépôt et tous les accès. Aucun verrou propriétaire." },
+        { q: "Combien coûte un site internet sur-mesure ?", a: `Un site une page sur-mesure coûte ${formatPrice(PRICE.webOnePage, "fr")} et se livre en ${DELAY.webOnePage.fr} ; un site vitrine de 5 à 8 pages avec outil d'édition démarre à ${formatPrice(PRICE.webShowcase, "fr")}, livré en ${DELAY.webShowcase.fr}. Le logo et l'identité de marque sont offerts. Prix nets (TVA non applicable), fixés par écrit avec le délai après un premier échange : le montant exact dépend du nombre de pages et des fonctionnalités.` },
+        { q: "Combien de temps faut-il pour créer un site internet ?", a: `Comptez ${DELAY.webOnePage.fr} pour un site une page et ${DELAY.webShowcase.fr} pour un site vitrine de 5 à 8 pages. Les projets plus lourds (e-commerce, plateforme, 3D) sont planifiés au cadrage. Pendant le projet, vous suivez l'avancement sur une préversion en ligne et validez chaque étape.` },
+        { q: "Site sur-mesure ou WordPress, Wix : que choisir ?", a: "Un site sur-mesure (Astro, Next.js) charge plus vite, se référence mieux et ne dépend d'aucun thème ni plugin à mettre à jour. Wix ou un thème WordPress peuvent suffire pour un petit budget sans objectif de visibilité. Pour modifier vos contenus vous-même, j'intègre un outil d'édition simple, ou WordPress si votre équipe le connaît déjà." },
+        { q: "Mon site sera-t-il visible sur Google et dans les IA ?", a: `Oui, les fondations sont incluses : SEO technique, données structurées Schema.org, fichier llms.txt, score Lighthouse ≥ 95 et Core Web Vitals au vert. Le site vitrine ajoute le SEO complet et 30 jours de suivi. Pour aller plus loin (contenus, ChatGPT Ads, suivi mensuel), l'accompagnement SEO & GEO démarre à ${formatPrice(PRICE.seoAudit, "fr")}.` },
+        { q: "Faites-vous la refonte de sites existants ?", a: "Oui. Je refais votre site (WordPress, Wix ou autre) sans perdre votre référencement : redirections 301, URLs et contenus qui performent conservés, Search Console suivie après la mise en ligne. La refonte du logo et de l'identité de marque est offerte dans le même projet." },
+        { q: "Le code de mon site m'appartient-il ?", a: "Oui, entièrement. À la livraison, vous récupérez le code source, les accès et la documentation. Aucun verrou propriétaire : vous pouvez faire évoluer le site avec moi ou avec un autre prestataire." },
       ],
     },
     en: {
@@ -138,12 +162,19 @@ const CONTENT: Record<ServiceId, Record<Lang, ServicePageContent>> = {
       ],
       proofTitle: "Related projects",
       relatedTitle: "Other services",
+      offers: [
+        { name: "One-page site", price: "webOnePage", delay: DELAY.webOnePage.en, items: ["Custom design and code", "Mobile-ready and fast (Lighthouse ≥ 95)", "Core SEO and AI visibility, launch"] },
+        { name: "Showcase site", price: "webShowcase", from: true, delay: DELAY.webShowcase.en, items: ["5 to 8 custom pages", "Editing tool so you stay autonomous", "Full SEO and 30 days of follow-up"] },
+      ],
+      offersPerk: "Brand identity included free: logo, mini style guide or complete identity come with your new or redesigned website.",
       faqTitle: "Frequently asked questions",
       faq: [
-        { q: "How much does a custom website cost?", a: "Every project is quoted after a written brief — price depends on page count, features and CMS. I don't quote without scoping: the price of a premium showcase site is set to measure, based on your project's scope." },
-        { q: "How long does it take?", a: "Plan 4 to 8 weeks for a custom showcase site, more for complex builds (e-commerce, platform, 3D). The timeline is set during scoping." },
-        { q: "Do you use WordPress?", a: "It depends. For high-performance editorial sites I favor Astro or Next.js with a headless CMS; for clients who want to manage a familiar ecosystem themselves, WordPress remains a fit." },
-        { q: "Do I own the code?", a: "Yes, fully. On delivery you get the repository and all access. No proprietary lock-in." },
+        { q: "How much does a custom website cost?", a: `A custom one-page site costs ${formatPrice(PRICE.webOnePage, "en")} and ships in ${DELAY.webOnePage.en}; a 5 to 8-page showcase site with an editing tool starts at ${formatPrice(PRICE.webShowcase, "en")}, delivered in ${DELAY.webShowcase.en}. Logo and brand identity are included free. Net prices (no VAT charged), fixed in writing with the timeline after a first call: the exact amount depends on page count and features.` },
+        { q: "How long does it take to build a website?", a: `Plan ${DELAY.webOnePage.en} for a one-page site and ${DELAY.webShowcase.en} for a 5 to 8-page showcase site. Heavier builds (e-commerce, platform, 3D) are scheduled during scoping. Throughout the project you follow progress on a live preview and sign off each step.` },
+        { q: "Custom website or WordPress, Wix: which to choose?", a: "A custom site (Astro, Next.js) loads faster, ranks better and depends on no theme or plugin to keep updated. Wix or a WordPress theme can do for a small budget with no visibility goal. To edit your content yourself, I add a simple editing tool, or WordPress if your team already knows it." },
+        { q: "Will my site be visible on Google and in AI answers?", a: `Yes, the foundations are included: technical SEO, Schema.org structured data, an llms.txt file, a Lighthouse score ≥ 95 and green Core Web Vitals. The showcase site adds full SEO and 30 days of follow-up. To go further (content, ChatGPT Ads, monthly follow-up), SEO & GEO work starts at ${formatPrice(PRICE.seoAudit, "en")}.` },
+        { q: "Do you redesign existing websites?", a: "Yes. I rebuild your site (WordPress, Wix or other) without losing your rankings: 301 redirects, top-performing URLs and content kept, Search Console monitored after launch. Redesigning your logo and brand identity is included free in the same project." },
+        { q: "Do I own my website's code?", a: "Yes, fully. On delivery you get the source code, access and documentation. No proprietary lock-in: you can evolve the site with me or with another provider." },
       ],
     },
   },
@@ -177,13 +208,20 @@ const CONTENT: Record<ServiceId, Record<Lang, ServicePageContent>> = {
       ],
       proofTitle: "Projets liés",
       relatedTitle: "Autres services",
+      offers: [
+        { name: "Audit visibilité Google + IA", price: "seoAudit", delay: DELAY.seoAudit.fr, items: ["Audit technique et contenu", "Votre présence testée dans ChatGPT, Perplexity et Gemini", "Plan d'action priorisé et visio d'1 h"] },
+        { name: "Lancement ChatGPT Ads", price: "adsLaunch", delay: DELAY.adsLaunch.fr, items: ["Ciblage et annonces", "Suivi des conversions conforme au RGPD", "1 mois d'optimisation, budget pub en plus"] },
+        { name: "Suivi SEO & GEO", price: "seoMonthly", from: true, unit: "/mois", delay: "3 mois minimum", items: ["Corrections techniques", "Contenus et données structurées", "Rapport chaque mois"] },
+      ],
       faqTitle: "Questions fréquentes",
       faq: [
-        { q: "Quelle différence entre SEO et GEO ?", a: "Le SEO optimise pour les moteurs de recherche classiques (Google). Le GEO optimise pour les moteurs génératifs (ChatGPT, Perplexity, AI Overviews) qui citent des sources dans leurs réponses. Les deux partagent des fondations techniques mais demandent des signaux différents." },
-        { q: "En combien de temps voit-on des résultats ?", a: "Les corrections techniques agissent en quelques semaines ; le gain de positions sur des requêtes concurrentielles prend généralement 3 à 6 mois. Le SEO est un investissement, pas un interrupteur." },
-        { q: "Qu'est-ce que ChatGPT Ads, et faut-il s'y mettre ?", a: "C'est la régie publicitaire d'OpenAI, ouverte aux annonceurs en France depuis fin août 2026 : des annonces affichées sous les réponses de ChatGPT (offres gratuite et Go), marquées « sponsorisé ». Pas de mots-clés à acheter : on décrit les contextes de conversation où l'annonce doit apparaître, on choisit les zones, et on paie au clic ou à l'impression. C'est le complément payant du GEO, pas un raccourci : les annonces n'influencent pas les réponses, être cité dedans reste un travail de fond. Je vous aide à tester avec un budget maîtrisé et un suivi des conversions conforme au RGPD." },
-        { q: "Faites-vous du référencement local ?", a: "Oui — fiche Google Business Profile, cohérence NAP, schema local et pages géolocalisées pour les entreprises ciblant Nice, la Côte d'Azur ou une zone précise." },
-        { q: "Travaillez-vous sur un site existant ?", a: "Bien sûr. La plupart des missions SEO partent d'un site déjà en ligne. L'audit identifie le potentiel avant tout engagement." },
+        { q: "Qu'est-ce que le GEO, et quelle différence avec le SEO ?", a: "Le GEO (Generative Engine Optimization) vise à être cité par les moteurs génératifs (ChatGPT, Perplexity, Gemini, Google AI Overviews), quand le SEO vise le classement dans les résultats Google. Les deux partagent les mêmes fondations : site rapide, contenus utiles, données structurées. Le GEO y ajoute des réponses courtes et citables, un fichier llms.txt et des mentions sur des sources de confiance." },
+        { q: "Comment savoir si mon entreprise est citée par ChatGPT ?", a: `C'est le point de départ de l'audit de visibilité Google + IA (${formatPrice(PRICE.seoAudit, "fr")}, livré en ${DELAY.seoAudit.fr}) : je pose à ChatGPT, Perplexity et Gemini les questions de vos clients, je relève qui est cité à votre place et pourquoi, puis je vous présente un plan d'action priorisé en visio d'1 h.` },
+        { q: "Combien coûte un consultant SEO & GEO à Nice ?", a: `L'audit de visibilité Google + IA coûte ${formatPrice(PRICE.seoAudit, "fr")} (livré en ${DELAY.seoAudit.fr}), le suivi mensuel SEO & GEO démarre à ${formatPrice(PRICE.seoMonthly, "fr")} par mois (3 mois minimum) et le lancement d'une campagne ChatGPT Ads coûte ${formatPrice(PRICE.adsLaunch, "fr")}, budget publicitaire en plus. Prix nets, TVA non applicable.` },
+        { q: "En combien de temps voit-on des résultats en SEO ?", a: "Les corrections techniques agissent en quelques semaines ; les gains de positions sur des requêtes concurrentielles prennent généralement 3 à 6 mois. Dans les IA qui consultent le web, comme ChatGPT Search ou Perplexity, une page bien structurée peut être citée dès qu'elle est indexée. Le SEO est un investissement, pas un interrupteur." },
+        { q: "Qu'est-ce que ChatGPT Ads, et faut-il s'y mettre ?", a: `ChatGPT Ads est la régie publicitaire d'OpenAI, ouverte aux annonceurs en France depuis fin août 2026 : des annonces affichées sous les réponses de ChatGPT (offres gratuite et Go), marquées « sponsorisé ». Pas de mots-clés à acheter : on décrit les contextes de conversation où l'annonce doit apparaître, on choisit les zones, et on paie au clic ou à l'impression. C'est le complément payant du GEO, pas un raccourci : les annonces n'influencent pas les réponses. Je lance votre campagne en ${DELAY.adsLaunch.fr} pour ${formatPrice(PRICE.adsLaunch, "fr")}, avec un budget maîtrisé et un suivi des conversions conforme au RGPD.` },
+        { q: "Faites-vous du référencement local à Nice ?", a: "Oui : fiche Google Business Profile, cohérence du nom, de l'adresse et du téléphone (NAP) sur les annuaires, avis clients, données structurées LocalBusiness et pages par ville. L'objectif : apparaître dans le Local Pack et sur Google Maps à Nice, Antibes, Cannes, Monaco ou dans votre zone." },
+        { q: "Travaillez-vous sur un site existant ?", a: "Oui, la plupart des missions SEO partent d'un site déjà en ligne, quel que soit l'outil : WordPress, Wix, Shopify ou site sur-mesure. L'audit mesure le potentiel avant tout engagement." },
       ],
     },
     en: {
@@ -215,13 +253,20 @@ const CONTENT: Record<ServiceId, Record<Lang, ServicePageContent>> = {
       ],
       proofTitle: "Related projects",
       relatedTitle: "Other services",
+      offers: [
+        { name: "Google + AI visibility audit", price: "seoAudit", delay: DELAY.seoAudit.en, items: ["Technical and content audit", "Your presence tested in ChatGPT, Perplexity and Gemini", "Prioritized action plan and a 1-hour call"] },
+        { name: "ChatGPT Ads launch", price: "adsLaunch", delay: DELAY.adsLaunch.en, items: ["Targeting and ads", "GDPR-compliant conversion tracking", "1 month of optimization, ad budget on top"] },
+        { name: "SEO & GEO follow-up", price: "seoMonthly", from: true, unit: "/month", delay: "3 months minimum", items: ["Technical fixes", "Content and structured data", "Monthly report"] },
+      ],
       faqTitle: "Frequently asked questions",
       faq: [
-        { q: "What's the difference between SEO and GEO?", a: "SEO optimizes for classic search engines (Google). GEO optimizes for generative engines (ChatGPT, Perplexity, AI Overviews) that cite sources in their answers. Both share technical foundations but need different signals." },
-        { q: "How long until results?", a: "Technical fixes act within weeks; ranking gains on competitive queries usually take 3 to 6 months. SEO is an investment, not a switch." },
-        { q: "What is ChatGPT Ads, and should I use it?", a: "It's OpenAI's ad platform, open to advertisers in France and across Europe since late August 2026: ads shown below ChatGPT's answers (Free and Go plans), labeled “sponsored”. There are no keywords to buy: you describe the conversation contexts where the ad should appear, pick locations, and pay per click or per impression. It's the paid complement to GEO, not a shortcut: ads don't influence the answers, so being cited in them remains long-term work. I help you test with a controlled budget and GDPR-compliant conversion tracking." },
-        { q: "Do you do local SEO?", a: "Yes — Google Business Profile, NAP consistency, local schema and geo-targeted pages for businesses targeting Nice, the French Riviera or a specific area." },
-        { q: "Do you work on an existing site?", a: "Of course. Most SEO work starts from a live site. The audit identifies the potential before any commitment." },
+        { q: "What is GEO, and how is it different from SEO?", a: "GEO (Generative Engine Optimization) aims to get you cited by generative engines (ChatGPT, Perplexity, Gemini, Google AI Overviews), while SEO aims to rank you in Google's results. Both share the same foundations: a fast site, useful content, structured data. GEO adds short, quotable answers, an llms.txt file and mentions on trusted sources." },
+        { q: "How do I know if ChatGPT cites my business?", a: `That's where the Google + AI visibility audit starts (${formatPrice(PRICE.seoAudit, "en")}, delivered in ${DELAY.seoAudit.en}): I ask ChatGPT, Perplexity and Gemini your customers' questions, note who gets cited instead of you and why, then walk you through a prioritized action plan in a 1-hour call.` },
+        { q: "How much does an SEO & GEO consultant cost in Nice?", a: `The Google + AI visibility audit costs ${formatPrice(PRICE.seoAudit, "en")} (delivered in ${DELAY.seoAudit.en}), monthly SEO & GEO follow-up starts at ${formatPrice(PRICE.seoMonthly, "en")} per month (3 months minimum) and a ChatGPT Ads campaign launch costs ${formatPrice(PRICE.adsLaunch, "en")}, ad budget on top. Net prices, no VAT charged.` },
+        { q: "How long until SEO shows results?", a: "Technical fixes act within weeks; ranking gains on competitive queries usually take 3 to 6 months. In AI tools that search the web, like ChatGPT Search or Perplexity, a well-structured page can be cited as soon as it's indexed. SEO is an investment, not a switch." },
+        { q: "What is ChatGPT Ads, and should I use it?", a: `ChatGPT Ads is OpenAI's ad platform, open to advertisers in France and across Europe since late August 2026: ads shown below ChatGPT's answers (Free and Go plans), labeled “sponsored”. There are no keywords to buy: you describe the conversation contexts where the ad should appear, pick locations, and pay per click or per impression. It's the paid complement to GEO, not a shortcut: ads don't influence the answers. I launch your campaign in ${DELAY.adsLaunch.en} for ${formatPrice(PRICE.adsLaunch, "en")}, with a controlled budget and GDPR-compliant conversion tracking.` },
+        { q: "Do you do local SEO in Nice?", a: "Yes: Google Business Profile, consistent name, address and phone (NAP) across directories, customer reviews, LocalBusiness structured data and city pages. The goal: show up in the Local Pack and on Google Maps in Nice, Antibes, Cannes, Monaco or your own area." },
+        { q: "Do you work on an existing site?", a: "Yes, most SEO work starts from a live site, whatever it runs on: WordPress, Wix, Shopify or custom code. The audit measures the potential before any commitment." },
       ],
     },
   },
@@ -254,12 +299,19 @@ const CONTENT: Record<ServiceId, Record<Lang, ServicePageContent>> = {
       ],
       proofTitle: "Projets liés",
       relatedTitle: "Autres services",
+      offers: [
+        { name: "Logo + mini-charte", price: "brandLogo", from: true, delay: DELAY.brandLogo.fr, items: ["2 pistes de logo", "Couleurs et typographies", "Kit réseaux sociaux"] },
+        { name: "Identité complète", price: "brandIdentity", from: true, delay: DELAY.brandIdentity.fr, items: ["Plateforme de marque", "Système visuel complet", "Guide de marque et fichiers sources"] },
+      ],
+      offersPerk: "Offert si vous me confiez la création ou la refonte de votre site : logo, mini-charte ou identité complète.",
       faqTitle: "Questions fréquentes",
       faq: [
-        { q: "Livrez-vous seulement un logo ?", a: "Non. Un logo seul ne fait pas une marque. Je conçois un système complet — typographie, couleurs, règles, déclinaisons — pour que votre identité reste cohérente partout." },
-        { q: "Peut-on faire l'identité sans le site ?", a: "Oui, l'identité de marque est une mission à part entière. Mais comme je fais aussi le développement, identité et site peuvent être pensés ensemble — c'est là que la cohérence est la plus forte." },
-        { q: "Travaillez-vous avec des marques de luxe ?", a: "Oui — yachting, hôtellerie, immobilier de prestige font partie de mes projets récents. Le haut de gamme exige une précision que je traite comme un standard, pas une option." },
-        { q: "Fournissez-vous un guide de marque ?", a: "Oui, chaque identité est livrée avec ses règles d'usage et ses fichiers sources, pour que vos prestataires gardent la cohérence." },
+        { q: "Combien coûte un logo et une identité de marque ?", a: `Un logo avec sa mini-charte démarre à ${formatPrice(PRICE.brandLogo, "fr")} (livré en ${DELAY.brandLogo.fr}), une identité complète avec plateforme et guide de marque à ${formatPrice(PRICE.brandIdentity, "fr")} (${DELAY.brandIdentity.fr}). Prix nets (TVA non applicable), fixés par écrit avec le délai. Et c'est offert si vous me confiez la création ou la refonte de votre site.` },
+        { q: "Combien de temps faut-il pour créer un logo ?", a: `Comptez ${DELAY.brandLogo.fr} pour un logo avec sa mini-charte : 2 pistes, couleurs, typographies et kit réseaux sociaux. Une identité complète, avec plateforme de marque et guide, prend ${DELAY.brandIdentity.fr}. Le planning est fixé par écrit dès le départ.` },
+        { q: "Quelle différence entre logo, charte graphique et identité de marque ?", a: "Le logo est le signe qui vous identifie. La charte graphique fixe ses règles d'usage : couleurs, typographies, espacements, déclinaisons. L'identité de marque englobe le tout, avec la plateforme de marque (positionnement, valeurs, ton), pour que votre image reste cohérente sur le site, les réseaux sociaux et le print." },
+        { q: "Peut-on faire l'identité de marque sans le site ?", a: "Oui, l'identité de marque est une mission à part entière. Mais identité et site pensés ensemble donnent la meilleure cohérence, et dans ce cas l'identité est offerte : vous ne payez que le site." },
+        { q: "Travaillez-vous avec des marques haut de gamme ?", a: "Oui : Sun Beach House (villas de luxe à Saint-Barthélemy), Eden Rock Yacht Rental (St Barths) et Royal Yacht International (superyachts, Monaco) font partie de mes projets d'identité. Le haut de gamme exige une précision que je traite comme un standard, pas une option." },
+        { q: "Fournissez-vous un guide de marque et les fichiers sources ?", a: "Oui. Chaque identité est livrée avec ses règles d'usage et ses fichiers sources vectoriels, prêts pour le web, le print et les réseaux sociaux, pour que vos prestataires gardent la cohérence." },
       ],
     },
     en: {
@@ -290,12 +342,19 @@ const CONTENT: Record<ServiceId, Record<Lang, ServicePageContent>> = {
       ],
       proofTitle: "Related projects",
       relatedTitle: "Other services",
+      offers: [
+        { name: "Logo + mini style guide", price: "brandLogo", from: true, delay: DELAY.brandLogo.en, items: ["2 logo directions", "Colors and typefaces", "Social media kit"] },
+        { name: "Complete identity", price: "brandIdentity", from: true, delay: DELAY.brandIdentity.en, items: ["Brand platform", "Complete visual system", "Brand guidelines and source files"] },
+      ],
+      offersPerk: "Free when I build or redesign your website: logo, mini style guide or complete identity.",
       faqTitle: "Frequently asked questions",
       faq: [
-        { q: "Do you only deliver a logo?", a: "No. A logo alone isn't a brand. I design a full system — typography, colors, rules, applications — so your identity stays coherent everywhere." },
-        { q: "Can I get the identity without the website?", a: "Yes, brand identity is a standalone engagement. But since I also do development, identity and site can be designed together — that's where coherence is strongest." },
-        { q: "Do you work with luxury brands?", a: "Yes — yachting, hospitality and prestige real estate are among my recent projects. The high end demands a precision I treat as a standard, not an option." },
-        { q: "Do you provide brand guidelines?", a: "Yes, every identity ships with its usage rules and source files, so your providers keep the consistency." },
+        { q: "How much does a logo and brand identity cost?", a: `A logo with its mini style guide starts at ${formatPrice(PRICE.brandLogo, "en")} (delivered in ${DELAY.brandLogo.en}), a complete identity with brand platform and guidelines at ${formatPrice(PRICE.brandIdentity, "en")} (${DELAY.brandIdentity.en}). Net prices (no VAT charged), fixed in writing with the timeline. And it's free when I build or redesign your website.` },
+        { q: "How long does it take to design a logo?", a: `Plan ${DELAY.brandLogo.en} for a logo with its mini style guide: 2 directions, colors, typefaces and a social media kit. A complete identity, with brand platform and guidelines, takes ${DELAY.brandIdentity.en}. The schedule is set in writing from the start.` },
+        { q: "What's the difference between a logo, a style guide and a brand identity?", a: "The logo is the mark that identifies you. The style guide sets its usage rules: colors, typefaces, spacing, applications. The brand identity covers all of it, plus the brand platform (positioning, values, tone), so your image stays coherent on the website, social media and print." },
+        { q: "Can I get the brand identity without the website?", a: "Yes, brand identity is a standalone engagement. But identity and site designed together give the strongest coherence, and in that case the identity is free: you only pay for the site." },
+        { q: "Do you work with high-end brands?", a: "Yes: Sun Beach House (luxury villas in Saint-Barthélemy), Eden Rock Yacht Rental (St Barths) and Royal Yacht International (superyachts, Monaco) are among my identity projects. The high end demands a precision I treat as a standard, not an option." },
+        { q: "Do you provide brand guidelines and source files?", a: "Yes. Every identity ships with its usage rules and vector source files, ready for web, print and social media, so your providers keep the consistency." },
       ],
     },
   },
@@ -328,12 +387,18 @@ const CONTENT: Record<ServiceId, Record<Lang, ServicePageContent>> = {
       ],
       proofTitle: "Projets liés",
       relatedTitle: "Autres services",
+      offers: [
+        { name: "Automatisation ou assistant IA", price: "appsStarter", delay: DELAY.appsStarter.fr, items: ["Une tâche automatisée (n8n, Make ou code)", "ou un assistant IA sur vos documents", "1 mois de suivi"] },
+        { name: "Outil ou application sur-mesure", price: "appsCustom", from: true, delay: "fixé au devis", items: ["Cadrage et prototype cliquable", "Web ou mobile, base de données et comptes", "Mise en ligne et documentation"] },
+      ],
       faqTitle: "Questions fréquentes",
       faq: [
-        { q: "Combien coûte un outil ou une application sur-mesure ?", a: "Chaque projet est chiffré après un cadrage écrit : le prix dépend du périmètre, des intégrations et de la plateforme (web, mobile ou les deux). Quand c'est possible, je commence par un MVP ciblé pour valider l'usage avant d'aller plus loin." },
-        { q: "L'IA peut-elle vraiment servir à une petite entreprise ?", a: "Oui, si on la branche sur un vrai besoin : répondre aux questions récurrentes à partir de vos documents, préparer des devis ou des comptes-rendus, trier des demandes, extraire les données de PDF. Et je vous dis honnêtement quand elle n'apporte rien et qu'une simple automatisation suffit." },
-        { q: "Que deviennent mes données ?", a: "Elles restent sous votre contrôle : hébergement choisi avec vous, accès limités, et API d'IA utilisées dans des conditions où vos données ne servent pas à entraîner les modèles. Les sujets sensibles (RGPD, données clients) sont traités dès le cadrage." },
-        { q: "No-code ou développement sur-mesure ?", a: "Les deux, selon le besoin. n8n, Make ou Zapier sont parfaits pour connecter des outils rapidement ; dès que la logique métier se complexifie ou que les volumes augmentent, un développement sur-mesure devient plus fiable et moins cher à long terme." },
+        { q: "Combien coûte une application ou un outil sur-mesure ?", a: `Une automatisation ou un assistant IA sur vos documents coûte ${formatPrice(PRICE.appsStarter, "fr")}, livré en ${DELAY.appsStarter.fr}. Un outil ou une application sur-mesure démarre à ${formatPrice(PRICE.appsCustom, "fr")}. Le prix exact dépend du périmètre, des intégrations et de la plateforme (web, mobile ou les deux). Quand c'est possible, je commence par un MVP ciblé pour valider l'usage avant d'aller plus loin.` },
+        { q: "Combien de temps faut-il pour développer une application ?", a: `Une automatisation ou un assistant IA est livré en ${DELAY.appsStarter.fr}. Pour un outil ou une application sur-mesure, le planning est fixé au cadrage, après un prototype cliquable : on commence souvent par un MVP centré sur l'usage principal, puis on l'enrichit.` },
+        { q: "Comment l'IA peut-elle aider une petite entreprise ?", a: "En la branchant sur un vrai besoin : répondre aux questions récurrentes à partir de vos documents, préparer des devis ou des comptes-rendus, trier les demandes entrantes, extraire les données de PDF. J'intègre les modèles de Claude et d'OpenAI, et je vous dis honnêtement quand une simple automatisation suffit." },
+        { q: "Que deviennent mes données avec l'IA ?", a: "Elles restent sous votre contrôle : hébergement choisi avec vous, accès limités, et API d'IA utilisées dans des conditions où vos données ne servent pas à entraîner les modèles. Les sujets sensibles (RGPD, données clients) sont traités dès le cadrage." },
+        { q: "No-code (n8n, Make, Zapier) ou développement sur-mesure ?", a: "Les deux, selon le besoin. n8n, Make ou Zapier sont parfaits pour connecter des outils rapidement ; dès que la logique métier se complexifie ou que les volumes augmentent, un développement sur-mesure devient plus fiable et moins cher à long terme." },
+        { q: "Développez-vous des applications mobiles iOS et Android ?", a: "Oui, quand l'usage le justifie : équipes sur le terrain, clients réguliers, fonctions du téléphone (photo, géolocalisation, notifications). Souvent, une application web installable sur l'écran d'accueil suffit et coûte moins cher : je vous le dis dès le cadrage." },
         { q: "Le code m'appartient-il ?", a: "Oui, entièrement. À la livraison, vous récupérez le code, les accès et la documentation. Aucun verrou propriétaire." },
       ],
     },
@@ -365,12 +430,18 @@ const CONTENT: Record<ServiceId, Record<Lang, ServicePageContent>> = {
       ],
       proofTitle: "Related projects",
       relatedTitle: "Other services",
+      offers: [
+        { name: "Automation or AI assistant", price: "appsStarter", delay: DELAY.appsStarter.en, items: ["One automated task (n8n, Make or code)", "or an AI assistant on your documents", "1 month of follow-up"] },
+        { name: "Custom tool or app", price: "appsCustom", from: true, delay: "set in the quote", items: ["Scoping and clickable prototype", "Web or mobile, database and accounts", "Launch and documentation"] },
+      ],
       faqTitle: "Frequently asked questions",
       faq: [
-        { q: "How much does a custom tool or app cost?", a: "Every project is quoted after a written scoping: price depends on scope, integrations and platform (web, mobile or both). When possible, I start with a focused MVP to validate usage before going further." },
-        { q: "Can AI really help a small business?", a: "Yes, when it's tied to a real need: answering recurring questions from your documents, preparing quotes or reports, triaging requests, extracting data from PDFs. And I'll tell you honestly when it adds nothing and a simple automation is enough." },
-        { q: "What happens to my data?", a: "It stays under your control: hosting chosen with you, restricted access, and AI APIs used under terms where your data isn't used to train the models. Sensitive topics (GDPR, customer data) are handled from scoping." },
-        { q: "No-code or custom development?", a: "Both, depending on the need. n8n, Make or Zapier are great for connecting tools quickly; once business logic gets complex or volumes grow, custom development becomes more reliable and cheaper over time." },
+        { q: "How much does a custom app or business tool cost?", a: `An automation or an AI assistant on your documents costs ${formatPrice(PRICE.appsStarter, "en")}, delivered in ${DELAY.appsStarter.en}. A custom tool or app starts at ${formatPrice(PRICE.appsCustom, "en")}. The exact price depends on scope, integrations and platform (web, mobile or both). When possible, I start with a focused MVP to validate usage before going further.` },
+        { q: "How long does it take to build an app?", a: `An automation or an AI assistant ships in ${DELAY.appsStarter.en}. For a custom tool or app, the schedule is set during scoping, after a clickable prototype: we often start with an MVP focused on the main use, then build on it.` },
+        { q: "How can AI help a small business?", a: "By plugging it into a real need: answering recurring questions from your documents, preparing quotes or reports, triaging incoming requests, extracting data from PDFs. I integrate Claude and OpenAI models, and I'll tell you honestly when a simple automation is enough." },
+        { q: "What happens to my data with AI?", a: "It stays under your control: hosting chosen with you, restricted access, and AI APIs used under terms where your data isn't used to train the models. Sensitive topics (GDPR, customer data) are handled from scoping." },
+        { q: "No-code (n8n, Make, Zapier) or custom development?", a: "Both, depending on the need. n8n, Make or Zapier are great for connecting tools quickly; once business logic gets complex or volumes grow, custom development becomes more reliable and cheaper over time." },
+        { q: "Do you build iOS and Android mobile apps?", a: "Yes, when the use case calls for it: field teams, returning customers, phone features (camera, location, notifications). Often a web app installable on the home screen is enough and costs less: I'll tell you during scoping." },
         { q: "Do I own the code?", a: "Yes, fully. On delivery you get the code, access and documentation. No proprietary lock-in." },
       ],
     },

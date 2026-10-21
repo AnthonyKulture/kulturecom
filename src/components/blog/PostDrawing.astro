@@ -1,0 +1,290 @@
+---
+import type { Lang } from "~/i18n/ui";
+import type { Post } from "~/lib/blog";
+
+// Small architect drawing standing in for a cover image on the blog index and
+// tag pages: same line language as the service page "planches" (ink lines,
+// drafting grid, one element in the accent blue), static and decorative.
+// The figure is picked from the article's translationKey, then from its tags.
+interface Props {
+  post: Post;
+  lang: Lang;
+  class?: string;
+}
+
+const { post, lang, class: className = "" } = Astro.props;
+const fr = lang === "fr";
+
+type Figure = "serp" | "chat" | "ads" | "aiSerp" | "chart" | "coast" | "profile" | "langs";
+type City = "nice" | "cannes" | "monaco";
+
+const BY_KEY: Record<string, { figure: Figure; city?: City }> = {
+  "seo-geo-chatgpt": { figure: "chat" },
+  "dominer-google-nice": { figure: "coast", city: "nice" },
+  "chatgpt-ads": { figure: "ads" },
+  "google-ai-mode": { figure: "aiSerp" },
+  "mesurer-visibilite-ia": { figure: "chart" },
+  "seo-cannes": { figure: "coast", city: "cannes" },
+  "seo-monaco": { figure: "coast", city: "monaco" },
+  "gbp-nice": { figure: "profile" },
+  "multilingue-riviera": { figure: "langs" },
+};
+
+const tags = post.data.tags.map((t) => t.toLowerCase());
+const pick = BY_KEY[post.data.translationKey] ?? (
+  tags.includes("chatgpt ads") ? { figure: "ads" as const }
+  : tags.some((t) => t.includes("local")) ? { figure: "coast" as const, city: "nice" as const }
+  : tags.includes("geo") ? { figure: "chat" as const }
+  : { figure: "serp" as const }
+);
+const { figure, city } = pick;
+const L = (frText: string, enText: string): string => (fr ? frText : enText);
+const p = `pd-${post.data.slug}`;
+
+// Coast: west (Cannes) to east (Monaco), sea below the line.
+const cities: { id: City; x: number; y: number; name: string; coords: string }[] = [
+  { id: "cannes", x: 92, y: 168, name: "CANNES", coords: "43°33′N · 7°01′E" },
+  { id: "nice", x: 300, y: 138, name: "NICE", coords: "43°43′N · 7°16′E" },
+  { id: "monaco", x: 398, y: 120, name: "MONACO", coords: "43°44′N · 7°25′E" },
+];
+---
+
+<svg
+  class:list={["post-drawing", className]}
+  viewBox="0 0 480 300"
+  aria-hidden="true"
+  focusable="false"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <defs>
+    <pattern id={`${p}-grid`} width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M20 0H0V20" fill="none" class="grid" />
+    </pattern>
+    <pattern id={`${p}-hatch`} width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="6" class="hatch" />
+    </pattern>
+  </defs>
+
+  <rect x="0" y="0" width="480" height="300" fill={`url(#${p}-grid)`} />
+
+  {figure === "serp" && (
+    <g>
+      <rect class="ink" x="60" y="44" width="360" height="34" />
+      <circle class="ink" cx="82" cy="61" r="7" />
+      <line class="ink" x1="87" y1="66" x2="93" y2="72" />
+      <line class="ink thin" x1="106" y1="61" x2="280" y2="61" />
+      <rect class="accent" x="48" y="98" width="384" height="58" />
+      {[110, 178, 236].map((y, i) => (
+        <g>
+          <line class={i === 0 ? "accent" : "ink"} x1="66" y1={y + 4} x2={i === 0 ? 262 : 230} y2={y + 4} />
+          <line class="ink thin" x1="66" y1={y + 20} x2="400" y2={y + 20} />
+          <line class="ink thin" x1="66" y1={y + 32} x2="340" y2={y + 32} />
+        </g>
+      ))}
+      <text class="lbl lbl-accent" x="432" y="92" text-anchor="end">01</text>
+    </g>
+  )}
+
+  {figure === "chat" && (
+    <g>
+      <rect class="ink" x="190" y="40" width="230" height="40" />
+      <line class="ink thin" x1="206" y1="60" x2="380" y2="60" />
+      <path class="ink" d="M60 104h300a12 12 0 0 1 12 12v116a12 12 0 0 1-12 12H120l-20 16v-16H72a12 12 0 0 1-12-12V116a12 12 0 0 1 12-12z" />
+      <path class="accent" d="M80 128l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" />
+      <line class="ink thin" x1="102" y1="134" x2="340" y2="134" />
+      <line class="ink thin" x1="80" y1="156" x2="350" y2="156" />
+      <line class="ink thin" x1="80" y1="172" x2="310" y2="172" />
+      <rect class="accent" x="80" y="196" width="128" height="26" />
+      <line class="accent" x1="94" y1="209" x2="194" y2="209" />
+      <text class="lbl" x="420" y="276" text-anchor="end">{L("SOURCE CITÉE", "CITED SOURCE")}</text>
+    </g>
+  )}
+
+  {figure === "ads" && (
+    <g>
+      <rect class="ink" x="200" y="34" width="220" height="34" />
+      <line class="ink thin" x1="214" y1="51" x2="380" y2="51" />
+      <path class="ink" d="M60 86h300a12 12 0 0 1 12 12v64a12 12 0 0 1-12 12H72a12 12 0 0 1-12-12V98a12 12 0 0 1 12-12z" />
+      <path class="accent" d="M80 106l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" />
+      <line class="ink thin" x1="102" y1="112" x2="330" y2="112" />
+      <line class="ink thin" x1="80" y1="134" x2="340" y2="134" />
+      <line class="ink thin" x1="80" y1="150" x2="280" y2="150" />
+      <rect class="accent" x="60" y="192" width="312" height="72" />
+      <rect class="accent" x="74" y="206" width="44" height="44" style={`fill:url(#${p}-hatch)`} />
+      <line class="accent" x1="132" y1="216" x2="300" y2="216" />
+      <line class="ink thin" x1="132" y1="232" x2="340" y2="232" />
+      <text class="lbl lbl-accent" x="372" y="184" text-anchor="end">{L("SPONSORISÉ", "SPONSORED")}</text>
+      <line class="leader" x1="372" y1="228" x2="424" y2="228" />
+      <text class="lbl" x="426" y="276" text-anchor="end">CHATGPT ADS</text>
+    </g>
+  )}
+
+  {figure === "aiSerp" && (
+    <g>
+      <rect class="ink" x="60" y="34" width="360" height="30" />
+      <circle class="ink" cx="80" cy="49" r="6" />
+      <line class="ink" x1="84" y1="53" x2="90" y2="59" />
+      <line class="ink thin" x1="102" y1="49" x2="260" y2="49" />
+      <rect class="ink" x="60" y="80" width="360" height="104" style={`fill:url(#${p}-hatch)`} />
+      <rect class="tag-bg" x="72" y="92" width="246" height="80" />
+      <path class="accent" d="M84 104l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" />
+      <line class="ink thin" x1="104" y1="110" x2="300" y2="110" />
+      <line class="ink thin" x1="84" y1="132" x2="306" y2="132" />
+      <line class="ink thin" x1="84" y1="148" x2="270" y2="148" />
+      <rect class="accent" x="332" y="96" width="76" height="34" />
+      <rect class="ink thin" x="332" y="138" width="76" height="34" />
+      {[202, 248].map((y) => (
+        <g>
+          <line class="ink" x1="60" y1={y} x2="240" y2={y} />
+          <line class="ink thin" x1="60" y1={y + 16} x2="400" y2={y + 16} />
+        </g>
+      ))}
+      <text class="lbl" x="420" y="290" text-anchor="end">{L("APERÇU IA · AI MODE", "AI OVERVIEW · AI MODE")}</text>
+    </g>
+  )}
+
+  {figure === "chart" && (
+    <g>
+      <line class="ink" x1="70" y1="40" x2="70" y2="240" />
+      <line class="ink" x1="70" y1="240" x2="430" y2="240" />
+      {[80, 120, 160, 200].map((y) => <line class="guide" x1="70" y1={y} x2="430" y2={y} />)}
+      {[
+        [96, 196], [150, 176], [204, 168], [258, 142], [312, 120], [366, 88],
+      ].map(([x, top], i) => (
+        <rect class={i === 5 ? "accent" : "ink thin"} x={x} y={top} width="34" height={240 - top} style={i === 5 ? "" : `fill:url(#${p}-hatch)`} />
+      ))}
+      <path class="accent" d="M113 186L167 170L221 160L275 132L329 108L383 74" />
+      <text class="lbl" x="70" y="268">{L("PRÉSENCE DANS LES RÉPONSES IA", "SHARE OF AI ANSWERS")}</text>
+      <text class="lbl lbl-accent" x="430" y="62" text-anchor="end">KPI</text>
+    </g>
+  )}
+
+  {figure === "coast" && (
+    <g>
+      <path class="ink" d="M20 196C52 188 70 176 92 172S140 182 172 168S228 150 262 146S300 140 320 132S370 128 398 120S440 104 460 96" />
+      <path class="ink thin" d="M20 214C60 206 84 196 110 192S170 196 204 186S270 168 310 162S380 148 460 118" />
+      {[232, 250, 268].map((y) => <line class="guide" x1="20" y1={y} x2="460" y2={y} />)}
+      {cities.map((c) => (
+        <g>
+          <line class={c.id === city ? "accent" : "ink thin"} x1={c.x} y1={c.y - 4} x2={c.x} y2={c.y - 46} />
+          <circle class={c.id === city ? "accent-fill" : "dot"} cx={c.x} cy={c.y - 4} r={c.id === city ? 5 : 3.5} />
+          <text class:list={["lbl", c.id === city && "lbl-accent"]} x={c.x} y={c.y - 54} text-anchor="middle">{c.name}</text>
+        </g>
+      ))}
+      <text class="lbl" x="460" y="290" text-anchor="end">{L("MER MÉDITERRANÉE", "MEDITERRANEAN SEA")}</text>
+      <text class="lbl" x="20" y="40">{cities.find((c) => c.id === city)?.coords}</text>
+    </g>
+  )}
+
+  {figure === "profile" && (
+    <g>
+      <rect class="ink" x="60" y="36" width="250" height="228" />
+      <rect class="ink thin" x="60" y="36" width="250" height="84" style={`fill:url(#${p}-hatch)`} />
+      <line class="ink" x1="78" y1="142" x2="232" y2="142" />
+      {[0, 1, 2, 3, 4].map((i) => (
+        <path class="accent" d={`M${84 + i * 18} 156l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6-4.5-4 6-1z`} />
+      ))}
+      <line class="ink thin" x1="78" y1="190" x2="290" y2="190" />
+      <line class="ink thin" x1="78" y1="206" x2="250" y2="206" />
+      <rect class="accent" x="78" y="224" width="70" height="24" />
+      <rect class="ink thin" x="156" y="224" width="70" height="24" />
+      <path class="ink" d="M384 72c-20 0-34 15-34 33 0 26 34 59 34 59s34-33 34-59c0-18-14-33-34-33z" />
+      <circle class="accent" cx="384" cy="105" r="11" />
+      <line class="leader" x1="310" y1="142" x2="350" y2="118" />
+      <text class="lbl" x="420" y="276" text-anchor="end">GOOGLE BUSINESS PROFILE</text>
+    </g>
+  )}
+
+  {figure === "langs" && (
+    <g>
+      <rect class="accent" x="186" y="46" width="108" height="56" />
+      <text class="lbl lbl-accent big" x="240" y="80" text-anchor="middle">FR</text>
+      {[
+        [70, "EN"], [186, "IT"], [302, "DE"],
+      ].map(([x, code]) => (
+        <g>
+          <rect class="ink" x={Number(x) + 0} y="178" width="108" height="56" />
+          <text class="lbl lbl-ink big" x={Number(x) + 54} y="212" text-anchor="middle">{code}</text>
+        </g>
+      ))}
+      <path class="link" d="M240 102V140H124V178" />
+      <path class="link" d="M240 140V178" />
+      <path class="link" d="M240 140H356V178" />
+      <text class="lbl" x="250" y="134">HREFLANG</text>
+      <text class="lbl" x="410" y="276" text-anchor="end">X-DEFAULT · /EN/</text>
+    </g>
+  )}
+</svg>
+
+<style>
+  .post-drawing {
+    display: block;
+    width: 100%;
+    height: auto;
+    color: var(--color-ink);
+    background: #ffffff;
+  }
+  .post-drawing :global(.grid) {
+    stroke: color-mix(in srgb, var(--color-ink) 5%, transparent);
+    stroke-width: 1;
+  }
+  .post-drawing :global(.hatch) {
+    stroke: color-mix(in srgb, var(--color-ink) 22%, transparent);
+    stroke-width: 1;
+  }
+  .post-drawing :global(.ink) {
+    stroke: var(--color-ink);
+    stroke-width: 1.3;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .post-drawing :global(.ink.thin) {
+    stroke-width: 0.9;
+    stroke: color-mix(in srgb, var(--color-ink) 70%, transparent);
+  }
+  .post-drawing :global(.accent) {
+    stroke: var(--color-accent);
+    stroke-width: 1.5;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .post-drawing :global(.accent-fill) {
+    fill: var(--color-accent);
+  }
+  .post-drawing :global(.dot) {
+    fill: var(--color-ink);
+  }
+  .post-drawing :global(.tag-bg) {
+    fill: #ffffff;
+  }
+  .post-drawing :global(.guide),
+  .post-drawing :global(.leader) {
+    stroke: var(--color-line);
+    stroke-width: 1;
+    stroke-dasharray: 3 4;
+  }
+  .post-drawing :global(.link) {
+    stroke: color-mix(in srgb, var(--color-ink) 55%, transparent);
+    stroke-width: 1;
+    stroke-dasharray: 4 4;
+    fill: none;
+  }
+  .post-drawing :global(.lbl) {
+    font-family: var(--font-label);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    fill: var(--color-ink-subtle);
+  }
+  .post-drawing :global(.lbl-ink) {
+    fill: var(--color-ink);
+  }
+  .post-drawing :global(.lbl-accent) {
+    fill: var(--color-accent);
+  }
+  .post-drawing :global(.lbl.big) {
+    font-size: 18px;
+    letter-spacing: 0.04em;
+  }
+</style>

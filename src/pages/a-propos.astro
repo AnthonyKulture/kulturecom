@@ -2,6 +2,8 @@
 import BaseLayout from "~/layouts/BaseLayout.astro";
 import Nav from "~/components/Nav.astro";
 import CTA from "~/components/CTA.astro";
+import AboutHero from "~/components/AboutHero.astro";
+import IntroBlueprint from "~/components/IntroBlueprint.astro";
 
 const lang = "fr" as const;
 
@@ -95,56 +97,23 @@ const refuse = [
 ---
 
 <BaseLayout lang={lang} pathname="/a-propos/">
+  <IntroBlueprint />
   <Nav lang={lang} altLang="en" altLangPath="/en/about/" />
   <main id="main-content" class="bg-[var(--color-bg)] text-[var(--color-ink)]">
 
-    <!-- ========== INTRO / HERO ========== -->
-    <section class="relative px-4 pt-32 pb-20 sm:px-6 sm:pt-40 sm:pb-28 md:px-12 md:pt-48 md:pb-32">
-      <div class="mx-auto w-full max-w-[var(--container-wide)]">
-        <p class="font-mono mb-4 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
-          <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
-          À propos
-        </p>
-        <h1 class="font-display text-[clamp(40px,9vw,160px)] uppercase leading-[0.92] tracking-[-0.04em] text-[var(--color-ink)]">
-          <span class="block">Anthony Profit,</span>
-          <span class="block opacity-70">freelance depuis 2018.</span>
-        </h1>
-        <p class="font-serif-italic mt-8 max-w-[40ch] text-[clamp(18px,2vw,28px)] leading-tight text-[var(--color-ink)]">
-          Web design + code + SEO. Un seul interlocuteur. Huit ans à transformer des marques invisibles en marques cherchées.
-        </p>
-
-        <!-- Meta strip -->
-        <dl class="font-mono mt-12 grid grid-cols-2 gap-6 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)] sm:grid-cols-4 sm:gap-10">
-          <div>
-            <dt class="opacity-60">Disponibilité</dt>
-            <dd class="mt-1 text-[var(--color-ink)]">Q4 2026</dd>
-          </div>
-          <div>
-            <dt class="opacity-60">Localisation</dt>
-            <dd class="mt-1 text-[var(--color-ink)]">Nice / Côte d'Azur</dd>
-          </div>
-          <div>
-            <dt class="opacity-60">Délai réponse</dt>
-            <dd class="mt-1 text-[var(--color-ink)]">48 h ouvrées</dd>
-          </div>
-          <div>
-            <dt class="opacity-60">Projets/an</dt>
-            <dd class="mt-1 text-[var(--color-ink)]">8 max</dd>
-          </div>
-        </dl>
-      </div>
-    </section>
+    <AboutHero lang={lang} />
 
     <!-- ========== STORY (dark band) ========== -->
-    <section data-surface="dark" class="relative bg-[var(--color-bg)] text-[var(--color-ink)] px-4 py-24 sm:px-6 sm:py-32 md:px-12 md:py-40">
+    <section data-surface="tint" class="relative bg-[var(--color-bg)] text-[var(--color-ink)] px-4 py-24 sm:px-6 sm:py-32 md:px-12 md:py-40">
       <div class="mx-auto w-full max-w-[68ch]">
-        <p class="font-mono mb-6 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
-          <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
-          Parcours
+        <p class="font-label mb-6 sheet-label text-[13px] uppercase tracking-[0.06em] text-[var(--color-ink-muted)]">
+          <span class="sheet-diamond" aria-hidden="true"></span>
+          <span>Parcours</span>
+          <span class="sheet-leader" aria-hidden="true"></span>
         </p>
         <div class="font-sans space-y-6 text-[clamp(16px,1.3vw,20px)] leading-[1.7] text-[var(--color-ink)]">
           <p>
-            J'ai commencé en agence digitale, j'ai vu trop de projets sortir cassés parce que trois équipes (brand, dev, SEO) se passaient des fichiers sans jamais se parler. En 2018, j'ai décidé de faire les trois moi-même. Pas pour être polyvalent — pour <em class="font-serif-italic">supprimer les friction points</em> entre les disciplines.
+            J'ai commencé en agence digitale, j'ai vu trop de projets sortir cassés parce que trois équipes (brand, dev, SEO) se passaient des fichiers sans jamais se parler. En 2018, j'ai décidé de faire les trois moi-même. Pas pour être polyvalent — pour <em class="font-lead">supprimer les friction points</em> entre les disciplines.
           </p>
           <p>
             Depuis, je travaille en solo avec un objectif simple : <strong class="font-medium text-[var(--color-ink)]">votre marque doit être trouvée, comprise, et préférée</strong>. La forme (design), la mécanique (code) et la visibilité (SEO) sont trois faces d'un même problème. Je les traite ensemble parce que les séparer coûte plus cher au client qu'à moi.
@@ -160,11 +129,12 @@ const refuse = [
     <section class="relative bg-[var(--color-bg)] px-4 py-24 sm:px-6 sm:py-32 md:px-12 md:py-40">
       <div class="mx-auto w-full max-w-[var(--container-wide)]">
         <header class="mb-12 sm:mb-16">
-          <p class="font-mono mb-3 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
-            <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
-            Stack
-          </p>
-          <h2 class="font-display text-[clamp(28px,5vw,72px)] uppercase leading-[0.95] tracking-[-0.04em] text-[var(--color-ink)]">
+          <p class="font-label mb-3 sheet-label text-[13px] uppercase tracking-[0.06em] text-[var(--color-ink-muted)]">
+          <span class="sheet-diamond" aria-hidden="true"></span>
+          <span>Stack</span>
+          <span class="sheet-leader" aria-hidden="true"></span>
+        </p>
+          <h2 class="font-display text-[clamp(26px,2.8vw,40px)] leading-[1.15] tracking-[-0.04em] text-[var(--color-ink)]">
             Quatre axes, <br />outils alignés.
           </h2>
         </header>
@@ -173,16 +143,16 @@ const refuse = [
           {
             stack.map((s) => (
               <article class="border-t border-[var(--color-border)] pt-6">
-                <span class="font-mono block text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-subtle)]">
+                <span class="font-label block text-[13px] uppercase tracking-[0.06em] text-[var(--color-ink-subtle)]">
                   {s.label}
                 </span>
                 <h3 class="font-sans mt-2 text-[clamp(22px,2.5vw,32px)] font-medium tracking-normal text-[var(--color-ink)]">
                   <a href={s.href} class="no-underline hover:text-[var(--color-accent)]">{s.title}</a>
                 </h3>
-                <ul class="mt-6 space-y-2 text-[clamp(14px,1.1vw,16px)] text-[var(--color-ink-muted)]">
+                <ul class="mt-6 space-y-2 text-[clamp(17px,1.1vw,18px)] text-[var(--color-ink-muted)]">
                   {s.items.map((item) => (
                     <li class="flex gap-2">
-                      <span aria-hidden="true" class="font-mono shrink-0 pt-0.5 text-[10px] text-[var(--color-accent)]">→</span>
+                      <span aria-hidden="true" class="font-label shrink-0 pt-0.5 text-[13px] text-[var(--color-accent)]">→</span>
                       <span>{item}</span>
                     </li>
                   ))}
@@ -195,14 +165,15 @@ const refuse = [
     </section>
 
     <!-- ========== PROCESS (numbered narrative) ========== -->
-    <section data-surface="dark" class="relative bg-[var(--color-bg)] text-[var(--color-ink)] px-4 py-24 sm:px-6 sm:py-32 md:px-12 md:py-40">
+    <section data-surface="tint" class="relative bg-[var(--color-bg)] text-[var(--color-ink)] px-4 py-24 sm:px-6 sm:py-32 md:px-12 md:py-40">
       <div class="mx-auto w-full max-w-[var(--container-wide)]">
         <header class="mb-16 sm:mb-20">
-          <p class="font-mono mb-3 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
-            <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
-            Process
-          </p>
-          <h2 class="font-display text-[clamp(28px,5vw,72px)] uppercase leading-[0.95] tracking-[-0.04em] text-[var(--color-ink)]">
+          <p class="font-label mb-3 sheet-label text-[13px] uppercase tracking-[0.06em] text-[var(--color-ink-muted)]">
+          <span class="sheet-diamond" aria-hidden="true"></span>
+          <span>Process</span>
+          <span class="sheet-leader" aria-hidden="true"></span>
+        </p>
+          <h2 class="font-display text-[clamp(26px,2.8vw,40px)] leading-[1.15] tracking-[-0.04em] text-[var(--color-ink)]">
             Cinq étapes, <br />zéro surprise.
           </h2>
         </header>
@@ -218,7 +189,7 @@ const refuse = [
                   <h3 class="font-sans text-[clamp(20px,2.2vw,28px)] font-medium tracking-normal text-[var(--color-ink)]">
                     {step.title}
                   </h3>
-                  <p class="mt-3 max-w-[60ch] text-[clamp(15px,1.2vw,17px)] leading-[1.65] text-[var(--color-ink-muted)]">
+                  <p class="mt-3 max-w-[60ch] text-[clamp(17px,1.2vw,18px)] leading-[1.65] text-[var(--color-ink-muted)]">
                     {step.body}
                   </p>
                 </div>
@@ -233,11 +204,12 @@ const refuse = [
     <section class="relative bg-[var(--color-bg)] px-4 py-24 sm:px-6 sm:py-32 md:px-12 md:py-40">
       <div class="mx-auto w-full max-w-[var(--container-wide)]">
         <header class="mb-12 sm:mb-16">
-          <p class="font-mono mb-3 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
-            <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
-            Ce que je refuse
-          </p>
-          <h2 class="font-display text-[clamp(28px,5vw,72px)] uppercase leading-[0.95] tracking-[-0.04em] text-[var(--color-ink)]">
+          <p class="font-label mb-3 sheet-label text-[13px] uppercase tracking-[0.06em] text-[var(--color-ink-muted)]">
+          <span class="sheet-diamond" aria-hidden="true"></span>
+          <span>Ce que je refuse</span>
+          <span class="sheet-leader" aria-hidden="true"></span>
+        </p>
+          <h2 class="font-display text-[clamp(26px,2.8vw,40px)] leading-[1.15] tracking-[-0.04em] text-[var(--color-ink)]">
             Six lignes <br />à ne pas franchir.
           </h2>
         </header>
@@ -245,8 +217,8 @@ const refuse = [
         <ul class="font-display flex flex-col">
           {
             refuse.map((line, i) => (
-              <li class="flex items-start gap-4 border-t border-[var(--color-border)] py-6 text-[clamp(20px,2.5vw,40px)] uppercase leading-[1.05] text-[var(--color-ink)] sm:gap-8 sm:py-8">
-                <span class="font-mono shrink-0 pt-2 text-[12px] tracking-[0.18em] text-[var(--color-ink-subtle)]">
+              <li class="flex items-start gap-4 border-t border-[var(--color-border)] py-6 font-display text-[clamp(20px,2.4vw,36px)] font-medium leading-[1.2] text-[var(--color-ink)] sm:gap-8 sm:py-8">
+                <span class="font-label shrink-0 pt-2 text-[13px] tracking-[0.06em] text-[var(--color-ink-subtle)]">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <span>{line}</span>

@@ -1,14 +1,15 @@
 ---
 import "~/styles/global.css";
-import Preloader from "~/components/Preloader.astro";
-import Rideau from "~/components/Rideau.astro";
 import Footer from "~/components/Footer.astro";
 import Analytics from "~/components/Analytics.astro";
 import Consent from "~/components/Consent.astro";
+import MobileBar from "~/components/MobileBar.astro";
+import CallbackDialog from "~/components/CallbackDialog.astro";
 import type { Lang } from "~/i18n/ui";
 import { ui } from "~/i18n/ui";
 import { getRoute } from "~/i18n/routes";
 import { SERVICE_PAGES } from "~/lib/service-pages";
+import { GOOGLE_PROFILE, PRICE, STARTING_PRICE, formatPrice } from "~/lib/facts";
 import { caseStudyPath } from "~/lib/case-studies";
 import { AREA_SERVED } from "~/lib/schema";
 
@@ -63,7 +64,6 @@ const canonical = new URL(pathname, Astro.site).toString();
 // FR counterpart is its own default.
 const xDefault =
   lang === "fr" || !hasCounterpart ? canonical : new URL(altPath, Astro.site).toString();
-const isHome = pathname === "/" || pathname === "/en/";
 // 1200×630 PNG — renders on every platform (Facebook + LinkedIn included; SVG
 // OG images don't). Rasterized from og.svg; see public/og.png.
 const ogImage = new URL("/og.png", Astro.site).toString();
@@ -77,7 +77,7 @@ const linkedinUrl = "https://www.linkedin.com/in/anthony-profit/";
 const instagramUrl = "https://www.instagram.com/antho_profit/";
 const behanceUrl = "https://www.behance.net/anthonyprofit";
 // Google Business Profile (canonical CID URL) — powers the local entity link.
-const gbpUrl = "https://www.google.com/maps?cid=13963690267531536578";
+const gbpUrl = GOOGLE_PROFILE.url;
 
 // Structured data — site entity graph (Person + ProfessionalService +
 // WebSite) plus a per-route WebPage / BreadcrumbList (and an ItemList of real
@@ -163,11 +163,14 @@ const graph: Record<string, any>[] = [
     },
     "address": {
       "@type": "PostalAddress",
+      "streetAddress": "2 rue Pierre Pietri",
       "addressLocality": "Nice",
       "postalCode": "06000",
       "addressRegion": "Provence-Alpes-Côte d'Azur",
       "addressCountry": "FR",
     },
+    // Pin of the Google Business Profile.
+    "geo": { "@type": "GeoCoordinates", "latitude": 43.7072786, "longitude": 7.2591778 },
     // City-level areaServed sharpens relevance for "Nice"/"Côte d'Azur" queries
     // (LLMs + local pack score city entities higher than a bare Country).
     "areaServed": AREA_SERVED,
@@ -179,9 +182,14 @@ const graph: Record<string, any>[] = [
       "itemListElement": SERVICE_PAGES.map((s) => ({
         "@type": "Offer",
         "itemOffered": { "@id": `${new URL(s.path[lang], Astro.site)}#service` },
+        // Entry price of the service ("dès X €"), same source as the pages.
+        ...(STARTING_PRICE[s.id] !== undefined && {
+          "priceSpecification": { "@type": "PriceSpecification", "minPrice": STARTING_PRICE[s.id], "priceCurrency": "EUR" },
+        }),
       })),
     },
-    "priceRange": "€€€",
+    // Real span of the published prices (entry offers), not a symbol.
+    "priceRange": `${formatPrice(Math.min(...Object.values(PRICE)), lang)} – ${formatPrice(Math.max(...Object.values(PRICE)), lang)}`,
     "hasMap": gbpUrl,
     "sameAs": [gbpUrl, linkedinUrl, instagramUrl, behanceUrl, githubUrl],
   },
@@ -255,34 +263,12 @@ const jsonLd = { "@context": "https://schema.org", "@graph": graph };
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
 
-    {/* Page-transition curtain (src/components/Rideau.astro) — decide the
-        initial cover/idle state BEFORE first paint. On a transition-entry the
-        one-shot `ap-rideau` flag is set: paint the page beneath the covering
-        ink panel (no flash) and let rideau.ts sweep it out. The flag is cleared
-        immediately so a failed module load can't leave the curtain stuck on the
-        next reload. Reduced motion / no support → always idle (panel hidden). */}
-    <script is:inline>
-      (function () {
-        try {
-          var reduce = window.matchMedia(
-            "(prefers-reduced-motion: reduce)"
-          ).matches;
-          var entering =
-            !reduce && sessionStorage.getItem("ap-rideau") === "1";
-          sessionStorage.removeItem("ap-rideau");
-          document.documentElement.dataset.rideau = entering ? "cover" : "idle";
-        } catch (e) {
-          document.documentElement.dataset.rideau = "idle";
-        }
-      })();
-    </script>
-
     <!-- Favicons + brand theme color. `?v=` busts the 1-year immutable cache
          set on *.svg / *.png in public/_headers — bump it when the icons change. -->
     <link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png?v=2" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" />
-    <meta name="theme-color" content="#efe9dc" />
+    <meta name="theme-color" content="#ffffff" />
 
     <!-- Google Analytics 4 -->
     <Analytics />
@@ -336,38 +322,25 @@ const jsonLd = { "@context": "https://schema.org", "@graph": graph };
     <!-- Structured data (JSON-LD) — Person + ProfessionalService + WebSite -->
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
 
-    {/* Fonts are self-hosted (@font-face in global.css). Preload the three
-        above-the-fold faces — display H1 (Archivo Black), body (Geist), lead
-        (Instrument Serif italic) — so text paints in the right font without a
-        third-party round trip. Geist Mono (small labels) loads on demand. */}
-    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/archivo-black-latin.woff2" />
+    {/* Fonts are self-hosted (@font-face in global.css). Preload both faces
+        (Urbanist headings, Geist text) so the first paint uses them without a
+        third-party round trip. */}
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/urbanist-latin.woff2" />
     <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/geist-latin.woff2" />
-    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/instrument-serif-italic-latin.woff2" />
-
-    {/* Preload first carousel slide — likely LCP on mobile (inline image
-        inside the H1, 180-260 px square, larger pixel area than the headline).
-        HOME ONLY — inner pages don't render the hero, so preloading it there
-        just wasted ~55 KB of priority bandwidth. */}
-    {isHome && (
-      <link rel="preload" as="image" href="/hero-slides/slide-01.webp" type="image/webp" />
-    )}
   </head>
   <body>
     {/* Keyboard skip link (WCAG 2.4.1). Hidden until the user tabs to it.
         The visible `<main id="main-content">` target lives in each page. */}
     <a
       href="#main-content"
-      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:bg-[var(--color-ink)] focus:px-4 focus:py-3 focus:font-mono focus:text-[12px] focus:uppercase focus:tracking-[0.18em] focus:text-[var(--color-bg)] focus:no-underline focus:outline-2 focus:outline-offset-2 focus:outline-[var(--color-accent)]"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:bg-[var(--color-ink)] focus:px-4 focus:py-3 focus:font-label focus:text-[13px] focus:uppercase focus:tracking-[0.06em] focus:text-[var(--color-bg)] focus:no-underline focus:outline-2 focus:outline-offset-2 focus:outline-[var(--color-accent)]"
     >
       {lang === "en" ? "Skip to content" : "Aller au contenu"}
     </a>
-    {/* The intro preloader is the HOME's opening act only. On inner pages it
-        held paid / search visitors behind a ~3 s full-screen overlay (scroll
-        locked) and pulled home-only assets — they now get the content at once. */}
-    {isHome && <Preloader lang={lang} />}
-    <Rideau />
     <slot />
     <Footer lang={lang} />
+    <MobileBar lang={lang} />
+    <CallbackDialog lang={lang} />
     <Consent lang={lang} />
   </body>
 </html>

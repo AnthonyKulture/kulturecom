@@ -1,0 +1,290 @@
+---
+import type { Lang } from "~/i18n/ui";
+import { ui } from "~/i18n/ui";
+import { getHomeContent } from "~/lib/home-content";
+import { caseStudyPath, getCaseStudy } from "~/lib/case-studies";
+import Eyebrow from "~/components/Eyebrow.astro";
+import { GOOGLE_PROFILE } from "~/lib/facts";
+
+// Home body between the hero and the contact block:
+// "Conçu. Codé. Cité." (+ freelance / agency / platform table) → 3 recent
+// case studies → Google reviews → FAQ. One layout family per section.
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const c = getHomeContent(lang);
+const t = ui[lang];
+const workHref = lang === "fr" ? "/projets/" : "/en/work/";
+const sheet = (n: string, fr: string, en: string): string => (lang === "fr" ? `Planche ${n} · ${fr}` : `Sheet ${n} · ${en}`);
+const rating = GOOGLE_PROFILE.rating.toLocaleString(lang === "fr" ? "fr-FR" : "en-GB", { minimumFractionDigits: 1 });
+
+// Bento: the lead case large on the left, two stacked on the right.
+const featured = ["surly", "eden-rock-yacht-rental", "sun-beach-house"].map((slug) => getCaseStudy(t, slug)!);
+// Intrinsic size of each card image (square unless listed), against layout shift.
+const imageSize: Record<string, [number, number]> = { "eden-rock-yacht-rental": [3456, 1728] };
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "inLanguage": lang === "fr" ? "fr-FR" : "en-US",
+  "mainEntity": c.faq.map((f) => ({
+    "@type": "Question",
+    "name": f.q,
+    "acceptedAnswer": { "@type": "Answer", "text": f.a },
+  })),
+};
+---
+
+{/* Conçu. Codé. Cité. — manifesto rows + comparison table. */}
+<section class="px-4 py-20 sm:px-6 md:px-12 md:py-32" data-reveal>
+  <div class="mx-auto w-full max-w-[var(--container-wide)]">
+    <Eyebrow label={sheet("01", "Approche", "Approach")} class="mb-6 md:mb-8" />
+    <h2 class="max-w-[24ch] font-display text-[clamp(26px,2.8vw,40px)]">{c.pillarsTitle}</h2>
+    <ol class="mt-10 md:mt-16">
+      {c.pillars.map((p) => (
+        <li class="grid gap-2 border-t border-[var(--color-ink)]/15 py-6 md:grid-cols-12 md:items-baseline md:gap-8 md:py-9">
+          <span class="font-display text-[clamp(44px,6.5vw,104px)] md:col-span-6">{p.word}</span>
+          <p class="max-w-[46ch] text-[16px] leading-[1.55] text-[var(--color-ink-muted)] md:col-span-6 md:text-[18px]">{p.body}</p>
+        </li>
+      ))}
+    </ol>
+
+    <div class="mt-12 overflow-x-auto md:mt-20">
+      <table class="compare w-full min-w-[640px] border-collapse text-left text-[16px] md:text-[17px]">
+        <caption class="mb-4 text-left font-lead text-[22px] text-[var(--color-ink)] md:text-[26px]">{c.compare.caption}</caption>
+        <thead>
+          <tr>
+            {c.compare.cols.map((col, i) => (
+              <th scope="col" class:list={["px-4 py-3 font-label text-[13px] font-normal uppercase tracking-[0.06em]", i === 1 && "is-me"]}>{col}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {c.compare.rows.map((row) => (
+            <tr class="border-t border-[var(--color-ink)]/12">
+              <th scope="row" class="px-4 py-4 font-medium">{row[0]}</th>
+              <td class="is-me px-4 py-4 font-medium">{row[1]}</td>
+              <td class="px-4 py-4 text-[var(--color-ink-muted)]">{row[2]}</td>
+              <td class="px-4 py-4 text-[var(--color-ink-muted)]">{row[3]}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+{/* Recent work — asymmetric bento: 1 large + 2 stacked. */}
+<section class="px-4 pb-20 sm:px-6 md:px-12 md:pb-32" data-reveal>
+  <div class="mx-auto w-full max-w-[var(--container-wide)]">
+    <Eyebrow label={sheet("02", "Projets", "Work")} class="mb-6 md:mb-8" />
+    <div class="flex items-end justify-between gap-6">
+      <h2 class="font-display text-[clamp(26px,2.8vw,40px)]">{c.workTitle}</h2>
+      <a href={workHref} class="shrink-0 font-label text-[13px] uppercase tracking-[0.06em] text-[var(--color-ink)] underline underline-offset-4 hover:text-[var(--color-accent)] md:text-[14px]">{c.workAll}</a>
+    </div>
+    <div class="mt-8 grid gap-4 md:mt-12 md:grid-cols-12 md:grid-rows-2 md:gap-5">
+      {featured.map((cs, i) => (
+        <a
+          href={caseStudyPath(cs.slug, lang)}
+          class:list={["work-card marks group", i === 0 ? "md:col-span-7 md:row-span-2" : "md:col-span-5"]}
+        >
+          <span class:list={["work-media", i === 0 ? "aspect-[4/3] md:aspect-auto md:flex-1" : "aspect-[16/9]"]}>
+            <img
+              src={cs.image}
+              alt={`${cs.title} : ${cs.headline}`}
+              loading="lazy"
+              decoding="async"
+              width={(imageSize[cs.slug] ?? [1024, 1024])[0]}
+              height={(imageSize[cs.slug] ?? [1024, 1024])[1]}
+            />
+          </span>
+          <span class="flex flex-col gap-1 pt-4">
+            <span class="font-display text-[20px] md:text-[24px]">{cs.title}</span>
+            <span class="text-[15px] text-[var(--color-ink-muted)]">{cs.headline}</span>
+            <span class="mt-2 flex items-center justify-between gap-4">
+              <span class="font-label text-[13px] uppercase tracking-[0.06em]">{cs.metric}</span>
+              <span class="font-label text-[13px] uppercase tracking-[0.06em] underline underline-offset-4 group-hover:text-[var(--color-accent)]">{c.workLink}</span>
+            </span>
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+{/* Google reviews: rating + four quotes (businesses first), linked to the profile. Visible
+    text only, no AggregateRating markup: Google ignores a business's ratings
+    of itself and reviews taken from another site. */}
+<section class="px-4 pb-20 sm:px-6 md:px-12 md:pb-32" data-reveal>
+  <div class="mx-auto w-full max-w-[var(--container-wide)]">
+    <Eyebrow label={sheet("03", "Avis", "Reviews")} class="mb-6 md:mb-8" />
+  </div>
+  <div class="mx-auto grid w-full max-w-[var(--container-wide)] gap-8 md:grid-cols-12 md:gap-10">
+    <div class="md:col-span-4">
+      <h2 class="font-display text-[clamp(26px,2.8vw,40px)]">{c.reviewsTitle}</h2>
+      <p class="mt-6 flex items-center gap-4" aria-label={lang === "fr" ? `Note moyenne ${rating} sur 5` : `Average rating ${rating} out of 5`}>
+        <span class="font-display text-[clamp(44px,5vw,64px)] leading-none" aria-hidden="true">{rating}</span>
+        <span class="stars" aria-hidden="true">
+          {[0, 1, 2, 3, 4].map(() => (
+            <svg viewBox="0 0 20 20" width="20" height="20"><path d="M10 1.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3.1-5.4 3.1 1.2-6L1.3 7.8l6.1-.7z" /></svg>
+          ))}
+        </span>
+      </p>
+      <p class="mt-2 text-[16px] text-[var(--color-ink-muted)]">{GOOGLE_PROFILE.reviewCount} {c.reviewsCount}</p>
+      <a href={GOOGLE_PROFILE.url} target="_blank" rel="noopener" class="mt-5 inline-flex items-center gap-2 text-[16px] font-medium text-[var(--color-accent)] underline underline-offset-4 hover:text-[var(--color-accent-strong)]">
+        {c.reviewsLink} <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+    <div class="md:col-span-8">
+      <ul class="grid gap-4 sm:grid-cols-2">
+        {c.reviews.map((r) => (
+          <li>
+            <figure class="review marks">
+              <blockquote class="text-[16px] leading-[1.55] text-[var(--color-ink)]">
+                <p>{lang === "fr" ? `« ${r.quote} »` : `“${r.quote}”`}</p>
+              </blockquote>
+              <figcaption class="mt-auto border-t border-[var(--color-border)] pt-4 text-[15px]">
+                <span class="font-medium">{r.author}</span>
+                <span class="text-[var(--color-ink-muted)]"> · {lang === "fr" ? "Avis Google" : "Google review"}</span>
+              </figcaption>
+            </figure>
+          </li>
+        ))}
+      </ul>
+      {c.reviewsNote && <p class="mt-3 text-[14px] text-[var(--color-ink-muted)]">{c.reviewsNote}</p>}
+    </div>
+  </div>
+</section>
+
+{/* FAQ — question list on the right, heading + aside on the left. */}
+<section class="px-4 py-20 sm:px-6 md:px-12 md:py-32" data-reveal>
+  <div class="mx-auto w-full max-w-[var(--container-wide)]">
+    <Eyebrow label={sheet("04", "Questions", "Questions")} class="mb-6 md:mb-8" />
+  </div>
+  <div class="mx-auto grid w-full max-w-[var(--container-wide)] gap-8 md:grid-cols-12 md:gap-10">
+    <div class="md:col-span-4">
+      <h2 class="font-display text-[clamp(26px,2.8vw,40px)]">{c.faqTitle}</h2>
+      <p class="mt-4 max-w-[30ch] text-[15px] text-[var(--color-ink-muted)]">
+        <a href="#contact" class="text-[var(--color-ink)] underline underline-offset-4 hover:text-[var(--color-accent)]">{c.faqAside}</a>
+      </p>
+    </div>
+    <div class="md:col-span-8">
+      {c.faq.map((f) => (
+        <details class="faq group border-b border-[var(--color-ink)]/15">
+          <summary class="flex cursor-pointer list-none items-start justify-between gap-6 py-5 text-[17px] font-medium md:text-[19px]">
+            <h3 class="font-[inherit] text-[inherit]">{f.q}</h3>
+            <span class="faq-icon" aria-hidden="true"></span>
+          </summary>
+          <div class="pb-6">
+            <p class="max-w-[64ch] text-[17px] leading-[1.6] text-[var(--color-ink-muted)]">{f.a}</p>
+            {f.link && (
+              <a href={f.link.href} class="mt-3 inline-flex items-center gap-2 text-[16px] font-medium text-[var(--color-accent)] underline underline-offset-4 hover:text-[var(--color-accent-strong)]">
+                {f.link.label} <span aria-hidden="true">→</span>
+              </a>
+            )}
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+  <script type="application/ld+json" set:html={JSON.stringify(faqLd)} is:inline />
+</section>
+
+<style>
+  .compare .is-me {
+    background: color-mix(in srgb, var(--color-accent) 7%, transparent);
+    color: var(--color-ink);
+  }
+  .compare thead .is-me {
+    border-radius: 0;
+    background: var(--color-accent);
+    color: #ffffff;
+  }
+  .compare tbody tr:last-child .is-me {
+    border-radius: 0;
+  }
+
+  .work-card {
+    display: flex;
+    flex-direction: column;
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+  .work-media {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: 0;
+    background: var(--color-bg-shade);
+  }
+  .work-media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s var(--ease-power3);
+  }
+  .work-card:hover .work-media img {
+    transform: scale(1.03);
+  }
+
+  .stars {
+    display: inline-flex;
+    gap: 3px;
+    color: var(--color-accent);
+  }
+  .stars svg {
+    fill: currentColor;
+  }
+  .review {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 100%;
+    padding: 24px;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+  }
+  .review blockquote {
+    margin: 0;
+  }
+
+  .faq summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq-icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    margin-top: 6px;
+  }
+  .faq-icon::before,
+  .faq-icon::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    background: currentColor;
+    transition: transform 0.3s var(--ease-power3);
+  }
+  .faq-icon::after {
+    transform: rotate(90deg);
+  }
+  .faq[open] .faq-icon::after {
+    transform: rotate(0deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .work-media img,
+    .faq-icon::before,
+    .faq-icon::after {
+      transition: none;
+    }
+  }
+</style>

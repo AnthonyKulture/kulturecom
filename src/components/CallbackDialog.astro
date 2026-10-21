@@ -1,0 +1,279 @@
+---
+import type { Lang } from "~/i18n/ui";
+import { getCallbackContent } from "~/lib/home-content";
+import { CALLBACK, CONTACT } from "~/lib/facts";
+
+// "Être rappelé" — one dialog per page, opened by any [data-callback-open]
+// button (hero, contact block, mobile action bar). Sends a `callback` lead to
+// /api/lead; the e-mail subject flags it as urgent.
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const c = getCallbackContent(lang);
+const strings = {
+  sending: c.sending,
+  submit: c.submit,
+  successOpen: c.successOpen,
+  successClosed: c.successClosed,
+  hours: CALLBACK,
+};
+---
+
+<dialog data-callback class="callback" aria-labelledby="callback-title" data-strings={JSON.stringify(strings)}>
+  <form data-callback-form class="callback-inner" novalidate>
+    <div class="flex items-start justify-between gap-6">
+      <p id="callback-title" class="font-display text-[clamp(26px,3vw,36px)]">{c.title}</p>
+      <button type="button" data-callback-close class="callback-x" aria-label={c.close}>
+        <span aria-hidden="true"></span>
+      </button>
+    </div>
+    <p data-cb-body-open class="mt-3 text-[16px] text-[var(--color-ink-muted)]">{c.bodyOpen}</p>
+    <p data-cb-body-closed class="mt-3 text-[16px] text-[var(--color-ink-muted)]" hidden>{c.bodyClosed}</p>
+
+    <div data-cb-fields class="mt-6 grid gap-4">
+      <div class="lf-field">
+        <label for="cb-name">{c.name}</label>
+        <input id="cb-name" name="name" type="text" autocomplete="given-name" maxlength="80" />
+      </div>
+      <div class="lf-field">
+        <label for="cb-phone">{c.phone}</label>
+        <input id="cb-phone" name="phone" type="tel" autocomplete="tel" maxlength="24" required aria-describedby="cb-phone-err" />
+        <p id="cb-phone-err" class="lf-err" hidden>{lang === "fr" ? "Indiquez un numéro valide." : "Please enter a valid number."}</p>
+      </div>
+      <div class="lf-hp" aria-hidden="true">
+        <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+      </div>
+      <button type="submit" data-cb-submit class="cb-submit">{c.submit} <span aria-hidden="true">→</span></button>
+    </div>
+
+    <p data-cb-done class="mt-6 text-[18px] font-medium" role="status" hidden></p>
+    <p data-cb-error class="mt-6 text-[16px]" role="alert" hidden>
+      {c.error} <a href={CONTACT.phoneHref} class="font-medium underline underline-offset-4">{CONTACT.phoneDisplay}</a>
+    </p>
+
+    <p class="mt-6 border-t border-[var(--color-ink)]/12 pt-4 text-[15px] text-[var(--color-ink-muted)]">
+      {c.orCall} <a href={CONTACT.phoneHref} class="font-medium text-[var(--color-ink)] underline underline-offset-4">{CONTACT.phoneDisplay}</a>
+    </p>
+  </form>
+</dialog>
+
+<style is:global>
+  .callback {
+    width: min(440px, calc(100vw - 32px));
+    max-height: calc(100dvh - 32px);
+    margin: auto;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: var(--color-bg);
+    color: var(--color-ink);
+    box-shadow: 0 30px 80px -30px rgb(16 37 70 / 0.45);
+  }
+  .callback::backdrop {
+    background: rgb(16 21 29 / 0.4);
+  }
+  .callback[open] {
+    animation: cb-in 0.35s var(--ease-power3) both;
+  }
+  @media (max-width: 639px) {
+    /* Bottom sheet on phones. */
+    .callback {
+      width: 100vw;
+      max-width: 100vw;
+      margin: auto 0 0;
+      border-radius: 0;
+    }
+    .callback[open] {
+      animation-name: cb-up;
+    }
+  }
+  .callback-inner {
+    padding: 24px 20px calc(20px + env(safe-area-inset-bottom));
+  }
+  @media (min-width: 640px) {
+    .callback-inner {
+      padding: 28px;
+    }
+  }
+  .callback .lf-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .callback .lf-field label {
+    font-size: 15px;
+    font-weight: 500;
+  }
+  .callback .lf-field input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--color-border);
+    background: #ffffff;
+    font-size: 16px;
+    border-radius: 0;
+  }
+  .callback .lf-field input:focus {
+    border-color: var(--color-accent);
+    outline: 3px solid color-mix(in srgb, var(--color-accent) 20%, transparent);
+    outline-offset: 0;
+  }
+  .callback .lf-field [aria-invalid="true"] {
+    border-color: #9f2f2d;
+  }
+  .callback .lf-err {
+    font-size: 14px;
+    color: #9f2f2d;
+  }
+  .callback .lf-hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .cb-submit {
+    display: inline-flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px 24px;
+    border-radius: 0;
+    background: var(--color-accent);
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+      background-color 0.2s var(--ease-power3),
+      transform 0.2s var(--ease-power3);
+  }
+  .cb-submit:hover {
+    background: var(--color-accent-strong);
+  }
+  .cb-submit:active {
+    transform: scale(0.98);
+  }
+  .cb-submit:disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
+  .callback-x {
+    position: relative;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+  }
+  .callback-x span::before,
+  .callback-x span::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 6px;
+    right: 6px;
+    height: 2px;
+    background: currentColor;
+    transform: rotate(45deg);
+  }
+  .callback-x span::after {
+    transform: rotate(-45deg);
+  }
+  @keyframes cb-in {
+    from { opacity: 0; transform: translateY(12px) scale(0.98); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes cb-up {
+    from { transform: translateY(100%); }
+    to { transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .callback[open] {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  import { isValidPhone, sendLead, trackLead } from "~/lib/lead-form";
+
+  const dialog = document.querySelector<HTMLDialogElement>("[data-callback]");
+  const form = dialog?.querySelector<HTMLFormElement>("[data-callback-form]");
+
+  if (dialog && form) {
+    const s = JSON.parse(dialog.dataset.strings || "{}");
+    const q = <T extends HTMLElement>(sel: string) => form.querySelector<T>(sel)!;
+    const phone = q<HTMLInputElement>("#cb-phone");
+    const submit = q<HTMLButtonElement>("[data-cb-submit]");
+
+    // Inside the callback hours (Europe/Paris)? Decides the promise shown.
+    const isOpenNow = (): boolean => {
+      const parts = new Intl.DateTimeFormat("en-GB", {
+        timeZone: "Europe/Paris",
+        weekday: "short",
+        hour: "numeric",
+        hour12: false,
+      }).formatToParts(new Date());
+      const wd = parts.find((p) => p.type === "weekday")?.value ?? "";
+      const hour = Number(parts.find((p) => p.type === "hour")?.value ?? 0);
+      const day = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(wd);
+      return s.hours.days.includes(day) && hour >= s.hours.fromHour && hour < s.hours.toHour;
+    };
+
+    const open = (): void => {
+      const now = isOpenNow();
+      q("[data-cb-body-open]").hidden = !now;
+      q("[data-cb-body-closed]").hidden = now;
+      dialog.dataset.openHours = now ? "1" : "0";
+      dialog.showModal();
+    };
+
+    document.addEventListener("click", (e) => {
+      if ((e.target as HTMLElement).closest("[data-callback-open]")) {
+        e.preventDefault();
+        open();
+      }
+    });
+    q("[data-callback-close]").addEventListener("click", () => dialog.close());
+    // Click on the backdrop closes.
+    dialog.addEventListener("click", (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+
+    const startedAt = Date.now();
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const value = phone.value.trim();
+      const valid = isValidPhone(value);
+      phone.setAttribute("aria-invalid", valid ? "false" : "true");
+      q("#cb-phone-err").hidden = valid;
+      if (!valid) {
+        phone.focus();
+        return;
+      }
+      submit.disabled = true;
+      submit.firstChild!.textContent = `${s.sending} `;
+      const ok = await sendLead({
+        type: "callback",
+        lang: document.documentElement.lang,
+        name: (form.elements.namedItem("name") as HTMLInputElement).value.trim(),
+        phone: value,
+        website: (form.elements.namedItem("website") as HTMLInputElement).value,
+        openHours: dialog.dataset.openHours === "1",
+        elapsed: Date.now() - startedAt,
+      });
+      submit.disabled = false;
+      submit.firstChild!.textContent = `${s.submit} `;
+      if (ok) {
+        trackLead("callback");
+        q("[data-cb-fields]").hidden = true;
+        q("[data-cb-error]").hidden = true;
+        const done = q("[data-cb-done]");
+        done.textContent = dialog.dataset.openHours === "1" ? s.successOpen : s.successClosed;
+        done.hidden = false;
+      } else {
+        q("[data-cb-error]").hidden = false;
+      }
+    });
+  }
+</script>

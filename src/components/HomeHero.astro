@@ -1,0 +1,509 @@
+---
+import type { Lang } from "~/i18n/ui";
+import { getHomeContent } from "~/lib/home-content";
+import { servicePagePath } from "~/lib/service-pages";
+import { fromPrice } from "~/lib/facts";
+import { CLIENT_LOGOS } from "~/lib/clients";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const c = getHomeContent(lang);
+// The one coloured word of the page: "ChatGPT" in the second H1 line, typed
+// over by the other assistants in a loop (script below). The HTML keeps
+// "ChatGPT" for crawlers; aria-label keeps the heading stable for readers.
+const h1End = c.h1[1].split("ChatGPT");
+const AI_NAMES = ["ChatGPT", "Claude", "Gemini", "Perplexity", "Mistral"];
+---
+
+<section data-home-hero data-intro-hero class="relative px-4 pb-12 pt-[88px] sm:px-6 md:px-12 md:pb-16 md:pt-28">
+  <div class="mx-auto w-full max-w-[var(--container-wide)]">
+    {/* The H1 carries who and where ("freelance à Nice", styled as an eyebrow)
+        before the promise. Promise: two set lines from md up; on phones the
+        sentence flows (balanced). */}
+    <h1 aria-label={`${c.kicker}. ${c.h1[0]} ${c.h1[1]}`}>
+      <span data-intro-item data-intro-box="EYEBROW" data-intro-text style="--i:1" class="block font-label text-[13px] font-medium uppercase tracking-[0.06em] text-[var(--color-accent)] sm:text-[14px]">{c.kicker}</span>{" "}
+      <span data-intro-item data-intro-box="H1" data-intro-text style="--i:2" class="mt-4 block font-display text-[clamp(34px,4.4vw,60px)] text-balance text-[var(--color-ink)]">
+        <span class="md:block">{c.h1[0]}</span>{" "}
+        <span class="md:block">{h1End[0]}<span class="tw text-[var(--color-accent)]" data-typewriter data-words={AI_NAMES.join(",")}>ChatGPT</span>{h1End[1]}</span>
+      </span>
+    </h1>
+
+    <p data-intro-item data-intro-box="COPY" data-intro-text style="--i:3" class="mt-4 max-w-[54ch] text-[clamp(17px,1.25vw,19px)] leading-[1.5] text-[var(--color-ink-muted)] md:mt-5">
+      {c.sub}
+    </p>
+
+    <ul data-doors aria-label={c.doorsLabel} class="mt-8 grid gap-2 md:mt-10 md:grid-cols-2 md:gap-3 lg:grid-cols-4">
+      {c.doors.map((d, n) => (
+        <li data-intro-item style={`--i:${5 + n}`}>
+          <a href={servicePagePath(d.id, lang)} class="door marks group" data-door={d.id} data-intro-box={`CARD 0${n + 1}`}>
+            {/* Drafting window: a tiny line drawing of the service, looping. */}
+            <span class="door-art" data-intro-plate aria-hidden="true">
+              <span class="door-index">0{n + 1}</span>
+              {d.id === "seo" && (
+                <svg class="art" viewBox="0 0 240 96" preserveAspectRatio="xMidYMid meet">
+                  <rect class="ln" x="40" y="10" width="160" height="16" />
+                  <circle class="ln" cx="51" cy="18" r="3.5" />
+                  <line class="ln" x1="54" y1="21" x2="58" y2="25" />
+                  <line class="ln-thin type" x1="66" y1="18" x2="150" y2="18" />
+                  <rect class="ln-thin" x="40" y="37" width="8" height="8" />
+                  <line class="ln-thin" x1="56" y1="41" x2="186" y2="41" />
+                  <rect class="ln-thin" x="40" y="55" width="8" height="8" />
+                  <line class="ln-thin" x1="56" y1="59" x2="170" y2="59" />
+                  <rect class="ln-thin" x="40" y="73" width="8" height="8" />
+                  <line class="ln-thin" x1="56" y1="77" x2="180" y2="77" />
+                  <rect class="acc rank" x="34" y="33" width="166" height="16" />
+                </svg>
+              )}
+              {d.id === "web" && (
+                <svg class="art" viewBox="0 0 240 96" preserveAspectRatio="xMidYMid meet">
+                  <rect class="ln" x="40" y="8" width="160" height="80" />
+                  <line class="ln" x1="40" y1="18" x2="200" y2="18" />
+                  <rect class="ln-thin draw" pathLength="1" style="--d:0" x="50" y="26" width="72" height="8" />
+                  <line class="ln-thin draw" pathLength="1" style="--d:1" x1="50" y1="42" x2="108" y2="42" />
+                  <rect class="acc draw" pathLength="1" style="--d:2" x="50" y="50" width="34" height="10" />
+                  <rect class="ln-thin draw" pathLength="1" style="--d:1" x="132" y="26" width="58" height="34" />
+                  <line class="ln-thin draw" pathLength="1" style="--d:2" x1="132" y1="26" x2="190" y2="60" />
+                  <line class="ln-thin draw" pathLength="1" style="--d:2" x1="190" y1="26" x2="132" y2="60" />
+                  <rect class="ln-thin draw" pathLength="1" style="--d:3" x="50" y="68" width="40" height="12" />
+                  <rect class="ln-thin draw" pathLength="1" style="--d:3.4" x="100" y="68" width="40" height="12" />
+                  <rect class="ln-thin draw" pathLength="1" style="--d:3.8" x="150" y="68" width="40" height="12" />
+                </svg>
+              )}
+              {d.id === "apps" && (
+                <svg class="art" viewBox="0 0 240 96" preserveAspectRatio="xMidYMid meet">
+                  <rect class="ln" x="36" y="38" width="28" height="20" />
+                  <rect class="ln" x="176" y="38" width="28" height="20" />
+                  <line class="ln-thin" x1="64" y1="48" x2="104" y2="48" />
+                  <line class="ln-thin" x1="136" y1="48" x2="176" y2="48" />
+                  <circle class="guide spin" cx="120" cy="48" r="26" />
+                  <circle class="acc" cx="120" cy="48" r="16" />
+                  <circle class="acc pulse" cx="120" cy="48" r="16" />
+                  <path class="acc" d="M120 40.5l2.6 4.9 4.9 2.6-4.9 2.6-2.6 4.9-2.6-4.9-4.9-2.6 4.9-2.6z" />
+                  <rect class="acc-fill dot" x="61" y="45" width="6" height="6" />
+                </svg>
+              )}
+              {d.id === "brand" && (
+                <svg class="art" viewBox="0 0 240 96" preserveAspectRatio="xMidYMid meet">
+                  <circle class="guide spin" cx="120" cy="50" r="38" />
+                  <line class="guide" x1="66" y1="50" x2="174" y2="50" />
+                  <line class="guide" x1="120" y1="6" x2="120" y2="92" />
+                  <path class="ln draw" pathLength="1" style="--d:0" d="M120 18L152 76H88Z" />
+                  <circle class="acc draw" pathLength="1" style="--d:1.2" cx="120" cy="58" r="13" />
+                  <line class="ln draw" pathLength="1" style="--d:2.2" x1="96" y1="58" x2="144" y2="58" />
+                  <rect class="ink-fill" x="190" y="30" width="10" height="10" />
+                  <rect class="acc-fill" x="190" y="44" width="10" height="10" />
+                  <rect class="ln-thin" x="190" y="58" width="10" height="10" />
+                </svg>
+              )}
+            </span>
+            <span class="door-body">
+              <span class="door-title">{d.title}</span>
+              <span class="door-desc">{d.desc}</span>
+            </span>
+            <span class="door-foot">
+              {fromPrice(d.id, lang) && <span class="door-price">{fromPrice(d.id, lang)}</span>}
+              <svg class="door-arrow" aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square">
+                <path d="M5 12 H19" /><path d="M13 6 L19 12 L13 18" />
+              </svg>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    {/* Client logos — uniform ink silhouettes in a continuous marquee that
+        fades out on both sides; static scrollable row when motion is reduced. */}
+    <div data-intro-item data-intro-box="LOGOS" style="--i:9" class="logo-marquee mt-12 md:mt-16">
+      <ul class="logo-track" aria-label={c.trustedBy}>
+        {[...CLIENT_LOGOS, ...CLIENT_LOGOS].map((l, i) => {
+          const copy = i >= CLIENT_LOGOS.length;
+          return (
+            <li aria-hidden={copy ? "true" : undefined}>
+              <img src={`/clients/${l.id}.webp`} alt={copy ? "" : l.name} width={l.w} height={l.h} style={`--w:${l.w}px`} decoding="async" />
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ===== Doors ===== Square corners, hairline border, a drafting window on
+     top (desktop) with a looping line drawing of the service. Phones: compact
+     rows (title + price + arrow) so the four fit in the first screen. */
+  .door {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 12px;
+    height: 100%;
+    padding: 12px 14px 12px 16px;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+    color: var(--color-ink);
+    text-decoration: none;
+    transition:
+      border-color 0.3s var(--ease-power3),
+      background-color 0.3s var(--ease-power3);
+  }
+  .door:hover,
+  .door:focus-visible {
+    border-color: var(--color-ink);
+  }
+  .door-art {
+    display: none;
+  }
+  .door-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .door-title {
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.25;
+  }
+  .door-desc {
+    font-size: 15px;
+    line-height: 1.35;
+    color: var(--color-ink-muted);
+  }
+  .door-foot {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 24px;
+  }
+  .door-price {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-accent);
+    white-space: nowrap;
+  }
+  .door-arrow {
+    flex-shrink: 0;
+    margin-left: auto;
+    transition: transform 0.35s var(--ease-power3);
+  }
+  .door:hover .door-arrow,
+  .door:focus-visible .door-arrow {
+    transform: translateX(4px);
+  }
+
+  /* Phones: title + price only, so the four doors fit in the first screen
+     (the description repeats what the title already says). */
+  @media (max-width: 767px) {
+    .door-desc {
+      display: none;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .door {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr auto;
+      align-items: stretch;
+      gap: 16px;
+      padding: 0 0 18px;
+    }
+    .door-art {
+      position: relative;
+      display: block;
+      height: 112px;
+      border-bottom: 1px solid var(--color-border);
+      background-image:
+        linear-gradient(color-mix(in srgb, var(--color-ink) 4%, transparent) 1px, transparent 1px),
+        linear-gradient(90deg, color-mix(in srgb, var(--color-ink) 4%, transparent) 1px, transparent 1px);
+      background-size: 12px 12px;
+      transition:
+        background-color 0.3s var(--ease-power3),
+        border-color 0.3s var(--ease-power3);
+    }
+    .door:hover .door-art,
+    .door:focus-visible .door-art {
+      background-color: color-mix(in srgb, var(--color-accent) 5%, transparent);
+      border-color: var(--color-ink);
+    }
+    .door-index {
+      position: absolute;
+      left: 10px;
+      top: 8px;
+      font-family: var(--font-label);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--color-ink-muted);
+    }
+    .door-body,
+    .door-foot {
+      padding-inline: 18px;
+    }
+    .door-title {
+      font-size: 18px;
+    }
+    .door-foot {
+      justify-content: space-between;
+    }
+  }
+
+  /* ===== Looping line drawings in the drafting windows ===== */
+  .art {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 10px 0;
+  }
+  .art .ln {
+    fill: none;
+    stroke: var(--color-ink);
+    stroke-width: 1.2;
+  }
+  .art .ln-thin {
+    fill: none;
+    stroke: color-mix(in srgb, var(--color-ink) 55%, transparent);
+    stroke-width: 1;
+  }
+  .art .acc {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 1.5;
+  }
+  .art .acc-fill {
+    fill: var(--color-accent);
+  }
+  .art .ink-fill {
+    fill: var(--color-ink);
+  }
+  .art .guide {
+    fill: none;
+    stroke: color-mix(in srgb, var(--color-ink) 28%, transparent);
+    stroke-width: 0.8;
+    stroke-dasharray: 2 4;
+  }
+  .art .draw {
+    /* Dash 1, gap 2: at offset 1 the whole path sits in the gap (no stray tip). */
+    stroke-dasharray: 1 2;
+    animation: art-draw 5s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+    animation-delay: calc(var(--d, 0) * 220ms);
+  }
+  .art .spin {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: art-spin 16s linear infinite;
+  }
+  .art .type {
+    transform-box: fill-box;
+    transform-origin: left center;
+    animation: art-type 3.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+  .art .rank {
+    animation: art-rank 3.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+  .art .dot {
+    animation: art-dot 2.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+  .art .pulse {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: art-pulse 2.8s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  }
+  @keyframes art-draw {
+    0%, 6% { stroke-dashoffset: 1; opacity: 1; }
+    40%, 82% { stroke-dashoffset: 0; opacity: 1; }
+    94% { stroke-dashoffset: 0; opacity: 0; }
+    100% { stroke-dashoffset: 1; opacity: 0; }
+  }
+  @keyframes art-spin {
+    to { transform: rotate(360deg); }
+  }
+  @keyframes art-type {
+    0% { transform: scaleX(0); }
+    30%, 100% { transform: scaleX(1); }
+  }
+  @keyframes art-rank {
+    0%, 30% { transform: translateY(36px); opacity: 0; }
+    38% { transform: translateY(36px); opacity: 1; }
+    66%, 90% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(0); opacity: 0; }
+  }
+  @keyframes art-dot {
+    0% { transform: translateX(0); opacity: 0; }
+    6% { opacity: 1; }
+    36% { transform: translateX(40px); opacity: 1; }
+    44%, 54% { transform: translateX(56px); opacity: 0; }
+    62% { transform: translateX(72px); opacity: 1; }
+    94% { transform: translateX(112px); opacity: 1; }
+    100% { transform: translateX(112px); opacity: 0; }
+  }
+  @keyframes art-pulse {
+    0%, 42% { transform: scale(1); opacity: 0; }
+    48% { transform: scale(1); opacity: 0.8; }
+    80%, 100% { transform: scale(1.7); opacity: 0; }
+  }
+  /* Off screen: paused. */
+  [data-doors]:not([data-live]) .art * {
+    animation-play-state: paused;
+  }
+
+  /* ===== Typewriter word in the H1 ===== */
+  .tw {
+    white-space: nowrap;
+  }
+  .tw.is-typing::after {
+    content: "";
+    display: inline-block;
+    width: 0.06em;
+    height: 0.82em;
+    margin-left: 0.05em;
+    vertical-align: -0.06em;
+    background: currentColor;
+    animation: tw-caret 1s steps(1) infinite;
+  }
+  @keyframes tw-caret {
+    50% { opacity: 0; }
+  }
+
+  /* ===== Client logo marquee ===== */
+  .logo-marquee {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+  }
+  .logo-track {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    animation: logo-scroll 60s linear infinite;
+  }
+  .logo-track > li {
+    display: flex;
+    align-items: center;
+    height: 38px;
+    margin-right: clamp(36px, 4vw, 60px);
+  }
+  .logo-track img {
+    display: block;
+    width: calc(var(--w) * 0.6);
+    height: auto;
+    max-width: none;
+    opacity: 0.62;
+  }
+  @media (max-width: 767px) {
+    .logo-track > li {
+      height: 34px;
+      margin-right: 32px;
+    }
+    .logo-track img {
+      width: calc(var(--w) * 0.45);
+    }
+  }
+  @keyframes logo-scroll {
+    to { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .art * {
+      animation: none !important;
+    }
+    .logo-marquee {
+      overflow-x: auto;
+    }
+    .logo-track {
+      animation: none;
+    }
+    .logo-track > li[aria-hidden="true"] {
+      display: none;
+    }
+    .door,
+    .door-arrow {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  // Door drawings loop only while the row is on screen (CSS pauses them otherwise).
+  const doors = document.querySelector<HTMLElement>("[data-doors]");
+  if (doors) {
+    new IntersectionObserver(([e]) => doors.toggleAttribute("data-live", e.isIntersecting)).observe(doors);
+  }
+
+  // Typewriter on the last H1 word: ChatGPT → Claude → Gemini → Perplexity →
+  // Mistral, forever. Waits for the entry animation, pauses when the hero is
+  // off-screen or the tab is hidden, and stays on "ChatGPT" with reduced motion.
+  const el = document.querySelector<HTMLElement>("[data-typewriter]");
+  if (el && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const words = (el.dataset.words ?? "").split(",");
+    const TYPE = 55;
+    const ERASE = 30;
+    const HOLD = 1000;
+    let index = 0;
+    let text = words[0];
+    let timer = 0;
+    let started = false;
+    let visible = true;
+
+    const next = (fn: () => void, ms: number) => {
+      window.clearTimeout(timer);
+      if (visible && !document.hidden) timer = window.setTimeout(fn, ms);
+    };
+    const erase = (): void => {
+      if (text.length) {
+        text = text.slice(0, -1);
+        el.textContent = text;
+        next(erase, ERASE);
+      } else {
+        index = (index + 1) % words.length;
+        next(type, 150);
+      }
+    };
+    const type = (): void => {
+      const word = words[index];
+      if (text.length < word.length) {
+        text = word.slice(0, text.length + 1);
+        el.textContent = text;
+        next(type, TYPE);
+      } else {
+        next(erase, HOLD);
+      }
+    };
+    const resume = (): void => {
+      if (!started) return;
+      next(text === words[index] ? erase : type, text === words[index] ? HOLD : TYPE);
+    };
+    const start = (): void => {
+      if (started) return;
+      started = true;
+      el.classList.add("is-typing");
+      resume();
+    };
+
+    // Start once the entry animation has handed over to the real page.
+    const root = document.documentElement;
+    if (root.classList.contains("intro-on")) {
+      const mo = new MutationObserver(() => {
+        if (root.classList.contains("intro-reveal") || !root.classList.contains("intro-on")) {
+          mo.disconnect();
+          window.setTimeout(start, 900);
+        }
+      });
+      mo.observe(root, { attributes: true, attributeFilter: ["class"] });
+    } else {
+      start();
+    }
+
+    document.addEventListener("visibilitychange", () => (document.hidden ? window.clearTimeout(timer) : resume()));
+    const hero = document.querySelector("[data-home-hero]");
+    if (hero) {
+      new IntersectionObserver(([e]) => {
+        visible = e.isIntersecting;
+        if (visible) resume();
+        else window.clearTimeout(timer);
+      }).observe(hero);
+    }
+  }
+</script>

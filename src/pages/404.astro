@@ -14,25 +14,26 @@ const lang: Lang = "fr";
   >
     <div class="mx-auto w-full max-w-[var(--container-wide)]">
       <p
-        class="font-mono mb-8 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]"
+        class="font-label mb-8 sheet-label text-[13px] uppercase tracking-[0.06em] text-[var(--color-ink-muted)]"
       >
-        <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
-        Erreur · 404
-      </p>
+          <span class="sheet-diamond" aria-hidden="true"></span>
+          <span>Erreur · 404</span>
+          <span class="sheet-leader" aria-hidden="true"></span>
+        </p>
 
       <h1
-        class="font-display text-[clamp(80px,18vw,260px)] uppercase leading-[0.85] tracking-[-0.04em] text-[var(--color-ink)]"
+        class="font-display text-[clamp(80px,18vw,260px)] leading-[0.85] tracking-[-0.04em] text-[var(--color-ink)]"
       >
         404
       </h1>
 
       <p
-        class="font-serif-italic mt-6 max-w-[44ch] text-[clamp(20px,3vw,36px)] leading-[1.25] text-[var(--color-ink)] sm:mt-10"
+        class="font-lead mt-6 max-w-[44ch] text-[clamp(20px,3vw,36px)] leading-[1.25] text-[var(--color-ink)] sm:mt-10"
       >
         Page introuvable.
       </p>
       <p
-        class="mt-3 max-w-[60ch] text-[clamp(14px,1.2vw,18px)] leading-[1.55] text-[var(--color-ink-muted)] sm:mt-5"
+        class="mt-3 max-w-[60ch] text-[clamp(17px,1.2vw,18px)] leading-[1.55] text-[var(--color-ink-muted)] sm:mt-5"
       >
         Le lien est cassé, la page a été déplacée, ou elle n'a jamais existé. Aucun
         souci — voici où repartir.
@@ -42,7 +43,7 @@ const lang: Lang = "fr";
         <li>
           <a
             href="/"
-            class="font-display inline-flex items-center gap-3 bg-[var(--color-ink)] px-6 py-4 text-[clamp(14px,1.2vw,18px)] uppercase text-[var(--color-bg)] no-underline transition-colors duration-200 hover:bg-[var(--color-accent)]"
+            class="btn btn-primary"
           >
             Retour à l'accueil
             <span aria-hidden="true">→</span>
@@ -51,7 +52,7 @@ const lang: Lang = "fr";
         <li>
           <a
             href="/a-propos/"
-            class="font-display inline-flex items-center gap-3 border border-[var(--color-ink)] bg-transparent px-6 py-4 text-[clamp(14px,1.2vw,18px)] uppercase text-[var(--color-ink)] no-underline transition-colors duration-200 hover:bg-[var(--color-ink)] hover:text-[var(--color-bg)]"
+            class="btn btn-secondary"
           >
             À propos
             <span aria-hidden="true">→</span>

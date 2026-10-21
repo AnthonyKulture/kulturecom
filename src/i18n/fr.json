@@ -1,31 +1,18 @@
 {
   "meta": {
     "siteName": "Anthony Profit",
-    "title": "Anthony Profit — Freelance développeur web, apps & IA, SEO & brand design",
-    "description": "Freelance développeur web, apps & IA, SEO et brand design. Sites et applications sur-mesure pour PME, B2B et marques créatives. 8 ans d'expérience. Disponible Q4 2026.",
+    "title": "Freelance web à Nice : sites, IA, SEO & GEO | Anthony Profit",
+    "description": "Designer-développeur freelance à Nice : sites sur-mesure, outils et IA, SEO & GEO. Un seul interlocuteur pour être trouvé sur Google et recommandé par ChatGPT.",
     "keywords": "freelance développeur web, freelance SEO, brand designer, Astro, React, web design, France",
     "ogImageAlt": "Anthony Profit — Freelance web developer, SEO & brand design"
   },
   "nav": {
     "brand": "anthony profit",
     "menu": "Menu",
-    "work": "Projets",
+    "work": "Réalisations",
     "services": "Services",
     "about": "À propos",
-    "cta": "Discutons",
     "cta.subject": "Projet — j'aimerais discuter"
-  },
-  "cta": {
-    "eyebrow": "Étape suivante",
-    "title.line1": "PARLONS",
-    "title.line2": "DE VOTRE PROJET.",
-    "subject": "Projet — j'aimerais discuter",
-    "projects.label": "Découvrir mes projets",
-    "email.label": "Email",
-    "email.value": "contact@kulturecom.fr",
-    "whatsapp.label": "WhatsApp",
-    "whatsapp.value": "+33 6 60 50 16 82",
-    "whatsapp.message": "Bonjour Anthony, j'ai un projet à discuter."
   },
   "footer": {
     "tagline": "Web design, code, SEO — un seul interlocuteur.",
@@ -42,52 +29,6 @@
     "legal.mentions": "Mentions légales",
     "legal.privacy": "Confidentialité",
     "copyright": "© 2026 Anthony Profit. Tous droits réservés."
-  },
-  "hero": {
-    "line1": "DES SITES",
-    "line2": "CONÇUS",
-    "line3": "pour séduire.",
-    "line4": "OPTIMISÉS",
-    "line5": "pour être trouvé.",
-    "subtitle": "Designer et développeur freelance à Nice, sur la Côte d'Azur. Je conçois des sites sur-mesure pour les créateurs et les entreprises qui veulent se démarquer, gagner en trafic et marquer les esprits — sur Google comme dans les réponses des IA.",
-    "label.showreel": "sélection",
-    "label.side": "Creative developer SEO GEO",
-    "label.scroll": "scroll down"
-  },
-  "about": {
-    "eyebrow": "À propos",
-    "item1.title": "Développeur <em>créatif</em> freelance, je porte votre projet du <em>concept</em> au <em>code.</em>",
-    "item1.desc": "Je m'appelle <em>Anthony</em>. Installé sur la <em>Côte d'Azur</em>, je conçois et développe des sites sur-mesure pour les marques, créateurs et entreprises qui veulent une expérience web qui marque.",
-    "svc1.num": "01",
-    "svc1.title": "Direction artistique & design",
-    "svc1.desc": "Une identité visuelle forte et une expérience qui se remarque. Je conçois <em>l'image de votre marque</em>, pas juste une jolie mise en page — chaque détail sert votre crédibilité.",
-    "svc2.num": "02",
-    "svc2.title": "Développement web sur-mesure",
-    "svc2.desc": "Des sites conçus et codés <em>à la main</em>, sans template. Rapides, soignés, animés — taillés pour votre marque, et pour personne d'autre.",
-    "svc3.num": "03",
-    "svc3.title": "SEO & GEO technique",
-    "svc3.desc": "Être <em>trouvé sur Google</em>, cité par les IA (ChatGPT, Gemini) et visible jusque dans <em>ChatGPT Ads</em>. Un site qui n'est pas seulement beau, mais visible là où vos clients cherchent vraiment aujourd'hui.",
-    "svc4.num": "04",
-    "svc4.title": "Outils, apps & IA",
-    "svc4.desc": "Des outils métier, des applications web et mobiles et une <em>IA branchée sur vos données</em>. Moins de tâches répétitives, plus de temps pour votre métier.",
-    "scroll": "↓ Continuer"
-  },
-  "cinematic": {
-    "cap1.title": "Des expériences immersives",
-    "cap1.desc": "Là où la création prend vie",
-    "cap2.title": "Chaque projet, un univers",
-    "cap2.desc": "Pensé, conçu, codé sur-mesure",
-    "cap3.title": "Du concept au code",
-    "cap3.desc": "Une signature web qui marque",
-    "cap4.title": "Continuez à défiler",
-    "cap4.desc": ""
-  },
-  "about2": {
-    "eyebrow": "Promesse · Étape 02",
-    "body.lead": "Vous l'aurez compris : je conçois des expériences web qui marquent et qui durent. La suite vous appartient — discutons de votre projet.",
-    "body.trail": "Ça commence par un",
-    "body.cta": "clic",
-    "accent": "02"
   },
   "projects": {
     "eyebrow": "Sélection",

@@ -9,18 +9,18 @@ import { readFileSync, readdirSync } from "node:fs";
 // their newest post, and pages from PAGE_LASTMOD, a hand-kept list of
 // deliberate editorial changes. Bump an entry when you really edit a page.
 const PAGE_LASTMOD = {
-  "/": "2026-10-19",
-  "/en/": "2026-10-19",
+  "/": "2026-10-21",
+  "/en/": "2026-10-21",
   "/services/": "2026-10-19",
   "/en/services/": "2026-10-19",
-  "/creation-site-internet/": "2026-10-19",
-  "/en/web-development/": "2026-10-19",
-  "/seo-geo/": "2026-10-19",
-  "/en/seo-geo/": "2026-10-19",
-  "/identite-de-marque/": "2026-10-19",
-  "/en/brand-design/": "2026-10-19",
-  "/outils-applications-ia/": "2026-10-19",
-  "/en/apps-ai-tools/": "2026-10-19",
+  "/creation-site-internet/": "2026-10-21",
+  "/en/web-development/": "2026-10-21",
+  "/seo-geo/": "2026-10-21",
+  "/en/seo-geo/": "2026-10-21",
+  "/identite-de-marque/": "2026-10-21",
+  "/en/brand-design/": "2026-10-21",
+  "/outils-applications-ia/": "2026-10-21",
+  "/en/apps-ai-tools/": "2026-10-21",
   "/a-propos/": "2026-10-19",
   "/en/about/": "2026-10-19",
 };
@@ -61,7 +61,7 @@ export default defineConfig({
       // TAG_INDEX_MIN posts (src/lib/blog.ts), and even then they mostly repeat
       // the blog index — internal links handle their discovery instead.
       filter: (page) =>
-        !/\/404\/?$/.test(page) && !/\/blog\/tag\//.test(page),
+        !/\/404\/?$/.test(page) && !/\/blog\/tag\//.test(page) && !/\/platine\/?$/.test(page),
       serialize(item) {
         const date = LASTMOD.get(new URL(item.url).pathname);
         if (date) item.lastmod = date;

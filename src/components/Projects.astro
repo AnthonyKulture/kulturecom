@@ -30,12 +30,12 @@ const workBase = lang === "fr" ? "/projets/" : "/en/work/";
     <header class="flex items-end justify-between gap-6 shrink-0">
       <div>
         <Eyebrow label={t.projects.eyebrow} class="mb-3" />
-        <h2 class="font-display text-[clamp(24px,4vw,56px)] uppercase leading-[0.95] tracking-[-0.04em] text-[var(--color-ink)]">
+        <h2 class="font-display text-[clamp(26px,2.8vw,40px)] leading-[1.15] tracking-[-0.04em] text-[var(--color-ink)]">
           <span class="block">{t.projects["title.line1"]}</span>
           <span class="block">{t.projects["title.line2"]}</span>
         </h2>
       </div>
-      <p class="font-mono shrink-0 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-subtle)]">
+      <p class="font-label shrink-0 text-[13px] uppercase tracking-[0.06em] text-[var(--color-ink-subtle)]">
         05 / {t.projects["count.label"]}
       </p>
     </header>
@@ -73,13 +73,13 @@ const workBase = lang === "fr" ? "/projets/" : "/en/work/";
                   class="absolute inset-0 block h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                 />
               )}
-              <span class="font-mono absolute left-2 top-2 rounded-sm bg-[var(--color-bg)]/90 px-1.5 py-0.5 text-[10px] uppercase tracking-[0.18em] text-[var(--color-ink)]">
+              <span class="font-label absolute left-2 top-2 bg-[var(--color-bg)]/90 px-1.5 py-0.5 text-[13px] uppercase tracking-[0.06em] text-[var(--color-ink)]">
                 {p.num}
               </span>
 
               {/* Result stamp — bottom-right, dark ink with accent dot. The
                   metric is the visual proof : it stays visible at all times. */}
-              <div class="font-mono absolute bottom-2 right-2 inline-flex items-center gap-1.5 bg-[var(--color-ink)] px-2 py-1 text-[9px] uppercase leading-tight tracking-[0.18em] text-[var(--color-bg)] max-w-[calc(100%-1rem)]">
+              <div class="font-label absolute bottom-2 right-2 inline-flex items-center gap-1.5 bg-[var(--color-ink)] px-2.5 py-1 text-[13px] leading-tight text-[var(--color-bg)] max-w-[calc(100%-1rem)]">
                 <span aria-hidden="true" class="inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-accent)] shrink-0"></span>
                 <span class="truncate">{p.metric}</span>
               </div>
@@ -87,10 +87,10 @@ const workBase = lang === "fr" ? "/projets/" : "/en/work/";
               {/* Hover overlay — problem + summary revealed on hover (desktop only).
                   Cream backdrop, ink text. Pure CSS transition, no JS. */}
               <div class="pointer-events-none absolute inset-0 flex flex-col justify-end gap-2 bg-gradient-to-t from-[var(--color-bg)] via-[var(--color-bg)]/95 to-transparent p-3 opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100">
-                <p class="font-serif-italic text-[clamp(11px,0.9vw,14px)] leading-snug text-[var(--color-ink)]">
+                <p class="font-lead text-[clamp(17px,0.9vw,18px)] leading-snug text-[var(--color-ink)]">
                   {p.problem}
                 </p>
-                <p class="text-[clamp(10px,0.8vw,12px)] leading-snug text-[var(--color-ink-muted)]">
+                <p class="text-[clamp(17px,0.8vw,18px)] leading-snug text-[var(--color-ink-muted)]">
                   {p.summary}
                 </p>
               </div>
@@ -99,13 +99,13 @@ const workBase = lang === "fr" ? "/projets/" : "/en/work/";
                 guarantee the bottom text block has identical height across all
                 cards, so the flex-1 image area above also matches. */}
             <div class="mt-2 flex shrink-0 flex-col gap-0.5 min-h-[60px]">
-              <h3 class="font-sans text-[clamp(12px,1.05vw,15px)] font-medium leading-snug tracking-normal text-[var(--color-ink)] line-clamp-1">
+              <h3 class="font-sans text-[clamp(17px,1.05vw,18px)] font-medium leading-snug tracking-normal text-[var(--color-ink)] line-clamp-1">
                 {p.title}
               </h3>
-              <p class="text-[clamp(10px,0.8vw,12px)] leading-snug text-[var(--color-ink-muted)] line-clamp-1">
+              <p class="text-[clamp(17px,0.8vw,18px)] leading-snug text-[var(--color-ink-muted)] line-clamp-1">
                 {p.client}
               </p>
-              <span class="font-mono mt-0.5 text-[9px] uppercase leading-snug tracking-[0.18em] text-[var(--color-ink-subtle)] line-clamp-1">
+              <span class="mt-0.5 text-[15px] leading-snug text-[var(--color-ink-muted)] line-clamp-1">
                 {p.tag}
               </span>
             </div>

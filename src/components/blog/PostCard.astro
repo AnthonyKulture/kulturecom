@@ -1,53 +1,107 @@
 ---
-// Editorial, text-forward list item for the blog index + tag pages. No image
-// dependency — date · reading time, title, description, tags.
+// Blog index + tag pages card: an architect drawing (PostDrawing) as the
+// cover, then date · reading time, title, description and the first tag.
+// `featured` lays the latest article out wide: drawing left, text right.
 import type { Lang } from "~/i18n/ui";
 import type { Post } from "~/lib/blog";
 import { postPath, readingMinutes, formatDate } from "~/lib/blog";
+import PostDrawing from "~/components/blog/PostDrawing.astro";
 
 interface Props {
   post: Post;
   lang: Lang;
+  featured?: boolean;
+  /** h2 on the index, h3 under a section heading. */
+  headingLevel?: 2 | 3;
 }
 
-const { post, lang } = Astro.props;
+const { post, lang, featured = false, headingLevel = 2 } = Astro.props;
 const d = post.data;
 const minutes = readingMinutes(post.body);
 const readLabel = lang === "fr" ? `${minutes} min de lecture` : `${minutes} min read`;
+const readMore = lang === "fr" ? "Lire l'article" : "Read the article";
+const Heading = `h${headingLevel}` as "h2" | "h3";
 ---
 
-<article class="border-t border-[var(--color-border)]">
-  <a
-    href={postPath(post)}
-    class="group block py-8 no-underline sm:py-10"
-  >
-    <div
-      class="font-mono mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] uppercase tracking-[0.16em] text-[var(--color-ink-subtle)]"
-    >
-      <time datetime={d.pubDate.toISOString()}>{formatDate(d.pubDate, lang)}</time>
-      <span aria-hidden="true">·</span>
-      <span>{readLabel}</span>
-    </div>
-    <h2
-      class="font-display text-[clamp(24px,3.4vw,40px)] uppercase leading-[1.02] tracking-[-0.04em] text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)]"
-    >
-      {d.title}
-    </h2>
-    <p
-      class="mt-4 max-w-[60ch] text-[clamp(15px,1.2vw,17px)] leading-[1.6] text-[var(--color-ink-muted)]"
-    >
-      {d.description}
-    </p>
-    {
-      d.tags.length > 0 && (
-        <ul class="mt-5 flex flex-wrap gap-2">
-          {d.tags.map((t) => (
-            <li class="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--color-ink-subtle)]">
-              #{t}
-            </li>
-          ))}
-        </ul>
-      )
-    }
+<article class:list={["post-card group", featured && "is-featured"]}>
+  <a href={postPath(post)} class="post-link">
+    <span class="post-media marks">
+      <PostDrawing post={post} lang={lang} />
+    </span>
+    <span class="post-body">
+      <span class="font-label flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px] uppercase tracking-[0.06em] text-[var(--color-ink-subtle)]">
+        {d.tags[0] && <span class="text-[var(--color-accent)]">{d.tags[0]}</span>}
+        {d.tags[0] && <span aria-hidden="true">·</span>}
+        <time datetime={d.pubDate.toISOString()}>{formatDate(d.pubDate, lang)}</time>
+        <span aria-hidden="true">·</span>
+        <span>{readLabel}</span>
+      </span>
+      <Heading
+        class:list={[
+          "font-display mt-3 text-balance text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)]",
+          featured ? "text-[clamp(26px,2.8vw,40px)]" : "text-[clamp(20px,1.7vw,24px)] leading-[1.15]",
+        ]}
+      >
+        {d.title}
+      </Heading>
+      <span
+        class:list={[
+          "mt-3 block max-w-[60ch] text-pretty text-[var(--color-ink-muted)]",
+          featured ? "text-[17px] leading-[1.6] md:text-[18px]" : "text-[15px] leading-[1.55]",
+        ]}
+      >
+        {d.description}
+      </span>
+      <span class="font-label inline-flex items-center gap-2 text-[13px] uppercase tracking-[0.06em] text-[var(--color-ink)] underline underline-offset-4 group-hover:text-[var(--color-accent)]">
+        {readMore}
+        <span aria-hidden="true">→</span>
+      </span>
+    </span>
   </a>
 </article>
+
+<style>
+  .post-link {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 100%;
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+  .post-media {
+    display: block;
+    border: 1px solid var(--color-border);
+    background: #ffffff;
+    overflow: hidden;
+  }
+  .post-media :global(svg) {
+    transition: transform 0.8s var(--ease-power3);
+  }
+  .post-card:hover .post-media :global(svg) {
+    transform: scale(1.03);
+  }
+  .post-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .post-body > :last-child {
+    margin-top: auto;
+    padding-top: 20px;
+  }
+  @media (min-width: 768px) {
+    .is-featured .post-link {
+      display: grid;
+      grid-template-columns: 7fr 5fr;
+      align-items: center;
+      gap: 48px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .post-media :global(svg) {
+      transition: none;
+    }
+  }
+</style>

@@ -2,6 +2,7 @@
 import type { Lang } from "~/i18n/ui";
 import { getAllServicePages } from "~/lib/service-pages";
 import CTA from "~/components/CTA.astro";
+import { fromPrice } from "~/lib/facts";
 
 interface Props {
   lang: Lang;
@@ -11,73 +12,106 @@ const { lang } = Astro.props;
 const isFr = lang === "fr";
 const services = getAllServicePages(lang);
 
+// "Par où commencer ?" — the visitor picks their situation, not a service
+// name; each card leads to the right service page with its starting price.
 const l = isFr
   ? {
-      eyebrow: "Services",
-      h1a: "Quatre axes,",
-      h1b: "un seul interlocuteur.",
-      lead: "Design, sites, apps & IA, SEO/GEO — pensés ensemble. Choisissez un angle, ou prenez l'ensemble sous une seule main, sur la Côte d'Azur comme à distance.",
-      more: "En savoir plus",
+      h1: "Par où commencer ?",
+      lead: "Choisissez la situation qui vous ressemble : je vous montre la bonne formule et son prix.",
+      situations: {
+        web: "Je n'ai pas de site, ou il ne me ressemble plus",
+        seo: "Mon site existe, mais personne ne le trouve",
+        apps: "Je perds du temps sur des tâches répétitives",
+        brand: "Je lance ou je modernise ma marque",
+      } as Record<string, string>,
+      unsure: "Vous hésitez ?",
+      unsureBody: "Demandez le check-up visibilité IA offert : je regarde où vous en êtes et je vous dis par quoi commencer.",
+      unsureCta: "Demander le check-up",
     }
   : {
-      eyebrow: "Services",
-      h1a: "Four crafts,",
-      h1b: "one point of contact.",
-      lead: "Design, websites, apps & AI, SEO/GEO — thought together. Pick one angle, or take it all under a single hand, on the French Riviera or remotely.",
-      more: "Learn more",
+      h1: "Where to start?",
+      lead: "Pick the situation that sounds like you: I'll show you the right package and its price.",
+      situations: {
+        web: "I have no website, or it no longer looks like me",
+        seo: "My website exists, but nobody finds it",
+        apps: "I lose time on repetitive tasks",
+        brand: "I'm launching or refreshing my brand",
+      } as Record<string, string>,
+      unsure: "Not sure?",
+      unsureBody: "Ask for the free AI visibility check-up: I'll look at where you stand and tell you where to start.",
+      unsureCta: "Ask for the check-up",
     };
+// Same order as the home doors.
+const order = ["seo", "web", "apps", "brand"];
+const cards = order.map((id) => services.find((s) => s.id === id)!);
 ---
 
 <main id="main-content" class="bg-[var(--color-bg)] text-[var(--color-ink)]">
 
-  {/* ========== HERO ========== */}
-  <section class="relative px-4 pt-32 pb-16 sm:px-6 sm:pt-40 sm:pb-20 md:px-12 md:pt-48 md:pb-24">
+  <section class="px-4 pb-12 pt-24 sm:px-6 md:px-12 md:pb-16 md:pt-32">
     <div class="mx-auto w-full max-w-[var(--container-wide)]">
-      <p class="font-mono mb-4 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
-        <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
-        {l.eyebrow}
-      </p>
-      <h1 class="font-display text-[clamp(40px,9vw,140px)] uppercase leading-[0.92] tracking-[-0.04em] text-[var(--color-ink)]">
-        <span class="block">{l.h1a}</span>
-        <span class="block opacity-70">{l.h1b}</span>
-      </h1>
-      <p class="font-serif-italic mt-8 max-w-[48ch] text-[clamp(18px,2vw,28px)] leading-tight text-[var(--color-ink)]">
-        {l.lead}
-      </p>
+      <h1 class="font-display text-[clamp(34px,4.4vw,60px)] leading-[1.08]">{l.h1}</h1>
+      <p class="mt-4 max-w-[56ch] text-[clamp(18px,1.5vw,21px)] leading-[1.5] text-[var(--color-ink-muted)]">{l.lead}</p>
     </div>
   </section>
 
-  {/* ========== SERVICE LIST ========== */}
-  <section class="relative px-4 pb-8 sm:px-6 md:px-12">
-    <div class="mx-auto w-full max-w-[var(--container-wide)]">
-      <ol class="flex flex-col">
-        {services.map((s, i) => (
-          <li>
-            <a
-              href={s.path}
-              class="group grid grid-cols-1 gap-4 border-t border-[var(--color-border)] py-10 no-underline sm:grid-cols-[80px_1fr_auto] sm:items-baseline sm:gap-10 sm:py-14"
-            >
-              <span class="font-mono text-[12px] uppercase tracking-[0.18em] text-[var(--color-accent)]">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <div>
-                <h2 class="font-display text-[clamp(28px,4.5vw,64px)] uppercase leading-[0.95] tracking-[-0.03em] text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)]">
-                  {s.name}
-                </h2>
-                <p class="mt-4 max-w-[60ch] text-[clamp(15px,1.2vw,18px)] leading-[1.6] text-[var(--color-ink-muted)]">
-                  {s.lead}
-                </p>
-              </div>
-              <span class="font-mono inline-flex items-center gap-2 self-start text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink)] sm:self-center">
-                {l.more}<span aria-hidden="true" class="transition-transform group-hover:translate-x-1">→</span>
-              </span>
-            </a>
-          </li>
-        ))}
-      </ol>
+  <section class="px-4 pb-16 sm:px-6 md:px-12 md:pb-24">
+    <div class="mx-auto grid w-full max-w-[var(--container-wide)] gap-4 md:grid-cols-2">
+      {cards.map((s) => (
+        <a href={s.path} class="hub-card marks group">
+          <h2 class="font-display text-[clamp(22px,2vw,28px)] leading-[1.2]">{l.situations[s.id]}</h2>
+          <p class="mb-6 mt-3 max-w-[52ch] text-[17px] leading-[1.55] text-[var(--color-ink-muted)]">{s.lead}</p>
+          <span class="mt-auto flex items-center justify-between gap-4 border-t border-[var(--color-border)] pt-5">
+            <span class="flex flex-col">
+              <span class="text-[17px] font-medium">{s.name}</span>
+              {fromPrice(s.id, lang) && <span class="text-[16px] font-medium text-[var(--color-accent)]">{fromPrice(s.id, lang)}</span>}
+            </span>
+            <span aria-hidden="true" class="hub-arrow">→</span>
+          </span>
+        </a>
+      ))}
+    </div>
+    <div class="mx-auto mt-4 flex w-full max-w-[var(--container-wide)] flex-wrap items-center justify-between gap-4 rounded-[var(--radius-card)] bg-[var(--color-bg-shade)] p-6 md:p-8">
+      <div class="max-w-[60ch]">
+        <h2 class="text-[20px] font-medium">{l.unsure}</h2>
+        <p class="mt-1 text-[17px] text-[var(--color-ink-muted)]">{l.unsureBody}</p>
+      </div>
+      <a href="#contact" data-need="checkup" class="btn btn-primary">{l.unsureCta}</a>
     </div>
   </section>
 
-  {/* Contact — consistent close. */}
   <CTA lang={lang} />
 </main>
+
+<style>
+  .hub-card {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+    color: var(--color-ink);
+    text-decoration: none;
+    transition:
+      border-color 0.25s var(--ease-power3),
+      box-shadow 0.25s var(--ease-power3);
+  }
+  @media (min-width: 768px) {
+    .hub-card {
+      padding: 32px;
+    }
+  }
+  .hub-card:hover,
+  .hub-card:focus-visible {
+    border-color: color-mix(in srgb, var(--color-accent) 45%, transparent);
+    box-shadow: 0 18px 40px -24px rgb(16 37 70 / 0.35);
+  }
+  .hub-arrow {
+    font-size: 22px;
+    color: var(--color-accent);
+    transition: transform 0.3s var(--ease-power3);
+  }
+  .hub-card:hover .hub-arrow {
+    transform: translateX(4px);
+  }
+</style>

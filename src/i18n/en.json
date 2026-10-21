@@ -1,8 +1,8 @@
 {
   "meta": {
     "siteName": "Anthony Profit",
-    "title": "Anthony Profit — Freelance web developer, apps & AI, SEO & brand design",
-    "description": "Freelance web developer, apps & AI, SEO and brand design. Custom websites and apps for SMBs, B2B and creative brands. 8 years of experience. Available Q4 2026.",
+    "title": "Web freelancer in Nice: sites, AI, SEO & GEO | Anthony Profit",
+    "description": "Freelance designer & developer in Nice: custom websites, tools and AI, SEO & GEO. One point of contact to be found on Google and recommended by ChatGPT.",
     "keywords": "freelance web developer, freelance SEO, brand designer, Astro, React, web design",
     "ogImageAlt": "Anthony Profit — Freelance web developer, SEO & brand design"
   },
@@ -12,20 +12,7 @@
     "work": "Work",
     "services": "Services",
     "about": "About",
-    "cta": "Let's talk",
     "cta.subject": "Project — let's discuss"
-  },
-  "cta": {
-    "eyebrow": "Next step",
-    "title.line1": "LET'S TALK",
-    "title.line2": "ABOUT YOUR PROJECT.",
-    "subject": "Project — let's discuss",
-    "projects.label": "Discover my projects",
-    "email.label": "Email",
-    "email.value": "contact@kulturecom.fr",
-    "whatsapp.label": "WhatsApp",
-    "whatsapp.value": "+33 6 60 50 16 82",
-    "whatsapp.message": "Hi Anthony, I have a project to discuss."
   },
   "footer": {
     "tagline": "Web design, code, SEO — one point of contact.",
@@ -42,52 +29,6 @@
     "legal.mentions": "Legal notice",
     "legal.privacy": "Privacy policy",
     "copyright": "© 2026 Anthony Profit. All rights reserved."
-  },
-  "hero": {
-    "line1": "WEBSITES",
-    "line2": "DESIGNED",
-    "line3": "to charm.",
-    "line4": "OPTIMIZED",
-    "line5": "to be found.",
-    "subtitle": "Freelance designer & developer in Nice, on the French Riviera. I build custom websites for creators and businesses that want to stand out, grow their traffic, and leave a lasting impression — on Google and in AI answers.",
-    "label.showreel": "selection",
-    "label.side": "Creative developer SEO GEO",
-    "label.scroll": "scroll down"
-  },
-  "about": {
-    "eyebrow": "About",
-    "item1.title": "<em>Creative</em> freelance developer, I carry your project from <em>concept</em> to <em>code.</em>",
-    "item1.desc": "I'm <em>Anthony</em>. Based on the <em>French Riviera</em>, I design and build custom websites for brands, creators and businesses that want a web experience worth remembering.",
-    "svc1.num": "01",
-    "svc1.title": "Art Direction & Design",
-    "svc1.desc": "A strong visual identity and an experience that gets noticed. I craft <em>your brand's image</em>, not just a pretty layout — every detail builds your credibility.",
-    "svc2.num": "02",
-    "svc2.title": "Custom Web Development",
-    "svc2.desc": "Sites designed and <em>hand-coded</em>, no templates. Fast, polished, animated — built for your brand, and no one else's.",
-    "svc3.num": "03",
-    "svc3.title": "Technical SEO & GEO",
-    "svc3.desc": "Get <em>found on Google</em>, cited by AI (ChatGPT, Gemini) and visible right inside <em>ChatGPT Ads</em>. A site that isn't just beautiful, but visible where your customers actually search today.",
-    "svc4.num": "04",
-    "svc4.title": "Tools, Apps & AI",
-    "svc4.desc": "Business tools, web and mobile apps, and <em>AI wired into your data</em>. Fewer repetitive tasks, more time for your actual work.",
-    "scroll": "↓ Continue"
-  },
-  "cinematic": {
-    "cap1.title": "Immersive experiences",
-    "cap1.desc": "Where creativity comes to life",
-    "cap2.title": "Every project, a world",
-    "cap2.desc": "Designed and hand-coded to measure",
-    "cap3.title": "From concept to code",
-    "cap3.desc": "A web signature that lasts",
-    "cap4.title": "Keep scrolling",
-    "cap4.desc": ""
-  },
-  "about2": {
-    "eyebrow": "Promise · Step 02",
-    "body.lead": "You'll have gathered it by now: I craft web experiences that leave a mark and last. The next move is yours — let's talk about your project.",
-    "body.trail": "It starts with a",
-    "body.cta": "click",
-    "accent": "02"
   },
   "projects": {
     "eyebrow": "Selection",

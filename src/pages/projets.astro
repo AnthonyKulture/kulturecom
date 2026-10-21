@@ -3,6 +3,7 @@ import BaseLayout from "~/layouts/BaseLayout.astro";
 import Nav from "~/components/Nav.astro";
 import Projects from "~/components/Projects.astro";
 import ProjectsMobile from "~/components/ProjectsMobile.astro";
+import CTA from "~/components/CTA.astro";
 
 const lang = "fr" as const;
 ---
@@ -14,15 +15,16 @@ const lang = "fr" as const;
     {/* ========== PAGE HERO ========== */}
     <section class="relative px-4 pt-32 pb-12 sm:px-6 sm:pt-40 sm:pb-16 md:px-12 md:pt-48 md:pb-20">
       <div class="mx-auto w-full max-w-[var(--container-wide)]">
-        <p class="font-mono mb-4 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
-          <span class="inline-block h-px w-6 bg-[var(--color-accent)]"></span>
-          Travaux
+        <p class="font-label mb-4 sheet-label text-[13px] uppercase tracking-[0.06em] text-[var(--color-ink-muted)]">
+          <span class="sheet-diamond" aria-hidden="true"></span>
+          <span>Travaux</span>
+          <span class="sheet-leader" aria-hidden="true"></span>
         </p>
-        <h1 class="font-display text-[clamp(40px,9vw,160px)] uppercase leading-[0.92] tracking-[-0.04em] text-[var(--color-ink)]">
+        <h1 class="font-display text-[clamp(34px,4.4vw,60px)] leading-[1.08] tracking-[-0.04em] text-[var(--color-ink)]">
           <span class="block">Des preuves,</span>
           <span class="block opacity-70">pas des promesses.</span>
         </h1>
-        <p class="font-serif-italic mt-8 max-w-[44ch] text-[clamp(18px,2vw,28px)] leading-tight text-[var(--color-ink)]">
+        <p class="font-lead mt-8 max-w-[44ch] text-[clamp(18px,1.5vw,21px)] leading-[1.5] text-[var(--color-ink)]">
           Cinq projets menés de bout en bout — design, code et SEO, du premier audit au référencement.
         </p>
       </div>
@@ -39,5 +41,6 @@ const lang = "fr" as const;
       <ProjectsMobile lang={lang} />
     </div>
 
+    <CTA lang={lang} />
   </main>
 </BaseLayout>

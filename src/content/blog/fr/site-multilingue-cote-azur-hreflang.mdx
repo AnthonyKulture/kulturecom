@@ -1,0 +1,159 @@
+---
+lang: fr
+slug: site-multilingue-cote-azur-hreflang
+translationKey: multilingue-riviera
+title: "Site multilingue sur la Côte d'Azur : SEO international, hreflang et visibilité IA pour toucher la clientèle étrangère"
+metaTitle: "Site multilingue Côte d'Azur : le guide"
+description: "Site multilingue à Nice, Cannes ou Monaco : structure d'URL, hreflang, traduction adaptée et GEO pour être trouvé par les touristes sur Google et ChatGPT."
+keywords:
+  - site multilingue
+  - site multilingue Côte d'Azur
+  - SEO international
+  - hreflang
+  - traduction site internet Nice
+  - site bilingue
+tags:
+  - SEO
+  - GEO
+  - Référencement local
+pillar: seo
+pubDate: 2026-10-22
+draft: false
+---
+
+import ServiceCTA from "~/components/blog/ServiceCTA.astro";
+import Callout from "~/components/blog/Callout.astro";
+
+Un site multilingue sur la Côte d'Azur sert à une chose : être trouvé par des clients qui ne cherchent pas en français, sur Google comme dans ChatGPT. Pour y arriver, il faut une URL distincte par langue, des balises hreflang réciproques et des textes écrits pour les requêtes réelles de chaque marché, pas une traduction mot à mot de la version française.
+
+La demande étrangère est massive sur la Riviera. Selon le [bilan touristique 2025 de l'Observatoire du tourisme de la Côte d'Azur](https://cotedazurfrance.fr/professionnels-du-tourisme/actualites/bilan-touristique-2025-realise-par-lobservatoire-du-tourisme-de-la-cote-dazur/) (publié en janvier 2026 par Côte d'Azur France Tourisme), la destination Alpes-Maritimes et Monaco a accueilli plus de 12 millions de touristes en 2025, dont plus de la moitié venaient de l'étranger. Les États-Unis sont devenus le premier marché étranger, avec plus de 15 % des nuitées internationales, devant le Royaume-Uni, l'Italie, l'Allemagne et la Scandinavie. Côté accès, l'aéroport Nice Côte d'Azur a traité 15,23 millions de passagers commerciaux en 2025 (+3,2 %), ce qui en fait le deuxième aéroport de France après Paris, d'après les Aéroports de la Côte d'Azur. Un hôtel à Cannes ou un loueur de bateaux à Antibes qui n'a qu'une version française se coupe donc d'une bonne partie de ses clients.
+
+## Sous-répertoires, sous-domaines ou ccTLD : quelle structure d'URL choisir ?
+
+Google ne désigne pas de structure gagnante. Sa documentation sur les [sites multirégionaux et multilingues](https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites) présente trois options valables et une à éviter :
+
+| Structure | Exemple | Avantages | Limites |
+|---|---|---|---|
+| Sous-répertoire | `monhotel.fr/en/` | Simple, un seul site à maintenir | Le ciblage pays est moins lisible pour l'internaute |
+| Sous-domaine | `en.monhotel.fr` | Facile à mettre en place | On ne sait pas toujours si « en » désigne une langue ou un pays |
+| Domaine pays (ccTLD) | `monhotel.de` | Ciblage géographique très clair | Coûteux, un domaine par pays, plus d'infrastructure |
+| Paramètre d'URL | `monhotel.fr?lang=en` | Aucun | Explicitement déconseillé par Google |
+
+Pour une entreprise locale de la Côte d'Azur, je recommande presque toujours le **sous-répertoire**. Vous ne visez pas l'Allemagne en tant que pays : vous visez des germanophones qui viennent à Nice. Le sous-répertoire garde toute l'autorité du domaine sur un seul site et ne demande aucune infrastructure en plus. Le ccTLD a du sens pour une marque qui vend réellement dans un autre pays, avec une offre et des prix propres à ce marché.
+
+C'est la structure de ce site : le français est la version par défaut, l'anglais vit sous `/en/`, et chaque page pointe vers son équivalent dans l'autre langue.
+
+## Comment bien faire le hreflang ?
+
+L'attribut hreflang indique à Google qu'une page existe dans d'autres langues et où trouver chaque version. La [documentation Google sur les versions localisées](https://developers.google.com/search/docs/specialty/international/localized-versions) fixe quelques règles qu'on voit souvent ignorées.
+
+La réciprocité est obligatoire. Si la page française pointe vers l'anglaise, l'anglaise doit pointer vers la française. Google l'écrit sans détour : si deux pages ne pointent pas l'une vers l'autre, les balises sont ignorées. Chaque version doit aussi se citer elle-même.
+
+Les codes suivent des normes précises. La langue utilise ISO 639-1 (`fr`, `en`, `de`, `it`), la région éventuelle ISO 3166-1 alpha-2 (`en-GB`, `en-US`). La langue vient toujours en premier, et on ne peut pas indiquer un pays seul.
+
+La valeur `x-default` sert de solution de repli pour les internautes dont la langue ne correspond à aucune de vos versions. Sur un site FR/EN de la Riviera, elle pointe en général vers la version française ou vers une page de choix de langue.
+
+Voici à quoi ressemble un jeu de balises correct, identique sur les deux versions :
+
+```html
+<link rel="alternate" hreflang="fr" href="https://monhotel.fr/chambres/" />
+<link rel="alternate" hreflang="en" href="https://monhotel.fr/en/rooms/" />
+<link rel="alternate" hreflang="x-default" href="https://monhotel.fr/chambres/" />
+```
+
+Les erreurs que je rencontre le plus en audit :
+
+- `en-UK` au lieu de `en-GB` : « UK » est un code réservé, Google l'ignore ;
+- des balises hreflang qui pointent toutes vers la page d'accueil de l'autre langue au lieu de la page équivalente ;
+- une version anglaise qui ne renvoie pas vers la française ;
+- des URL relatives, alors que Google demande des adresses complètes avec `https://`.
+
+Google ne se sert pas du hreflang, ni de l'attribut `lang` du HTML, pour savoir dans quelle langue est une page. Il le déduit du contenu. Une page « /en/ » dont le texte principal est resté en français reste une page française à ses yeux.
+
+## Faut-il rediriger automatiquement selon la langue du navigateur ?
+
+Non. Google déconseille de rediriger d'office un visiteur vers une version linguistique en devinant sa langue, que ce soit par son adresse IP ou par les réglages de son navigateur. L'internaute ne peut plus choisir (un Italien qui vit à Monaco et lit le français, par exemple), et Googlebot explore surtout depuis les États-Unis, sans en-tête `Accept-Language` : avec une redirection automatique, il risque de ne jamais voir certaines versions.
+
+Préférez des URL distinctes par langue reliées par le hreflang, et un sélecteur de langue visible. Un bandeau discret du type « This page is also available in English » est acceptable, à condition de ne pas forcer la bascule.
+
+<ServiceCTA service="creation-site-internet" lang="fr" text="Je construis des sites bilingues ou multilingues avec la structure d'URL et le hreflang réglés dès le départ." />
+
+## Traduire ou adapter : pourquoi les mots-clés changent d'une langue à l'autre
+
+Une [traduction de site internet](/creation-site-internet/) à Nice qui reprend phrase par phrase la version française passe à côté de la façon dont les étrangers cherchent.
+
+Prenons une conciergerie de Cannes qui écrit « location saisonnière Cannes » en français. Un Américain tapera plutôt *vacation rental Cannes* ou *villa rental Cannes*, un Britannique *holiday rental Cannes*. Un Allemand ou un Italien n'écrira pas « Nice » mais *Nizza*, et l'Italien parlera de *Costa Azzurra* plutôt que de Côte d'Azur. Un Allemand cherchera une *Ferienwohnung in Nizza* ou une *Ferienvilla an der Côte d'Azur*, rarement une traduction littérale de « location saisonnière ».
+
+La méthode que j'applique :
+
+1. lister les requêtes françaises qui comptent pour l'activité ;
+2. pour chaque langue cible, chercher les équivalents réellement tapés (outil de mots-clés réglé sur le pays, suggestions de Google, pages des concurrents locaux dans cette langue) ;
+3. réécrire les titres, les intertitres et la meta description autour de ces requêtes ;
+4. adapter le fond, pas seulement la forme : un client américain veut savoir si vous parlez anglais au téléphone, combien de temps il faut depuis l'aéroport, si la plage est privée.
+
+### La traduction automatique est-elle pénalisée ?
+
+Google ne sanctionne pas la traduction automatique en soi. Sa politique sur le **scaled content abuse** (contenu produit à grande échelle), dans les [règles anti-spam de Google Search](https://developers.google.com/search/docs/essentials/spam-policies) mises à jour en août 2026, vise les pages générées en masse dans le but principal de manipuler le classement, et cite explicitement les transformations automatiques comme la traduction quand elles apportent peu de valeur aux utilisateurs.
+
+Traduire dix pages de services avec un outil, puis les faire relire et adapter par quelqu'un qui connaît la langue et le métier, ne pose aucun problème. Générer cinq cents pages « villa + ville » traduites en six langues sans relecture, si. Google rappelle aussi que traduire seulement les menus et le pied de page en laissant le contenu principal dans une autre langue donne une mauvaise expérience.
+
+## Google Business Profile, avis et données structurées dans chaque langue
+
+Pour une recherche locale, le touriste voit souvent votre fiche Google avant votre site. Cette fiche Google Business Profile est unique, quelle que soit la langue. Google peut afficher les avis traduits automatiquement selon la langue du lecteur, avec un lien vers le texte original. Ce que vous maîtrisez :
+
+- demander un avis aux clients étrangers, dans leur langue, au bon moment (au check-out, à la remise des clés) ;
+- répondre à chaque avis dans la langue où il a été écrit : un avis en italien mérite une réponse en italien ;
+- garder un nom, une adresse et un téléphone identiques partout, y compris sur les annuaires anglophones ou les plateformes de réservation.
+
+J'ai détaillé la fiche elle-même dans le [guide Google Business Profile à Nice](/blog/google-business-profile-nice-guide/).
+
+Pour les données structurées, chaque version linguistique doit porter son propre balisage, dans sa langue. Google demande que le balisage décrive le contenu visible de la page : une page anglaise avec un schéma `LocalBusiness` dont la description est en français envoie un signal incohérent. Indiquez la langue avec la propriété `inLanguage` quand le type le permet, et gardez les mêmes données factuelles (adresse, téléphone, horaires) dans toutes les versions. Sur ce site, chaque article publie ainsi un schéma `BlogPosting` avec `inLanguage` en `fr-FR` ou en `en-US` selon la version.
+
+## Pourquoi une version anglaise compte pour être recommandé par ChatGPT
+
+Le GEO (*Generative Engine Optimization*) consiste à rendre une entreprise compréhensible et citable par les moteurs génératifs. Pour un touriste, le scénario est banal : il demande à ChatGPT ou à Perplexity, en anglais, *« best seafood restaurant in Villefranche-sur-Mer »* ou *« yacht charter Monaco with English-speaking crew »*. L'IA répond dans sa langue et s'appuie sur les sources qu'elle trouve.
+
+Les données disponibles invitent à la prudence, mais elles vont dans le même sens. Glenn Gabe (GSQi) a testé en [décembre 2025](https://www.gsqi.com/marketing-blog/ai-search-hreflang-multilingual-queries/) des requêtes multilingues sur plusieurs plateformes : Google, Bing et Copilot renvoyaient en général la bonne version linguistique, alors que ChatGPT et Claude renvoyaient souvent la version anglaise et que Perplexity se trompait souvent de version, au point qu'il doute que ces trois outils tiennent compte du hreflang. Weglot, qui vend un outil de traduction (gardez-le en tête), a analysé plus de 1,3 million de citations dans les AI Overviews et ChatGPT sur les marchés espagnol et mexicain : selon son étude mise à jour en août 2026, les sites sans version anglaise étaient beaucoup moins cités sur les requêtes en anglais, et les AI Overviews favorisaient nettement les sources rédigées dans la langue de la requête.
+
+Ce que j'en retiens pour la Riviera : si votre site n'existe qu'en français, l'IA doit vous comprendre à travers une autre langue pour vous recommander à un Américain, alors que vos concurrents ont peut-être écrit directement en anglais. Une version anglaise propre, avec vos services, votre quartier et vos points forts formulés clairement, vous donne une page qui correspond à la question posée. Rien ne garantit une citation, mais vous retirez un obstacle. Pour vérifier où vous en êtes, la méthode est décrite dans [mesurer sa visibilité dans ChatGPT](/blog/mesurer-visibilite-ia-chatgpt/), et le fonctionnement général du GEO dans [pourquoi votre entreprise n'apparaît pas dans ChatGPT](/blog/seo-geo-apparaitre-dans-chatgpt/).
+
+<ServiceCTA service="seo-geo" lang="fr" />
+
+## Checklist d'un site multilingue sur la Côte d'Azur
+
+- Une URL distincte par langue, en sous-répertoire (`/en/`, `/it/`, `/de/`).
+- Des balises hreflang réciproques, autoréférentes, avec des codes ISO valides et un `x-default`.
+- Aucune redirection automatique par IP ou par langue du navigateur, un sélecteur de langue visible.
+- Des textes adaptés aux requêtes de chaque marché (Nizza, Costa Azzurra, *vacation rental*…).
+- Une traduction relue par un humain, et aucune page générée en masse sans valeur ajoutée.
+- Les avis demandés et traités dans la langue du client.
+- Des données structurées dans chaque langue, cohérentes avec le contenu visible.
+
+Si vous travaillez à Monaco, l'article sur le [référencement à Monaco](/blog/referencement-monaco-seo-geo/) complète ce guide.
+
+## Questions fréquentes
+
+### Combien de langues faut-il pour un site sur la Côte d'Azur ?
+
+Deux suffisent pour la plupart des entreprises locales : le français et l'anglais, qui couvre les deux premiers marchés étrangers (États-Unis, Royaume-Uni) et sert souvent de langue commune aux Scandinaves. Ajoutez l'italien ou l'allemand si une part visible de vos clients parle cette langue et si vous pouvez leur répondre dans cette langue.
+
+### Le hreflang améliore-t-il le classement sur Google ?
+
+Google ne présente pas le hreflang comme un levier de classement. Il sert à aider Google à montrer la bonne version linguistique à chaque internaute, ce qui évite qu'un touriste anglophone tombe sur votre page française.
+
+### Peut-on traduire son site avec une IA ?
+
+Oui, à condition de relire et d'adapter. Google ne pénalise pas la traduction automatique en tant que telle, mais sa politique contre le contenu produit à grande échelle vise les pages traduites en masse qui n'apportent rien aux utilisateurs.
+
+### Un site bilingue suffit-il pour apparaître dans ChatGPT ?
+
+Pas à lui seul. Les assistants IA s'appuient aussi sur les avis, les annuaires, les mentions de votre entreprise sur d'autres sites et la clarté de vos informations. La version anglaise donne une source qui correspond à la langue de la question.
+
+<Callout title="À retenir">
+
+- Plus de la moitié des touristes de la Côte d'Azur viennent de l'étranger (Observatoire du tourisme, bilan 2025) : une version anglaise est le minimum.
+- Structure recommandée pour une entreprise locale : sous-répertoires `/en/`, hreflang réciproque avec `x-default`, aucune redirection automatique.
+- Adaptez les mots-clés à chaque marché au lieu de traduire mot à mot, et faites relire toute traduction automatique.
+- Une page rédigée dans la langue du touriste vous donne plus de chances d'être cité quand il interroge une IA dans cette langue.
+
+</Callout>

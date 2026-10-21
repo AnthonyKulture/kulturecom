@@ -1,0 +1,113 @@
+---
+import type { Lang } from "~/i18n/ui";
+
+// Phone-only action bar: "Démarrer un projet" + "Être rappelé", pinned to the
+// bottom once the visitor has scrolled past the first screen. Hidden while the
+// contact block is on screen (no duplicate actions) and while the cookie
+// banner is up (it sits in the same spot).
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const fr = lang === "fr";
+const contactHref = fr ? "/contact/" : "/en/contact/";
+---
+
+<div data-mobile-bar class="mobile-bar" data-visible="false">
+  <a href={contactHref} data-to-contact class="mb-btn mb-btn--primary">{fr ? "Démarrer un projet" : "Start a project"}</a>
+  <button type="button" data-callback-open class="mb-btn">{fr ? "Être rappelé" : "Call me back"}</button>
+</div>
+
+<style>
+  .mobile-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 80;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 8px;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    background: color-mix(in srgb, var(--color-bg) 92%, transparent);
+    border-top: 1px solid var(--color-border);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transform: translateY(110%);
+    transition: transform 0.4s var(--ease-power3);
+  }
+  .mobile-bar[data-visible="true"] {
+    transform: none;
+  }
+  @media (min-width: 768px) {
+    .mobile-bar {
+      display: none;
+    }
+  }
+  .mb-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+    background: #ffffff;
+    font-size: 15px;
+    font-weight: 500;
+    text-align: center;
+    color: var(--color-ink);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .mb-btn--primary {
+    border-color: var(--color-accent);
+    background: var(--color-accent);
+    color: #ffffff;
+  }
+  .mb-btn:active {
+    transform: scale(0.98);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-bar {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const bar = document.querySelector<HTMLElement>("[data-mobile-bar]");
+  if (bar) {
+    const contact = document.getElementById("contact");
+    const consent = document.querySelector<HTMLElement>("[data-consent-banner]");
+    let contactInView = false;
+
+    const update = (): void => {
+      const past = window.scrollY > window.innerHeight * 0.6;
+      const consentUp = !!consent && !consent.hidden;
+      bar.dataset.visible = String(past && !contactInView && !consentUp);
+    };
+
+    if (contact) {
+      new IntersectionObserver(([e]) => {
+        contactInView = e.isIntersecting;
+        update();
+      }).observe(contact);
+    }
+    if (consent) new MutationObserver(update).observe(consent, { attributes: true, attributeFilter: ["hidden"] });
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+  }
+
+  // "Démarrer un projet" links go to the page's own contact block when there
+  // is one (home, services, case studies) instead of loading /contact/.
+  document.addEventListener("click", (e) => {
+    const link = (e.target as HTMLElement).closest<HTMLAnchorElement>("[data-to-contact]");
+    const contact = document.getElementById("contact");
+    if (!link || !contact) return;
+    e.preventDefault();
+    contact.scrollIntoView({ behavior: "smooth", block: "start" });
+    history.replaceState(null, "", "#contact");
+  });
+</script>

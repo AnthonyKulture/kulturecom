@@ -1,6 +1,9 @@
 ---
 import type { Lang } from "~/i18n/ui";
 import { ui } from "~/i18n/ui";
+import { SERVICE_PAGES } from "~/lib/service-pages";
+import { getHomeContent } from "~/lib/home-content";
+import { fromPrice } from "~/lib/facts";
 
 interface Props {
   lang: Lang;
@@ -8,213 +11,293 @@ interface Props {
   altLang: Lang;
 }
 
-const { lang, altLangPath, altLang } = Astro.props;
+const { lang, altLangPath } = Astro.props;
 const t = ui[lang];
-const workHref = lang === "fr" ? "/projets/" : "/en/work/";
-const servicesHref = lang === "fr" ? "/services/" : "/en/services/";
-const aboutHref = lang === "fr" ? "/a-propos/" : "/en/about/";
-const homeHref = lang === "fr" ? "/" : "/en/";
-const contactHref = lang === "fr" ? "/contact/" : "/en/contact/";
+const fr = lang === "fr";
+const workHref = fr ? "/projets/" : "/en/work/";
+const servicesHref = fr ? "/services/" : "/en/services/";
+const blogHref = fr ? "/blog/" : "/en/blog/";
+const aboutHref = fr ? "/a-propos/" : "/en/about/";
+const homeHref = fr ? "/" : "/en/";
+const contactHref = fr ? "/contact/" : "/en/contact/";
+const ctaLabel = fr ? "Démarrer un projet" : "Start a project";
+const guidesLabel = "Guides";
+const allServices = fr ? "Tous les services" : "All services";
 
 // Lang switcher: both languages always visible. Current lang stays on the
-// current URL; the other lang switches via the `altLangPath` injected by
-// the parent page.
-const frHref = lang === "fr" ? "/" : altLangPath;
-const enHref = lang === "en" ? "/en/" : altLangPath;
+// current URL; the other lang switches via the `altLangPath` from the page.
+const frHref = fr ? "/" : altLangPath;
+const enHref = !fr ? "/en/" : altLangPath;
 
-// Mobile full-screen menu — labels + the items shown as big display links.
-// "Discutons" + the lang switcher stay on the header (here AND mirrored in the
-// open overlay), so only the section links go inside the burger menu.
-const menuLabel = lang === "fr" ? "Ouvrir le menu" : "Open menu";
-const closeLabel = lang === "fr" ? "Fermer le menu" : "Close menu";
-const menuItems = [
-  { n: "01", label: t.nav.work, href: workHref },
-  { n: "02", label: t.nav.services, href: servicesHref },
-  { n: "03", label: t.nav.about, href: aboutHref },
-  { n: "04", label: "Contact", href: contactHref },
+// Service sub-menu: the same 4 "doors" as the home hero (title, one-line
+// benefit, starting price), in the same order.
+const doors = getHomeContent(lang).doors;
+const services = doors.map((d) => ({
+  ...d,
+  href: SERVICE_PAGES.find((s) => s.id === d.id)!.path[lang],
+  price: fromPrice(d.id, lang),
+}));
+
+const links = [
+  { label: t.nav.work, href: workHref },
+  { label: guidesLabel, href: blogHref },
+  { label: t.nav.about, href: aboutHref },
 ];
+
+const menuLabel = fr ? "Ouvrir le menu" : "Open menu";
+const closeLabel = fr ? "Fermer le menu" : "Close menu";
 const email = t.footer["contact.email"];
 const linkedinUrl = "https://www.linkedin.com/in/anthony-profit/";
 const instagramUrl = "https://www.instagram.com/antho_profit/";
 const behanceUrl = "https://www.behance.net/anthonyprofit";
+const path = Astro.url.pathname;
+const isCurrent = (href: string): boolean => path === href || (href !== homeHref && path.startsWith(href));
 ---
 
-{/* Smart nav — `fixed` so it survives scroll. mix-blend-mode: difference
-    with a CREAM source (`text-[var(--color-bg)]`, not white) gives PURE
-    BLACK on the cream Hero (|cream - cream| = 0) AND a near-cream tint on
-    the dark About section (|cream - ink| ≈ cream). The cream source is
-    intentional : with `text-white`, the blend resolved to rgb(16,22,35)
-    — a slight blue tint that mismatched the preloader name's handoff
-    color. Show on scroll-up, hide on scroll-down via the inline script.
-    `will-change: transform, opacity` is a GPU-layer pre-warm hint : the
-    nav is fully occluded by the Preloader (z-100) at page load, and
-    without the hint browsers may decompose its compositing layer to save
-    resources — costing a 1-2 frame paint gap when the preloader is
-    removed. The hint forces the browser to keep the layer ready, which
-    is what makes the preloader→nav swap visually continuous. */}
-<nav
+{/* Smart nav — transparent at the top, cream + hairline once scrolled; hides
+    on scroll-down, comes back on scroll-up. */}
+<header
   data-nav-smart
   data-hidden="false"
-  class="fixed left-0 right-0 top-0 z-50 flex items-center justify-between px-4 py-4 mix-blend-difference transition-[transform,opacity] duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] data-[hidden=true]:-translate-y-full data-[hidden=true]:opacity-0 sm:px-6 md:px-12 md:py-7"
-  aria-label="Navigation principale"
-  style="will-change: transform, opacity;"
+  data-scrolled="false"
+  class="site-nav fixed inset-x-0 top-0 z-50"
 >
-  {/* Brand — "Anthony" in serif italic + "PROFIT" in display caps, collés.
-      Typographic contrast (editorial italic ↔ brutalist display) acts as
-      the logotype itself; no graphic mark needed. */}
-  <a
-    href={homeHref}
-    aria-label="Anthony Profit"
-    class="inline-flex items-baseline gap-0 text-[var(--color-bg)] no-underline hover:[&>span]:underline [&>span]:underline-offset-4"
+  <nav
+    data-intro-item
+    style="--i:0"
+    class="mx-auto flex h-16 w-full max-w-[var(--container-wide)] items-center justify-between gap-4 px-4 sm:px-6 md:h-[72px] md:px-12"
+    aria-label={fr ? "Navigation principale" : "Main navigation"}
   >
-    <span class="font-serif-italic text-[20px] leading-none max-[379px]:text-[17px] sm:text-[24px] md:text-[28px]"
-      >Anthony</span
-    ><span class="font-display text-[20px] leading-none tracking-[-0.02em] max-[379px]:text-[17px] sm:text-[24px] md:text-[28px]"
-      >PROFIT</span
-    >
-  </a>
-
-  {/* Right cluster: work · about · contact · lang switcher */}
-  {/* Below 380px (common Android widths) the logo + "Discutons" collided: tighten. */}
-  <div class="flex items-center gap-4 max-[379px]:gap-3 sm:gap-5">
-    {/* Work — hidden on mobile to save horizontal space (reachable via footer) */}
-    <a
-      href={workHref}
-      class="font-mono hidden text-[12px] uppercase tracking-[0.18em] text-[var(--color-bg)] no-underline hover:underline underline-offset-4 sm:inline-block sm:text-[13px]"
-      >{t.nav.work}</a
-    >
-    {/* Services — hidden on mobile to save horizontal space (reachable via menu/footer) */}
-    <a
-      href={servicesHref}
-      class="font-mono hidden text-[12px] uppercase tracking-[0.18em] text-[var(--color-bg)] no-underline hover:underline underline-offset-4 sm:inline-block sm:text-[13px]"
-      >{t.nav.services}</a
-    >
-    {/* About — hidden on mobile to save horizontal space */}
-    <a
-      href={aboutHref}
-      class="font-mono hidden text-[12px] uppercase tracking-[0.18em] text-[var(--color-bg)] no-underline hover:underline underline-offset-4 sm:inline-block sm:text-[13px]"
-      >{t.nav.about}</a
-    >
-    {/* Discutons / Let's talk — anchors to the homepage's #contact (CTA)
-        section. From any other page we navigate to homepage then scroll. */}
-    <a
-      href={contactHref}
-      class="font-mono text-[12px] uppercase tracking-[0.18em] text-[var(--color-bg)] no-underline hover:underline underline-offset-4 sm:text-[13px]"
-      >{t.nav.cta}</a
-    >
-
-    {/* Lang switcher — both EN and FR visible, current lang in bold for
-        clarity; alt lang slightly faded as a secondary affordance. */}
-    <span class="font-mono inline-flex items-center gap-1 text-[11px] uppercase tracking-[0.18em] text-[var(--color-bg)] sm:text-[12px]">
-      <a
-        href={enHref}
-        hreflang="en"
-        aria-current={lang === "en" ? "page" : undefined}
-        class:list={[
-          "no-underline hover:underline underline-offset-4",
-          lang === "en" ? "font-bold" : "opacity-60 hover:opacity-100",
-        ]}
-        >EN</a
-      >
-      <span aria-hidden="true" class="opacity-60">/</span>
-      <a
-        href={frHref}
-        hreflang="fr"
-        aria-current={lang === "fr" ? "page" : undefined}
-        class:list={[
-          "no-underline hover:underline underline-offset-4",
-          lang === "fr" ? "font-bold" : "opacity-60 hover:opacity-100",
-        ]}
-        >FR</a
-      >
-    </span>
-
-    {/* Burger — opens the full-screen mobile menu (mobile only; desktop uses
-        the inline Work/About links above). Discutons + the lang switcher stay
-        on the header in both states (mirrored inside the open overlay). */}
-    <button
-      type="button"
-      data-menu-toggle
-      aria-expanded="false"
-      aria-controls="mobile-menu"
-      aria-label={menuLabel}
-      class="burger -mr-1 grid h-10 w-7 place-items-center text-[var(--color-bg)] sm:hidden"
-    >
-      <span class="burger-box" aria-hidden="true">
-        <span class="burger-line"></span>
-        <span class="burger-line"></span>
-      </span>
-    </button>
-  </div>
-</nav>
-
-{/* ===== Full-screen mobile menu ===== mobile only (`sm:hidden`). Dark surface
-    (cream-on-ink via `data-surface="dark"`). Revealed with a circle clip-path
-    growing FROM the burger (top-right) — the same clip vocabulary as the
-    Contact reveal — then the big display links rise out of their masks in a
-    stagger, accent numbers + footer fading last. Starts `inert` (closed); the
-    script below toggles `data-menu-open` on <html> (CSS drives the animation),
-    locks scroll (+ Lenis), traps focus, and closes on Esc / link tap. */}
-<div
-  id="mobile-menu"
-  data-mobile-menu
-  data-surface="dark"
-  role="dialog"
-  aria-modal="true"
-  aria-label="Menu"
-  aria-hidden="true"
-  inert
-  class="mobile-menu fixed inset-0 z-[90] flex flex-col bg-[var(--color-bg)] text-[var(--color-ink)] sm:hidden"
->
-  {/* Top bar — mirrors the header so Discutons + the switcher stay reachable
-      while the menu is open; brand left, close (✕) right. */}
-  <div class="flex shrink-0 items-center justify-between px-4 py-4">
-    <a href={homeHref} data-menu-link aria-label="Anthony Profit" class="inline-flex items-baseline gap-0 no-underline">
-      <span class="font-serif-italic text-[20px] leading-none">Anthony</span><span class="font-display text-[20px] leading-none tracking-[-0.02em]">PROFIT</span>
+    <a href={homeHref} aria-label="Anthony Profit" data-intro-box="LOGO" class="inline-flex shrink-0 items-baseline text-[var(--color-ink)] no-underline">
+      <span class="font-display text-[21px] leading-none tracking-[-0.02em] max-[379px]:text-[18px] md:text-[23px]">Anthony Profit</span>
     </a>
-    <div class="flex items-center gap-4">
-      <a href={contactHref} data-menu-link class="font-mono text-[12px] uppercase tracking-[0.18em] no-underline hover:underline underline-offset-4">{t.nav.cta}</a>
-      <span class="font-mono inline-flex items-center gap-1 text-[11px] uppercase tracking-[0.18em]">
-        <a href={enHref} hreflang="en" aria-current={lang === "en" ? "page" : undefined} class:list={["no-underline hover:underline underline-offset-4", lang === "en" ? "font-bold" : "opacity-60"]}>EN</a>
+
+    <div data-intro-box="NAV" class="hidden items-center gap-7 lg:flex">
+      <div class="nav-dd" data-dd>
+        <button type="button" class="nav-link inline-flex items-center gap-1.5" aria-expanded="false" aria-controls="nav-services" data-dd-toggle>
+          {t.nav.services}
+          <svg aria-hidden="true" viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 4.5 L6 8.5 L10 4.5" /></svg>
+        </button>
+        <div id="nav-services" class="nav-dd-panel" data-dd-panel>
+          <ul class="grid gap-1">
+            {services.map((s) => (
+              <li>
+                <a href={s.href} class="dd-item">
+                  <span class="flex flex-col">
+                    <span class="text-[15px] font-medium">{s.title}</span>
+                    <span class="text-[15px] text-[var(--color-ink-muted)]">{s.desc}</span>
+                  </span>
+                  {s.price && <span class="font-label text-[13px] uppercase tracking-[0.08em] whitespace-nowrap">{s.price}</span>}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <a href={servicesHref} class="mt-2 block px-3 py-2 font-label text-[13px] uppercase tracking-[0.06em] underline underline-offset-4 hover:text-[var(--color-accent)]">{allServices}</a>
+        </div>
+      </div>
+      {links.map((l) => (
+        <a href={l.href} class="nav-link" aria-current={isCurrent(l.href) ? "page" : undefined}>{l.label}</a>
+      ))}
+    </div>
+
+    <div class="flex items-center gap-4 sm:gap-5">
+      <a href={contactHref} data-to-contact data-intro-box="CTA" class="nav-cta hidden sm:inline-flex">{ctaLabel}</a>
+      <span class="font-label inline-flex items-center gap-1 text-[13px] uppercase tracking-[0.06em] sm:text-[14px]">
+        <a href={enHref} hreflang="en" aria-current={lang === "en" ? "page" : undefined} class:list={["no-underline hover:underline underline-offset-4", lang === "en" ? "font-bold" : "opacity-60 hover:opacity-100"]}>EN</a>
         <span aria-hidden="true" class="opacity-60">/</span>
-        <a href={frHref} hreflang="fr" aria-current={lang === "fr" ? "page" : undefined} class:list={["no-underline hover:underline underline-offset-4", lang === "fr" ? "font-bold" : "opacity-60"]}>FR</a>
+        <a href={frHref} hreflang="fr" aria-current={lang === "fr" ? "page" : undefined} class:list={["no-underline hover:underline underline-offset-4", lang === "fr" ? "font-bold" : "opacity-60 hover:opacity-100"]}>FR</a>
       </span>
-      <button type="button" data-menu-close aria-label={closeLabel} class="burger burger--close grid h-10 w-7 place-items-center">
+      <button
+        type="button"
+        data-menu-toggle
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label={menuLabel}
+        class="burger -mr-1 grid h-10 w-7 place-items-center text-[var(--color-ink)] lg:hidden"
+      >
         <span class="burger-box" aria-hidden="true">
           <span class="burger-line"></span>
           <span class="burger-line"></span>
         </span>
       </button>
     </div>
-  </div>
-
-  {/* Big section links */}
-  <nav class="flex flex-1 flex-col justify-center gap-2 px-4" aria-label={lang === "fr" ? "Menu principal" : "Main menu"}>
-    {menuItems.map((it, i) => (
-      <a href={it.href} data-menu-link class="menu-link flex items-baseline gap-4 no-underline" style={`--d:${(0.2 + i * 0.07).toFixed(2)}s`}>
-        <span class="menu-num font-mono text-[12px] tracking-[0.18em] text-[var(--color-accent)]">{it.n}</span>
-        <span class="menu-mask">
-          <span class="menu-inner font-display text-[clamp(44px,15vw,88px)] uppercase leading-[0.95] tracking-[-0.04em]">{it.label}</span>
-        </span>
-      </a>
-    ))}
   </nav>
+</header>
 
-  {/* Footer — email + socials */}
-  <div class="menu-foot flex shrink-0 flex-col gap-3 px-4 pb-10">
-    <a href={`mailto:${email}`} data-menu-link class="font-mono text-[13px] lowercase tracking-[0.05em] no-underline hover:underline underline-offset-4">{email}</a>
-    <div class="flex gap-5 font-mono text-[11px] uppercase tracking-[0.18em]">
-      <a href={instagramUrl} target="_blank" rel="noopener" class="no-underline hover:underline underline-offset-4 opacity-80 hover:opacity-100">Instagram</a>
-      <a href={linkedinUrl} target="_blank" rel="noopener" class="no-underline hover:underline underline-offset-4 opacity-80 hover:opacity-100">LinkedIn</a>
-      <a href={behanceUrl} target="_blank" rel="noopener" class="no-underline hover:underline underline-offset-4 opacity-80 hover:opacity-100">Behance</a>
-    </div>
+{/* ===== Full-screen menu (< lg) ===== dark surface, circle reveal from the
+    burger; services first (the 4 doors + prices), then the other pages. */}
+<div
+  id="mobile-menu"
+  data-mobile-menu
+  data-surface="tint"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Menu"
+  aria-hidden="true"
+  inert
+  class="mobile-menu fixed inset-0 z-[90] flex flex-col overflow-y-auto bg-[var(--color-bg)] text-[var(--color-ink)] lg:hidden"
+>
+  <div class="flex shrink-0 items-center justify-between px-4 py-3 sm:px-6">
+    <a href={homeHref} data-menu-link aria-label="Anthony Profit" class="inline-flex items-baseline no-underline">
+      <span class="font-display text-[21px] leading-none tracking-[-0.02em]">Anthony Profit</span>
+    </a>
+    <button type="button" data-menu-close aria-label={closeLabel} class="burger burger--close grid h-10 w-7 place-items-center">
+      <span class="burger-box" aria-hidden="true">
+        <span class="burger-line"></span>
+        <span class="burger-line"></span>
+      </span>
+    </button>
   </div>
+
+  <nav class="flex flex-1 flex-col gap-8 px-4 pb-6 pt-4 sm:px-6" aria-label={fr ? "Menu principal" : "Main menu"}>
+    <div class="menu-fade" style="--d:0.18s">
+      <a href={servicesHref} data-menu-link class="font-label text-[13px] uppercase tracking-[0.06em] text-[var(--color-ink-muted)] no-underline">{t.nav.services}</a>
+      <ul class="mt-3 grid gap-1">
+        {services.map((s) => (
+          <li>
+            <a href={s.href} data-menu-link class="flex items-baseline justify-between gap-4 border-b border-[var(--color-ink)]/15 py-3 no-underline">
+              <span class="text-[18px] font-medium">{s.title}</span>
+              {s.price && <span class="font-label text-[13px] uppercase tracking-[0.08em] whitespace-nowrap text-[var(--color-ink-muted)]">{s.price}</span>}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <ul class="flex flex-col gap-1">
+      {[...links, { label: "Contact", href: contactHref }].map((l, i) => (
+        <li>
+          <a href={l.href} data-menu-link class="menu-link block no-underline" style={`--d:${(0.26 + i * 0.06).toFixed(2)}s`}>
+            <span class="menu-mask">
+              <span class="menu-inner font-display text-[clamp(36px,11vw,64px)] leading-[1] tracking-[-0.04em]">{l.label}</span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <div class="menu-fade mt-auto flex flex-col gap-3" style="--d:0.5s">
+      <a href={`mailto:${email}`} data-menu-link class="font-label text-[15px] lowercase tracking-[0.05em] no-underline hover:underline underline-offset-4">{email}</a>
+      <div class="flex gap-5 font-label text-[13px] uppercase tracking-[0.06em]">
+        <a href={instagramUrl} target="_blank" rel="noopener" class="opacity-80 no-underline hover:opacity-100 hover:underline underline-offset-4">Instagram</a>
+        <a href={linkedinUrl} target="_blank" rel="noopener" class="opacity-80 no-underline hover:opacity-100 hover:underline underline-offset-4">LinkedIn</a>
+        <a href={behanceUrl} target="_blank" rel="noopener" class="opacity-80 no-underline hover:opacity-100 hover:underline underline-offset-4">Behance</a>
+      </div>
+    </div>
+  </nav>
 </div>
 
 <style is:global>
-  /* Burger icon — two lines using currentColor (so the nav's mix-blend-difference
-     keeps it legible over light/dark sections). The overlay's close button reuses
-     the same box but is locked to an ✕. */
+  .site-nav {
+    color: var(--color-ink);
+    transition:
+      transform 0.5s var(--ease-power3),
+      background-color 0.3s var(--ease-power3),
+      border-color 0.3s var(--ease-power3);
+    border-bottom: 1px solid transparent;
+  }
+  .site-nav[data-scrolled="true"] {
+    background: color-mix(in srgb, var(--color-bg) 90%, transparent);
+    border-bottom-color: color-mix(in srgb, var(--color-ink) 10%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .site-nav[data-hidden="true"] {
+    transform: translateY(-100%);
+  }
+  .nav-link {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-ink);
+    text-decoration: none;
+    cursor: pointer;
+    text-underline-offset: 6px;
+  }
+  .nav-link:hover,
+  .nav-link[aria-current="page"],
+  .nav-link[aria-expanded="true"] {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+  }
+  .nav-cta {
+    align-items: center;
+    padding: 10px 18px;
+    border-radius: 0;
+    background: var(--color-accent);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      background-color 0.2s var(--ease-power3),
+      transform 0.2s var(--ease-power3);
+  }
+  .nav-cta:hover {
+    background: var(--color-accent-strong);
+  }
+  .nav-cta:active {
+    transform: scale(0.98);
+  }
+
+  /* Services dropdown — opens on hover (pointer) or click/keyboard. */
+  .nav-dd {
+    position: relative;
+  }
+  .nav-dd-panel {
+    position: absolute;
+    top: calc(100% + 14px);
+    left: -16px;
+    width: 440px;
+    padding: 10px;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+    box-shadow: 0 18px 40px -18px rgb(16 37 70 / 0.25);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    transition:
+      opacity 0.2s var(--ease-power3),
+      transform 0.25s var(--ease-power3),
+      visibility 0s linear 0.25s;
+  }
+  /* Hover bridge so the pointer can travel from the button to the panel. */
+  .nav-dd-panel::before {
+    content: "";
+    position: absolute;
+    inset: -16px 0 auto;
+    height: 16px;
+  }
+  .nav-dd[data-open] .nav-dd-panel {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition-delay: 0s;
+  }
+  @media (hover: hover) {
+    .nav-dd:hover .nav-dd-panel {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      transition-delay: 0s;
+    }
+  }
+  .dd-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 12px;
+    border-radius: 0;
+    color: var(--color-ink);
+    text-decoration: none;
+    transition: background-color 0.2s var(--ease-power3);
+  }
+  .dd-item:hover,
+  .dd-item:focus-visible {
+    background: var(--color-bg-shade);
+  }
+
+  /* Burger — two lines; the overlay's close button is locked to an ✕. */
   .burger-box {
     position: relative;
     display: block;
@@ -227,91 +310,74 @@ const behanceUrl = "https://www.behance.net/anthonyprofit";
     width: 100%;
     height: 2px;
     background: currentColor;
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.4s var(--ease-power3);
   }
   .burger-line:nth-child(1) { top: 0; }
   .burger-line:nth-child(2) { bottom: 0; }
   .burger--close .burger-line:nth-child(1) { top: 50%; transform: translateY(-50%) rotate(45deg); }
   .burger--close .burger-line:nth-child(2) { bottom: 50%; transform: translateY(50%) rotate(-45deg); }
 
-  /* Overlay — circle reveal from the burger (top-right). Closed = collapsed +
-     non-interactive; the `inert` attribute (toggled by JS) keeps it out of the
-     tab order / a11y tree when closed. */
+  /* Overlay — circle reveal from the burger (top-right). */
   .mobile-menu {
-    clip-path: circle(0% at calc(100% - 32px) 36px);
+    clip-path: circle(0% at calc(100% - 32px) 32px);
     pointer-events: none;
     transition: clip-path 0.55s cubic-bezier(0.7, 0, 0.84, 0);
-    will-change: clip-path;
   }
   html[data-menu-open="true"] .mobile-menu {
-    clip-path: circle(150% at calc(100% - 32px) 36px);
+    clip-path: circle(150% at calc(100% - 32px) 32px);
     pointer-events: auto;
-    transition: clip-path 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: clip-path 0.7s var(--ease-power3);
   }
-
-  /* Big links rise out of a mask; numbers + footer fade up. Per-row delay comes
-     from `--d` on each `.menu-link` (inherited by the number); the footer has its
-     own. Delays apply only while opening — closing snaps back together. */
-  .menu-mask { display: block; overflow: hidden; padding-block: 0.08em; }
+  .menu-mask { display: block; overflow: hidden; padding-block: 0.06em; }
   .menu-inner {
     display: block;
     transform: translateY(115%);
-    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: transform;
+    transition: transform 0.8s var(--ease-power3);
   }
-  .menu-num,
-  .menu-foot {
+  .menu-fade {
     opacity: 0;
     transform: translateY(12px);
-    transition: opacity 0.5s ease-out, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.5s ease-out, transform 0.5s var(--ease-power3);
   }
-  .menu-foot { --d: 0.46s; }
-  html[data-menu-open="true"] .menu-inner { transform: translateY(0); transition-delay: var(--d); }
-  html[data-menu-open="true"] .menu-num,
-  html[data-menu-open="true"] .menu-foot { opacity: 1; transform: none; transition-delay: var(--d); }
-
-  /* Lock background scroll while the menu is open (belt-and-braces with the JS
-     Lenis stop, for the brief window before the script runs / if JS is slow). */
+  html[data-menu-open="true"] .menu-inner { transform: none; transition-delay: var(--d); }
+  html[data-menu-open="true"] .menu-fade { opacity: 1; transform: none; transition-delay: var(--d); }
   html[data-menu-open="true"] body { overflow: hidden; }
 
   @media (prefers-reduced-motion: reduce) {
-    .mobile-menu { transition: none; }
-    .menu-inner { transition: none; transform: none; }
-    .menu-num, .menu-foot { transition: none; opacity: 1; transform: none; }
+    .site-nav,
+    .nav-dd-panel,
+    .mobile-menu,
+    .menu-inner,
+    .menu-fade,
     .burger-line { transition: none; }
+    .menu-inner,
+    .menu-fade { transform: none; opacity: 1; }
   }
 </style>
 
 <script>
-  // Smart-nav scroll behavior — visible at top, hide on scroll-down, show
-  // on scroll-up. rAF-throttled. Respects prefers-reduced-motion.
+  // Smart nav: background once scrolled; hide on scroll-down, show on scroll-up.
   (() => {
     const nav = document.querySelector<HTMLElement>("[data-nav-smart]");
     if (!nav) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    const HIDE_AFTER = 80; // px scrolled before hide-on-down can fire
-    const DELTA = 6; // px change to commit a direction switch
-
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const HIDE_AFTER = 120;
+    const DELTA = 6;
     let lastY = window.scrollY;
     let ticking = false;
 
     const update = () => {
       const y = window.scrollY;
-      const delta = y - lastY;
-
-      if (y < HIDE_AFTER) {
-        nav.dataset.hidden = "false";
-      } else if (delta > DELTA) {
-        nav.dataset.hidden = "true";
-      } else if (delta < -DELTA) {
-        nav.dataset.hidden = "false";
+      nav.dataset.scrolled = String(y > 8);
+      if (!reduce) {
+        const delta = y - lastY;
+        if (y < HIDE_AFTER || delta < -DELTA) nav.dataset.hidden = "false";
+        else if (delta > DELTA && !nav.querySelector("[data-dd][data-open]")) nav.dataset.hidden = "true";
       }
-
       lastY = y;
       ticking = false;
     };
-
+    update();
     window.addEventListener(
       "scroll",
       () => {
@@ -323,51 +389,58 @@ const behanceUrl = "https://www.behance.net/anthonyprofit";
       { passive: true }
     );
   })();
-</script>
 
-<script>
-  // Mobile full-screen menu — open/close + a11y. The CSS (above) does the
-  // animation off `html[data-menu-open]`; this only flips state, locks scroll
-  // (pausing Lenis so the pinned timelines don't scrub underneath), manages
-  // focus (move in on open, trap, restore on close) and closes on Esc / tap.
+  // Services dropdown — click / Enter toggles, Esc or outside click closes.
+  (() => {
+    const dd = document.querySelector<HTMLElement>("[data-dd]");
+    const btn = dd?.querySelector<HTMLButtonElement>("[data-dd-toggle]");
+    if (!dd || !btn) return;
+    const set = (open: boolean) => {
+      dd.toggleAttribute("data-open", open);
+      btn.setAttribute("aria-expanded", String(open));
+    };
+    btn.addEventListener("click", () => set(!dd.hasAttribute("data-open")));
+    document.addEventListener("click", (e) => {
+      if (!dd.contains(e.target as Node)) set(false);
+    });
+    dd.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        set(false);
+        btn.focus();
+      }
+    });
+    dd.addEventListener("focusout", (e) => {
+      if (!dd.contains(e.relatedTarget as Node)) set(false);
+    });
+  })();
+
+  // Full-screen menu — open/close, focus trap, Esc, close on link tap.
   (() => {
     const root = document.documentElement;
     const toggle = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
     const menu = document.querySelector<HTMLElement>("[data-mobile-menu]");
     if (!toggle || !menu) return;
     const closeBtn = menu.querySelector<HTMLButtonElement>("[data-menu-close]");
-    const lenis = () => window.__lenis;
-
     const focusables = (): HTMLElement[] =>
-      Array.from(
-        menu.querySelectorAll<HTMLElement>("a[href], button:not([disabled])")
-      ).filter((el) => el.offsetParent !== null || el === closeBtn);
+      Array.from(menu.querySelectorAll<HTMLElement>("a[href], button:not([disabled])"));
 
     let open = false;
     const setOpen = (v: boolean): void => {
       if (v === open) return;
       open = v;
       root.dataset.menuOpen = v ? "true" : "false";
-      toggle.setAttribute("aria-expanded", v ? "true" : "false");
-      menu.setAttribute("aria-hidden", v ? "false" : "true");
-      if (v) menu.removeAttribute("inert");
-      else menu.setAttribute("inert", "");
-      const l = lenis();
-      if (v) l?.stop?.();
-      else l?.start?.();
-      // Move focus in on open (close button), back to the burger on close.
+      toggle.setAttribute("aria-expanded", String(v));
+      menu.setAttribute("aria-hidden", String(!v));
+      menu.toggleAttribute("inert", !v);
       if (v) (closeBtn ?? focusables()[0])?.focus();
       else toggle.focus();
     };
 
     toggle.addEventListener("click", () => setOpen(true));
     closeBtn?.addEventListener("click", () => setOpen(false));
-    // A tap on any menu link closes the overlay; navigation (or the #contact
-    // capture-scroll in about-scroll.ts) then proceeds on the now-visible page.
     menu.querySelectorAll<HTMLElement>("[data-menu-link]").forEach((a) =>
       a.addEventListener("click", () => setOpen(false))
     );
-
     document.addEventListener("keydown", (e) => {
       if (!open) return;
       if (e.key === "Escape") {
@@ -377,7 +450,6 @@ const behanceUrl = "https://www.behance.net/anthonyprofit";
       }
       if (e.key === "Tab") {
         const f = focusables();
-        if (!f.length) return;
         const first = f[0];
         const last = f[f.length - 1];
         if (e.shiftKey && document.activeElement === first) {
@@ -389,10 +461,7 @@ const behanceUrl = "https://www.behance.net/anthonyprofit";
         }
       }
     });
-
-    // Safety: if the viewport grows to desktop while open (rotation / resize),
-    // close so the overlay (display:none at ≥640px) can't trap state.
-    window.matchMedia("(min-width: 640px)").addEventListener("change", (m) => {
+    window.matchMedia("(min-width: 1024px)").addEventListener("change", (m) => {
       if (m.matches) setOpen(false);
     });
   })();

@@ -12,6 +12,8 @@
 // the 404 pages) falls back to the site-wide i18n defaults.
 
 import type { Lang } from "./ui";
+import { DELAY, LOWEST_PRICE, STARTING_PRICE, formatPrice } from "~/lib/facts";
+import type { ServiceId } from "~/lib/service-pages";
 
 export interface RouteMeta {
   /** Counterpart-locale path — powers hreflang + the language switcher. */
@@ -29,6 +31,12 @@ export interface RouteMeta {
 }
 
 const SITE = "Anthony Profit";
+// Lowest entry price, quoted in the home descriptions.
+const LOWEST_FR = formatPrice(LOWEST_PRICE, "fr");
+const LOWEST_EN = formatPrice(LOWEST_PRICE, "en");
+// Starting price of one service, for its meta description.
+const fr = (id: ServiceId): string => formatPrice(STARTING_PRICE[id] ?? 0, "fr");
+const en = (id: ServiceId): string => formatPrice(STARTING_PRICE[id] ?? 0, "en");
 
 export const routes: Record<string, RouteMeta> = {
   // ---- FR ----
@@ -36,16 +44,16 @@ export const routes: Record<string, RouteMeta> = {
     lang: "fr",
     alt: "/en/",
     pageType: "WebPage",
-    title: `${SITE} — Freelance développeur web, apps & IA, SEO & brand design`,
+    title: `Freelance web à Nice : sites, IA, SEO & GEO | ${SITE}`,
     description:
-      "Freelance développeur web, apps & IA, SEO et brand design. Sites et applications sur-mesure pour PME, B2B et marques créatives. 8 ans d'expérience. Disponible Q4 2026.",
+      `Designer-développeur freelance à Nice : sites sur-mesure, outils et IA, SEO & GEO. Votre site trouvé sur Google et recommandé par ChatGPT. Dès ${LOWEST_FR}.`,
   },
   "/a-propos/": {
     lang: "fr",
     alt: "/en/about/",
     crumb: "À propos",
     pageType: "AboutPage",
-    title: `À propos — Anthony Profit, freelance web & SEO depuis 2018`,
+    title: `À propos de moi | Anthony Profit, freelance web à Nice`,
     description:
       "Designer et développeur freelance sur la Côte d'Azur. Mon parcours, ma méthode design → code → SEO, et mes engagements pour des sites qui durent et se font trouver.",
   },
@@ -90,11 +98,11 @@ export const routes: Record<string, RouteMeta> = {
   "/blog/": {
     lang: "fr",
     alt: "/en/blog/",
-    crumb: "Journal",
+    crumb: "Guides",
     pageType: "WebPage",
-    title: `Blog SEO, GEO & développement web | Anthony Profit`,
+    title: `Guides SEO & GEO : Nice, Cannes, Monaco | Anthony Profit`,
     description:
-      "Articles et méthodes sur le SEO, le GEO (optimisation pour ChatGPT, Perplexity & les AI Overviews) et la création de sites web sur-mesure. Par Anthony Profit, Nice.",
+      "Guides concrets sur le référencement local, le GEO (ChatGPT, Perplexity, AI Overviews) et ChatGPT Ads, pour les entreprises de Nice, Cannes et Monaco.",
   },
 
   // ---- FR · services ----
@@ -113,7 +121,7 @@ export const routes: Record<string, RouteMeta> = {
     crumb: "Création de site internet",
     title: `Création de site internet sur-mesure à Nice | Anthony Profit`,
     description:
-      "Création de site internet sur-mesure à Nice : design, développement Astro/React et performance. Sites rapides, accessibles, sans template. Devis sur brief.",
+      `Création de site internet sur-mesure à Nice : design, code Astro/React, rapide et bien référencé. Site une page dès ${fr("web")}, réponse sous 48 h.`,
   },
   "/seo-geo/": {
     lang: "fr",
@@ -121,7 +129,7 @@ export const routes: Record<string, RouteMeta> = {
     crumb: "SEO & GEO",
     title: `Consultant SEO, GEO & ChatGPT Ads à Nice | Anthony Profit`,
     description:
-      "SEO et GEO à Nice : audit technique, Schema.org, llms.txt et campagnes ChatGPT Ads. Être trouvé sur Google et cité par ChatGPT, Perplexity et les AI Overviews.",
+      `SEO et GEO à Nice : être trouvé sur Google et cité par ChatGPT. Audit de visibilité dès ${fr("seo")}, campagnes ChatGPT Ads, Schema.org, llms.txt.`,
   },
   "/identite-de-marque/": {
     lang: "fr",
@@ -129,7 +137,7 @@ export const routes: Record<string, RouteMeta> = {
     crumb: "Identité de marque",
     title: `Identité visuelle & de marque à Nice | Anthony Profit`,
     description:
-      "Identité visuelle à Nice : logo, brand system, typographie et déclinaisons web, print et social. Une image cohérente qui rend votre marque crédible.",
+      `Identité visuelle à Nice : logo, charte, typographie et déclinaisons web, print et réseaux. Logo et mini-charte dès ${fr("brand")}, offerts avec votre site.`,
   },
   "/outils-applications-ia/": {
     lang: "fr",
@@ -137,7 +145,7 @@ export const routes: Record<string, RouteMeta> = {
     crumb: "Outils, apps & IA",
     title: `Outils, applications & IA sur-mesure à Nice | Anthony Profit`,
     description:
-      "Outils métier, applications web et mobiles et IA intégrée (Claude, OpenAI) près de Nice. Automatisations et API pour gagner du temps. Devis sur brief.",
+      `Outils métier, apps web et mobiles, IA intégrée (Claude, OpenAI) et automatisations près de Nice. Premier outil dès ${fr("apps")}, livré en ${DELAY.appsStarter.fr}.`,
   },
 
   // ---- FR · études de cas ----
@@ -187,16 +195,16 @@ export const routes: Record<string, RouteMeta> = {
     lang: "en",
     alt: "/",
     pageType: "WebPage",
-    title: `${SITE} — Freelance web developer, apps & AI, SEO & brand design`,
+    title: `Web freelancer in Nice: sites, AI, SEO & GEO | ${SITE}`,
     description:
-      "Freelance web developer, apps & AI, SEO and brand design. Custom websites and apps for SMBs, B2B and creative brands. 8 years of experience. Available Q4 2026.",
+      `Freelance designer & developer in Nice: custom websites, tools and AI, SEO & GEO. Your site found on Google and recommended by ChatGPT. From ${LOWEST_EN}.`,
   },
   "/en/about/": {
     lang: "en",
     alt: "/a-propos/",
     crumb: "About",
     pageType: "AboutPage",
-    title: `About — Anthony Profit, freelance web & SEO since 2018`,
+    title: `About me | Anthony Profit, freelance web in Nice`,
     description:
       "Freelance designer & developer on the French Riviera. My background, my design → code → SEO method, and how I build sites that last and get found.",
   },
@@ -241,11 +249,11 @@ export const routes: Record<string, RouteMeta> = {
   "/en/blog/": {
     lang: "en",
     alt: "/blog/",
-    crumb: "Journal",
+    crumb: "Guides",
     pageType: "WebPage",
-    title: `Blog: SEO, GEO & web development | Anthony Profit`,
+    title: `SEO & GEO guides: Nice, Cannes, Monaco | Anthony Profit`,
     description:
-      "Articles and playbooks on SEO, GEO (optimization for ChatGPT, Perplexity & AI Overviews) and custom web development. By Anthony Profit, French Riviera.",
+      "Practical guides on local SEO, GEO (ChatGPT, Perplexity, AI Overviews) and ChatGPT Ads for businesses in Nice, Cannes and Monaco on the French Riviera.",
   },
 
   // ---- EN · services ----
@@ -264,7 +272,7 @@ export const routes: Record<string, RouteMeta> = {
     crumb: "Web development",
     title: `Custom web development in Nice | Anthony Profit`,
     description:
-      "Custom website development near Nice: design, Astro/React development and performance. Fast, accessible sites, no templates. Quoted on a written brief.",
+      `Custom website design and development near Nice: Astro/React, fast and search-ready. One-page site from ${en("web")}, reply within 2 business days.`,
   },
   "/en/seo-geo/": {
     lang: "en",
@@ -272,7 +280,7 @@ export const routes: Record<string, RouteMeta> = {
     crumb: "SEO & GEO",
     title: `SEO, GEO & ChatGPT Ads consultant in Nice | Anthony Profit`,
     description:
-      "SEO and GEO near Nice: technical audit, Schema.org, llms.txt and ChatGPT Ads campaigns. Get found on Google and cited by ChatGPT, Perplexity and AI Overviews.",
+      `SEO and GEO near Nice: get found on Google and cited by ChatGPT. Visibility audit from ${en("seo")}, ChatGPT Ads campaigns, Schema.org, llms.txt.`,
   },
   "/en/brand-design/": {
     lang: "en",
@@ -280,7 +288,7 @@ export const routes: Record<string, RouteMeta> = {
     crumb: "Brand identity",
     title: `Brand identity & visual design in Nice | Anthony Profit`,
     description:
-      "Brand identity design on the French Riviera: logo, brand system, typography and web/print/social applications. A coherent image that makes your brand credible.",
+      `Brand identity on the French Riviera: logo, style guide, typography and web, print and social applications. Logo and mini guide from ${en("brand")}, free with your website.`,
   },
   "/en/apps-ai-tools/": {
     lang: "en",
@@ -288,7 +296,7 @@ export const routes: Record<string, RouteMeta> = {
     crumb: "Tools, apps & AI",
     title: `Custom tools, apps & AI development | Anthony Profit`,
     description:
-      "Business tools, web and mobile apps and built-in AI (Claude, OpenAI) near Nice. Automations and API integrations that save your team time. Quoted on a brief.",
+      `Business tools, web and mobile apps, built-in AI (Claude, OpenAI) and automations near Nice. First tool from ${en("apps")}, delivered in ${DELAY.appsStarter.en}.`,
   },
 
   // ---- EN · case studies ----
