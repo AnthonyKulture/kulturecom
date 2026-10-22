@@ -61,7 +61,7 @@ export default defineConfig({
       // TAG_INDEX_MIN posts (src/lib/blog.ts), and even then they mostly repeat
       // the blog index — internal links handle their discovery instead.
       filter: (page) =>
-        !/\/404\/?$/.test(page) && !/\/blog\/tag\//.test(page) && !/\/platine\/?$/.test(page),
+        !/\/404\/?$/.test(page) && !/\/blog\/tag\//.test(page),
       serialize(item) {
         const date = LASTMOD.get(new URL(item.url).pathname);
         if (date) item.lastmod = date;
