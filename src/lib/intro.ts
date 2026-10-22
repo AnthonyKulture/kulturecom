@@ -140,7 +140,15 @@ export function runIntro(): void {
           el.dataset.introText !== undefined ? textRect(el) : el.dataset.introRotate ? tiltedRect(el) : el.getBoundingClientRect();
         return { el, label, rect };
       })
-      .filter((b) => b.rect.width > 0 && b.rect.height > 0 && b.rect.top < H && b.rect.bottom > 0);
+      .filter(
+        (b) =>
+          b.rect.width > 0 &&
+          b.rect.height > 0 &&
+          b.rect.top < H &&
+          b.rect.bottom > 0 &&
+          // Hidden but laid out (e.g. the home doors before their reveal).
+          getComputedStyle(b.el).visibility !== "hidden",
+      );
 
     boxes.forEach((b, i) => {
       const r = b.rect;

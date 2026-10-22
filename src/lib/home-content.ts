@@ -40,6 +40,9 @@ export interface HomeContent {
   h1: [string, string];
   sub: string;
   doorsLabel: string;
+  /** Hero button that reveals the four doors; hint shown next to it. */
+  doorsCta: string;
+  doorsHint: string;
   doors: Door[];
   trustedBy: string;
   pillars: { word: string; body: string }[];
@@ -116,14 +119,16 @@ export function getHomeContent(lang: Lang): HomeContent {
   if (fr(lang)) {
     return {
       kicker: "Designer & développeur freelance à Nice",
-      h1: ["Votre site, trouvé sur Google", "et recommandé par ChatGPT."],
-      sub: "Je conçois, code et référence votre site ou votre outil. Un seul interlocuteur, du design jusqu'aux réponses des IA.",
+      h1: ["Des sites sur-mesure,", "recommandés par ChatGPT."],
+      sub: "Je dessine et je code chaque site pour votre marque, puis je travaille sa visibilité sur Google et dans les réponses des IA.",
       doorsLabel: "Vous voulez…",
+      doorsCta: "Choisir mon projet",
+      doorsHint: "4 services · dès {price}",
       doors: [
         { id: "seo", title: "Être trouvé sur Google et cité par les IA", desc: "SEO, GEO, ChatGPT Ads" },
-        { id: "web", title: "Créer ou refaire mon site", desc: "Sur-mesure, rapide, bien référencé" },
-        { id: "apps", title: "Gagner du temps avec l'IA", desc: "Outils, apps, automatisations" },
-        { id: "brand", title: "Lancer ou moderniser ma marque", desc: "Logo, identité, charte" },
+        { id: "web", title: "Créer ou refaire mon site", desc: "Design et code sur-mesure" },
+        { id: "apps", title: "Gagner du temps avec l'IA", desc: "Outils métier, apps et automatisations" },
+        { id: "brand", title: "Lancer ou moderniser ma marque", desc: "Logo et charte graphique" },
       ],
       trustedBy: "Ils m'ont confié leur image et leur visibilité",
       pillarsTitle: "Un seul interlocuteur à Nice, du design jusqu'aux réponses des IA.",
@@ -192,14 +197,16 @@ export function getHomeContent(lang: Lang): HomeContent {
   }
   return {
     kicker: "Freelance designer & developer in Nice",
-    h1: ["Your website, found on Google", "and recommended by ChatGPT."],
-    sub: "I design, build and rank your website or tool. One point of contact, from design to AI answers.",
+    h1: ["Custom websites,", "recommended by ChatGPT."],
+    sub: "I design and code every site for your brand, then work on its visibility on Google and in AI answers.",
     doorsLabel: "You want to…",
+    doorsCta: "Choose your project",
+    doorsHint: "4 services · from {price}",
     doors: [
       { id: "seo", title: "Get found on Google and cited by AI", desc: "SEO, GEO, ChatGPT Ads" },
-      { id: "web", title: "Build or rebuild my website", desc: "Custom, fast, search-ready" },
-      { id: "apps", title: "Save time with AI", desc: "Tools, apps, automations" },
-      { id: "brand", title: "Launch or refresh my brand", desc: "Logo, identity, guidelines" },
+      { id: "web", title: "Build or rebuild my website", desc: "Custom design and code" },
+      { id: "apps", title: "Save time with AI", desc: "Business tools, apps and automations" },
+      { id: "brand", title: "Launch or refresh my brand", desc: "Logo and style guide" },
     ],
     trustedBy: "Brands that trusted me with their image and visibility",
     pillarsTitle: "One point of contact in Nice, from design to AI answers.",
@@ -276,7 +283,7 @@ export function getFormContent(lang: Lang): FormContent {
       back: "Retour",
       needQ: "De quoi avez-vous besoin ?",
       needs: [
-        { value: "seo", label: "Être trouvé sur Google et cité par les IA" },
+        { value: "seo", label: "Être trouvé sur Google et les IA" },
         { value: "web", label: "Créer ou refaire mon site" },
         { value: "apps", label: "Gagner du temps avec l'IA" },
         { value: "brand", label: "Lancer ou moderniser ma marque" },

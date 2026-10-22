@@ -51,8 +51,10 @@ const faqLd = {
       ))}
     </ol>
 
-    <div class="mt-12 overflow-x-auto md:mt-20">
-      <table class="compare w-full min-w-[640px] border-collapse text-left text-[16px] md:text-[17px]">
+    {/* Phones: each criterion stacks its three answers (no sideways scroll);
+        from md up, the usual table. */}
+    <div class="mt-12 md:mt-20 md:overflow-x-auto">
+      <table class="compare w-full border-collapse text-left text-[16px] md:min-w-[640px] md:text-[17px]">
         <caption class="mb-4 text-left font-lead text-[22px] text-[var(--color-ink)] md:text-[26px]">{c.compare.caption}</caption>
         <thead>
           <tr>
@@ -65,9 +67,9 @@ const faqLd = {
           {c.compare.rows.map((row) => (
             <tr class="border-t border-[var(--color-ink)]/12">
               <th scope="row" class="px-4 py-4 font-medium">{row[0]}</th>
-              <td class="is-me px-4 py-4 font-medium">{row[1]}</td>
-              <td class="px-4 py-4 text-[var(--color-ink-muted)]">{row[2]}</td>
-              <td class="px-4 py-4 text-[var(--color-ink-muted)]">{row[3]}</td>
+              <td data-label={c.compare.cols[1]} class="is-me px-4 py-4 font-medium">{row[1]}</td>
+              <td data-label={c.compare.cols[2]} class="px-4 py-4 text-[var(--color-ink-muted)]">{row[2]}</td>
+              <td data-label={c.compare.cols[3]} class="px-4 py-4 text-[var(--color-ink-muted)]">{row[3]}</td>
             </tr>
           ))}
         </tbody>
@@ -204,6 +206,57 @@ const faqLd = {
   }
   .compare tbody tr:last-child .is-me {
     border-radius: 0;
+  }
+  @media (max-width: 767px) {
+    .compare,
+    .compare caption,
+    .compare tbody,
+    .compare tr,
+    .compare th,
+    .compare td {
+      display: block;
+    }
+    /* The column names move into each answer (data-label). */
+    .compare thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+    .compare tbody tr {
+      padding: 20px 0 16px;
+    }
+    .compare tbody th {
+      padding: 0 0 10px;
+      font-family: var(--font-label);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-ink);
+    }
+    .compare tbody td {
+      padding: 10px 14px;
+    }
+    .compare tbody td::before {
+      content: attr(data-label);
+      display: block;
+      margin-bottom: 2px;
+      font-family: var(--font-label);
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-ink-muted);
+    }
+    .compare tbody td.is-me {
+      border-left: 2px solid var(--color-accent);
+    }
+    .compare tbody td.is-me::before {
+      color: var(--color-accent);
+    }
   }
 
   .work-card {

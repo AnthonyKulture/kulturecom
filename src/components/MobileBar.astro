@@ -101,13 +101,38 @@ const contactHref = fr ? "/contact/" : "/en/contact/";
   }
 
   // "Démarrer un projet" links go to the page's own contact block when there
-  // is one (home, services, case studies) instead of loading /contact/.
+  // is one (home, services, case studies) instead of loading /contact/; so do
+  // the in-page "#contact" buttons. The block lands centred on screen, or just
+  // under the menu when it is taller than the screen.
+  const stillMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const goToContact = (contact: HTMLElement, smooth: boolean): void => {
+    const rects = [...contact.children]
+      .filter((c): c is HTMLDivElement => c instanceof HTMLDivElement)
+      .map((c) => c.getBoundingClientRect());
+    const top = Math.min(...rects.map((r) => r.top)) + window.scrollY;
+    const height = Math.max(...rects.map((r) => r.bottom)) + window.scrollY - top;
+    const at = (nav: number): number => {
+      const room = window.innerHeight - nav;
+      return height <= room ? top - nav - (room - height) / 2 : top - nav - 24;
+    };
+    // Scrolling down hides the menu; scrolling up (or without motion) shows it.
+    let y = at(0);
+    if (y < window.scrollY || stillMotion) {
+      y = at(document.querySelector("[data-nav-smart]")?.getBoundingClientRect().height ?? 0);
+    }
+    window.scrollTo({ top: Math.max(0, y), behavior: smooth && !stillMotion ? "smooth" : "auto" });
+  };
   document.addEventListener("click", (e) => {
-    const link = (e.target as HTMLElement).closest<HTMLAnchorElement>("[data-to-contact]");
+    const link = (e.target as HTMLElement).closest<HTMLAnchorElement>('[data-to-contact], a[href="#contact"]');
     const contact = document.getElementById("contact");
     if (!link || !contact) return;
     e.preventDefault();
-    contact.scrollIntoView({ behavior: "smooth", block: "start" });
+    goToContact(contact, true);
     history.replaceState(null, "", "#contact");
   });
+  // Arriving from another page on …#contact: same placement once laid out.
+  if (location.hash === "#contact") {
+    const contact = document.getElementById("contact");
+    if (contact) window.addEventListener("load", () => goToContact(contact, false), { once: true });
+  }
 </script>

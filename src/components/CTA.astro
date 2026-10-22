@@ -47,8 +47,9 @@ const clientStrings = {
   <div class="mx-auto w-full max-w-[var(--container-wide)]">
     <Eyebrow label={lang === "fr" ? "Dernière planche · Contact" : "Last sheet · Contact"} class="mb-8 md:mb-10" />
   </div>
-  <div class="mx-auto grid w-full max-w-[var(--container-wide)] gap-10 lg:grid-cols-12 lg:gap-14">
-    <div class="lg:col-span-5">
+  {/* 30 / 70: the form gets most of the width. */}
+  <div class="mx-auto grid w-full max-w-[var(--container-wide)] gap-10 lg:grid-cols-[3fr_7fr] lg:gap-14">
+    <div>
       <Heading id="contact-title" class="font-display text-[clamp(30px,3.6vw,52px)] leading-[1.1] text-[var(--color-ink)]">
         <span class="block">{f.title[0]}</span>
         <span class="block text-[var(--color-ink-muted)]">{f.title[1]}</span>
@@ -63,7 +64,7 @@ const clientStrings = {
       </div>
     </div>
 
-    <div class="lg:col-span-7">
+    <div>
       <form
         data-lead-form
         data-need={need}
@@ -89,8 +90,8 @@ const clientStrings = {
         <fieldset data-step="1" class="lf-step">
           <legend class="lf-q">{f.needQ}</legend>
           <div class="lf-chips">
-            {f.needs.map((n) => (
-              <label class="lf-chip">
+            {f.needs.map((n, i) => (
+              <label class="lf-chip" style={`--n:${i}`}>
                 <input type="radio" name="need" value={n.value} checked={need === n.value} />
                 <span>{n.label}</span>
               </label>
@@ -245,19 +246,36 @@ const clientStrings = {
     letter-spacing: -0.015em;
     line-height: 1.2;
   }
+  /* One choice per row, all the same height (the tallest one sets it). */
   .lf-chips {
     display: grid;
+    grid-auto-rows: 1fr;
     gap: 8px;
-  }
-  @media (min-width: 640px) {
-    .lf-chips {
-      grid-template-columns: 1fr 1fr;
-    }
   }
   .lf-chip {
     position: relative;
     display: block;
     cursor: pointer;
+  }
+  /* The step 1 choices come in one by one when the form scrolls into view
+     (only once the script has armed it: visible without JS). */
+  .lf-chips[data-chips-wait] .lf-chip {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  .lf-chips[data-chips-in] .lf-chip {
+    animation: chip-in 0.6s var(--ease-power3) both;
+    animation-delay: calc(var(--n, 0) * 90ms);
+  }
+  @keyframes chip-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
   .lf-chip input {
     position: absolute;
@@ -268,6 +286,7 @@ const clientStrings = {
   .lf-chip span {
     display: flex;
     align-items: center;
+    height: 100%;
     min-height: 52px;
     padding: 12px 16px;
     border: 1px solid var(--color-border);
@@ -431,4 +450,25 @@ const clientStrings = {
 <script>
   import { initLeadForms } from "~/lib/lead-form";
   initLeadForms();
+
+  // Step 1 choices come in one by one when the form reaches the screen. The
+  // form is observed, not the choices: on a service page the form opens on
+  // step 2 and the choices only show after "Back".
+  if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.querySelectorAll<HTMLFormElement>("[data-lead-form]").forEach((form) => {
+      const chips = form.querySelector<HTMLElement>(".lf-chips");
+      if (!chips) return;
+      chips.setAttribute("data-chips-wait", "");
+      const io = new IntersectionObserver(
+        ([e]) => {
+          if (!e.isIntersecting) return;
+          io.disconnect();
+          chips.removeAttribute("data-chips-wait");
+          chips.setAttribute("data-chips-in", "");
+        },
+        { threshold: 0.25 },
+      );
+      io.observe(form);
+    });
+  }
 </script>
