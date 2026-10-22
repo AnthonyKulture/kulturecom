@@ -246,11 +246,22 @@ const clientStrings = {
     letter-spacing: -0.015em;
     line-height: 1.2;
   }
-  /* One choice per row, all the same height (the tallest one sets it). */
+  /* Choices: one column on a narrow form, two from 600px wide, all the same
+     height (the tallest sets it). The text size follows the form's width so
+     the longest choice stays on one line, down to 13px (one column) or 14px
+     (two); below that it may wrap. */
+  .lead-form {
+    container-type: inline-size;
+  }
   .lf-chips {
     display: grid;
     grid-auto-rows: 1fr;
     gap: 8px;
+  }
+  @container (min-width: 600px) {
+    .lf-chips {
+      grid-template-columns: 1fr 1fr;
+    }
   }
   .lf-chip {
     position: relative;
@@ -293,12 +304,18 @@ const clientStrings = {
     border-radius: 0;
     background: #ffffff;
     font-size: 16px;
+    font-size: clamp(13px, calc(5.4cqi - 2px), 16px);
     font-weight: 500;
     transition:
       background-color 0.2s var(--ease-power3),
       color 0.2s var(--ease-power3),
       border-color 0.2s var(--ease-power3),
       transform 0.2s var(--ease-power3);
+  }
+  @container (min-width: 600px) {
+    .lf-chip span {
+      font-size: clamp(14px, calc(2.7cqi - 2.2px), 16px);
+    }
   }
   .lf-chip:hover span {
     border-color: color-mix(in srgb, var(--color-accent) 50%, transparent);

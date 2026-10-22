@@ -283,7 +283,7 @@ export function getFormContent(lang: Lang): FormContent {
       back: "Retour",
       needQ: "De quoi avez-vous besoin ?",
       needs: [
-        { value: "seo", label: "Être trouvé sur Google et les IA" },
+        { value: "seo", label: "Être trouvé sur Google et cité par les IA" },
         { value: "web", label: "Créer ou refaire mon site" },
         { value: "apps", label: "Gagner du temps avec l'IA" },
         { value: "brand", label: "Lancer ou moderniser ma marque" },
