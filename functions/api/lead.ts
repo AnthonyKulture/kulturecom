@@ -123,14 +123,26 @@ export async function onRequestPost({ request, env }: { request: Request; env: E
       textContent: lines.join("\n"),
     }),
   });
-  if (!res.ok) return reply(502, isJson, "send_failed");
-  return reply(200, isJson);
+  // Brevo's answer goes to the Cloudflare logs (deployment → Functions →
+  // real-time logs); its message id is returned so a lead can be found in
+  // Brevo → Transactional → Logs.
+  const body = await res.text();
+  if (!res.ok) {
+    console.error("brevo", res.status, body.slice(0, 500));
+    return reply(502, isJson, "send_failed");
+  }
+  console.log("brevo", res.status, body.slice(0, 200));
+  let id: string | undefined;
+  try {
+    id = (JSON.parse(body) as { messageId?: string }).messageId;
+  } catch {}
+  return reply(200, isJson, undefined, id);
 }
 
 /** JSON for the scripted form; a minimal page for a no-JS form post. */
-function reply(status: number, isJson: boolean, error?: string): Response {
+function reply(status: number, isJson: boolean, error?: string, id?: string): Response {
   if (isJson) {
-    return new Response(JSON.stringify(error ? { ok: false, error } : { ok: true }), {
+    return new Response(JSON.stringify(error ? { ok: false, error } : { ok: true, ...(id && { id }) }), {
       status,
       headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" },
     });
