@@ -69,7 +69,7 @@ const isCurrent = (href: string): boolean => path === href || (href !== homeHref
     aria-label={fr ? "Navigation principale" : "Main navigation"}
   >
     <a href={homeHref} aria-label="Anthony Profit" data-intro-box="LOGO" class="inline-flex shrink-0 items-baseline text-[var(--color-ink)] no-underline">
-      <span class="font-display text-[21px] leading-none tracking-[-0.02em] max-[379px]:text-[18px] md:text-[23px]">Anthony Profit</span>
+      <span class="font-display text-[21px] leading-none tracking-[-0.02em] max-[379px]:text-[18px] md:text-[23px]">Anthony<span aria-hidden="true" class="mx-[0.2em] inline-block size-[0.22em] rounded-full bg-[var(--color-accent)] align-[0.14em]"></span>Profit</span>
     </a>
 
     <div data-intro-box="NAV" class="hidden items-center gap-7 lg:flex">
@@ -139,7 +139,7 @@ const isCurrent = (href: string): boolean => path === href || (href !== homeHref
 >
   <div class="flex shrink-0 items-center justify-between px-4 py-3 sm:px-6">
     <a href={homeHref} data-menu-link aria-label="Anthony Profit" class="inline-flex items-baseline no-underline">
-      <span class="font-display text-[21px] leading-none tracking-[-0.02em]">Anthony Profit</span>
+      <span class="font-display text-[21px] leading-none tracking-[-0.02em]">Anthony<span aria-hidden="true" class="mx-[0.2em] inline-block size-[0.22em] rounded-full bg-[var(--color-accent)] align-[0.14em]"></span>Profit</span>
     </a>
     <button type="button" data-menu-close aria-label={closeLabel} class="burger burger--close grid h-10 w-7 place-items-center">
       <span class="burger-box" aria-hidden="true">
