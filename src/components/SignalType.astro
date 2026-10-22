@@ -1,0 +1,156 @@
+---
+// Neon-sign word: letters start as a hairline outline, then strike on one at a
+// time in random order, each flickering a few times with a brief blue flash
+// before staying lit. Once lit, the pointer makes nearby
+// letters stutter, a click powers the word down in a wave from the click point
+// and relights it, and lit letters occasionally drop out. Native take on the
+// "Signal Type" effect (no React, no dependency).
+// Without JS or with reduced motion, the word is simply shown lit.
+interface Props {
+  text: string;
+  class?: string;
+}
+
+const { text, class: className = "" } = Astro.props;
+const letters = [...text];
+---
+
+<span class:list={["signal", className]} data-signal aria-label={text} role="img">
+  {letters.map((ch) => (
+    <span class="signal-ch" aria-hidden="true">{ch === " " ? " " : ch}</span>
+  ))}
+</span>
+
+<script>
+  const FLICKERS = 3; // flickers before a letter stays lit
+  const STAGGER = 45; // ms between two letters striking on
+  const DELAY = 150; // ms before the first letter
+  const INSTABILITY = 0.3; // chance per tick that a lit letter drops out
+  const RADIUS = 90; // px, pointer interference radius
+
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+  const rand = (a: number, b: number) => a + Math.random() * (b - a);
+
+  // One letter: a few on/off blinks, a flash, then steady.
+  async function strike(el: HTMLElement): Promise<void> {
+    for (let i = 0; i < FLICKERS; i++) {
+      el.dataset.lit = "flash";
+      await wait(rand(30, 70));
+      delete el.dataset.lit;
+      await wait(rand(40, 110));
+    }
+    el.dataset.lit = "flash";
+    await wait(120);
+    el.dataset.lit = "on";
+  }
+
+  // Short stutter of an already lit letter.
+  async function stutter(el: HTMLElement): Promise<void> {
+    if (el.dataset.busy || el.dataset.lit !== "on") return;
+    el.dataset.busy = "1";
+    delete el.dataset.lit;
+    await wait(rand(40, 90));
+    el.dataset.lit = "on";
+    await wait(rand(30, 60));
+    delete el.dataset.lit;
+    await wait(rand(40, 80));
+    el.dataset.lit = "on";
+    delete el.dataset.busy;
+  }
+
+  function ignite(word: HTMLElement): Promise<void> {
+    const chars = [...word.querySelectorAll<HTMLElement>(".signal-ch")];
+    const order = chars.map((_, i) => i).sort(() => Math.random() - 0.5);
+    return Promise.all(
+      order.map(async (idx, rank) => {
+        await wait(DELAY + rank * STAGGER);
+        await strike(chars[idx]);
+      }),
+    ).then(() => undefined);
+  }
+
+  function arm(word: HTMLElement): void {
+    const chars = [...word.querySelectorAll<HTMLElement>(".signal-ch")];
+    let ready = false;
+    word.dataset.armed = "";
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return;
+        io.disconnect();
+        ignite(word).then(() => (ready = true));
+      },
+      { rootMargin: "0px 0px -10% 0px" },
+    );
+    io.observe(word);
+
+    // Pointer interference: lit letters near the cursor stutter.
+    word.addEventListener("pointermove", (e) => {
+      if (!ready || e.pointerType !== "mouse") return;
+      for (const el of chars) {
+        const r = el.getBoundingClientRect();
+        const d = Math.hypot(e.clientX - (r.left + r.width / 2), e.clientY - (r.top + r.height / 2));
+        if (d < RADIUS && Math.random() < 0.08) stutter(el);
+      }
+    });
+
+    // Click: power down in a wave from the click point, then relight.
+    word.addEventListener("click", async (e) => {
+      if (!ready) return;
+      ready = false;
+      const dist = chars.map((el) => {
+        const r = el.getBoundingClientRect();
+        return Math.abs(e.clientX - (r.left + r.width / 2));
+      });
+      await Promise.all(
+        chars.map(async (el, i) => {
+          await wait(dist[i] * 0.6);
+          delete el.dataset.lit;
+        }),
+      );
+      await wait(350);
+      await ignite(word);
+      ready = true;
+    });
+
+    // Loose connection: now and then a lit letter drops out.
+    setInterval(() => {
+      if (!ready || document.hidden || Math.random() > INSTABILITY) return;
+      stutter(chars[Math.floor(Math.random() * chars.length)]);
+    }, 2400);
+  }
+
+  if (!reduced && "IntersectionObserver" in window) {
+    document.querySelectorAll<HTMLElement>("[data-signal]").forEach(arm);
+  }
+</script>
+
+<style>
+  .signal {
+    display: inline-block;
+    cursor: default;
+  }
+  .signal-ch {
+    display: inline-block;
+    transition:
+      color 0.06s linear,
+      text-shadow 0.12s linear;
+  }
+  /* Unlit: hairline outline, only once JS has armed the word. */
+  .signal[data-armed] .signal-ch:not([data-lit]) {
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in srgb, var(--color-ink) 28%, transparent);
+  }
+  /* Strike: brief blue flash. */
+  .signal[data-armed] .signal-ch[data-lit="flash"] {
+    color: var(--color-accent);
+    text-shadow:
+      0 0 6px color-mix(in srgb, var(--color-accent) 70%, transparent),
+      0 0 18px color-mix(in srgb, var(--color-accent) 45%, transparent);
+  }
+  /* Lit: plain ink. */
+  .signal[data-armed] .signal-ch[data-lit="on"] {
+    color: var(--color-ink);
+  }
+</style>

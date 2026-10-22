@@ -5,6 +5,7 @@ import Analytics from "~/components/Analytics.astro";
 import Consent from "~/components/Consent.astro";
 import MobileBar from "~/components/MobileBar.astro";
 import CallbackDialog from "~/components/CallbackDialog.astro";
+import GyroscopeCursor from "~/components/GyroscopeCursor.astro";
 import type { Lang } from "~/i18n/ui";
 import { ui } from "~/i18n/ui";
 import { getRoute } from "~/i18n/routes";
@@ -342,5 +343,6 @@ const jsonLd = { "@context": "https://schema.org", "@graph": graph };
     <MobileBar lang={lang} />
     <CallbackDialog lang={lang} />
     <Consent lang={lang} />
+    <GyroscopeCursor />
   </body>
 </html>

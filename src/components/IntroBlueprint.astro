@@ -1,15 +1,16 @@
 ---
-// Blueprint entry animation for the home page (see src/lib/intro.ts), on every
-// load (a refresh starts back at the top). The inline script decides BEFORE
-// first paint whether it plays: not with reduced motion. Nothing renders when
-// it doesn't.
+// Blueprint entry animation for the home page (see src/lib/intro.ts), once per
+// visit (a refresh starts back at the top). The inline script decides BEFORE
+// first paint whether it plays: not with reduced motion, nor when it already
+// played in this tab. Nothing renders when it doesn't.
 ---
 
 <script is:inline>
   (function () {
     try {
       var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if (!reduce) {
+      if (!reduce && sessionStorage.getItem("ap-intro") !== "seen") {
+        sessionStorage.setItem("ap-intro", "seen");
         document.documentElement.classList.add("intro-on");
         // A refresh starts from the top so the drawing lines up with the page.
         if ("scrollRestoration" in history) history.scrollRestoration = "manual";

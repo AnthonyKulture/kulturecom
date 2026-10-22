@@ -40,9 +40,6 @@ export interface HomeContent {
   h1: [string, string];
   sub: string;
   doorsLabel: string;
-  /** Hero button that reveals the four doors; hint shown next to it. */
-  doorsCta: string;
-  doorsHint: string;
   doors: Door[];
   trustedBy: string;
   pillars: { word: string; body: string }[];
@@ -122,8 +119,6 @@ export function getHomeContent(lang: Lang): HomeContent {
       h1: ["Des sites sur-mesure,", "recommandés par ChatGPT."],
       sub: "Je dessine et je code chaque site pour votre marque, puis je travaille sa visibilité sur Google et dans les réponses des IA.",
       doorsLabel: "Vous voulez…",
-      doorsCta: "Choisir mon projet",
-      doorsHint: "4 services · dès {price}",
       doors: [
         { id: "seo", title: "Être trouvé sur Google et cité par les IA", desc: "SEO, GEO, ChatGPT Ads" },
         { id: "web", title: "Créer ou refaire mon site", desc: "Design et code sur-mesure" },
@@ -200,8 +195,6 @@ export function getHomeContent(lang: Lang): HomeContent {
     h1: ["Custom websites,", "recommended by ChatGPT."],
     sub: "I design and code every site for your brand, then work on its visibility on Google and in AI answers.",
     doorsLabel: "You want to…",
-    doorsCta: "Choose your project",
-    doorsHint: "4 services · from {price}",
     doors: [
       { id: "seo", title: "Get found on Google and cited by AI", desc: "SEO, GEO, ChatGPT Ads" },
       { id: "web", title: "Build or rebuild my website", desc: "Custom design and code" },

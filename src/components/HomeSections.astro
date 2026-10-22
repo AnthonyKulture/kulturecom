@@ -4,6 +4,7 @@ import { ui } from "~/i18n/ui";
 import { getHomeContent } from "~/lib/home-content";
 import { caseStudyPath, getCaseStudy } from "~/lib/case-studies";
 import Eyebrow from "~/components/Eyebrow.astro";
+import SignalType from "~/components/SignalType.astro";
 import { GOOGLE_PROFILE } from "~/lib/facts";
 
 // Home body between the hero and the contact block:
@@ -45,7 +46,7 @@ const faqLd = {
     <ol class="mt-10 md:mt-16">
       {c.pillars.map((p) => (
         <li class="grid gap-2 border-t border-[var(--color-ink)]/15 py-6 md:grid-cols-12 md:items-baseline md:gap-8 md:py-9">
-          <span class="font-display text-[clamp(44px,6.5vw,104px)] md:col-span-6">{p.word}</span>
+          <SignalType text={p.word} class="font-display text-[clamp(44px,6.5vw,104px)] md:col-span-6" />
           <p class="max-w-[46ch] text-[16px] leading-[1.55] text-[var(--color-ink-muted)] md:col-span-6 md:text-[18px]">{p.body}</p>
         </li>
       ))}

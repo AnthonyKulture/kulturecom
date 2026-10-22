@@ -146,7 +146,7 @@ export function runIntro(): void {
           b.rect.height > 0 &&
           b.rect.top < H &&
           b.rect.bottom > 0 &&
-          // Hidden but laid out (e.g. the home doors before their reveal).
+          // Laid out but hidden (visibility: hidden) gets no frame.
           getComputedStyle(b.el).visibility !== "hidden",
       );
 

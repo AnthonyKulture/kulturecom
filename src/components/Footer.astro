@@ -28,36 +28,6 @@ const linkedinUrl = "https://www.linkedin.com/in/anthony-profit/";
 const instagramUrl = "https://www.instagram.com/antho_profit/";
 const behanceUrl = "https://www.behance.net/anthonyprofit";
 
-// Wrap letters of `s` in mask spans with a SHUFFLED per-letter
-// transition-delay so the reveal cascades in a random order without any JS
-// at runtime. The shuffle happens once at SSR — same order on every page
-// load until the next build.
-const wrapLettersShuffled = (
-  s: string,
-  baseMs: number = 0,
-  stepMs: number = 70
-): string => {
-  const chars = Array.from(s);
-  const delays = chars.map((_, i) => baseMs + i * stepMs);
-  // Fisher-Yates shuffle of the delays
-  for (let i = delays.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [delays[i], delays[j]] = [delays[j], delays[i]];
-  }
-  return chars
-    .map((c, i) => {
-      const ch = c === " " ? "&nbsp;" : c;
-      return `<span class="footer-letter-mask"><span class="footer-letter-inner" style="transition-delay:${delays[i]}ms">${ch}</span></span>`;
-    })
-    .join("");
-};
-
-// First name letters cascade across ~0.5s (7 letters × 70ms ≈ 490ms span,
-// each with a 0.6s ease) = total ~1.1s for the whole word.
-const firstNameHtml = wrapLettersShuffled("Anthony", 0, 70);
-// Last name starts AFTER the first name is mostly done.
-const lastNameHtml = wrapLettersShuffled("Profit", 500, 60);
-
 const currentYear = "2026";
 const navLabels = lang === "en"
   ? { projects: "WORK", services: "SERVICES", about: "ABOUT", journal: "GUIDES", contact: "CONTACT" }
@@ -183,35 +153,14 @@ const navLabels = lang === "en"
     <div class="mt-16 md:mt-24" />
 
     {/* HUGE NAME */}
-    <h2 class="flex flex-wrap items-baseline gap-x-[0.25em] pb-8 font-display text-[clamp(52px,14vw,210px)] leading-[1.05] tracking-[-0.035em] sm:pb-10 md:pb-12">
-      <span data-footer-name="first" set:html={firstNameHtml} />
-      <span data-footer-name="last" class="whitespace-nowrap" set:html={lastNameHtml} />
+    <h2 data-footer-name class="flex flex-wrap items-baseline gap-x-[0.25em] pb-8 font-display text-[clamp(52px,14vw,210px)] leading-[1.05] tracking-[-0.035em] sm:pb-10 md:pb-12">
+      <span>Anthony</span>
+      <span class="whitespace-nowrap">Profit</span>
     </h2>
   </div>
 </footer>
 
 <style is:global>
-  /* Letter mask reveal — pure CSS transitions, no JS animation library.
-     The inner spans start translated below the mask (invisible), then
-     transition up to their natural position when the footer parent
-     receives `data-name-revealed="true"`. Per-letter transition-delay is
-     inlined on each span in SSR (shuffled for the random reveal order). */
-  .footer-letter-mask {
-    display: inline-block;
-    overflow: hidden;
-    vertical-align: top;
-    padding-bottom: 0.12em;
-  }
-  .footer-letter-inner {
-    display: inline-block;
-    transform: translateY(105%);
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: transform;
-  }
-  [data-site-footer][data-name-revealed="true"] .footer-letter-inner {
-    transform: translateY(0);
-  }
-
   [data-footer-top] {
     opacity: 0;
     transform: translateY(20px);
@@ -224,7 +173,6 @@ const navLabels = lang === "en"
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .footer-letter-inner,
     [data-footer-top] {
       transform: none !important;
       opacity: 1 !important;
@@ -235,22 +183,28 @@ const navLabels = lang === "en"
 
 <noscript>
   <style>
-    .footer-letter-inner { transform: none !important; }
     [data-footer-top] { opacity: 1 !important; transform: none !important; }
   </style>
 </noscript>
 
 <script>
+  import { vaporType } from "~/lib/vapor-type";
+
   // IntersectionObserver-driven reveal. Two-stage:
-  //   1. footer crosses ~50% visibility   → name letters reveal (Anthony +
-  //      PROFIT., each letter has its own SSR-shuffled transition-delay)
+  //   1. footer crosses ~50% visibility   → the name condenses out of vapor
+  //      (canvas, see vapor-type.ts; plain text under reduced motion)
   //   2. footer crosses ~70% visibility   → top items cascade reveal
   //      (was 0.95, but the footer is h-[100lvh]; on mobile the visible viewport
   //       is shorter than lvh when the URL bar shows, so 95% was unreachable and
   //       the links never revealed — only the name. 0.7 is reachable everywhere.)
-  // No GSAP, no ScrollTrigger, no pin. Pure DOM + CSS — no timing conflicts
+  // No GSAP, no ScrollTrigger, no pin. DOM + CSS + one canvas — no timing conflicts
   // with the rest of the page's GSAP work.
   const footer = document.querySelector<HTMLElement>("[data-site-footer]");
+  const name = document.querySelector<HTMLElement>("[data-footer-name]");
+  const vapor =
+    name && !matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? vaporType(name, getComputedStyle(document.documentElement).getPropertyValue("--color-accent"))
+      : null;
   if (footer) {
     let nameRevealed = false;
     let topRevealed = false;
@@ -260,7 +214,7 @@ const navLabels = lang === "en"
         for (const entry of entries) {
           const ratio = entry.intersectionRatio;
           if (!nameRevealed && ratio >= 0.5) {
-            footer.dataset.nameRevealed = "true";
+            vapor?.start();
             nameRevealed = true;
           }
           if (!topRevealed && ratio >= 0.7) {
