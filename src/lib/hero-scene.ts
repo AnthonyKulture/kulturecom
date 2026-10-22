@@ -35,7 +35,7 @@ const WALK = 32; // seconds from birth to walked past, the same for every mounta
 const depth = (p: number) => Z_BIRTH * (Z_PAST / Z_BIRTH) ** p;
 
 /** Small seeded PRNG so server and client draw the same first frame. */
-function rng(seed: number): () => number {
+export function rng(seed: number): () => number {
   let a = seed >>> 0;
   return () => {
     a = (a + 0x6d2b79f5) >>> 0;
