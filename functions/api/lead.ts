@@ -1,12 +1,14 @@
 /**
  * POST /api/lead — contact form and callback requests (Cloudflare Pages
- * Function, deployed with the site). Each lead is e-mailed through Brevo's
- * transactional API; a callback request is flagged [RAPPEL] in the subject so
- * the phone notification stands out.
+ * Function, deployed with the site). Each lead is e-mailed through Resend
+ * (or Brevo when no Resend key is set); a callback request is flagged
+ * [RAPPEL] in the subject so the phone notification stands out.
  *
  * Settings → Variables and secrets (Cloudflare Pages project):
- *   BREVO_API_KEY  secret, Brevo API key (SMTP & API → API keys)
- *   LEAD_FROM      sender verified in Brevo, e.g. site@anthonyprofit.com
+ *   RESEND_API_KEY secret, Resend API key (resend.com → API Keys)
+ *   BREVO_API_KEY  secret, Brevo API key, used only without RESEND_API_KEY
+ *   LEAD_FROM      sender on the domain verified with the provider,
+ *                  e.g. hello@anthonyprofit.com
  *   LEAD_TO        recipient (optional, defaults to contact@kulturecom.fr)
  *
  * Without them the endpoint answers 503 and the form shows its prefilled
@@ -14,6 +16,7 @@
  */
 
 interface Env {
+  RESEND_API_KEY?: string;
   BREVO_API_KEY?: string;
   LEAD_FROM?: string;
   LEAD_TO?: string;
@@ -65,7 +68,7 @@ export async function onRequestPost({ request, env }: { request: Request; env: E
       : !!name && EMAIL_RE.test(email) && (!phone || validPhone(phone));
   if (!valid) return reply(422, isJson, "invalid");
 
-  if (!env.BREVO_API_KEY || !env.LEAD_FROM) return reply(503, isJson, "not_configured");
+  if (!(env.RESEND_API_KEY || env.BREVO_API_KEY) || !env.LEAD_FROM) return reply(503, isJson, "not_configured");
 
   const when = new Intl.DateTimeFormat("fr-FR", {
     timeZone: "Europe/Paris",
@@ -108,33 +111,46 @@ export async function onRequestPost({ request, env }: { request: Request; env: E
       ? `[RAPPEL] ${phone}${name ? ` · ${name}` : ""}`
       : `[Contact] ${NEEDS[need] ?? "Projet"} · ${name}`;
 
-  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
-    method: "POST",
-    headers: {
-      "api-key": env.BREVO_API_KEY,
-      "content-type": "application/json",
-      accept: "application/json",
-    },
-    body: JSON.stringify({
-      sender: { name: "anthonyprofit.com", email: env.LEAD_FROM },
-      to: [{ email: env.LEAD_TO || "contact@kulturecom.fr" }],
-      ...(type === "project" ? { replyTo: { email, name } } : {}),
-      subject,
-      textContent: lines.join("\n"),
-    }),
-  });
-  // Brevo's answer goes to the Cloudflare logs (deployment → Functions →
-  // real-time logs); its message id is returned so a lead can be found in
-  // Brevo → Transactional → Logs.
+  const to = env.LEAD_TO || "contact@kulturecom.fr";
+  const text = lines.join("\n");
+  const provider = env.RESEND_API_KEY ? "resend" : "brevo";
+  const res =
+    provider === "resend"
+      ? await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, "content-type": "application/json" },
+          body: JSON.stringify({
+            from: `anthonyprofit.com <${env.LEAD_FROM}>`,
+            to: [to],
+            ...(type === "project" ? { reply_to: email } : {}),
+            subject,
+            text,
+          }),
+        })
+      : await fetch("https://api.brevo.com/v3/smtp/email", {
+          method: "POST",
+          headers: { "api-key": env.BREVO_API_KEY!, "content-type": "application/json", accept: "application/json" },
+          body: JSON.stringify({
+            sender: { name: "anthonyprofit.com", email: env.LEAD_FROM },
+            to: [{ email: to }],
+            ...(type === "project" ? { replyTo: { email, name } } : {}),
+            subject,
+            textContent: text,
+          }),
+        });
+  // The provider's answer goes to the Cloudflare logs (deployment →
+  // Functions → real-time logs); its message id is returned so a lead can be
+  // traced in the provider's logs.
   const body = await res.text();
   if (!res.ok) {
-    console.error("brevo", res.status, body.slice(0, 500));
+    console.error(provider, res.status, body.slice(0, 500));
     return reply(502, isJson, "send_failed");
   }
-  console.log("brevo", res.status, body.slice(0, 200));
+  console.log(provider, res.status, body.slice(0, 200));
   let id: string | undefined;
   try {
-    id = (JSON.parse(body) as { messageId?: string }).messageId;
+    const json = JSON.parse(body) as { id?: string; messageId?: string };
+    id = json.id ?? json.messageId;
   } catch {}
   return reply(200, isJson, undefined, id);
 }
@@ -156,40 +172,39 @@ function reply(status: number, isJson: boolean, error?: string, id?: string): Re
 }
 
 /**
- * TEMPORARY diagnostic (remove once leads arrive): GET /api/lead?diag[&id=<messageId>]
- * asks Brevo, with the server-side key, which account the key belongs to,
- * whether transactional sending is enabled, and what happened to a message.
- * Addresses are masked; nothing is sent.
+ * TEMPORARY diagnostic (remove once leads arrive): GET /api/lead?diag[&id=<email id>]
+ * asks Resend, with the server-side key, whether the sending domain is
+ * verified and what happened to a given e-mail. Addresses are masked;
+ * nothing is sent. Needs a "Full access" key; a sending-only key answers 401.
  */
 export async function onRequestGet({ request, env }: { request: Request; env: Env }): Promise<Response> {
   const url = new URL(request.url);
   if (!url.searchParams.has("diag")) return new Response(null, { status: 405 });
-  if (!env.BREVO_API_KEY) return Response.json({ configured: false });
+  if (!env.RESEND_API_KEY) return Response.json({ provider: env.BREVO_API_KEY ? "brevo" : null });
   const mask = (e: unknown): string => String(e ?? "").replace(/^(.{2}).*(@.*)$/, "$1•••$2");
-  const brevo = (path: string) =>
-    fetch(`https://api.brevo.com/v3${path}`, { headers: { "api-key": env.BREVO_API_KEY!, accept: "application/json" } }).then(
+  const resend = (path: string) =>
+    fetch(`https://api.resend.com${path}`, { headers: { authorization: `Bearer ${env.RESEND_API_KEY}` } }).then(
       async (r) => ({ status: r.status, body: (await r.json().catch(() => null)) as Record<string, any> | null }),
     );
-  const account = await brevo("/account");
+  const domains = await resend("/domains");
   const id = url.searchParams.get("id");
-  const events = id ? await brevo(`/smtp/statistics/events?days=7&messageId=${encodeURIComponent(id)}`) : null;
+  const email = id ? await resend(`/emails/${encodeURIComponent(id)}`) : null;
   return Response.json(
     {
-      configured: true,
+      provider: "resend",
       from: mask(env.LEAD_FROM),
       to: mask(env.LEAD_TO || "contact@kulturecom.fr"),
-      account: {
-        status: account.status,
-        email: mask(account.body?.email),
-        company: account.body?.companyName,
-        relayEnabled: account.body?.relay?.enabled,
-        plan: account.body?.plan?.map((p: any) => `${p.type}:${p.credits}`),
-        error: account.status >= 300 ? account.body : undefined,
+      domains: {
+        status: domains.status,
+        list: domains.body?.data?.map((d: any) => ({ name: d.name, status: d.status, region: d.region })),
+        error: domains.status >= 300 ? domains.body : undefined,
       },
-      events: events && {
-        status: events.status,
-        list: events.body?.events?.map((e: any) => ({ event: e.event, reason: e.reason, date: e.date, to: mask(e.email) })),
-        error: events.status >= 300 ? events.body : undefined,
+      email: email && {
+        status: email.status,
+        lastEvent: email.body?.last_event,
+        createdAt: email.body?.created_at,
+        to: email.body?.to?.map(mask),
+        error: email.status >= 300 ? email.body : undefined,
       },
     },
     { headers: { "cache-control": "no-store" } },
