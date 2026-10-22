@@ -4,6 +4,7 @@ import { getHomeContent } from "~/lib/home-content";
 import { servicePagePath } from "~/lib/service-pages";
 import { fromPrice } from "~/lib/facts";
 import { CLIENT_LOGOS } from "~/lib/clients";
+import HeroScene from "~/components/HeroScene.astro";
 
 interface Props {
   lang: Lang;
@@ -19,12 +20,19 @@ const AI_NAMES = ["ChatGPT", "Claude", "Gemini", "Perplexity", "Mistral"];
 // The typed word sits in a slot as wide as the longest name, so the title
 // wraps the same way whatever name is on screen.
 const LONGEST = AI_NAMES.reduce((a, b) => (b.length > a.length ? b : a));
+// The four service doors are switched off for now (the hero is being redone
+// around an illustration); set back to true to show them again.
+const SHOW_DOORS = false;
 ---
 
-<section data-home-hero data-intro-hero class="relative flex min-h-[100svh] flex-col px-4 pb-12 pt-[88px] sm:px-6 md:px-12 md:pb-16 md:pt-28">
+<section data-home-hero data-intro-hero class="relative flex min-h-[100svh] flex-col overflow-x-clip px-4 pb-12 pt-[88px] sm:px-6 md:px-12 md:pb-16 md:pt-28">
   {/* Full-height column: title at the top, client logos at the bottom of the
       first screen, the doors (or their button) centred in between. */}
   <div class="mx-auto flex w-full max-w-[var(--container-wide)] flex-1 flex-col">
+    {/* Large screens: text on the left half, the illustration on the right
+        half bleeding to the screen edge. Phones: text, then the illustration. */}
+    <div class="hero-grid">
+    <div class="hero-text">
     {/* The H1 carries who and where ("freelance à Nice", styled as an eyebrow)
         before the promise. Promise: two set lines from md up; on phones the
         sentence flows (balanced). */}
@@ -39,9 +47,16 @@ const LONGEST = AI_NAMES.reduce((a, b) => (b.length > a.length ? b : a));
     <p data-intro-item data-intro-box="COPY" data-intro-text style="--i:3" class="mt-4 max-w-[54ch] text-balance text-[clamp(17px,1.25vw,19px)] leading-[1.5] text-[var(--color-ink-muted)] md:mt-5">
       {c.sub}
     </p>
+    </div>
 
-    {/* The four doors, shown straight away in the middle band of the hero,
-        between the subtitle and the logos. */}
+    {/* Vector scene (HeroScene): a hiker walking a ridge toward the sun while
+        the mountains stream past in depth. Decorative. */}
+    <figure class="hero-visual" aria-hidden="true" data-intro-item data-intro-box="ILLUSTRATION" style="--i:4">
+      <HeroScene />
+    </figure>
+    </div>
+
+    {SHOW_DOORS && (
     <div class="hero-middle">
     <ul data-doors aria-label={c.doorsLabel} class="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
       {c.doors.map((d, n) => (
@@ -122,10 +137,11 @@ const LONGEST = AI_NAMES.reduce((a, b) => (b.length > a.length ? b : a));
       ))}
     </ul>
     </div>
+    )}
 
     {/* Client logos — uniform ink silhouettes in a continuous marquee that
         fades out on both sides; static scrollable row when motion is reduced. */}
-    <div data-intro-item data-intro-box="LOGOS" style="--i:9" class="logo-marquee">
+    <div data-intro-item data-intro-box="LOGOS" style="--i:9" class="logo-marquee mt-6 md:mt-10">
       <ul class="logo-track" aria-label={c.trustedBy}>
         {[...CLIENT_LOGOS, ...CLIENT_LOGOS].map((l, i) => {
           const copy = i >= CLIENT_LOGOS.length;
@@ -404,6 +420,70 @@ const LONGEST = AI_NAMES.reduce((a, b) => (b.length > a.length ? b : a));
       padding-block: 48px;
     }
   }
+  /* ===== Hero layout with the illustration ===== */
+  .hero-grid {
+    position: relative;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
+  /* Phones and tablets: the drawing fills the space between the text and
+     the logos, edge to edge, faded at top and bottom. */
+  .hero-visual {
+    position: relative;
+    flex: 1;
+    min-height: 240px;
+    margin: 24px -16px 0;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 14%, #000 86%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0, #000 14%, #000 86%, transparent 100%);
+  }
+  @media (min-width: 640px) {
+    .hero-visual {
+      margin-inline: -24px;
+    }
+  }
+  @media (min-width: 768px) {
+    .hero-visual {
+      margin-inline: -48px;
+    }
+  }
+  /* Large screens: text on the left half; the drawing takes the right half,
+     from the top of the hero down to the logos, bleeding to the screen edge
+     and melting into the page on its left and bottom edges. */
+  @media (min-width: 1024px) {
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+    }
+    .hero-text {
+      position: relative;
+      z-index: 1;
+      padding-right: 24px;
+    }
+    .hero-grid [data-intro-box="H1"] {
+      font-size: clamp(34px, 3.6vw, 58px);
+    }
+    .hero-visual {
+      position: absolute;
+      top: -48px;
+      bottom: 0;
+      left: 48%;
+      right: calc((100% - 100vw) / 2);
+      margin: 0;
+      min-height: 0;
+      -webkit-mask-image:
+        linear-gradient(to right, transparent 0, #000 24%),
+        linear-gradient(to bottom, transparent 0, #000 12%, #000 86%, transparent 100%);
+      -webkit-mask-composite: source-in;
+      mask-image:
+        linear-gradient(to right, transparent 0, #000 24%),
+        linear-gradient(to bottom, transparent 0, #000 12%, #000 86%, transparent 100%);
+      mask-composite: intersect;
+    }
+  }
+
   /* ===== Typewriter word in the H1 ===== */
   /* The slot keeps the width of the longest name (an invisible pseudo-element,
      so no extra text in the page): the title never rewraps while typing. */
