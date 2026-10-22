@@ -45,7 +45,7 @@ export const CALLBACK = {
  * complete project.
  */
 export const PRICE = {
-  seoAudit: 390, // Audit visibilité Google + IA, 7 days
+  seoAudit: 390, // Audit visibilité Google + IA, 5 days
   seoMonthly: 490, // Suivi mensuel SEO/GEO, per month
   adsLaunch: 490, // Lancement ChatGPT Ads (ad budget excluded)
   webOnePage: 790, // Site une page sur-mesure, 2-3 weeks
