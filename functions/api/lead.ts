@@ -154,3 +154,44 @@ function reply(status: number, isJson: boolean, error?: string, id?: string): Re
   const html = `<!doctype html><html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>${ok ? "Merci" : "Envoi impossible"}</title><body style="margin:0;padding:48px 20px;font:18px/1.5 system-ui,sans-serif;background:#efe9dc;color:#0b0b0b"><p>${text}</p><p><a href="/" style="color:inherit">Retour au site</a></p></body></html>`;
   return new Response(html, { status, headers: { "content-type": "text/html; charset=utf-8" } });
 }
+
+/**
+ * TEMPORARY diagnostic (remove once leads arrive): GET /api/lead?diag[&id=<messageId>]
+ * asks Brevo, with the server-side key, which account the key belongs to,
+ * whether transactional sending is enabled, and what happened to a message.
+ * Addresses are masked; nothing is sent.
+ */
+export async function onRequestGet({ request, env }: { request: Request; env: Env }): Promise<Response> {
+  const url = new URL(request.url);
+  if (!url.searchParams.has("diag")) return new Response(null, { status: 405 });
+  if (!env.BREVO_API_KEY) return Response.json({ configured: false });
+  const mask = (e: unknown): string => String(e ?? "").replace(/^(.{2}).*(@.*)$/, "$1•••$2");
+  const brevo = (path: string) =>
+    fetch(`https://api.brevo.com/v3${path}`, { headers: { "api-key": env.BREVO_API_KEY!, accept: "application/json" } }).then(
+      async (r) => ({ status: r.status, body: (await r.json().catch(() => null)) as Record<string, any> | null }),
+    );
+  const account = await brevo("/account");
+  const id = url.searchParams.get("id");
+  const events = id ? await brevo(`/smtp/statistics/events?days=7&messageId=${encodeURIComponent(id)}`) : null;
+  return Response.json(
+    {
+      configured: true,
+      from: mask(env.LEAD_FROM),
+      to: mask(env.LEAD_TO || "contact@kulturecom.fr"),
+      account: {
+        status: account.status,
+        email: mask(account.body?.email),
+        company: account.body?.companyName,
+        relayEnabled: account.body?.relay?.enabled,
+        plan: account.body?.plan?.map((p: any) => `${p.type}:${p.credits}`),
+        error: account.status >= 300 ? account.body : undefined,
+      },
+      events: events && {
+        status: events.status,
+        list: events.body?.events?.map((e: any) => ({ event: e.event, reason: e.reason, date: e.date, to: mask(e.email) })),
+        error: events.status >= 300 ? events.body : undefined,
+      },
+    },
+    { headers: { "cache-control": "no-store" } },
+  );
+}
