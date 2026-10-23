@@ -1,0 +1,204 @@
+---
+lang: fr
+slug: donnees-structurees-localbusiness-schema-org
+translationKey: schema-localbusiness
+title: "Données structurées LocalBusiness : le guide Schema.org concret pour une entreprise de la Côte d'Azur"
+metaTitle: "Données structurées LocalBusiness : guide"
+description: "Données structurées LocalBusiness : quel type Schema.org choisir, quelles propriétés remplir, un exemple JSON-LD commenté et l'effet réel sur Google et les IA."
+keywords:
+  - données structurées LocalBusiness
+  - schema LocalBusiness
+  - balisage Schema.org entreprise locale
+  - JSON-LD LocalBusiness
+  - données structurées SEO local
+tags:
+  - SEO
+  - Référencement local
+  - GEO
+pillar: seo
+pubDate: 2026-10-23
+draft: false
+---
+
+import ServiceCTA from "~/components/blog/ServiceCTA.astro";
+import Callout from "~/components/blog/Callout.astro";
+
+Les données structurées LocalBusiness sont un bloc de code Schema.org, en général au format JSON-LD, qui décrit votre entreprise locale à Google et aux autres moteurs : nom, adresse, téléphone, horaires, zone desservie, profils officiels. Elles ne font pas monter un site à elles seules, mais elles retirent toute ambiguïté sur qui vous êtes et où vous êtes, ce qui sert à la fois le SEO local et les moteurs IA.
+
+Ce guide part de ce que Google documente réellement, puis passe au concret : quel type choisir, quoi remplir, un exemple commenté pour un commerce niçois, et les cas particuliers de la Côte d'Azur (Monaco, saisonnalité, entreprises sans vitrine).
+
+## Que sont les données structurées LocalBusiness ?
+
+Schema.org est un vocabulaire partagé par les moteurs de recherche pour décrire des choses en langage machine. `LocalBusiness` en est le type dédié aux établissements physiques ou aux entreprises qui servent une zone géographique : un restaurant du cours Saleya, un cabinet dentaire à Cannes, un plombier qui intervient de Menton à Antibes.
+
+Le balisage se place dans le code de la page, sans rien changer à l'affichage. Google [recommande le format JSON-LD](https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data?hl=fr) quand le site le permet : un script isolé dans la page, facile à générer et à maintenir, plutôt que des attributs semés dans le HTML.
+
+Dans sa [documentation LocalBusiness](https://developers.google.com/search/docs/appearance/structured-data/local-business?hl=fr) (mise à jour le 8 septembre 2026), Google ne rend que deux propriétés obligatoires : `name` et `address`. Tout le reste est recommandé : `telephone`, `url`, `geo`, `openingHoursSpecification`, `priceRange`, `menu` et `servesCuisine` pour la restauration. Google précise que ce balisage peut alimenter le panneau d'informations de l'établissement dans Search et Maps.
+
+## Est-ce que ça améliore le classement sur Google ?
+
+Pas directement. Les [règles générales des données structurées](https://developers.google.com/search/docs/appearance/structured-data/sd-policies?hl=fr) disent que Google ne garantit pas leur affichage, et la documentation ne les présente nulle part comme un facteur de classement. Le classement local, lui, repose selon [l'aide Google Business Profile](https://support.google.com/business/answer/7091?hl=fr) sur trois critères : la pertinence, la distance et la proéminence (avis, liens vers votre site, notoriété en ligne).
+
+Leur intérêt est ailleurs. Elles confirment à Google, en langage machine, que le site et la fiche Google parlent du même établissement. Quand l'adresse, le téléphone et les horaires concordent entre le site, le balisage et la fiche, il n'y a rien à deviner. À mon avis, c'est l'une des tâches les plus rentables d'un audit local : une heure de travail, sans risque si le balisage dit la vérité.
+
+## Et pour ChatGPT, Perplexity ou les aperçus IA de Google ?
+
+Google est clair sur ce point : sa [page consacrée aux fonctionnalités IA](https://developers.google.com/search/docs/appearance/ai-features?hl=fr) indique qu'aucun balisage Schema.org spécial n'est nécessaire pour apparaître dans les aperçus IA ou le mode IA. Elle recommande en revanche que les données structurées correspondent au texte visible de la page.
+
+Côté Microsoft, Search Engine Land a rapporté qu'en mars 2025, au salon SMX Munich, Fabrice Canel (Bing) a confirmé que le balisage Schema aide les LLM de Microsoft à comprendre le contenu. C'est utile à savoir, car Bing alimente Copilot. OpenAI et Perplexity n'ont rien publié de précis sur leur usage du balisage.
+
+Ma lecture : le balisage ne vous fera pas citer par une IA, mais il réduit le risque qu'elle se trompe sur vos informations pratiques. Une IA qui assemble une réponse à « dentiste ouvert le samedi à Nice » croise plusieurs sources. Si votre site, votre balisage et votre fiche donnent les mêmes horaires, vous ne donnez à aucune d'elles une raison de vous écarter. Le reste du travail GEO est dans l'article [SEO, GEO et ChatGPT](/blog/seo-geo-apparaitre-dans-chatgpt/).
+
+## Quel type Schema.org choisir pour son activité ?
+
+Google demande d'utiliser le sous-type le plus précis possible. Schema.org en propose une trentaine directement sous `LocalBusiness`, puis des sous-types plus fins encore. Quelques correspondances pour des métiers courants sur la Côte d'Azur :
+
+| Activité | Type Schema.org | Remarque |
+|---|---|---|
+| Restaurant, pizzeria, bar de plage | `Restaurant`, `BarOrPub` (sous `FoodEstablishment`) | ajoutez `menu`, `servesCuisine`, `acceptsReservations` |
+| Hôtel, chambres d'hôtes, résidence | `Hotel`, `BedAndBreakfast` (sous `LodgingBusiness`) | horaires d'accueil, `checkinTime`, `checkoutTime` |
+| Agence immobilière | `RealEstateAgent` | une fiche par agence si vous en avez plusieurs |
+| Dentiste, médecin, kiné | `Dentist`, `Physician`, `MedicalClinic` | restez factuel, pas d'avis auto-publiés |
+| Plombier, électricien, serrurier | `Plumber`, `Electrician`, `Locksmith` (sous `HomeAndConstructionBusiness`) | `areaServed` pour la zone d'intervention |
+| Avocat, notaire, expert-comptable | `Attorney`, `Notary`, `AccountingService` | |
+| Boutique | `Store` ou un sous-type (`ClothingStore`, `JewelryStore`…) | |
+| Coiffeur, institut | `HairSalon`, `BeautySalon` (sous `HealthAndBeautyBusiness`) | |
+| Conciergerie, agence de services | `ProfessionalService` si rien de plus précis | à défaut, `LocalBusiness` |
+
+Si votre activité couvre deux types (un hôtel avec restaurant ouvert au public), décrivez l'établissement principal, puis le second avec la propriété `department` ou un bloc séparé sur sa propre page.
+
+## Quelles propriétés remplir, et comment ?
+
+Voici celles qui comptent pour une entreprise locale, avec les règles que Google donne pour chacune :
+
+- `name` : le nom exact affiché sur la fiche Google, sans mot-clé ajouté.
+- `address` (`PostalAddress`) : rue, code postal, ville, `addressCountry` en code ISO (`FR`, ou `MC` pour Monaco).
+- `telephone` : avec l'indicatif du pays, par exemple `+33 4…` ou `+377…`.
+- `url` : un lien qui fonctionne vers la page de cet établissement précis.
+- `geo` : latitude et longitude avec au moins 5 décimales, selon Google.
+- `openingHoursSpecification` : les horaires, jour par jour.
+- `priceRange` : moins de 100 caractères, sinon Google ne l'affiche pas.
+- `image` et `logo` : des URL accessibles au robot.
+- `sameAs` : les URL de vos profils officiels (fiche Google, LinkedIn, Instagram, Pages Jaunes, TripAdvisor).
+
+Placez le bloc sur la page qui décrit l'établissement : la page d'accueil pour une entreprise à adresse unique, la page de chaque agence s'il y en a plusieurs.
+
+## Un exemple JSON-LD commenté pour un commerce niçois
+
+L'exemple ci-dessous décrit une boulangerie fictive à Nice. Les valeurs sont des repères à remplacer par les vôtres.
+
+```json
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Bakery",
+  "name": "Boulangerie Exemple",
+  "url": "https://www.exemple.fr/",
+  "telephone": "+33 4 00 00 00 00",
+  "image": "https://www.exemple.fr/images/devanture.jpg",
+  "priceRange": "€",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "1 rue de l'Exemple",
+    "postalCode": "06000",
+    "addressLocality": "Nice",
+    "addressCountry": "FR"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 43.71500,
+    "longitude": 7.26200
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      "opens": "07:00",
+      "closes": "19:30"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Sunday",
+      "opens": "07:00",
+      "closes": "13:00"
+    }
+  ],
+  "sameAs": [
+    "https://www.google.com/maps?cid=VOTRE_CID",
+    "https://www.instagram.com/votre-compte/"
+  ]
+}
+</script>
+```
+
+Le lundi n'apparaît pas : la boutique est fermée ce jour-là. Pour une fermeture sur toute une journée, Google accepte aussi de mettre `opens` et `closes` à `00:00`.
+
+## Les cas particuliers de la Côte d'Azur
+
+### Saisonnalité et horaires d'été
+
+Un restaurant de plage à Juan-les-Pins ou une base nautique à Villefranche-sur-Mer n'ouvre pas toute l'année. Google prévoit les propriétés `validFrom` et `validThrough` (au format AAAA-MM-JJ) dans `openingHoursSpecification` pour décrire une saison ou une fermeture. Sans elles, les horaires sont considérés comme valables toute l'année. Pour un bar qui ferme après minuit pendant le Festival de Cannes, une seule plage suffit : ouverture à `18:00`, fermeture à `03:00`, Google comprend que la fermeture tombe le lendemain.
+
+### Monaco et les communes limitrophes
+
+Une entreprise installée en Principauté indique `"addressCountry": "MC"`, le code postal `98000` et un téléphone en `+377`. Une entreprise de Beausoleil ou de Cap-d'Ail reste en France (`FR`), même si sa clientèle est monégasque. Mélanger les deux sur le site, la fiche et le balisage est une erreur fréquente, et une source d'hésitation pour les moteurs. Le guide du [référencement à Monaco](/blog/referencement-monaco-seo-geo/) détaille la cohérence d'entité.
+
+### Entreprises sans vitrine
+
+Un serrurier ou une conciergerie qui reçoit rarement des clients peut masquer son adresse sur sa fiche Google. Dans le balisage, décrivez alors la zone avec `areaServed` (par exemple Nice, Saint-Laurent-du-Var, Cagnes-sur-Mer) et ne publiez pas une adresse que vous cachez sur Google : les deux doivent raconter la même chose.
+
+### Site bilingue
+
+Chaque version linguistique porte son balisage dans sa langue, avec les mêmes faits (adresse, téléphone, horaires). La mise en place est décrite dans l'article sur le [site multilingue sur la Côte d'Azur](/blog/site-multilingue-cote-azur-hreflang/).
+
+<ServiceCTA service="seo-geo" lang="fr" text="J'audite et je corrige vos données structurées, votre fiche Google et votre cohérence d'entité." />
+
+## Les erreurs qui coûtent cher
+
+Google rappelle dans ses règles qu'il ne faut pas baliser un contenu invisible pour le visiteur, et que le balisage doit représenter fidèlement la page. Un problème de données structurées peut entraîner une action manuelle : le site perd alors l'éligibilité aux résultats enrichis, sans effet sur son classement selon Google, mais c'est du travail perdu.
+
+Les erreurs que je vois le plus souvent sur des sites azuréens :
+
+1. Des étoiles d'avis ajoutées dans le balisage de sa propre entreprise. Google est explicite dans sa [documentation sur les avis](https://developers.google.com/search/docs/appearance/structured-data/review-snippet?hl=fr) : quand l'entité contrôle les avis qui la concernent, ses pages `LocalBusiness` ne sont pas éligibles aux étoiles. Inutile donc de copier vos avis Google dans `aggregateRating`.
+2. Des horaires qui diffèrent entre le balisage, la page Contact et la fiche Google, souvent parce qu'un plugin a été configuré une fois en 2021 puis oublié.
+3. Un type générique (`Organization`) là où un sous-type précis existe.
+4. Le même bloc `LocalBusiness` copié sur toutes les pages, y compris des pages de villes où l'entreprise n'a aucune adresse.
+5. Un nom enrichi de mots-clés (« Plombier Nice Urgence 24/7 ») qui ne correspond pas au nom réel.
+
+## Comment tester et suivre son balisage ?
+
+1. Passez la page dans le [test des résultats enrichis](https://search.google.com/test/rich-results) de Google pour repérer les erreurs bloquantes.
+2. Vérifiez la syntaxe complète avec le validateur de Schema.org (validator.schema.org), qui accepte tous les types, même ceux que Google n'exploite pas.
+3. Une fois en ligne, utilisez l'outil d'inspection d'URL de la Search Console pour voir ce que Google a lu.
+4. Recontrôlez à chaque changement d'horaires, de téléphone ou d'adresse, en même temps que la fiche Google. Le guide de la [fiche Google Business Profile à Nice](/blog/google-business-profile-nice-guide/) contient la checklist correspondante.
+
+Je travaille depuis Nice pour des entreprises de Nice, Cannes et Monaco, et à distance partout en France. La vérification des données structurées fait partie de l'audit visibilité Google + IA (390 €, 5 jours), et leur maintenance du suivi SEO & GEO (490 € par mois). Le détail est sur la page [SEO & GEO](/seo-geo/).
+
+<ServiceCTA service="seo-geo" lang="fr" />
+
+## Questions fréquentes
+
+### Les données structurées LocalBusiness sont-elles obligatoires ?
+
+Non. Google peut référencer et classer une entreprise locale sans balisage. Elles aident Google à identifier l'établissement sans ambiguïté et peuvent alimenter son panneau d'informations, mais aucun classement ne dépend d'elles seules.
+
+### Faut-il du balisage spécial pour être cité par ChatGPT ou les aperçus IA ?
+
+Non. Google indique qu'aucun balisage Schema.org spécial n'est requis pour ses fonctionnalités IA, et OpenAI n'a rien publié à ce sujet. Un balisage exact et cohérent avec la page reste une bonne pratique, notamment pour Bing, qui dit s'en servir.
+
+### Peut-on mettre ses avis Google dans le balisage pour afficher des étoiles ?
+
+Non. Google exclut des étoiles d'avis les pages `LocalBusiness` d'une entreprise qui publie les avis la concernant sur son propre site. Les étoiles de votre fiche Google s'affichent déjà sur Maps et dans le Local Pack.
+
+### Où placer le code JSON-LD sur un site WordPress ou Astro ?
+
+Sur la page qui décrit l'établissement, dans une balise `script` de type `application/ld+json`. Un plugin SEO peut le générer sous WordPress ; sur un site sur-mesure, on le produit à partir des mêmes données que la page Contact, pour qu'ils ne puissent jamais diverger.
+
+<Callout title="À retenir">
+
+- Le balisage LocalBusiness décrit votre établissement en langage machine : `name` et `address` sont obligatoires, horaires, téléphone, `geo` et `sameAs` fortement conseillés.
+- Il n'améliore pas le classement à lui seul ; il confirme que le site et la fiche Google parlent du même établissement.
+- Choisissez le sous-type le plus précis, gérez la saisonnalité avec `validFrom` et `validThrough`, et utilisez `MC` pour une adresse à Monaco.
+- Pas d'avis auto-publiés dans le balisage, et pas de contenu invisible : le JSON-LD doit dire exactement ce que dit la page.
+
+</Callout>

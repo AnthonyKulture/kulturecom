@@ -1,0 +1,204 @@
+---
+lang: en
+slug: localbusiness-schema-markup-guide
+translationKey: schema-localbusiness
+title: "LocalBusiness schema markup: a practical Schema.org guide for French Riviera businesses"
+metaTitle: "LocalBusiness schema markup: a guide"
+description: "LocalBusiness schema markup: which Schema.org type to pick, which properties to fill in, annotated JSON-LD and what Google and AI engines do with it."
+keywords:
+  - LocalBusiness schema markup
+  - LocalBusiness structured data
+  - local business schema
+  - JSON-LD LocalBusiness
+  - structured data local SEO
+tags:
+  - SEO
+  - Local SEO
+  - GEO
+pillar: seo
+pubDate: 2026-10-23
+draft: false
+---
+
+import ServiceCTA from "~/components/blog/ServiceCTA.astro";
+import Callout from "~/components/blog/Callout.astro";
+
+LocalBusiness schema markup is a block of Schema.org code, usually in JSON-LD format, that describes your local business to Google and other engines: name, address, phone, opening hours, service area, official profiles. It won't lift a site in the rankings on its own, but it removes any doubt about who you are and where you are, which helps both local SEO and AI engines.
+
+This guide starts from what Google actually documents, then gets practical: which type to choose, what to fill in, an annotated example for a shop in Nice, and the special cases of the French Riviera (Monaco, seasonal hours, businesses without a storefront).
+
+## What is LocalBusiness structured data?
+
+Schema.org is a vocabulary shared by search engines to describe things in machine-readable form. `LocalBusiness` is its type for physical premises or businesses that serve a geographic area: a restaurant on Cours Saleya, a dental practice in Cannes, a plumber covering everything from Menton to Antibes.
+
+The markup sits in the page code and changes nothing visually. Google [recommends JSON-LD](https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data) when your setup allows it: a self-contained script in the page, easy to generate and maintain, rather than attributes scattered through the HTML.
+
+In its [LocalBusiness documentation](https://developers.google.com/search/docs/appearance/structured-data/local-business) (last updated 8 September 2026), Google makes only two properties required: `name` and `address`. Everything else is recommended: `telephone`, `url`, `geo`, `openingHoursSpecification`, `priceRange`, plus `menu` and `servesCuisine` for food businesses. Google says this markup can feed the business's knowledge panel in Search and Maps.
+
+## Does it improve Google rankings?
+
+Not directly. Google's [general structured data guidelines](https://developers.google.com/search/docs/appearance/structured-data/sd-policies) say it doesn't guarantee the markup will be shown, and the documentation never presents it as a ranking factor. Local ranking, according to [Google Business Profile help](https://support.google.com/business/answer/7091?hl=en), rests on three criteria: relevance, distance and prominence (reviews, links to your site, how well known you are online).
+
+The value lies elsewhere. The markup confirms to Google, in machine terms, that your website and your Google profile describe the same business. When address, phone and hours match across the site, the markup and the profile, there is nothing left to guess. In my view it's one of the best-paying tasks in a local audit: an hour of work, with no risk as long as the markup tells the truth.
+
+## What about ChatGPT, Perplexity and Google's AI Overviews?
+
+Google is clear here: its [page on AI features](https://developers.google.com/search/docs/appearance/ai-features) says no special Schema.org markup is needed to appear in AI Overviews or AI Mode. It does recommend that structured data match the visible text on the page.
+
+On Microsoft's side, Search Engine Land reported that in March 2025, at SMX Munich, Fabrice Canel (Bing) confirmed that schema markup helps Microsoft's LLMs understand content. Worth knowing, since Bing feeds Copilot. OpenAI and Perplexity have published nothing specific about how they use markup.
+
+My reading: markup won't get you cited by an AI, but it lowers the risk of an AI getting your practical details wrong. An AI building an answer to "dentist open on Saturday in Nice" cross-checks several sources. If your site, your markup and your profile give the same hours, none of them gives it a reason to drop you. The rest of the GEO work is covered in [SEO, GEO and ChatGPT](/en/blog/seo-geo-appear-in-chatgpt/).
+
+## Which Schema.org type should you choose?
+
+Google asks for the most specific subtype available. Schema.org lists around thirty directly under `LocalBusiness`, with finer subtypes below those. Some matches for common Riviera trades:
+
+| Business | Schema.org type | Note |
+|---|---|---|
+| Restaurant, pizzeria, beach bar | `Restaurant`, `BarOrPub` (under `FoodEstablishment`) | add `menu`, `servesCuisine`, `acceptsReservations` |
+| Hotel, B&B, residence | `Hotel`, `BedAndBreakfast` (under `LodgingBusiness`) | reception hours, `checkinTime`, `checkoutTime` |
+| Estate agency | `RealEstateAgent` | one block per branch if you have several |
+| Dentist, doctor, physio | `Dentist`, `Physician`, `MedicalClinic` | stay factual, no self-published reviews |
+| Plumber, electrician, locksmith | `Plumber`, `Electrician`, `Locksmith` (under `HomeAndConstructionBusiness`) | `areaServed` for the service area |
+| Lawyer, notary, accountant | `Attorney`, `Notary`, `AccountingService` | |
+| Shop | `Store` or a subtype (`ClothingStore`, `JewelryStore`…) | |
+| Hairdresser, beauty salon | `HairSalon`, `BeautySalon` (under `HealthAndBeautyBusiness`) | |
+| Concierge, service agency | `ProfessionalService` if nothing more precise fits | otherwise `LocalBusiness` |
+
+If you run two kinds of business (a hotel with a restaurant open to the public), describe the main one, then the second with the `department` property or in a separate block on its own page.
+
+## Which properties to fill in, and how?
+
+These are the ones that matter for a local business, with Google's rules for each:
+
+- `name`: the exact name shown on your Google profile, with no added keywords.
+- `address` (`PostalAddress`): street, postcode, town, and `addressCountry` as an ISO code (`FR`, or `MC` for Monaco).
+- `telephone`: with the country code, for example `+33 4…` or `+377…`.
+- `url`: a working link to the page for that specific location.
+- `geo`: latitude and longitude with at least 5 decimal places, per Google.
+- `openingHoursSpecification`: opening hours, day by day.
+- `priceRange`: under 100 characters, or Google won't show it.
+- `image` and `logo`: URLs the crawler can reach.
+- `sameAs`: the URLs of your official profiles (Google profile, LinkedIn, Instagram, TripAdvisor).
+
+Put the block on the page that describes the business: the home page for a single-location business, each branch page if you have several.
+
+## An annotated JSON-LD example for a shop in Nice
+
+The example below describes a fictional bakery in Nice. The values are placeholders to replace with your own.
+
+```json
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Bakery",
+  "name": "Boulangerie Exemple",
+  "url": "https://www.exemple.fr/",
+  "telephone": "+33 4 00 00 00 00",
+  "image": "https://www.exemple.fr/images/devanture.jpg",
+  "priceRange": "€",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "1 rue de l'Exemple",
+    "postalCode": "06000",
+    "addressLocality": "Nice",
+    "addressCountry": "FR"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 43.71500,
+    "longitude": 7.26200
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      "opens": "07:00",
+      "closes": "19:30"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Sunday",
+      "opens": "07:00",
+      "closes": "13:00"
+    }
+  ],
+  "sameAs": [
+    "https://www.google.com/maps?cid=YOUR_CID",
+    "https://www.instagram.com/your-account/"
+  ]
+}
+</script>
+```
+
+Monday is missing because the shop is closed that day. For a full-day closure, Google also accepts setting both `opens` and `closes` to `00:00`.
+
+## Special cases on the French Riviera
+
+### Seasonal businesses and summer hours
+
+A beach restaurant in Juan-les-Pins or a watersports base in Villefranche-sur-Mer doesn't open all year. Google supports `validFrom` and `validThrough` (in YYYY-MM-DD format) inside `openingHoursSpecification` to describe a season or a closure. Without them, hours are treated as valid year-round. For a bar that closes after midnight during the Cannes Film Festival, one entry is enough: opens at `18:00`, closes at `03:00`, and Google understands the closing time falls the next day.
+
+### Monaco and the towns next to it
+
+A business based in the Principality uses `"addressCountry": "MC"`, the `98000` postcode and a `+377` phone number. A business in Beausoleil or Cap-d'Ail stays in France (`FR`), even if its clients are Monegasque. Mixing the two across the site, the profile and the markup is a common mistake, and it makes engines hesitate. The [SEO in Monaco](/en/blog/seo-monaco-international/) guide goes into entity consistency in detail.
+
+### Businesses without a storefront
+
+A locksmith or concierge who rarely receives clients can hide the address on the Google profile. In the markup, describe the area with `areaServed` (Nice, Saint-Laurent-du-Var, Cagnes-sur-Mer, for instance) and don't publish an address you hide on Google: both should tell the same story.
+
+### Bilingual websites
+
+Each language version carries its own markup in its own language, with the same facts (address, phone, hours). The setup is covered in the article on [multilingual websites on the French Riviera](/en/blog/multilingual-website-french-riviera/).
+
+<ServiceCTA service="seo-geo" lang="en" text="I audit and fix your structured data, your Google profile and your entity consistency." />
+
+## The mistakes that cost you
+
+Google's guidelines say not to mark up content that visitors can't see, and that markup must be a true representation of the page. A structured data issue can lead to a manual action: the site loses eligibility for rich results. Google says it doesn't affect ranking, but the work is wasted.
+
+The mistakes I see most often on Riviera websites:
+
+1. Review stars added to the markup of your own business. Google is explicit in its [review snippet documentation](https://developers.google.com/search/docs/appearance/structured-data/review-snippet): when an entity controls the reviews about itself, its `LocalBusiness` pages aren't eligible for stars. So there's no point copying your Google reviews into `aggregateRating`.
+2. Hours that differ between the markup, the contact page and the Google profile, often because a plugin was set up once in 2021 and forgotten.
+3. A generic type (`Organization`) where a precise subtype exists.
+4. The same `LocalBusiness` block copied onto every page, including town pages where the business has no address.
+5. A name padded with keywords ("Plumber Nice Emergency 24/7") that doesn't match the real name.
+
+## How to test and monitor your markup
+
+1. Run the page through Google's [Rich Results Test](https://search.google.com/test/rich-results) to catch blocking errors.
+2. Check the full syntax with the Schema.org validator (validator.schema.org), which accepts every type, including those Google doesn't use.
+3. Once live, use the URL Inspection tool in Search Console to see what Google read.
+4. Check again whenever your hours, phone or address change, at the same time as your Google profile. The [Google Business Profile in Nice](/en/blog/nice-google-business-profile-guide/) guide has the matching checklist.
+
+I work from Nice for businesses in Nice, Cannes and Monaco, and remotely anywhere in France. Checking structured data is part of the Google + AI visibility audit (€390, 5 days), and keeping it accurate is part of the monthly SEO & GEO retainer (€490 a month). Details are on the [SEO & GEO](/en/seo-geo/) page.
+
+<ServiceCTA service="seo-geo" lang="en" />
+
+## Frequently asked questions
+
+### Is LocalBusiness structured data required?
+
+No. Google can index and rank a local business without any markup. It helps Google identify the business without ambiguity and can feed its knowledge panel, but no ranking depends on it alone.
+
+### Do you need special markup to be cited by ChatGPT or AI Overviews?
+
+No. Google says no special Schema.org markup is required for its AI features, and OpenAI has published nothing on the subject. Accurate markup that matches the page is still good practice, especially for Bing, which says it uses it.
+
+### Can I put my Google reviews in the markup to show stars?
+
+No. Google excludes from review stars the `LocalBusiness` pages of a business that publishes reviews about itself on its own site. The stars from your Google profile already show on Maps and in the Local Pack.
+
+### Where does the JSON-LD go on a WordPress or Astro site?
+
+On the page that describes the business, in a `script` tag of type `application/ld+json`. An SEO plugin can generate it on WordPress; on a custom-built site, it's produced from the same data as the contact page, so the two can never drift apart.
+
+<Callout title="Key takeaways">
+
+- LocalBusiness markup describes your business in machine terms: `name` and `address` are required; hours, phone, `geo` and `sameAs` are strongly advised.
+- It doesn't improve rankings on its own; it confirms that your site and your Google profile describe the same business.
+- Pick the most specific subtype, handle seasons with `validFrom` and `validThrough`, and use `MC` for an address in Monaco.
+- No self-published reviews in the markup and no hidden content: the JSON-LD must say exactly what the page says.
+
+</Callout>

@@ -14,9 +14,9 @@ librement : l'ordre de la liste est l'ordre de parution.
 - [x] Référencement à Monaco → /blog/referencement-monaco-seo-geo/
 - [x] Site multilingue sur la Côte d'Azur → /blog/site-multilingue-cote-azur-hreflang/
 - [x] Prix du référencement à Nice → /blog/prix-referencement-nice-seo/
+- [x] Données structurées LocalBusiness → /blog/donnees-structurees-localbusiness-schema-org/
 
 ## À écrire
-- [ ] Données structurées Schema.org LocalBusiness : le guide concret pour une entreprise de la Côte d'Azur (Google + IA)
 - [ ] Être cité par Perplexity : comment fonctionne sa recherche et ce qui fait qu'une entreprise locale est citée
 - [ ] SEO pour restaurants à Nice : Local Pack, fiche Google, menus, et réponses IA à « où manger »
 - [ ] SEO immobilier de prestige sur la Côte d'Azur (Nice, Cannes, Monaco, Cap d'Antibes) : SEO local, multilingue et GEO
