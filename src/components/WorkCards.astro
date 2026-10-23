@@ -1,0 +1,134 @@
+---
+// Recent work as cards, images always in view: the first project large, the
+// four others in a 2×2 beside it (wide screens), each with its name and its
+// result under the image. Hovering only zooms the image a little inside its
+// frame: nothing moves, wherever the pointer comes in. The home's entrance
+// (HomeSections.astro) wipes each image up and brings its caption in.
+import type { Lang } from "~/i18n/ui";
+import { ui } from "~/i18n/ui";
+import { caseStudyPath } from "~/lib/case-studies";
+import { getProjects } from "~/lib/projects-data";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const projects = getProjects(ui[lang]);
+---
+
+<ol class="cards" data-cards>
+  {projects.map((p, i) => (
+    <li class:list={["card", i === 0 && "card--lead"]} data-card>
+      <a href={caseStudyPath(p.slug, lang)} class="card-link">
+        <span class="card-media" data-card-media>
+          <img src={p.image} alt="" loading="lazy" decoding="async" width="800" height="1000" />
+        </span>
+        <span class="card-text" data-card-text>
+          <span class="card-title font-display">{p.title}</span>
+          {i === 0 && <span class="card-desc text-body">{p.summary}</span>}
+          <span class="card-meta font-label text-small uppercase tracking-[0.06em]">{p.metric}</span>
+        </span>
+      </a>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px 16px;
+  }
+  .card--lead {
+    grid-column: 1 / -1;
+  }
+  @media (min-width: 1024px) {
+    /* The lead card down the left, the others two by two on the right; the
+       rows share what height the section gives them. */
+    .cards {
+      height: 100%;
+      grid-template-columns: 1.15fr 1fr 1fr;
+      grid-template-rows: repeat(2, minmax(0, 1fr));
+      gap: 24px 20px;
+    }
+    .card--lead {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+    }
+  }
+  .card {
+    min-height: 0;
+  }
+  .card-link {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+  .card-media {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+  }
+  .card--lead .card-media {
+    aspect-ratio: 16 / 10;
+  }
+  @media (min-width: 1024px) {
+    .card-media,
+    .card--lead .card-media {
+      flex: 1 1 0;
+      min-height: 0;
+      aspect-ratio: auto;
+    }
+  }
+  .card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: scale 0.9s var(--ease-power3);
+  }
+  .card-link:hover .card-media img,
+  .card-link:focus-visible .card-media img {
+    scale: 1.04;
+  }
+  .card-text {
+    display: grid;
+    gap: 4px;
+    padding-top: 12px;
+  }
+  .card-title {
+    font-size: var(--text-body);
+    font-weight: 500;
+    line-height: 1.25;
+  }
+  .card--lead .card-title {
+    font-size: var(--text-title);
+    line-height: 1.1;
+  }
+  .card-desc {
+    max-width: 44ch;
+    color: var(--color-ink-muted);
+  }
+  .card-meta {
+    color: var(--color-ink-muted);
+    overflow-wrap: anywhere; /* long domain names stay in their column */
+  }
+  .card-link:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 4px;
+  }
+  @media (max-width: 767px) {
+    .card-desc {
+      display: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .card-media img {
+      transition: none;
+    }
+  }
+</style>

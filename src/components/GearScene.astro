@@ -1,0 +1,37 @@
+---
+// Third illustration: his camp in the mountains — backpack (a scarf tied on,
+// flying in the wind), water bottle, and laptop on a stump typing code —
+// in dots like the others (src/lib/gear-halftone.ts). Decorative; still under
+// reduced motion.
+---
+
+<canvas class="gear-dots" data-gear-dots aria-hidden="true"></canvas>
+
+<script>
+  import { GEAR_VIEW, drawGearTone } from "~/lib/gear-halftone";
+  import { runDots } from "~/lib/halftone";
+
+  const canvas = document.querySelector<HTMLCanvasElement>("[data-gear-dots]");
+  if (canvas) {
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let t = 3; // a few lines already typed on the screen
+    runDots(
+      canvas,
+      GEAR_VIEW,
+      (tone, cols, rows, dt) => {
+        t += dt;
+        drawGearTone(tone, t, cols, rows);
+      },
+      still,
+    );
+  }
+</script>
+
+<style>
+  .gear-dots {
+    display: block;
+    width: 100%;
+    aspect-ratio: 400 / 200;
+    color: var(--color-accent); /* the dots' ink */
+  }
+</style>

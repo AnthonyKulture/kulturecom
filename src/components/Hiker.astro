@@ -1,0 +1,65 @@
+---
+// The hiker who stands for me in the illustrations, as a still line drawing
+// (the illustrations' fallback without JS; his shapes live in
+// src/lib/hiker-shape.ts, shared with the dot rendering, which animates him).
+// Figure units, feet at the origin, about 95 tall: the parent places and
+// scales it, and sets --k to keep the ink weight even when it is drawn bigger.
+import { ARM_L, ARM_R, BODY, LEG_L, LEG_R, type Mark } from "~/lib/hiker-shape";
+
+const limbs: [string, Mark[]][] = [
+  ["hk-leg hk-leg--l", LEG_L],
+  ["hk-leg hk-leg--r", LEG_R],
+  ["hk-arm hk-arm--l", ARM_L],
+  ["hk-arm hk-arm--r", ARM_R],
+];
+---
+
+<g class="hiker">
+  <g class="hk-sway">
+    <g class="hk">
+      {limbs.map(([cls, marks]) => (
+        <g class={cls}>
+          {marks.map((m) =>
+            m.ink === "tube" ? (
+              <>
+                <path class="hk-tube" d={m.d} />
+                <path class="hk-tube-in" d={m.d} />
+              </>
+            ) : (
+              <path class={m.ink === "fill" ? "hk-fill" : "hk-line"} d={m.d} />
+            ),
+          )}
+        </g>
+      ))}
+      {BODY.map((m) => <path class={m.ink === "fill" ? "hk-fill" : "hk-line"} d={m.d} />)}
+    </g>
+  </g>
+</g>
+
+<style>
+  /* White shapes outlined in ink; arms are ink tubes with a white core. */
+  .hk-fill {
+    fill: var(--color-bg);
+    stroke: var(--color-accent);
+    stroke-width: calc(1.15px * var(--k, 1));
+    stroke-linejoin: round;
+  }
+  .hk-line {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: calc(1px * var(--k, 1));
+    stroke-linecap: round;
+  }
+  .hk-tube {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 5.2;
+    stroke-linecap: round;
+  }
+  .hk-tube-in {
+    fill: none;
+    stroke: var(--color-bg);
+    stroke-width: calc(5.2px - 2.2px * var(--k, 1));
+    stroke-linecap: round;
+  }
+</style>

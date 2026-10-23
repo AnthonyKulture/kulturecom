@@ -3,6 +3,7 @@ import type { Lang } from "~/i18n/ui";
 import { ui } from "~/i18n/ui";
 import { SERVICE_PAGES, getServicePage } from "~/lib/service-pages";
 import GoogleRating from "~/components/GoogleRating.astro";
+import LakeScene from "~/components/LakeScene.astro";
 
 interface Props {
   lang: Lang;
@@ -153,10 +154,15 @@ const navLabels = lang === "en"
     <div class="mt-16 md:mt-24" />
 
     {/* HUGE NAME */}
-    <h2 data-footer-name class="flex flex-wrap items-baseline gap-x-[0.25em] pb-8 font-display text-[clamp(52px,14vw,210px)] leading-[1.05] tracking-[-0.035em] sm:pb-10 md:pb-12">
+    <h2 data-footer-name class="relative z-10 flex flex-wrap items-baseline gap-x-[0.25em] font-display text-[clamp(52px,14vw,210px)] leading-[1.05] tracking-[-0.035em]">
       <span>Anthony</span>
       <span class="whitespace-nowrap">Profit</span>
     </h2>
+  </div>
+
+  {/* The lake view closes the page, edge to edge; the name sits in its sky. */}
+  <div class="-mt-[6vw]">
+    <LakeScene />
   </div>
 </footer>
 

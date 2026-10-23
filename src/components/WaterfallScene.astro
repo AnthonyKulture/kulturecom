@@ -1,0 +1,150 @@
+---
+// Second illustration, as a still line drawing: the hiker at the foot of a
+// waterfall, seen from behind (geometry in src/lib/waterfall-scene.ts). It
+// sizes the drawing's place in section 2; it only shows without JS (see the
+// noscript). Otherwise the scene is drawn in dots over the whole section and
+// filmed by a camera (WaterfallDots.astro).
+import Hiker from "~/components/Hiker.astro";
+import {
+  BANK,
+  BUSHES,
+  CLIFFS,
+  CLOUDS,
+  FAR,
+  FOAM,
+  HIKER,
+  LIP,
+  POOL_MARKS,
+  POOL_ROCKS,
+  RIPPLE,
+  RIPPLE_PATH,
+  RIVER,
+  SHEET,
+  SPRAY,
+  STREAKS,
+  VIEW,
+} from "~/lib/waterfall-scene";
+---
+
+<div class="wf-frame">
+<svg class="wf wf-line-art" viewBox={`0 0 ${VIEW.w} ${VIEW.h}`} focusable="false" style={`--rx:${RIPPLE.x}px;--ry:${RIPPLE.y}px`}>
+  {/* Sky, then the distant peaks and the river seen through the gorge. */}
+  <path class="wf-line wf-cloud" d={CLOUDS} />
+  <path class="wf-fill" d={FAR.fill} />
+  <path class="wf-line wf-far" d={FAR.line} />
+  <path class="wf-fill" d={RIVER.fill} />
+  <path class="wf-line" d={RIVER.banks} />
+  <path class="wf-hatch" d={RIVER.flow} />
+
+  {/* The fall: a white sheet, dashes running down it, the lip on top. */}
+  <path class="wf-fill" d={SHEET} />
+  {STREAKS.map((s) => (
+    <path
+      class="wf-streak"
+      d={s.d}
+      pathLength="100"
+      style={`stroke-dasharray:${s.dash};stroke-dashoffset:${s.offset};stroke-width:${s.width};opacity:${s.opacity}`}
+    />
+  ))}
+  <path class="wf-line" d={LIP} />
+
+  {/* The pool: rings spreading from under the foam (at rest: three sizes). */}
+  {[0.62, 0.95, 1.25].map((k) => (
+    <path class="wf-ripple" d={RIPPLE_PATH} style={`transform:scale(${k})`} />
+  ))}
+  <path class="wf-hatch" d={POOL_MARKS} />
+
+  {/* Foam boiling at the foot of the fall, spray rising from it. */}
+  {FOAM.map((f) => <path class="wf-puff" d={f.d} />)}
+  {SPRAY.map((s) => <circle class="wf-drop" cx={s.x} cy={s.y} r={s.r} />)}
+  <path class="wf-shape" d={POOL_ROCKS.fill} />
+  <path class="wf-hatch" d={POOL_ROCKS.marks} />
+
+  {/* The two rock walls framing the fall (they hide its edges and the
+      foam's sides), and the bushes on their tops. */}
+  {CLIFFS.map((c) => (
+    <g>
+      <path class="wf-shape" d={c.d} />
+      <path class="wf-hatch" d={c.rock} />
+    </g>
+  ))}
+  <path class="wf-shape" d={BUSHES} />
+
+  {/* The bank in front, and the hiker on his boulder, looking at the fall. */}
+  <path class="wf-shape" d={BANK.d} />
+  <path class="wf-line" d={`${BANK.marks}${BANK.tufts}`} />
+  <g transform={`translate(${HIKER.x} ${HIKER.y}) scale(${HIKER.scale})`} style="--k:0.8">
+    <Hiker />
+  </g>
+</svg>
+<noscript><style is:inline>.wf-line-art{visibility:visible!important}</style></noscript>
+</div>
+
+<style>
+  .wf-frame {
+    position: relative;
+  }
+  .wf {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  /* The line drawing is only for visitors without JS (see the noscript); it
+     still sizes the frame for the dots. */
+  .wf-line-art {
+    visibility: hidden;
+  }
+  /* Shapes are opaque white with an ink outline; lines are ink only. */
+  .wf-fill {
+    fill: var(--color-bg);
+  }
+  .wf-shape {
+    fill: var(--color-bg);
+    stroke: var(--color-accent);
+    stroke-width: 1.2;
+    stroke-linejoin: round;
+  }
+  .wf-line,
+  .wf-hatch,
+  .wf-streak,
+  .wf-ripple,
+  .wf-drop {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .wf-line {
+    stroke-width: 1.1;
+  }
+  .wf-hatch {
+    stroke-width: 0.8;
+    opacity: 0.6;
+  }
+  .wf-far {
+    opacity: 0.5;
+  }
+  .wf-cloud {
+    stroke-width: 0.9;
+    opacity: 0.55;
+  }
+  .wf-ripple {
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+    transform-box: view-box;
+    transform-origin: var(--rx) var(--ry);
+    opacity: 0.6;
+  }
+  .wf-puff {
+    fill: var(--color-bg);
+    stroke: var(--color-accent);
+    stroke-width: 1.1;
+    stroke-linejoin: round;
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+  }
+  .wf-drop {
+    stroke-width: 0.8;
+    opacity: 0.8;
+  }
+</style>

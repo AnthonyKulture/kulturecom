@@ -365,13 +365,21 @@ const isCurrent = (href: string): boolean => path === href || (href !== homeHref
     const DELTA = 6;
     let lastY = window.scrollY;
     let ticking = false;
+    // The home's scroll sequences (HomeHero, WaterfallDots, ClimbScene): the
+    // nav stays while one of them holds the screen.
+    // (Looked up each time: they switch themselves on after this runs.)
+    const pinned = () =>
+      [...document.querySelectorAll<HTMLElement>('[data-seq="on"]')].some((s) => {
+        const r = s.getBoundingClientRect();
+        return r.top <= 1 && r.bottom >= window.innerHeight - 1;
+      });
 
     const update = () => {
       const y = window.scrollY;
       nav.dataset.scrolled = String(y > 8);
       if (!reduce) {
         const delta = y - lastY;
-        if (y < HIDE_AFTER || delta < -DELTA) nav.dataset.hidden = "false";
+        if (y < HIDE_AFTER || delta < -DELTA || pinned()) nav.dataset.hidden = "false";
         else if (delta > DELTA && !nav.querySelector("[data-dd][data-open]")) nav.dataset.hidden = "true";
       }
       lastY = y;

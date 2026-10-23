@@ -1,15 +1,18 @@
 ---
-// Hero illustration, all vector: a hiker seen from behind walks his ridge
-// toward the sun while the mountains stream past in depth (see
-// src/lib/hero-scene.ts). The first frame is drawn here on the server, so the
-// scene shows without JS; the script below animates it.
+// Hero illustration, as a still line drawing: a hiker seen from behind on his
+// ridge, the mountains around (world in src/lib/hero-scene.ts). Only for
+// visitors without JS (see the noscript); otherwise the scene is drawn in
+// dots, filmed over the whole hero (HeroDots.astro).
+import Hiker from "~/components/Hiker.astro";
 import { CX, FEET_Y, GROUND_PATH, HORIZON, LAYER_COUNT, VIEW, createScene, sceneFrame } from "~/lib/hero-scene";
 
 const scene = createScene();
 const first = sceneFrame(scene);
 ---
 
-<svg class="scene" data-hero-scene viewBox={`0 0 ${VIEW.w} ${VIEW.h}`} preserveAspectRatio="xMidYMid slice" focusable="false">
+<noscript><style is:inline>.hero-line{visibility:visible!important}</style></noscript>
+
+<svg class="scene hero-line" data-hero-scene viewBox={`0 0 ${VIEW.w} ${VIEW.h}`} preserveAspectRatio="xMidYMid slice" focusable="false">
   {/* Sky: drifting cirrus, the sun sitting on the horizon. */}
   <path class="sc-cloud" data-clouds d={first.clouds} />
   <circle class="sc-ink" cx={CX + 150} cy={HORIZON - 4} r="27" />
@@ -33,97 +36,11 @@ const first = sceneFrame(scene);
   <path class="sc-ground" d={GROUND_PATH} />
   <path class="sc-decal" data-decals d={first.decals} />
 
-  {/* The hiker, from behind: legs, arms (a trekking pole in the right hand),
-      jacket, head, then the backpack with its rolled mat over it all. */}
+  {/* The hiker, walking toward the sun. */}
   <g transform={`translate(${CX} ${FEET_Y}) scale(1.12)`}>
-    <g class="hk-sway">
-      <g class="hk">
-        <g class="hk-leg hk-leg--l">
-          <path class="hk-fill" d="M-9.5 -41C-9.8 -30 -9 -18 -8.4 -7.5L-3.4 -7.5C-3 -18 -2.4 -30 -1.2 -41Z" />
-          <path class="hk-fill" d="M-9.2 -8.5L-2.8 -8.5C-2.4 -5 -2 -2.5 -2.2 -1C-5 0.6 -8.4 0.6 -10.4 -0.6C-10.2 -3 -9.6 -5.5 -9.2 -8.5Z" />
-        </g>
-        <g class="hk-leg hk-leg--r">
-          <path class="hk-fill" d="M9.5 -41C9.8 -30 9 -18 8.4 -7.5L3.4 -7.5C3 -18 2.4 -30 1.2 -41Z" />
-          <path class="hk-fill" d="M9.2 -8.5L2.8 -8.5C2.4 -5 2 -2.5 2.2 -1C5 0.6 8.4 0.6 10.4 -0.6C10.2 -3 9.6 -5.5 9.2 -8.5Z" />
-        </g>
-        <g class="hk-arm hk-arm--l">
-          <path class="hk-tube" d="M-10 -69C-14 -63 -15.2 -55 -14.6 -47" />
-          <path class="hk-tube-in" d="M-10 -69C-14 -63 -15.2 -55 -14.6 -47" />
-          <circle class="hk-fill" cx="-14.6" cy="-45.2" r="2.3" />
-        </g>
-        <g class="hk-arm hk-arm--r">
-          <path class="hk-line" d="M14.8 -47.5L19.6 0.5" />
-          <path class="hk-tube" d="M10 -69C14 -63 15.2 -55 14.6 -47" />
-          <path class="hk-tube-in" d="M10 -69C14 -63 15.2 -55 14.6 -47" />
-          <circle class="hk-fill" cx="14.6" cy="-45.2" r="2.3" />
-        </g>
-        <path class="hk-fill" d="M-11.4 -43C-12.4 -52 -12.2 -62 -10 -71C-6 -73.5 6 -73.5 10 -71C12.2 -62 12.4 -52 11.4 -43C4 -40.6 -4 -40.6 -11.4 -43Z" />
-        <circle class="hk-fill" cx="0" cy="-87.5" r="6.2" />
-        <path class="hk-line" d="M-6 -88.4C-5.6 -94.8 5.6 -94.8 6 -88.4M-3.6 -92.6l-1 2.4M0 -93.6v2.6M3.6 -92.6l1 2.4M-6.1 -87.2q-1.7 0.4 -0.5 2.7M6.1 -87.2q1.7 0.4 0.5 2.7" />
-        <path class="hk-fill" d="M-12.4 -47.5C-13.2 -56 -13.4 -68 -12 -76C-11.2 -80.5 -7 -82 0 -82C7 -82 11.2 -80.5 12 -76C13.4 -68 13.2 -56 12.4 -47.5C5 -45 -5 -45 -12.4 -47.5Z" />
-        <path class="hk-fill" d="M-11 -86.4h22a3.3 3.3 0 0 1 0 6.6h-22a3.3 3.3 0 0 1 0 -6.6Z" />
-        <path class="hk-fill" d="M12.4 -59.5h3.2v10.5q0 1.4 -1.4 1.4h-1.8Z" />
-        <path class="hk-line" d="M-6 -86.4v6.6M6 -86.4v6.6M-11.6 -73C-6 -76 6 -76 11.6 -73M-7.6 -63h15.2v10q0 2 -2 2h-11.2q-2 0 -2 -2ZM-1.6 -63v3.2h3.2v-3.2M-9.2 -80.2C-10.8 -78 -11.6 -75 -11.2 -71M9.2 -80.2C10.8 -78 11.6 -75 11.2 -71M-12.9 -60.5h-1.8" />
-      </g>
-    </g>
+    <Hiker />
   </g>
 </svg>
-
-<script>
-  import { advance, createScene, sceneFrame } from "~/lib/hero-scene";
-
-  const svg = document.querySelector<SVGSVGElement>("[data-hero-scene]");
-  if (svg && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    const scene = createScene();
-    const ridges = [...svg.querySelectorAll<SVGGElement>("[data-ridge]")].map((g) => {
-      const [fill, line, hatch] = g.querySelectorAll("path");
-      return { g, fill, line, hatch };
-    });
-    const clouds = svg.querySelector<SVGPathElement>("[data-clouds]")!;
-    const decals = svg.querySelector<SVGPathElement>("[data-decals]")!;
-    let raf = 0;
-    let last = 0;
-    let onScreen = true;
-
-    const frame = (now: number): void => {
-      const dt = last ? Math.min(0.05, (now - last) / 1000) : 0;
-      last = now;
-      advance(scene, dt);
-      const f = sceneFrame(scene);
-      f.layers.forEach((r, i) => {
-        const el = ridges[i];
-        if (!el) return;
-        el.fill.style.opacity = String(r.fillOpacity);
-        el.line.style.opacity = String(r.lineOpacity);
-        el.hatch.style.opacity = String(r.lineOpacity * 0.55);
-        el.fill.setAttribute("d", r.fill);
-        el.line.setAttribute("d", r.d);
-        el.line.setAttribute("stroke-width", String(r.width));
-        el.hatch.setAttribute("d", r.hatch);
-      });
-      clouds.setAttribute("d", f.clouds);
-      decals.setAttribute("d", f.decals);
-      raf = requestAnimationFrame(frame);
-    };
-    const run = (): void => {
-      if (raf || !onScreen || document.hidden) return;
-      last = 0;
-      raf = requestAnimationFrame(frame);
-    };
-    const stop = (): void => {
-      cancelAnimationFrame(raf);
-      raf = 0;
-    };
-    svg.dataset.live = "";
-    new IntersectionObserver(([e]) => {
-      onScreen = e.isIntersecting;
-      if (onScreen) run();
-      else stop();
-    }).observe(svg);
-    document.addEventListener("visibilitychange", () => (document.hidden ? stop() : run()));
-    run();
-  }
-</script>
 
 <style>
   /* Fills its frame (absolute: a percentage height would not resolve inside
@@ -134,6 +51,10 @@ const first = sceneFrame(scene);
     display: block;
     width: 100%;
     height: 100%;
+  }
+  /* The line drawing is only for visitors without JS (see the noscript). */
+  .hero-line {
+    visibility: hidden;
   }
   .sc-ink,
   .sc-ridge,
@@ -178,101 +99,5 @@ const first = sceneFrame(scene);
   }
   .sc-ground {
     stroke-width: 1.4;
-  }
-
-  /* Hiker: white shapes outlined in ink; arms are ink tubes with a white core. */
-  .hk-fill {
-    fill: var(--color-bg);
-    stroke: var(--color-accent);
-    stroke-width: 1.15;
-    stroke-linejoin: round;
-  }
-  .hk-line {
-    fill: none;
-    stroke: var(--color-accent);
-    stroke-width: 1;
-    stroke-linecap: round;
-  }
-  .hk-tube {
-    fill: none;
-    stroke: var(--color-accent);
-    stroke-width: 5.2;
-    stroke-linecap: round;
-  }
-  .hk-tube-in {
-    fill: none;
-    stroke: var(--color-bg);
-    stroke-width: 3;
-    stroke-linecap: round;
-  }
-
-  /* Walk cycle (only once the script runs: still drawing otherwise). */
-  .hk,
-  .hk-sway,
-  .hk-leg,
-  .hk-arm {
-    transform-box: fill-box;
-  }
-  .hk-leg,
-  .hk-arm {
-    transform-origin: 50% 0;
-  }
-  [data-live] .hk {
-    animation: hk-bob 0.55s ease-in-out infinite;
-  }
-  [data-live] .hk-sway {
-    animation: hk-sway 1.1s ease-in-out infinite;
-  }
-  [data-live] .hk-leg {
-    animation: hk-step 1.1s ease-in-out infinite;
-  }
-  [data-live] .hk-leg--r {
-    animation-delay: -0.55s;
-  }
-  [data-live] .hk-arm {
-    animation: hk-swing 1.1s ease-in-out infinite;
-  }
-  [data-live] .hk-arm--l {
-    animation-delay: -0.55s;
-  }
-  @keyframes hk-bob {
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-1.4px);
-    }
-  }
-  /* Seen from behind, a step reads as the leg shortening (foot lifted, knee
-     bent) then landing. */
-  @keyframes hk-step {
-    0%,
-    55%,
-    100% {
-      transform: scaleY(1);
-    }
-    25% {
-      transform: scaleY(0.8) translateX(0.8px);
-    }
-  }
-  @keyframes hk-swing {
-    0%,
-    100% {
-      transform: rotate(-6deg);
-    }
-    50% {
-      transform: rotate(6deg);
-    }
-  }
-  /* Weight shifting from one leg to the other. */
-  @keyframes hk-sway {
-    0%,
-    100% {
-      transform: translateX(-0.9px) rotate(-0.6deg);
-    }
-    50% {
-      transform: translateX(0.9px) rotate(0.6deg);
-    }
   }
 </style>

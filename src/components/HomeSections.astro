@@ -1,10 +1,13 @@
 ---
 import type { Lang } from "~/i18n/ui";
-import { ui } from "~/i18n/ui";
 import { getHomeContent } from "~/lib/home-content";
-import { caseStudyPath, getCaseStudy } from "~/lib/case-studies";
+import { caseStudyPath } from "~/lib/case-studies";
 import Eyebrow from "~/components/Eyebrow.astro";
-import SignalType from "~/components/SignalType.astro";
+import ClimbScene from "~/components/ClimbScene.astro";
+import WorkCards from "~/components/WorkCards.astro";
+import GearScene from "~/components/GearScene.astro";
+import WaterfallDots from "~/components/WaterfallDots.astro";
+import WaterfallScene from "~/components/WaterfallScene.astro";
 import { GOOGLE_PROFILE } from "~/lib/facts";
 
 // Home body between the hero and the contact block:
@@ -16,15 +19,12 @@ interface Props {
 
 const { lang } = Astro.props;
 const c = getHomeContent(lang);
-const t = ui[lang];
 const workHref = lang === "fr" ? "/projets/" : "/en/work/";
+// The comparison's answers start in lower case (they used to follow "Agence :").
+const cap = (text: string): string => text.charAt(0).toUpperCase() + text.slice(1);
 const sheet = (n: string, fr: string, en: string): string => (lang === "fr" ? `Planche ${n} · ${fr}` : `Sheet ${n} · ${en}`);
 const rating = GOOGLE_PROFILE.rating.toLocaleString(lang === "fr" ? "fr-FR" : "en-GB", { minimumFractionDigits: 1 });
 
-// Bento: the lead case large on the left, two stacked on the right.
-const featured = ["surly", "eden-rock-yacht-rental", "sun-beach-house"].map((slug) => getCaseStudy(t, slug)!);
-// Intrinsic size of each card image (square unless listed), against layout shift.
-const imageSize: Record<string, [number, number]> = { "eden-rock-yacht-rental": [3456, 1728] };
 
 const faqLd = {
   "@context": "https://schema.org",
@@ -38,39 +38,118 @@ const faqLd = {
 };
 ---
 
-{/* Conçu. Codé. Cité. — manifesto rows + comparison table. */}
+{/* Conçu. Codé. Cité. — the waterfall drawing on the right, the manifesto
+    rows on the left (each word facing its line). A scroll sequence
+    (WaterfallDots.astro): pinned, it opens inside the hiker's backpack where
+    the hero's dive ended, pulls back to the waterfall, then the text comes
+    in; last, still pinned, the water rises from the bottom in dots and
+    fills the screen with the blue of the projects below. The spacer gives it the
+    scroll it needs (only with the sequence). */}
+<div data-approach-seq>
+<section class="relative px-4 py-20 sm:px-6 md:px-12 md:py-32" data-approach>
+  <WaterfallDots />
+  <canvas class="flood" data-flood aria-hidden="true"></canvas>
+  <div class="relative z-[1] mx-auto w-full max-w-[var(--container-wide)]">
+    <div data-seq-item>
+      <Eyebrow label={sheet("01", "Approche", "Approach")} class="mb-6 md:mb-8" />
+    </div>
+    <div class="grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-14">
+      <figure class="approach-visual lg:order-2" aria-hidden="true">
+        <WaterfallScene />
+      </figure>
+      <div>
+        <h2 data-seq-item class="max-w-[24ch] font-display text-title">{c.pillarsTitle}</h2>
+        <ol class="pillars mt-8 md:mt-12">
+          {c.pillars.map((p) => (
+            <li data-seq-item class="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] items-center gap-5 border-t border-[var(--color-ink)]/15 py-5 md:gap-8 md:py-7">
+              <span class="pillar-word inline-block font-display text-[var(--color-accent)]" data-vapor>{p.word}</span>
+              <p class="text-body text-[var(--color-ink-muted)]">{p.body}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+<div data-seq-spacer class="seq-spacer" aria-hidden="true"></div>
+</div>
+
+{/* Recent work — the case studies as cards, images always in view
+    (WorkCards.astro), beside the title and the hiker walking up a slope, on
+    the blue the approach's water filled the screen with: text and drawing in
+    white. With the approach's sequence it is pulled up over its last screen,
+    so it pins the moment the water has filled it, and its entrance follows
+    the scroll, quickly: the title word by word coming clear (as React Bits'
+    Scroll Reveal), the label and the link, the cards rising one after the
+    other, and the drawing condensing out of vapor (ClimbScene.astro). The
+    spacer gives it the little scroll it needs (only with the sequence). */}
+<div data-work-seq>
+<section data-surface="blue" class="work bg-[var(--color-bg)] px-4 py-20 text-[var(--color-ink)] sm:px-6 md:px-12 md:py-32" data-work>
+  <div class="work-inner mx-auto grid w-full max-w-[var(--container-wide)] gap-10 lg:grid-cols-12 lg:gap-14">
+    <div class="work-side flex min-w-0 flex-col lg:col-span-4">
+      <div data-in-item>
+        <Eyebrow label={sheet("02", "Projets", "Work")} class="mb-6 md:mb-8" />
+      </div>
+      <h2 class="font-display text-title" data-in-tilt>
+        {c.workTitle.split(" ").map((w, i) => (
+          <>{i > 0 && " "}<span class="work-word" data-in-word>{w}</span></>
+        ))}
+      </h2>
+      <a href={workHref} data-in-item class="mt-4 self-start font-label text-small uppercase tracking-[0.06em] text-[var(--color-ink)] underline underline-offset-4">{c.workAll}</a>
+      <figure class="climb-visual" aria-hidden="true">
+        <ClimbScene />
+      </figure>
+    </div>
+    <div class="work-cards min-w-0 lg:col-span-8">
+      <WorkCards lang={lang} />
+    </div>
+  </div>
+</section>
+<div data-seq-spacer class="seq-spacer" aria-hidden="true"></div>
+</div>
+
+{/* Freelance, agency or platform. */}
 <section class="px-4 py-20 sm:px-6 md:px-12 md:py-32" data-reveal>
   <div class="mx-auto w-full max-w-[var(--container-wide)]">
-    <Eyebrow label={sheet("01", "Approche", "Approach")} class="mb-6 md:mb-8" />
-    <h2 class="max-w-[24ch] font-display text-[clamp(26px,2.8vw,40px)]">{c.pillarsTitle}</h2>
-    <ol class="mt-10 md:mt-16">
-      {c.pillars.map((p) => (
-        <li class="grid gap-2 border-t border-[var(--color-ink)]/15 py-6 md:grid-cols-12 md:items-baseline md:gap-8 md:py-9">
-          <SignalType text={p.word} class="font-display text-[clamp(44px,6.5vw,104px)] md:col-span-6" />
-          <p class="max-w-[46ch] text-[16px] leading-[1.55] text-[var(--color-ink-muted)] md:col-span-6 md:text-[18px]">{p.body}</p>
-        </li>
-      ))}
-    </ol>
-
-    {/* Phones: each criterion stacks its three answers (no sideways scroll);
-        from md up, the usual table. */}
-    <div class="mt-12 md:mt-20 md:overflow-x-auto">
-      <table class="compare w-full border-collapse text-left text-[16px] md:min-w-[640px] md:text-[17px]">
-        <caption class="mb-4 text-left font-lead text-[22px] text-[var(--color-ink)] md:text-[26px]">{c.compare.caption}</caption>
+    <Eyebrow label={sheet("03", "Comparatif", "Comparison")} class="mb-6 md:mb-8" />
+    {/* Freelance / agency / platform (same 4/8 split as the reviews and the
+        FAQ): a real table, one row per criterion, one column per option, my
+        column tinted blue so it reads at a glance. On phones each criterion
+        becomes a small card: my answer first, then the agency and the
+        platform, each under its name. */}
+    <div class="grid gap-8 md:grid-cols-12 md:gap-10">
+      <div class="md:col-span-4 md:flex md:flex-col">
+        <h3 class="max-w-[22ch] font-display text-title">{c.compare.title[0]} <span class="text-[var(--color-accent)]">{c.compare.title[1]}</span></h3>
+        <p class="mt-4 max-w-[40ch] text-body text-[var(--color-ink-muted)]">{c.compare.lead}</p>
+        {/* His camp, in the white space under the title, level with the end
+            of the list (wide screens). */}
+        <div class="hidden max-w-[440px] pt-12 md:mt-auto md:block" aria-hidden="true">
+          <GearScene />
+        </div>
+      </div>
+      <table class="compare text-body md:col-span-8">
+        <caption class="sr-only">{c.compare.title[0]} {c.compare.title[1]}</caption>
+        <colgroup>
+          <col class="compare-col-label" />
+          <col class="compare-col-me" />
+          <col />
+          <col />
+        </colgroup>
         <thead>
-          <tr>
-            {c.compare.cols.map((col, i) => (
-              <th scope="col" class:list={["px-4 py-3 font-label text-[13px] font-normal uppercase tracking-[0.06em]", i === 1 && "is-me"]}>{col}</th>
-            ))}
+          <tr class="font-display text-title">
+            <td></td>
+            <th scope="col" class="is-me">{c.compare.me}</th>
+            <th scope="col">{c.compare.agency}</th>
+            <th scope="col">{c.compare.platform}</th>
           </tr>
         </thead>
         <tbody>
-          {c.compare.rows.map((row) => (
-            <tr class="border-t border-[var(--color-ink)]/12">
-              <th scope="row" class="px-4 py-4 font-medium">{row[0]}</th>
-              <td data-label={c.compare.cols[1]} class="is-me px-4 py-4 font-medium">{row[1]}</td>
-              <td data-label={c.compare.cols[2]} class="px-4 py-4 text-[var(--color-ink-muted)]">{row[2]}</td>
-              <td data-label={c.compare.cols[3]} class="px-4 py-4 text-[var(--color-ink-muted)]">{row[3]}</td>
+          {c.compare.rows.map((r) => (
+            <tr>
+              <th scope="row" class="font-label text-small uppercase tracking-[0.06em]">{r.label}</th>
+              <td class="is-me" data-label={c.compare.me}>{cap(r.me)}</td>
+              <td data-label={c.compare.agency}>{cap(r.agency)}</td>
+              <td data-label={c.compare.platform}>{cap(r.platform)}</td>
             </tr>
           ))}
         </tbody>
@@ -79,111 +158,87 @@ const faqLd = {
   </div>
 </section>
 
-{/* Recent work — asymmetric bento: 1 large + 2 stacked. */}
-<section class="px-4 pb-20 sm:px-6 md:px-12 md:pb-32" data-reveal>
-  <div class="mx-auto w-full max-w-[var(--container-wide)]">
-    <Eyebrow label={sheet("02", "Projets", "Work")} class="mb-6 md:mb-8" />
-    <div class="flex items-end justify-between gap-6">
-      <h2 class="font-display text-[clamp(26px,2.8vw,40px)]">{c.workTitle}</h2>
-      <a href={workHref} class="shrink-0 font-label text-[13px] uppercase tracking-[0.06em] text-[var(--color-ink)] underline underline-offset-4 hover:text-[var(--color-accent)] md:text-[14px]">{c.workAll}</a>
-    </div>
-    <div class="mt-8 grid gap-4 md:mt-12 md:grid-cols-12 md:grid-rows-2 md:gap-5">
-      {featured.map((cs, i) => (
-        <a
-          href={caseStudyPath(cs.slug, lang)}
-          class:list={["work-card marks group", i === 0 ? "md:col-span-7 md:row-span-2" : "md:col-span-5"]}
-        >
-          <span class:list={["work-media", i === 0 ? "aspect-[4/3] md:aspect-auto md:flex-1" : "aspect-[16/9]"]}>
-            <img
-              src={cs.image}
-              alt={`${cs.title} : ${cs.headline}`}
-              loading="lazy"
-              decoding="async"
-              width={(imageSize[cs.slug] ?? [1024, 1024])[0]}
-              height={(imageSize[cs.slug] ?? [1024, 1024])[1]}
-            />
-          </span>
-          <span class="flex flex-col gap-1 pt-4">
-            <span class="font-display text-[20px] md:text-[24px]">{cs.title}</span>
-            <span class="text-[15px] text-[var(--color-ink-muted)]">{cs.headline}</span>
-            <span class="mt-2 flex items-center justify-between gap-4">
-              <span class="font-label text-[13px] uppercase tracking-[0.06em]">{cs.metric}</span>
-              <span class="font-label text-[13px] uppercase tracking-[0.06em] underline underline-offset-4 group-hover:text-[var(--color-accent)]">{c.workLink}</span>
-            </span>
-          </span>
-        </a>
-      ))}
-    </div>
-  </div>
-</section>
-
 {/* Google reviews: rating + four quotes (businesses first), linked to the profile. Visible
     text only, no AggregateRating markup: Google ignores a business's ratings
-    of itself and reviews taken from another site. */}
-<section class="px-4 pb-20 sm:px-6 md:px-12 md:pb-32" data-reveal>
+    of itself and reviews taken from another site. The quotes glide slowly in
+    a loop (script), at a steady pace; they stop on
+    hover, on keyboard focus or with the pause button. With reduced motion:
+    a plain row to swipe. */}
+<section class="px-4 pb-20 sm:px-6 md:px-12 md:pb-32" data-reveal data-reviews>
   <div class="mx-auto w-full max-w-[var(--container-wide)]">
-    <Eyebrow label={sheet("03", "Avis", "Reviews")} class="mb-6 md:mb-8" />
+    <Eyebrow label={sheet("04", "Avis", "Reviews")} class="mb-6 md:mb-8" />
   </div>
   <div class="mx-auto grid w-full max-w-[var(--container-wide)] gap-8 md:grid-cols-12 md:gap-10">
     <div class="md:col-span-4">
-      <h2 class="font-display text-[clamp(26px,2.8vw,40px)]">{c.reviewsTitle}</h2>
+      <h2 class="font-display text-title">{c.reviewsTitle}</h2>
       <p class="mt-6 flex items-center gap-4" aria-label={lang === "fr" ? `Note moyenne ${rating} sur 5` : `Average rating ${rating} out of 5`}>
-        <span class="font-display text-[clamp(44px,5vw,64px)] leading-none" aria-hidden="true">{rating}</span>
+        <span class="font-display text-display leading-none" aria-hidden="true">{rating}</span>
         <span class="stars" aria-hidden="true">
           {[0, 1, 2, 3, 4].map(() => (
             <svg viewBox="0 0 20 20" width="20" height="20"><path d="M10 1.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3.1-5.4 3.1 1.2-6L1.3 7.8l6.1-.7z" /></svg>
           ))}
         </span>
       </p>
-      <p class="mt-2 text-[16px] text-[var(--color-ink-muted)]">{GOOGLE_PROFILE.reviewCount} {c.reviewsCount}</p>
-      <a href={GOOGLE_PROFILE.url} target="_blank" rel="noopener" class="mt-5 inline-flex items-center gap-2 text-[16px] font-medium text-[var(--color-accent)] underline underline-offset-4 hover:text-[var(--color-accent-strong)]">
+      <p class="mt-2 text-body text-[var(--color-ink-muted)]">{GOOGLE_PROFILE.reviewCount} {c.reviewsCount}</p>
+      <a href={GOOGLE_PROFILE.url} target="_blank" rel="noopener" class="mt-5 inline-flex items-center gap-2 text-body font-medium text-[var(--color-accent)] underline underline-offset-4 hover:text-[var(--color-accent-strong)]">
         {c.reviewsLink} <span aria-hidden="true">↗</span>
       </a>
     </div>
-    <div class="md:col-span-8">
-      <ul class="grid gap-4 sm:grid-cols-2">
-        {c.reviews.map((r) => (
-          <li>
-            <figure class="review marks">
-              <blockquote class="text-[16px] leading-[1.55] text-[var(--color-ink)]">
-                <p>{lang === "fr" ? `« ${r.quote} »` : `“${r.quote}”`}</p>
-              </blockquote>
-              <figcaption class="mt-auto border-t border-[var(--color-border)] pt-4 text-[15px]">
-                <span class="font-medium">{r.author}</span>
-                <span class="text-[var(--color-ink-muted)]"> · {lang === "fr" ? "Avis Google" : "Google review"}</span>
-              </figcaption>
-            </figure>
-          </li>
-        ))}
-      </ul>
-      {c.reviewsNote && <p class="mt-3 text-[14px] text-[var(--color-ink-muted)]">{c.reviewsNote}</p>}
+    <div class="min-w-0 md:col-span-8">
+      <div class="reviews-viewport">
+        <ul class="reviews-track" data-reviews-track>
+          {[...c.reviews, ...c.reviews].map((r, i) => {
+            const copy = i >= c.reviews.length;
+            return (
+              <li class="review" style={`--i:${i % c.reviews.length}`} aria-hidden={copy ? "true" : undefined} data-copy={copy ? "" : undefined}>
+                <figure>
+                  <blockquote class="text-body text-[var(--color-ink)]">
+                    <p>{lang === "fr" ? `« ${r.quote} »` : `“${r.quote}”`}</p>
+                  </blockquote>
+                  <figcaption class="mt-5 text-small">
+                    <span class="font-medium">{r.author}</span>
+                    <span class="text-[var(--color-ink-muted)]"> · {lang === "fr" ? "Avis Google" : "Google review"}</span>
+                  </figcaption>
+                </figure>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      <div class="mt-5 flex items-center justify-between gap-4">
+        {c.reviewsNote ? <p class="text-small text-[var(--color-ink-muted)]">{c.reviewsNote}</p> : <span />}
+        <button type="button" class="loop-pause font-label text-small uppercase tracking-[0.06em]" data-reviews-pause aria-pressed="false" data-label-pause={lang === "fr" ? "Pause" : "Pause"} data-label-play={lang === "fr" ? "Lecture" : "Play"}>
+          {lang === "fr" ? "Pause" : "Pause"}
+        </button>
+      </div>
     </div>
   </div>
 </section>
 
-{/* FAQ — question list on the right, heading + aside on the left. */}
-<section class="px-4 py-20 sm:px-6 md:px-12 md:py-32" data-reveal>
+{/* FAQ — question list on the right, heading + aside on the left. The
+    questions rise in one after the other; an answer unfolds smoothly. */}
+<section class="px-4 py-20 sm:px-6 md:px-12 md:py-32" data-reveal data-faq>
   <div class="mx-auto w-full max-w-[var(--container-wide)]">
-    <Eyebrow label={sheet("04", "Questions", "Questions")} class="mb-6 md:mb-8" />
+    <Eyebrow label={sheet("05", "Questions", "Questions")} class="mb-6 md:mb-8" />
   </div>
   <div class="mx-auto grid w-full max-w-[var(--container-wide)] gap-8 md:grid-cols-12 md:gap-10">
     <div class="md:col-span-4">
-      <h2 class="font-display text-[clamp(26px,2.8vw,40px)]">{c.faqTitle}</h2>
-      <p class="mt-4 max-w-[30ch] text-[15px] text-[var(--color-ink-muted)]">
+      <h2 class="font-display text-title">{c.faqTitle}</h2>
+      <p class="mt-4 max-w-[30ch] text-body text-[var(--color-ink-muted)]">
         <a href="#contact" class="text-[var(--color-ink)] underline underline-offset-4 hover:text-[var(--color-accent)]">{c.faqAside}</a>
       </p>
     </div>
-    <div class="md:col-span-8">
-      {c.faq.map((f) => (
-        <details class="faq group border-b border-[var(--color-ink)]/15">
-          <summary class="flex cursor-pointer list-none items-start justify-between gap-6 py-5 text-[17px] font-medium md:text-[19px]">
+    <div class="faq-list md:col-span-8">
+      {c.faq.map((f, i) => (
+        <details class="faq group" style={`--i:${i}`}>
+          <summary class="flex cursor-pointer list-none items-start justify-between gap-6 py-5 text-body">
             <h3 class="font-[inherit] text-[inherit]">{f.q}</h3>
             <span class="faq-icon" aria-hidden="true"></span>
           </summary>
-          <div class="pb-6">
-            <p class="max-w-[64ch] text-[17px] leading-[1.6] text-[var(--color-ink-muted)]">{f.a}</p>
+          <div class="faq-answer pb-6">
+            <p class="max-w-[64ch] text-body text-[var(--color-ink-muted)]">{f.a}</p>
             {f.link && (
-              <a href={f.link.href} class="mt-3 inline-flex items-center gap-2 text-[16px] font-medium text-[var(--color-accent)] underline underline-offset-4 hover:text-[var(--color-accent-strong)]">
+              <a href={f.link.href} class="mt-3 inline-flex items-center gap-2 text-body text-[var(--color-accent)] underline underline-offset-4 hover:text-[var(--color-accent-strong)]">
                 {f.link.label} <span aria-hidden="true">→</span>
               </a>
             )}
@@ -196,93 +251,268 @@ const faqLd = {
 </section>
 
 <style>
-  .compare .is-me {
-    background: color-mix(in srgb, var(--color-accent) 7%, transparent);
-    color: var(--color-ink);
+  /* ===== Approche: scroll sequence ===== Pinned while the spacer scrolls by
+     (WaterfallDots.astro sets data-seq="on"). */
+  [data-approach-seq][data-seq="on"] > [data-approach] {
+    position: sticky;
+    top: 0;
   }
-  .compare thead .is-me {
-    border-radius: 0;
+  /* Wide screens: while it plays, the section holds in one screen, its
+     content centred, the drawing no taller than the screen allows. */
+  @media (min-width: 1024px) {
+    [data-approach-seq][data-seq="on"] > [data-approach] {
+      display: flex;
+      min-height: 100svh;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 80px;
+      padding-bottom: 48px;
+    }
+    [data-approach-seq][data-seq="on"] .approach-visual {
+      max-width: calc((100svh - 200px) * 600 / 680);
+    }
+  }
+  /* Pulled up over the hero's last screen (WaterfallDots.astro): on top of
+     it, and opaque, so the hero leaving underneath never shows. */
+  [data-approach-seq][data-overlap="on"] {
+    position: relative;
+    z-index: 2;
+  }
+  [data-approach-seq][data-overlap="on"] > [data-approach] {
+    background: var(--color-bg);
+  }
+  .seq-spacer {
+    display: none;
+  }
+  [data-approach-seq][data-seq="on"] > .seq-spacer {
+    display: block;
+    height: 162vh;
+  }
+  @media (max-width: 767px) {
+    [data-approach-seq][data-seq="on"] > .seq-spacer {
+      height: 122vh;
+    }
+  }
+  /* The water rising at the end of the pin, in dots (WaterfallDots.astro
+     draws it): over everything in the section, in the projects' blue. */
+  .flood {
+    display: none;
+  }
+  [data-approach-seq][data-seq="on"] .flood {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: var(--color-accent);
+    pointer-events: none;
+  }
+  /* On phones the drawing sits above the text, not too tall. */
+  .approach-visual {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  @media (min-width: 1024px) {
+    .approach-visual {
+      max-width: none;
+    }
+  }
+  /* The three words share the hero title's display size. */
+  .pillars :global(.pillar-word) {
+    font-size: var(--text-display);
+    line-height: 1;
+  }
+  /* ===== Projets ===== Wide screens: one screen tall, the cards taking
+     the height the section gives them; the drawing at the foot of the side
+     column, as tall as what is left there. */
+  @media (min-width: 1024px) {
+    .work {
+      display: flex;
+      min-height: 100svh;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .work-inner {
+      height: clamp(520px, calc(100svh - 190px), 900px);
+    }
+  }
+  .climb-visual {
+    display: flex;
+    max-width: 420px;
+    justify-content: center;
+    margin-top: 32px;
+  }
+  .climb-visual :global(.climb-dots) {
+    max-height: 42svh;
+  }
+  @media (min-width: 1024px) {
+    .climb-visual {
+      min-height: 0;
+      max-width: none;
+      flex: 1 1 0;
+      align-items: flex-end;
+    }
+    .climb-visual :global(.climb-dots) {
+      width: auto;
+      max-width: 100%;
+      height: 100%;
+      max-height: none;
+    }
+  }
+  .work-word {
+    display: inline-block;
+  }
+  [data-work-seq][data-seq="on"] [data-in-tilt] {
+    transform-origin: 0 50%;
+  }
+  /* Its scroll sequence (script below): pulled up over the approach's last
+     screen, pinned while the spacer scrolls by. */
+  [data-work-seq][data-seq="on"] {
+    position: relative;
+    z-index: 3;
+  }
+  [data-work-seq][data-seq="on"] > [data-work] {
+    position: sticky;
+    top: 0;
+    padding-top: 88px;
+    padding-bottom: 40px;
+  }
+  [data-work-seq][data-seq="on"] > .seq-spacer {
+    display: block;
+    height: 45vh;
+  }
+  @media (max-width: 767px) {
+    [data-work-seq][data-seq="on"] > [data-work] {
+      padding-top: 72px;
+    }
+    [data-work-seq][data-seq="on"] > .seq-spacer {
+      height: 40vh;
+    }
+  }
+  /* ===== Freelance / agency / platform ===== */
+  .compare {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+  .compare-col-label {
+    width: 22%;
+  }
+  .compare-col-me {
+    width: 30%;
+  }
+  .compare thead th {
+    padding: 0 16px 16px;
+    text-align: left;
+    font-weight: 600; /* as .font-display, over the th's own bold */
+    color: var(--color-ink);
+    vertical-align: bottom;
+  }
+  /* My column: solid blue all the way down, white text, its name after the
+     site's small square (white here). */
+  .compare .is-me {
     background: var(--color-accent);
     color: #ffffff;
   }
-  .compare tbody tr:last-child .is-me {
-    border-radius: 0;
+  .compare thead th.is-me {
+    padding-top: 18px;
+    color: #ffffff;
   }
+  .compare thead th.is-me::before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin: 0 10px 0.18em 0;
+    background: #ffffff;
+  }
+  /* Between two rows, a faint white line inside the blue. */
+  .compare tbody td.is-me {
+    border-top: 1px solid color-mix(in srgb, #ffffff 22%, transparent);
+  }
+  .compare tbody tr {
+    border-top: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+  }
+  .compare tbody tr:last-child {
+    border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+  }
+  .compare tbody th {
+    padding: 20px 16px 20px 0;
+    text-align: left;
+    font-weight: 400;
+    color: var(--color-ink-muted);
+    vertical-align: top;
+  }
+  .compare td {
+    padding: 18px 16px;
+    vertical-align: top;
+    color: var(--color-ink-muted);
+  }
+  .compare td.is-me {
+    color: #ffffff;
+    font-weight: 500;
+  }
+  /* Phones: one small card per criterion, each answer under its option's name. */
   @media (max-width: 767px) {
     .compare,
-    .compare caption,
     .compare tbody,
     .compare tr,
     .compare th,
     .compare td {
       display: block;
+      width: auto;
     }
-    /* The column names move into each answer (data-label). */
+    .compare colgroup,
     .compare thead {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      clip-path: inset(50%);
-      white-space: nowrap;
+      display: none;
     }
     .compare tbody tr {
-      padding: 20px 0 16px;
+      padding: 18px 0;
     }
     .compare tbody th {
       padding: 0 0 10px;
-      font-family: var(--font-label);
-      font-size: 13px;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--color-ink);
     }
-    .compare tbody td {
-      padding: 10px 14px;
+    .compare td {
+      padding: 6px 0;
     }
-    .compare tbody td::before {
+    .compare td::before {
       content: attr(data-label);
       display: block;
-      margin-bottom: 2px;
       font-family: var(--font-label);
-      font-size: 12px;
-      font-weight: 400;
+      font-size: var(--text-small);
       letter-spacing: 0.06em;
       text-transform: uppercase;
+      font-weight: 400;
       color: var(--color-ink-muted);
     }
-    .compare tbody td.is-me {
-      border-left: 2px solid var(--color-accent);
+    .compare td.is-me {
+      margin-bottom: 4px;
+      padding: 10px 12px;
+      border-top: 0;
     }
-    .compare tbody td.is-me::before {
-      color: var(--color-accent);
+    .compare td.is-me::before {
+      color: color-mix(in srgb, #ffffff 78%, transparent);
     }
   }
 
-  .work-card {
-    display: flex;
-    flex-direction: column;
-    color: var(--color-ink);
-    text-decoration: none;
+  .loop-pause {
+    padding: 6px 0;
+    color: var(--color-ink-muted);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    cursor: pointer;
   }
-  .work-media {
-    position: relative;
-    display: block;
-    overflow: hidden;
-    border-radius: 0;
-    background: var(--color-bg-shade);
+  .loop-pause:hover,
+  .loop-pause:focus-visible {
+    color: var(--color-accent);
   }
-  .work-media img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.8s var(--ease-power3);
-  }
-  .work-card:hover .work-media img {
-    transform: scale(1.03);
+  /* Reduced motion: no loop, a row to swipe. */
+  @media (prefers-reduced-motion: reduce) {
+    .loop-pause {
+      display: none;
+    }
   }
 
   .stars {
@@ -293,28 +523,80 @@ const faqLd = {
   .stars svg {
     fill: currentColor;
   }
-  .review {
+  /* ===== Reviews: a slow loop of quotes ===== */
+  .reviews-viewport {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, #000 0, #000 82%, transparent);
+    mask-image: linear-gradient(90deg, #000 0, #000 82%, transparent);
+  }
+  .reviews-track {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-    height: 100%;
-    padding: 24px;
-    border: 1px solid var(--color-border);
-    background: var(--color-bg);
+    align-items: flex-start;
+    width: max-content;
+    will-change: transform;
+  }
+  .review {
+    flex: 0 0 auto;
+    width: clamp(260px, 26vw, 360px);
+    margin-right: clamp(28px, 3vw, 48px);
+    padding-top: 20px;
+    border-top: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
   }
   .review blockquote {
     margin: 0;
   }
+  /* Entry: the quotes rise in one after the other. */
+  .reveal-on [data-reviews] .review {
+    opacity: 0;
+    translate: 0 16px;
+    transition:
+      opacity 0.8s var(--ease-power3) calc(var(--i) * 110ms + 150ms),
+      translate 0.8s var(--ease-power3) calc(var(--i) * 110ms + 150ms);
+  }
+  .reveal-on [data-reviews][data-revealed] .review {
+    opacity: 1;
+    translate: 0 0;
+  }
+  /* Reduced motion: no loop, a row to swipe. */
+  @media (prefers-reduced-motion: reduce) {
+    .reviews-viewport {
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+    .review {
+      scroll-snap-align: start;
+    }
+    .review[data-copy] {
+      display: none;
+    }
+  }
 
+  /* ===== FAQ ===== */
+  .faq-list {
+    border-top: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+  }
+  .faq {
+    border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+    interpolate-size: allow-keywords;
+  }
   .faq summary::-webkit-details-marker {
     display: none;
+  }
+  .faq summary {
+    transition: color 0.3s var(--ease-power3);
+  }
+  .faq summary:hover,
+  .faq[open] summary {
+    color: var(--color-accent);
   }
   .faq-icon {
     position: relative;
     flex-shrink: 0;
-    width: 14px;
-    height: 14px;
-    margin-top: 6px;
+    width: 12px;
+    height: 12px;
+    margin-top: 7px;
   }
   .faq-icon::before,
   .faq-icon::after {
@@ -323,9 +605,9 @@ const faqLd = {
     top: 50%;
     left: 0;
     width: 100%;
-    height: 1.5px;
+    height: 1px;
     background: currentColor;
-    transition: transform 0.3s var(--ease-power3);
+    transition: transform 0.4s var(--ease-power3);
   }
   .faq-icon::after {
     transform: rotate(90deg);
@@ -333,12 +615,160 @@ const faqLd = {
   .faq[open] .faq-icon::after {
     transform: rotate(0deg);
   }
+  /* Smooth unfold where the browser supports animating <details>; elsewhere
+     it simply opens. */
+  .faq::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition:
+      block-size 0.5s var(--ease-power3),
+      content-visibility 0.5s allow-discrete;
+  }
+  .faq[open]::details-content {
+    block-size: auto;
+  }
+  .faq-answer {
+    opacity: 0;
+    translate: 0 -6px;
+    transition:
+      opacity 0.4s var(--ease-power3),
+      translate 0.4s var(--ease-power3);
+  }
+  .faq[open] .faq-answer {
+    opacity: 1;
+    translate: 0 0;
+    transition-delay: 0.08s;
+  }
+  /* Entry: the questions rise in one after the other. */
+  .reveal-on [data-faq] .faq {
+    opacity: 0;
+    translate: 0 14px;
+    transition:
+      opacity 0.7s var(--ease-power3) calc(var(--i) * 80ms + 150ms),
+      translate 0.7s var(--ease-power3) calc(var(--i) * 80ms + 150ms);
+  }
+  .reveal-on [data-faq][data-revealed] .faq {
+    opacity: 1;
+    translate: 0 0;
+  }
 
   @media (prefers-reduced-motion: reduce) {
-    .work-media img,
+    .faq summary,
+    .faq-answer,
+    .faq::details-content,
     .faq-icon::before,
     .faq-icon::after {
       transition: none;
     }
+    .faq-answer {
+      opacity: 1;
+      translate: none;
+    }
   }
 </style>
+
+<script>
+  import { seqProgress } from "~/lib/camera";
+  import { initMarquee } from "~/lib/marquee";
+
+  // Projets on the blue: once the approach's sequence is on (its script has
+  // run by the first frame), pin this section too, pulled up over the
+  // approach's last screen so it is there the moment the water has filled
+  // it, and play its entrance with the scroll through the pin (eased a
+  // little), so scrolling back and forth runs it back and forth at once.
+  const workSeq = document.querySelector<HTMLElement>("[data-work-seq]");
+  const work = workSeq?.querySelector<HTMLElement>("[data-work]");
+  const workSpacer = workSeq?.querySelector<HTMLElement>("[data-seq-spacer]");
+  if (workSeq && work && workSpacer && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    requestAnimationFrame(() => {
+      const prev = document.querySelector<HTMLElement>("[data-approach-seq]");
+      const prevStage = prev?.querySelector<HTMLElement>("[data-approach]");
+      if (prev?.dataset.seq !== "on" || !prevStage) return;
+      workSeq.dataset.seq = "on";
+      work.dataset.wait = "";
+      const lift = (): void => {
+        workSeq.style.marginTop = `${-prevStage.offsetHeight}px`;
+      };
+
+      // What comes in, and when (shares of the pin): [element, from, to, kind].
+      // All of it in by 80 %: a short scroll. The words start faint and
+      // blurred and come clear one after the other while the title levels
+      // out of a slight tilt; the cards rise and wipe up one after another.
+      type Kind = "fade" | "word" | "tilt" | "card";
+      const steps: [HTMLElement, number, number, Kind][] = [];
+      const items = [...work.querySelectorAll<HTMLElement>("[data-in-item]")];
+      steps.push([items[0], 0, 0.3, "fade"]);
+      const tilt = work.querySelector<HTMLElement>("[data-in-tilt]");
+      if (tilt) steps.push([tilt, 0, 0.5, "tilt"]);
+      work.querySelectorAll<HTMLElement>("[data-in-word]").forEach((el, i) => steps.push([el, i * 0.12, 0.32 + i * 0.12, "word"]));
+      if (items[1]) steps.push([items[1], 0.2, 0.5, "fade"]);
+      work.querySelectorAll<HTMLElement>("[data-card]").forEach((card, i) => steps.push([card, 0.04 + i * 0.07, 0.42 + i * 0.07, "card"]));
+      const ease = (v: number): number => 1 - (1 - v) ** 3;
+      const last = new Map<HTMLElement, number>();
+      const apply = (p: number): void => {
+        for (const [el, from, to, kind] of steps) {
+          const e = ease(Math.min(1, Math.max(0, (p - from) / (to - from))));
+          const key = Math.round(e * 1000);
+          if (last.get(el) === key) continue;
+          last.set(el, key);
+          const done = e >= 1;
+          if (kind === "tilt") {
+            el.style.rotate = done ? "" : `${(3 * (1 - e)).toFixed(3)}deg`;
+          } else if (kind === "word") {
+            el.style.opacity = done ? "" : (0.1 + 0.9 * e).toFixed(3);
+            el.style.filter = done ? "" : `blur(${(4 * (1 - e)).toFixed(2)}px)`;
+          } else if (kind === "fade") {
+            el.style.opacity = done ? "" : e.toFixed(3);
+            el.style.translate = done ? "" : `0 ${(10 * (1 - e)).toFixed(2)}px`;
+            el.style.filter = done ? "" : `blur(${(4 * (1 - e)).toFixed(2)}px)`;
+          } else {
+            // A card: it rises, its image wipes up out of a zoom, its
+            // caption follows.
+            el.style.translate = done ? "" : `0 ${(36 * (1 - e)).toFixed(2)}px`;
+            const media = el.querySelector<HTMLElement>("[data-card-media]");
+            const img = media?.querySelector<HTMLElement>("img");
+            const text = el.querySelector<HTMLElement>("[data-card-text]");
+            if (media) media.style.clipPath = done ? "" : `inset(${((1 - e) * 100).toFixed(2)}% 0 0 0)`;
+            if (img) img.style.scale = done ? "" : (1 + 0.18 * (1 - e)).toFixed(4);
+            if (text) text.style.opacity = done ? "" : Math.max(0, e * 1.6 - 0.6).toFixed(3);
+          }
+        }
+        // The drawing's vapor reads it (ClimbScene.astro).
+        work.dataset.in = p.toFixed(4);
+      };
+
+      let r = 0;
+      let raf = 0;
+      let shown: boolean | null = null;
+      const tick = (): void => {
+        const target = seqProgress(workSeq, workSpacer);
+        r += (target - r) * 0.18;
+        if (Math.abs(target - r) < 1e-4) r = target;
+        // Hidden until it pins over the approach.
+        const on = workSeq.getBoundingClientRect().top <= 0.5;
+        if (on !== shown) {
+          shown = on;
+          work.style.visibility = on ? "" : "hidden";
+        }
+        apply(on ? r : 0);
+        raf = r !== target ? requestAnimationFrame(tick) : 0;
+      };
+      const kick = (): void => {
+        if (!raf) raf = requestAnimationFrame(tick);
+      };
+      lift();
+      kick();
+      window.addEventListener("resize", () => {
+        lift();
+        kick();
+      });
+      window.addEventListener("scroll", kick, { passive: true });
+    });
+  }
+
+  // The reviews' slow loop (see marquee.ts).
+  const reviews = document.querySelector<HTMLElement>("[data-reviews]");
+  const reviewsTrack = reviews?.querySelector<HTMLElement>("[data-reviews-track]");
+  const reviewsPause = reviews?.querySelector<HTMLButtonElement>("[data-reviews-pause]");
+  if (reviews && reviewsTrack && reviewsPause) initMarquee(reviews, reviewsTrack, reviewsPause);
+</script>

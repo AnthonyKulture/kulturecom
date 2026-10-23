@@ -129,7 +129,7 @@ export const routes: Record<string, RouteMeta> = {
     crumb: "SEO & GEO",
     title: `Consultant SEO, GEO & ChatGPT Ads à Nice | Anthony Profit`,
     description:
-      `SEO et GEO à Nice : être trouvé sur Google et cité par ChatGPT. Audit de visibilité dès ${fr("seo")}, campagnes ChatGPT Ads, Schema.org, llms.txt.`,
+      `SEO et GEO à Nice : être trouvé sur Google et cité par ChatGPT. Stratégie, plan éditorial, contenus et veille. Audit de visibilité dès ${fr("seo")}, ChatGPT Ads.`,
   },
   "/identite-de-marque/": {
     lang: "fr",
@@ -280,7 +280,7 @@ export const routes: Record<string, RouteMeta> = {
     crumb: "SEO & GEO",
     title: `SEO, GEO & ChatGPT Ads consultant in Nice | Anthony Profit`,
     description:
-      `SEO and GEO near Nice: get found on Google and cited by ChatGPT. Visibility audit from ${en("seo")}, ChatGPT Ads campaigns, Schema.org, llms.txt.`,
+      `SEO and GEO near Nice: get found on Google and cited by ChatGPT. Strategy, editorial plan, content and market watch. Visibility audit from ${en("seo")}, ChatGPT Ads.`,
   },
   "/en/brand-design/": {
     lang: "en",

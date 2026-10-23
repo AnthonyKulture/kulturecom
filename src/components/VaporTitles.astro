@@ -1,0 +1,42 @@
+---
+// Big titles marked `data-vapor` condense out of vapor as they come into view,
+// and break back into vapor around the pointer (see vapor-type.ts). Plain text
+// under reduced motion or without JS. The home hero title runs its own copy of
+// the effect (it also swaps the AI name), so it isn't marked.
+---
+
+<script>
+  import { vaporType } from "~/lib/vapor-type";
+
+  const titles = document.querySelectorAll<HTMLElement>("[data-vapor]");
+  if (titles.length && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const accent = getComputedStyle(document.documentElement).getPropertyValue("--color-accent");
+    const vapors = new Map<Element, ReturnType<typeof vaporType>>();
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          io.unobserve(e.target);
+          vapors.get(e.target)?.start();
+        }
+      },
+      { threshold: 0.4 },
+    );
+    const watch = (): void => titles.forEach((t) => io.observe(t));
+    titles.forEach((t) => vapors.set(t, vaporType(t, accent)));
+
+    // With the blueprint entry animation on, wait for it to hand over.
+    const root = document.documentElement;
+    if (root.classList.contains("intro-on")) {
+      const mo = new MutationObserver(() => {
+        if (root.classList.contains("intro-reveal") || !root.classList.contains("intro-on")) {
+          mo.disconnect();
+          watch();
+        }
+      });
+      mo.observe(root, { attributes: true, attributeFilter: ["class"] });
+    } else {
+      watch();
+    }
+  }
+</script>

@@ -35,6 +35,15 @@ export interface Review {
   author: string;
 }
 
+/** One criterion of the freelance / agency / platform comparison. */
+export interface CompareRow {
+  label: string;
+  me: string;
+  /** Lower-case: shown after "Agence : " / "Plateforme : ". */
+  agency: string;
+  platform: string;
+}
+
 export interface HomeContent {
   kicker: string;
   h1: [string, string];
@@ -45,9 +54,14 @@ export interface HomeContent {
   pillars: { word: string; body: string }[];
   pillarsTitle: string;
   compare: {
-    caption: string;
-    cols: [string, string, string, string];
-    rows: [string, string, string, string][];
+    /** Second part set in the accent colour. */
+    title: [string, string];
+    lead: string;
+    /** Names: "Avec moi", "Agence", "Plateforme". */
+    me: string;
+    agency: string;
+    platform: string;
+    rows: CompareRow[];
   };
   workTitle: string;
   workAll: string;
@@ -120,26 +134,31 @@ export function getHomeContent(lang: Lang): HomeContent {
       sub: "Je dessine et je code chaque site pour votre marque, puis je travaille sa visibilité sur Google et dans les réponses des IA.",
       doorsLabel: "Vous voulez…",
       doors: [
-        { id: "seo", title: "Être trouvé sur Google et cité par les IA", desc: "SEO, GEO, ChatGPT Ads" },
+        { id: "seo", title: "Être trouvé sur Google et cité par les IA", desc: "Stratégie, contenus, SEO & GEO" },
         { id: "web", title: "Créer ou refaire mon site", desc: "Design et code sur-mesure" },
         { id: "apps", title: "Gagner du temps avec l'IA", desc: "Outils métier, apps et automatisations" },
         { id: "brand", title: "Lancer ou moderniser ma marque", desc: "Logo et charte graphique" },
       ],
       trustedBy: "Ils m'ont confié leur image et leur visibilité",
-      pillarsTitle: "Un seul interlocuteur à Nice, du design jusqu'aux réponses des IA.",
+      pillarsTitle: "Un seul interlocuteur, du design jusqu'aux réponses des IA.",
       pillars: [
         { word: "Conçu.", body: "Un design sur-mesure, pensé pour votre marque et pour que vos visiteurs passent à l'action." },
         { word: "Codé.", body: "Un code rapide et accessible, livré avec un score Lighthouse d'au moins 95 et des Core Web Vitals au vert." },
-        { word: "Cité.", body: "SEO, données structurées et llms.txt dès la mise en ligne, pour être trouvé sur Google et cité par ChatGPT, Perplexity ou Gemini." },
+        { word: "Cité.", body: "Une stratégie de contenus, une veille sur votre marché et un SEO solide dès la mise en ligne, pour être trouvé sur Google et cité par ChatGPT, Perplexity ou Gemini." },
       ],
       compare: {
-        caption: "Freelance, agence ou plateforme : ce qui change pour vous",
-        cols: ["", "Avec moi", "Agence", "Plateforme (Wix, Squarespace…)"],
+        title: ["Freelance, agence ou plateforme :", "ce qui change pour vous"],
+        lead: "Trois façons d'avoir un site professionnel. Voici ce que chacune implique, critère par critère.",
+        me: "Avec moi",
+        agency: "Agence",
+        platform: "Plateforme",
         rows: [
-          ["Qui fait le travail", "Moi, du brief à la mise en ligne", "Une équipe, via un chef de projet", "Vous"],
-          ["Design", "Sur-mesure", "Sur-mesure", "Modèle à adapter"],
-          ["SEO et visibilité IA", "Inclus dès la conception", "Souvent en option", "À faire soi-même"],
-          ["Performance", "Lighthouse ≥ 95", "Variable", "Limitée par la plateforme"],
+          { label: "Interlocuteur", me: "La personne qui conçoit et code votre site", agency: "un chef de projet, qui relaie à l'équipe", platform: "personne, vous faites tout" },
+          { label: "Design", me: "Sur-mesure, pensé pour votre marque", agency: "sur-mesure", platform: "un modèle à adapter" },
+          { label: "Prix", me: `Dès ${formatPrice(PRICE.webOnePage, lang)}, fixé par écrit`, agency: "plus élevé, frais de structure", platform: "un abonnement, plus votre temps" },
+          { label: "SEO et IA", me: "Inclus dès la conception", agency: "souvent en option", platform: "à faire vous-même" },
+          { label: "Stratégie et contenus", me: "Plan éditorial, rédaction et veille", agency: "souvent sous-traités", platform: "à faire vous-même" },
+          { label: "Vitesse", me: "Un site rapide, score Lighthouse d'au moins 95", agency: "variable", platform: "limitée par l'outil" },
         ],
       },
       workTitle: "Projets récents",
@@ -196,26 +215,31 @@ export function getHomeContent(lang: Lang): HomeContent {
     sub: "I design and code every site for your brand, then work on its visibility on Google and in AI answers.",
     doorsLabel: "You want to…",
     doors: [
-      { id: "seo", title: "Get found on Google and cited by AI", desc: "SEO, GEO, ChatGPT Ads" },
+      { id: "seo", title: "Get found on Google and cited by AI", desc: "Strategy, content, SEO & GEO" },
       { id: "web", title: "Build or rebuild my website", desc: "Custom design and code" },
       { id: "apps", title: "Save time with AI", desc: "Business tools, apps and automations" },
       { id: "brand", title: "Launch or refresh my brand", desc: "Logo and style guide" },
     ],
     trustedBy: "Brands that trusted me with their image and visibility",
-    pillarsTitle: "One point of contact in Nice, from design to AI answers.",
+    pillarsTitle: "One point of contact, from design to AI answers.",
     pillars: [
       { word: "Designed.", body: "A custom design, built around your brand and around getting your visitors to act." },
       { word: "Built.", body: "Fast, accessible code, shipped with a Lighthouse score of 95 or more and green Core Web Vitals." },
-      { word: "Cited.", body: "SEO, structured data and llms.txt from launch day, to be found on Google and cited by ChatGPT, Perplexity or Gemini." },
+      { word: "Cited.", body: "A content strategy, a close watch on your market and solid SEO from launch day, to be found on Google and cited by ChatGPT, Perplexity or Gemini." },
     ],
     compare: {
-      caption: "Freelancer, agency or platform: what changes for you",
-      cols: ["", "With me", "Agency", "Platform (Wix, Squarespace…)"],
+      title: ["Freelancer, agency or platform:", "what changes for you"],
+      lead: "Three ways to get a professional website. Here is what each one means for you, point by point.",
+      me: "With me",
+      agency: "Agency",
+      platform: "Platform",
       rows: [
-        ["Who does the work", "Me, from brief to launch", "A team, through a project manager", "You"],
-        ["Design", "Custom", "Custom", "Template to adapt"],
-        ["SEO and AI visibility", "Built in from day one", "Often an add-on", "Do it yourself"],
-        ["Performance", "Lighthouse ≥ 95", "Varies", "Capped by the platform"],
+        { label: "Point of contact", me: "The person who designs and builds your site", agency: "a project manager, who relays to the team", platform: "no one, you do it all" },
+        { label: "Design", me: "Custom, made for your brand", agency: "custom", platform: "a template to adapt" },
+        { label: "Price", me: `From ${formatPrice(PRICE.webOnePage, lang)}, fixed in writing`, agency: "higher, agency overhead", platform: "a subscription, plus your time" },
+        { label: "SEO and AI", me: "Built in from day one", agency: "often an add-on", platform: "do it yourself" },
+        { label: "Strategy and content", me: "Editorial plan, writing and market watch", agency: "often outsourced", platform: "do it yourself" },
+        { label: "Speed", me: "A fast site, Lighthouse score of 95 or more", agency: "varies", platform: "capped by the tool" },
       ],
     },
     workTitle: "Recent work",
