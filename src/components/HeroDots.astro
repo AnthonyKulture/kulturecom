@@ -11,7 +11,7 @@
 <canvas class="hero-dots" data-hero-dots data-intro-item style="--i:4" aria-hidden="true"></canvas>
 
 <script>
-  import { boxIn, clamp01, film, frame, lerpBox, screenIn, seqProgress, smooth } from "~/lib/camera";
+  import { Hold, boxIn, clamp01, film, follow, frame, lerpBox, screenIn, seqProgress, smooth } from "~/lib/camera";
   import type { HikerState } from "~/lib/halftone-ink";
   import { runDots } from "~/lib/halftone";
   import { drawHeroTone } from "~/lib/hero-halftone";
@@ -53,15 +53,28 @@
     const focus = { x: CX, y: FEET_Y + PACK_Y * hiker.s };
     let pace = 1;
     let q = 0;
+    // The dive takes its time (a second and a half at least, either way).
+    // Only when it falls well behind the scroll (a fast flick) is the hero
+    // held on screen until it catches up, and section 2 waits for it (it
+    // reads data-lag): at an ordinary pace the scroll alone carries it, with
+    // no shifting of the stage against the scroll (that would jitter).
+    const DIVE_TIME = 1.5;
+    const LAG = 0.08; // how far behind counts as falling behind
+    const hold = seq ? new Hold(stage, wrap) : null;
 
     runDots(
       canvas,
       VIEW,
       (tone, cols, rows, dt, px) => {
-        // Where the scroll is in the sequence, through a light spring.
-        const target = seq ? seqProgress(wrap, spacer) : 0;
-        q = dt ? q + (target - q) * (1 - Math.exp(-dt / 0.12)) : target;
-        if (Math.abs(target - q) < 1e-4) q = target;
+        // Where the scroll is in the sequence, through a light spring, at
+        // the dive's own pace.
+        // While section 2 is on top of it (playing back, on the way up), the
+        // dive waits for it rather than unwinding unseen.
+        const raw = seq ? seqProgress(wrap, spacer) : 0;
+        const target = cover?.dataset.shown === "on" ? Math.max(raw, q) : raw;
+        q = follow(q, target, dt, 0.12, 1 / DIVE_TIME);
+        if (hold?.update(dt, q < target - LAG, q > target + LAG)) q = target;
+        if (seq) wrap.dataset.lag = (target - q).toFixed(3);
         const open = smooth(0.04, 0.36, q); // the frame opens to the whole screen
         const clear = smooth(0.06, 0.3, q); // title and logos fade as they're pushed away
         // The camera goes into the pack, faster and faster, filling the screen
@@ -84,7 +97,7 @@
             clear > 0.5 ? "none" : "",
           );
         }
-        if (cover?.dataset.overlap === "on" && cover.getBoundingClientRect().top <= 0.5) return false;
+        if (cover?.dataset.shown === "on") return false;
 
         // He stops walking as the camera comes up to him; the world stops with him.
         pace += (1 - smooth(0.04, 0.3, q) - pace) * Math.min(1, dt * 6);

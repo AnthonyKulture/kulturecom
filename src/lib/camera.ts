@@ -107,3 +107,85 @@ export function frame(
   if (fade.bottom > 0) edge(0, y + h, 0, y + h * (1 - fade.bottom), x, y + h * (1 - fade.bottom), w, h * fade.bottom);
   ctx.restore();
 }
+
+/**
+ * Ease `value` toward `target` over a frame `dt` s long: a light spring
+ * (`tau` s), but never faster than `rate` units a second, so a sequence takes
+ * its time however fast the page is scrolled. Lands exactly on the target
+ * once within `eps`.
+ */
+export function follow(value: number, target: number, dt: number, tau: number, rate: number, eps = 1e-4): number {
+  if (!dt) return target;
+  const cap = rate * dt;
+  const step = Math.max(-cap, Math.min(cap, (target - value) * (1 - Math.exp(-dt / tau))));
+  const next = value + step;
+  return Math.abs(target - next) < eps ? target : next;
+}
+
+/**
+ * Keeps a pinned stage on screen while its sequence is still catching up
+ * with the scroll: if the page has already scrolled past its pin (or back
+ * above it), the stage is fixed at the top of the screen (its place in the
+ * page kept by padding on its wrapper, so nothing below moves) until the
+ * sequence is done, then let go with a short slide. Fixed rather than
+ * shifted against the scroll, so it never trembles while the page moves.
+ * Past `limit` (a screen and a half) it gives up: `update` returns true and
+ * the caller should jump to the end.
+ */
+export class Hold {
+  private fixed = false;
+  private offset = 0; // the let-go slide, px
+
+  constructor(
+    private stage: HTMLElement,
+    private wrap: HTMLElement,
+  ) {}
+
+  /** Where the stage's top would be without the hold (px from the screen's
+   *  top): pinned at 0 while its wrapper allows, above or below otherwise. */
+  natural(): number {
+    const r = this.wrap.getBoundingClientRect();
+    return Math.min(Math.max(r.top, 0), r.bottom - this.stage.offsetHeight);
+  }
+
+  /** `down`: still playing forward; `up`: still playing back. */
+  update(dt: number, down: boolean, up: boolean): boolean {
+    const natural = this.natural();
+    const want = (natural < -0.5 && down) || (natural > 0.5 && up);
+    const over = want && Math.abs(natural) > window.innerHeight * 1.5;
+    if (want && !over) {
+      if (!this.fixed) this.fix(true);
+      this.offset = 0;
+      this.stage.style.translate = "";
+      return false;
+    }
+    if (this.fixed) {
+      // Let go from where it is shown, the top of the screen.
+      this.fix(false);
+      this.offset = over ? 0 : -natural;
+    }
+    this.offset = Math.abs(this.offset) < 0.5 ? 0 : this.offset * Math.exp(-dt / 0.16);
+    this.stage.style.translate = this.offset ? `0 ${this.offset.toFixed(1)}px` : "";
+    return over;
+  }
+
+  private fix(on: boolean): void {
+    this.fixed = on;
+    const s = this.stage.style;
+    this.wrap.style.paddingTop = on ? `${this.stage.offsetHeight}px` : "";
+    s.position = on ? "fixed" : "";
+    s.top = on ? "0" : "";
+    s.left = on ? "0" : "";
+    s.right = on ? "0" : "";
+  }
+
+  /** Shifted at all (held, or being let go). */
+  active(): boolean {
+    return this.fixed || this.offset !== 0;
+  }
+
+  /** Held at the top while playing back (above its pin). */
+  holdingUp(): boolean {
+    return this.fixed && this.natural() > 0;
+  }
+}

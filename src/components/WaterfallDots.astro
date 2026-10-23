@@ -16,7 +16,7 @@
 <canvas class="waterfall-dots" data-waterfall-dots aria-hidden="true"></canvas>
 
 <script>
-  import { boxIn, clamp01, film, frame, lerpBox, screenIn, smooth } from "~/lib/camera";
+  import { Hold, boxIn, clamp01, film, follow, frame, lerpBox, screenIn, smooth } from "~/lib/camera";
   import type { HikerState } from "~/lib/halftone-ink";
   import { drawFlood } from "~/lib/flood";
   import { runDots } from "~/lib/halftone";
@@ -30,6 +30,9 @@
   const ARRIVE = { phone: 1.12, wide: 1.49 };
   const WATER = 0.26;
   const BAR = 112; // phones: the call bar at the foot of the screen, and a margin
+  // Each part takes its time, however fast the page is scrolled (seconds,
+  // either way): the way in, the slide, the water.
+  const TIME = { arrive: 1.8, slide: 0.7, water: 1 };
 
   const canvas = document.querySelector<HTMLCanvasElement>("[data-waterfall-dots]");
   const stage = canvas?.closest<HTMLElement>("[data-approach]");
@@ -120,15 +123,31 @@
     const focus = { x: HIKER.x, y: HIKER.y + PACK_Y * HIKER.scale };
     let t = 0;
     let at = 0; // how far into the pin, in px of scroll, eased
+    // Held on screen only when it falls well behind the scroll (a fast
+    // flick), until it catches up; then too it waits for the hero's dive,
+    // and the projects wait for it (data-filled).
+    const hold = seq ? new Hold(stage, wrap) : null;
+    const projects = document.querySelector<HTMLElement>("[data-work-seq]");
+    const LAG = 0.1; // of a screen: how far behind counts as falling behind
+    const heroDone = (): boolean => !overlap || Number(hero.dataset.lag ?? 0) < 0.08;
 
     runDots(
       canvas,
       VIEW,
       (tone, cols, rows, dt, px) => {
         t += dt;
-        const target = seq ? Math.min(Math.max(0, -wrap.getBoundingClientRect().top), spacer.offsetHeight) : 0;
-        at = dt ? at + (target - at) * (1 - Math.exp(-dt / 0.12)) : target;
-        if (Math.abs(target - at) < 0.5) at = target;
+        // Nothing moves until the hero's dive is done (unless it is playing
+        // back, held above its pin).
+        const waiting = overlap && !heroDone() && !hold?.holdingUp();
+        // And while the projects are on top of it (playing back, on the way
+        // up), it waits for them rather than draining unseen.
+        const raw = seq && !waiting ? Math.min(Math.max(0, -wrap.getBoundingClientRect().top), spacer.offsetHeight) : 0;
+        const target = projects?.dataset.shown === "on" ? Math.max(raw, at) : raw;
+        // At the pace of the part it is in.
+        const rate = at < tl.arrive * 0.9 ? tl.arrive / TIME.arrive : at < tl.water0 ? Math.max(tl.slide / TIME.slide, 600) : (tl.water1 - tl.water0) / TIME.water;
+        at = follow(at, target, dt, 0.12, rate, 0.5);
+        const lag = LAG * window.innerHeight;
+        if (hold?.update(dt, at < target - lag, at > target + lag)) at = target;
         // The way in, over the first part of the pin.
         const a = seq ? at / tl.arrive : 1;
         // Out of the pack, fast at first, then easing back to the whole scene.
@@ -160,6 +179,9 @@
         // above its top, and each line of text goes under as the dots close
         // over it.
         const level = seq ? smooth(tl.water0, tl.water1, at) : 0;
+        // The projects wait for the water, unless it is all but there
+        // (HomeSections.astro).
+        if (seq) wrap.dataset.filled = level >= 0.995 || target - at < lag ? "on" : "";
         const band = Math.min(220, vh * 0.28);
         const edge = vh + 40 - level * (vh + band + 80);
         if (level > 0) {
@@ -180,9 +202,13 @@
         }
 
         const root = stage.getBoundingClientRect();
-        // Hidden (and not drawn) until it pins over the hero.
-        const hidden = overlap && root.top > 0.5;
-        if (overlap) set(stage, "visibility", hidden ? "hidden" : "");
+        // Hidden (and not drawn) until it pins over the hero, once the dive
+        // is done (or while it is held, playing back above its pin).
+        const hidden = overlap && !hold?.holdingUp() && (root.top > 0.5 || !heroDone());
+        if (overlap) {
+          set(stage, "visibility", hidden ? "hidden" : "");
+          wrap.dataset.shown = hidden ? "" : "on";
+        }
         if (hidden || level >= 1) return false; // nothing of it shows
         const screen = screenIn(root);
         const box = lerpBox(screen, boxIn(visual, root), settle);
