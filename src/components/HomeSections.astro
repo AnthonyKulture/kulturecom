@@ -695,7 +695,7 @@ const faqLd = {
 </style>
 
 <script>
-  import { seqProgress } from "~/lib/camera";
+  import { Hold, follow, seqProgress } from "~/lib/camera";
   import { initMarquee } from "~/lib/marquee";
 
   // Projets on the blue: once the approach's sequence is on (its script has
@@ -764,21 +764,37 @@ const faqLd = {
         work.dataset.in = p.toFixed(4);
       };
 
+      // The entrance takes its time (a second at least, either way); held on
+      // screen only when it falls well behind the scroll (a fast flick), and
+      // then too it waits for the approach's water.
+      const ENTER_TIME = 1.1;
+      const LAG = 0.12;
+      const hold = new Hold(work, workSeq);
       let r = 0;
       let raf = 0;
+      let then = 0;
       let shown: boolean | null = null;
-      const tick = (): void => {
-        const target = seqProgress(workSeq, workSpacer);
-        r += (target - r) * 0.18;
-        if (Math.abs(target - r) < 1e-4) r = target;
-        // Hidden until it pins over the approach.
-        const on = workSeq.getBoundingClientRect().top <= 0.5;
+      const tick = (now: number): void => {
+        const dt = then ? Math.min(0.05, (now - then) / 1000) : 1 / 60;
+        then = now;
+        const filled = prev.dataset.filled === "on";
+        const up = hold.holdingUp();
+        const pinned = hold.natural() <= 0.5;
+        const waiting = !filled && !up;
+        const target = waiting ? 0 : seqProgress(workSeq, workSpacer);
+        r = follow(r, target, dt, 0.12, 1 / ENTER_TIME);
+        if (hold.update(dt, r < target - LAG, r > target + LAG)) r = target;
+        // Hidden until it pins over the approach and the water has filled it.
+        const on = hold.holdingUp() || (pinned && filled);
         if (on !== shown) {
           shown = on;
           work.style.visibility = on ? "" : "hidden";
+          workSeq.dataset.shown = on ? "on" : "";
         }
         apply(on ? r : 0);
-        raf = r !== target ? requestAnimationFrame(tick) : 0;
+        const busy = r !== target || hold.active() || (pinned && !filled);
+        raf = busy ? requestAnimationFrame(tick) : 0;
+        if (!raf) then = 0;
       };
       const kick = (): void => {
         if (!raf) raf = requestAnimationFrame(tick);
