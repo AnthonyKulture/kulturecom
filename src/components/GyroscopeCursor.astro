@@ -2,7 +2,9 @@
 // Arrow cursor that turns toward where it moves (native take on React Bits'
 // Gyroscope Cursor). The tip sits exactly on the pointer; only the heading is
 // eased. Mouse-only and off under prefers-reduced-motion: the native cursor
-// stays in every other case.
+// stays in every other case. A modal dialog (the "Être rappelé" form) sits in
+// the browser's top layer, above anything the page can draw, this arrow
+// included: while one is open the native cursor comes back.
 ---
 
 <div class="gyro-cursor" data-gyro-cursor aria-hidden="true">
@@ -63,6 +65,15 @@
     let angle = REST;
     let target = REST;
     let raf = 0;
+    // Native cursor while a modal dialog is open (see above). Checked on
+    // each move, and right after a click (one may have opened or closed it).
+    const modal = (): boolean => {
+      const open = !!document.querySelector("dialog[open]");
+      document.documentElement.classList.toggle("has-gyro-cursor", !open);
+      if (open) el.dataset.visible = "false";
+      return open;
+    };
+    addEventListener("click", () => requestAnimationFrame(modal));
 
     const render = () => {
       // Shortest way round, eased.
@@ -84,7 +95,7 @@
         if (el.dataset.visible === "true" && dx * dx + dy * dy > 4) target = Math.atan2(dy, dx);
         x = e.clientX;
         y = e.clientY;
-        el.dataset.visible = (e.target as Element).closest?.("input, textarea, select") ? "false" : "true";
+        el.dataset.visible = modal() || (e.target as Element).closest?.("input, textarea, select") ? "false" : "true";
         if (!raf) raf = requestAnimationFrame(render);
       },
       { passive: true },
