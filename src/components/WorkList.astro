@@ -1,0 +1,269 @@
+---
+// Recent work as an editorial list: one row per case study (number, name,
+// result), fine rules between them. Hovering or focusing a row brings up its
+// image, which follows the pointer a little (wide screens with a mouse). On
+// phones and touch screens each row carries a small thumbnail instead.
+import type { Lang } from "~/i18n/ui";
+import { ui } from "~/i18n/ui";
+import { caseStudyPath } from "~/lib/case-studies";
+import { getProjects } from "~/lib/projects-data";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const projects = getProjects(ui[lang]);
+---
+
+<div class="wl" data-worklist>
+  <ol class="wl-list">
+    {projects.map((p, i) => (
+      <li class="wl-item" style={`--i:${i}`}>
+        <a href={caseStudyPath(p.slug, lang)} class="wl-row" data-i={i}>
+          <span class="wl-num font-label text-small">{String(i + 1).padStart(2, "0")}</span>
+          <img class="wl-thumb" src={p.image} alt="" loading="lazy" decoding="async" width="112" height="112" />
+          <span class="wl-main">
+            <span class="wl-title font-display text-title">{p.title}</span>
+            <span class="wl-desc text-body">{p.summary}</span>
+          </span>
+          <span class="wl-meta font-label text-small uppercase tracking-[0.06em]">{p.metric}</span>
+          <span class="wl-arrow" aria-hidden="true">→</span>
+        </a>
+      </li>
+    ))}
+  </ol>
+  <div class="wl-preview" aria-hidden="true">
+    {projects.map((p, i) => <img src={p.image} alt="" loading="lazy" decoding="async" width="600" height="750" data-i={i} />)}
+  </div>
+</div>
+
+<style>
+  .wl {
+    position: relative;
+  }
+  .wl-list {
+    border-top: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+  }
+  .wl-row {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr) auto 1.25rem;
+    align-items: center;
+    gap: 16px;
+    padding: 22px 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+  .wl-num {
+    color: var(--color-ink-muted);
+  }
+  .wl-thumb {
+    display: none;
+  }
+  .wl-main {
+    display: block;
+    min-width: 0;
+  }
+  .wl-title {
+    display: block;
+    transition:
+      color 0.3s var(--ease-power3),
+      translate 0.4s var(--ease-power3);
+  }
+  /* The one-line summary: folded away, unfolds under the name on hover/focus. */
+  .wl-desc {
+    display: block;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    color: var(--color-ink-muted);
+    transition:
+      max-height 0.45s var(--ease-power3),
+      opacity 0.35s var(--ease-power3),
+      margin 0.45s var(--ease-power3);
+  }
+  .wl-meta {
+    color: var(--color-ink-muted);
+    text-align: right;
+  }
+  .wl-arrow {
+    opacity: 0;
+    color: var(--color-accent);
+    translate: -6px 0;
+    transition:
+      opacity 0.3s var(--ease-power3),
+      translate 0.3s var(--ease-power3);
+  }
+  .wl-row:hover .wl-title,
+  .wl-row:focus-visible .wl-title {
+    color: var(--color-accent);
+    translate: 8px 0;
+  }
+  .wl-row:hover .wl-desc,
+  .wl-row:focus-visible .wl-desc {
+    max-height: 4.5em;
+    opacity: 1;
+    margin-top: 6px;
+  }
+  .wl-row:hover .wl-arrow,
+  .wl-row:focus-visible .wl-arrow {
+    opacity: 1;
+    translate: 0 0;
+  }
+  .wl-row:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
+  }
+
+  /* The floating image: hidden until a row is hovered, placed by the script. */
+  .wl-preview {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2;
+    width: clamp(200px, 18vw, 280px);
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0;
+    scale: 0.92;
+    transition:
+      opacity 0.35s var(--ease-power3),
+      scale 0.45s var(--ease-power3);
+  }
+  .wl-preview[data-on] {
+    opacity: 1;
+    scale: 1;
+  }
+  .wl-preview img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.3s var(--ease-power3);
+  }
+  .wl-preview img[data-active] {
+    opacity: 1;
+  }
+
+  /* Entry: the rows rise in one after the other, when the section that
+     holds the list is revealed (reveal.ts). */
+  .wl-item {
+    transition:
+      opacity 0.7s var(--ease-power3) calc(var(--i) * 90ms + 120ms),
+      translate 0.7s var(--ease-power3) calc(var(--i) * 90ms + 120ms);
+  }
+  :global(.reveal-on [data-reveal]:not([data-revealed])) .wl-item {
+    opacity: 0;
+    translate: 0 16px;
+  }
+
+  /* Touch screens and phones: no floating image, a thumbnail in each row,
+     name and result only (compact). */
+  @media (hover: none), (max-width: 767px) {
+    .wl-preview {
+      display: none;
+    }
+    .wl-row {
+      grid-template-columns: 4.5rem minmax(0, 1fr);
+      align-items: center;
+      gap: 4px 16px;
+      padding: 16px 0;
+    }
+    .wl-num,
+    .wl-arrow {
+      display: none;
+    }
+    .wl-thumb {
+      display: block;
+      grid-row: span 2;
+      width: 4.5rem;
+      height: 4.5rem;
+      object-fit: cover;
+    }
+    .wl-title {
+      font-size: var(--text-body);
+      font-weight: 500;
+    }
+    .wl-desc {
+      display: none;
+    }
+    .wl-meta {
+      text-align: left;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wl-title,
+    .wl-desc,
+    .wl-arrow,
+    .wl-preview,
+    .wl-preview img {
+      transition: none;
+    }
+    .wl-row:hover .wl-title,
+    .wl-row:focus-visible .wl-title {
+      translate: none;
+    }
+  }
+</style>
+
+<script>
+  // Floating image for the hovered (or focused) row: it eases toward the
+  // pointer, a little to its right, and swaps to the row's project.
+  const root = document.querySelector<HTMLElement>("[data-worklist]");
+  const preview = root?.querySelector<HTMLElement>(".wl-preview");
+  if (root && preview && matchMedia("(hover: hover) and (min-width: 768px)").matches) {
+    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const imgs = [...preview.querySelectorAll<HTMLImageElement>("img")];
+    let x = 0;
+    let y = 0;
+    let tx = 0;
+    let ty = 0;
+    let raf = 0;
+    const place = (): void => {
+      x += (tx - x) * (still ? 1 : 0.18);
+      y += (ty - y) * (still ? 1 : 0.18);
+      preview.style.translate = `${x.toFixed(1)}px ${y.toFixed(1)}px`;
+      raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.5 ? requestAnimationFrame(place) : 0;
+    };
+    const aim = (px: number, py: number): void => {
+      const r = root.getBoundingClientRect();
+      const w = preview.offsetWidth;
+      const h = preview.offsetHeight;
+      // Beside the pointer, kept inside the list's box.
+      tx = Math.min(r.width - w, Math.max(0, px - r.left + 32));
+      ty = Math.min(r.height - h, Math.max(0, py - r.top - h / 2));
+      if (!raf) raf = requestAnimationFrame(place);
+    };
+    const show = (row: HTMLElement): void => {
+      const i = row.dataset.i;
+      imgs.forEach((img) => img.toggleAttribute("data-active", img.dataset.i === i));
+      preview.setAttribute("data-on", "");
+    };
+    const hide = (): void => preview.removeAttribute("data-on");
+
+    root.querySelectorAll<HTMLElement>(".wl-row").forEach((row) => {
+      row.addEventListener("pointerenter", (e) => {
+        if (!preview.hasAttribute("data-on")) {
+          // First appearance: jump straight to the pointer.
+          aim(e.clientX, e.clientY);
+          x = tx;
+          y = ty;
+        }
+        show(row);
+      });
+      row.addEventListener("focus", () => {
+        const r = row.getBoundingClientRect();
+        aim(r.left + r.width * 0.55, r.top + r.height / 2);
+        show(row);
+      });
+      row.addEventListener("blur", hide);
+    });
+    root.addEventListener("pointermove", (e) => aim(e.clientX, e.clientY));
+    root.addEventListener("pointerleave", hide);
+  }
+</script>

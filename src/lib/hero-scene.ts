@@ -32,7 +32,7 @@ const WALK = 32; // seconds from birth to walked past, the same for every mounta
  *  passes by (p = 1 and a little beyond). No fade: it is opaque from its first
  *  frame, so nothing ever shows through. All mountains share the same rate, so
  *  their depth order never changes while they are in view. */
-const depth = (p: number) => Z_BIRTH * (Z_PAST / Z_BIRTH) ** p;
+export const depth = (p: number) => Z_BIRTH * (Z_PAST / Z_BIRTH) ** p;
 
 /** Small seeded PRNG so server and client draw the same first frame. */
 export function rng(seed: number): () => number {
@@ -46,10 +46,10 @@ export function rng(seed: number): () => number {
   };
 }
 
-type Pt = [number, number]; // world x, height
+export type Pt = [number, number]; // world x, height
 type Seg = [number, number, number, number];
 
-interface Layer {
+export interface Layer {
   kind: "peak" | "hill";
   side: -1 | 1;
   p: number; // 0 = born at the vanishing point, ~1 = walking past
@@ -72,11 +72,21 @@ interface Cloud {
   seed: number;
 }
 
+/** Three birds flying across now and then (dot rendering only). */
+interface Flock {
+  x: number;
+  y: number;
+  dir: 1 | -1;
+  wait: number; // s until the next pass (0 while crossing)
+  t: number; // s since the pass began, for the wing beats
+}
+
 export interface Scene {
   layers: Layer[];
   backdrop: { z: number; d: string; opacity: number }[];
   decals: Decal[];
   clouds: Cloud[];
+  flock: Flock;
   rand: () => number;
 }
 
@@ -232,9 +242,7 @@ export function createScene(seed = 11): Scene {
     seed: rand() * 1000,
   }));
   const clouds: Cloud[] = [
-    { x: 40, y: 92, len: 260, speed: 3.2, seed: 1 },
     { x: 330, y: 150, len: 170, speed: 4.4, seed: 2 },
-    { x: 560, y: 70, len: 230, speed: 2.6, seed: 3 },
     { x: 120, y: 214, len: 140, speed: 5.2, seed: 4 },
     { x: 640, y: 196, len: 150, speed: 4.8, seed: 5 },
   ];
@@ -243,14 +251,17 @@ export function createScene(seed = 11): Scene {
     backdrop: [{ z: 40, d: backdrop(rand, 40, 1.4), opacity: 0.45 }],
     decals,
     clouds,
+    flock: { x: -80, y: 150, dir: 1, wait: 5, t: 0 },
     rand,
   };
 }
 
-/** Move the world forward by `dt` seconds. */
-export function advance(scene: Scene, dt: number): void {
+/** Move the world forward by `dt` seconds. `pace` (0..1) is how fast he walks
+ *  the world past: 0 once he stops (HeroDots.astro), the clouds drift on. */
+export function advance(scene: Scene, dt: number, pace = 1): void {
+  const walk = dt * pace;
   for (const [i, l] of scene.layers.entries()) {
-    l.p += dt / WALK;
+    l.p += walk / WALK;
     if (l.p >= 1 && !inView(l)) {
       // Walked past and out of frame: a new one is born at the vanishing point
       // (keeping the overshoot, so the stagger holds; it is still hidden then).
@@ -259,7 +270,7 @@ export function advance(scene: Scene, dt: number): void {
     }
   }
   for (const d of scene.decals) {
-    d.t += dt * 0.085;
+    d.t += walk * 0.085;
     if (d.t > 1) {
       d.t -= 1;
       d.u = scene.rand() * 2 - 1;
@@ -271,12 +282,48 @@ export function advance(scene: Scene, dt: number): void {
     c.x -= c.speed * dt;
     if (c.x + c.len < -20) c.x = VIEW.w + 20 + scene.rand() * 80;
   }
+  const f = scene.flock;
+  if (f.wait > 0) {
+    f.wait -= dt;
+    if (f.wait <= 0) {
+      // Off they go, from either side, at some height in the sky.
+      f.dir = scene.rand() < 0.5 ? 1 : -1;
+      f.x = f.dir > 0 ? -80 : VIEW.w + 80;
+      f.y = 80 + scene.rand() * 110;
+      f.t = 0;
+    }
+  } else {
+    f.x += f.dir * 62 * dt;
+    f.t += dt;
+    if (f.x < -100 || f.x > VIEW.w + 100) f.wait = 16 + scene.rand() * 18;
+  }
+}
+
+/** The three birds as wing strokes: a loose V, each beating its own wings. */
+export function flockFrame(f: Flock): string {
+  if (f.wait > 0) return "";
+  let d = "";
+  const place: Pt[] = [
+    [0, 0],
+    [-26, 9],
+    [-44, -6],
+  ];
+  place.forEach(([dx, dy], i) => {
+    const x = f.x + dx * f.dir;
+    const y = f.y + dy + Math.sin(f.t * 1.4 + i * 1.7) * 2.5;
+    const beat = Math.sin(f.t * 2 * Math.PI * 1.6 + i * 1.9);
+    const span = 9.5 - i * 0.8;
+    const tip = -beat * 5.5 - 1; // wing tips up and down
+    d += `M${n1(x - span)} ${n1(y + tip)}Q${n1(x - span * 0.45)} ${n1(y - 2.5 - beat)} ${n1(x)} ${n1(y)}`;
+    d += `Q${n1(x + span * 0.45)} ${n1(y - 2.5 - beat)} ${n1(x + span)} ${n1(y + tip)}`;
+  });
+  return d;
 }
 
 // ---------------------------------------------------------------- drawing
 
 const n1 = (v: number) => Math.round(v * 10) / 10;
-const proj = (x: number, h: number, z: number): Pt => [CX + (x * F) / z, HORIZON + ((CAM - h) * F) / z];
+export const proj = (x: number, h: number, z: number): Pt => [CX + (x * F) / z, HORIZON + ((CAM - h) * F) / z];
 
 /** Whether any part of a mountain (its outline, or the body under it) is in
  *  frame. Only checked once it has walked past, so it never vanishes in view. */

@@ -1,8 +1,8 @@
 ---
-// Hero illustration, all vector: a hiker seen from behind walks his ridge
-// toward the sun while the mountains stream past in depth (see
-// src/lib/hero-scene.ts). The first frame is drawn here on the server, so the
-// scene shows without JS; the script below animates it.
+// Hero illustration, as a still line drawing: a hiker seen from behind on his
+// ridge, the mountains around (world in src/lib/hero-scene.ts). Only for
+// visitors without JS (see the noscript); otherwise the scene is drawn in
+// dots, filmed over the whole hero (HeroDots.astro).
 import Hiker from "~/components/Hiker.astro";
 import { CX, FEET_Y, GROUND_PATH, HORIZON, LAYER_COUNT, VIEW, createScene, sceneFrame } from "~/lib/hero-scene";
 
@@ -10,7 +10,9 @@ const scene = createScene();
 const first = sceneFrame(scene);
 ---
 
-<svg class="scene" data-hero-scene viewBox={`0 0 ${VIEW.w} ${VIEW.h}`} preserveAspectRatio="xMidYMid slice" focusable="false">
+<noscript><style is:inline>.hero-line{visibility:visible!important}</style></noscript>
+
+<svg class="scene hero-line" data-hero-scene viewBox={`0 0 ${VIEW.w} ${VIEW.h}`} preserveAspectRatio="xMidYMid slice" focusable="false">
   {/* Sky: drifting cirrus, the sun sitting on the horizon. */}
   <path class="sc-cloud" data-clouds d={first.clouds} />
   <circle class="sc-ink" cx={CX + 150} cy={HORIZON - 4} r="27" />
@@ -36,65 +38,9 @@ const first = sceneFrame(scene);
 
   {/* The hiker, walking toward the sun. */}
   <g transform={`translate(${CX} ${FEET_Y}) scale(1.12)`}>
-    <Hiker gait="walk" />
+    <Hiker />
   </g>
 </svg>
-
-<script>
-  import { advance, createScene, sceneFrame } from "~/lib/hero-scene";
-
-  const svg = document.querySelector<SVGSVGElement>("[data-hero-scene]");
-  if (svg && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    const scene = createScene();
-    const ridges = [...svg.querySelectorAll<SVGGElement>("[data-ridge]")].map((g) => {
-      const [fill, line, hatch] = g.querySelectorAll("path");
-      return { g, fill, line, hatch };
-    });
-    const clouds = svg.querySelector<SVGPathElement>("[data-clouds]")!;
-    const decals = svg.querySelector<SVGPathElement>("[data-decals]")!;
-    let raf = 0;
-    let last = 0;
-    let onScreen = true;
-
-    const frame = (now: number): void => {
-      const dt = last ? Math.min(0.05, (now - last) / 1000) : 0;
-      last = now;
-      advance(scene, dt);
-      const f = sceneFrame(scene);
-      f.layers.forEach((r, i) => {
-        const el = ridges[i];
-        if (!el) return;
-        el.fill.style.opacity = String(r.fillOpacity);
-        el.line.style.opacity = String(r.lineOpacity);
-        el.hatch.style.opacity = String(r.lineOpacity * 0.55);
-        el.fill.setAttribute("d", r.fill);
-        el.line.setAttribute("d", r.d);
-        el.line.setAttribute("stroke-width", String(r.width));
-        el.hatch.setAttribute("d", r.hatch);
-      });
-      clouds.setAttribute("d", f.clouds);
-      decals.setAttribute("d", f.decals);
-      raf = requestAnimationFrame(frame);
-    };
-    const run = (): void => {
-      if (raf || !onScreen || document.hidden) return;
-      last = 0;
-      raf = requestAnimationFrame(frame);
-    };
-    const stop = (): void => {
-      cancelAnimationFrame(raf);
-      raf = 0;
-    };
-    svg.dataset.live = "";
-    new IntersectionObserver(([e]) => {
-      onScreen = e.isIntersecting;
-      if (onScreen) run();
-      else stop();
-    }).observe(svg);
-    document.addEventListener("visibilitychange", () => (document.hidden ? stop() : run()));
-    run();
-  }
-</script>
 
 <style>
   /* Fills its frame (absolute: a percentage height would not resolve inside
@@ -105,6 +51,10 @@ const first = sceneFrame(scene);
     display: block;
     width: 100%;
     height: 100%;
+  }
+  /* The line drawing is only for visitors without JS (see the noscript). */
+  .hero-line {
+    visibility: hidden;
   }
   .sc-ink,
   .sc-ridge,

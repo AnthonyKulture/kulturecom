@@ -43,6 +43,21 @@
   --font-label:
     "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
 
+  /* Type scale — four sizes only, used everywhere on the home page:
+     display (hero title, the three manifesto words, the rating), title
+     (section headings), body (all running text, answers, buttons) and small
+     (uppercase labels, meta). Hierarchy beyond that comes from weight and
+     colour, not from another size. Classes: text-display, text-title,
+     text-body, text-small. */
+  --text-display: clamp(34px, 3.6vw, 58px); /* the hero title holds on 2 lines in its half column */
+  --text-display--line-height: 1.05;
+  --text-title: clamp(24px, 2.4vw, 34px);
+  --text-title--line-height: 1.2;
+  --text-body: 17px;
+  --text-body--line-height: 1.55;
+  --text-small: 13px;
+  --text-small--line-height: 1.4;
+
   /* Shape: square corners (90°) everywhere */
   --radius-card: 0;
   --radius-field: 0;
@@ -132,7 +147,7 @@
     border: 1px solid transparent;
     border-radius: 0;
     font-family: var(--font-sans);
-    font-size: 15px;
+    font-size: var(--text-body);
     font-weight: 500;
     line-height: 1.2;
     text-decoration: none;
@@ -215,7 +230,7 @@ main > section:not(:first-child)::before {
   gap: 10px;
   width: 100%;
   font-family: var(--font-label);
-  font-size: 13px;
+  font-size: var(--text-small);
   line-height: 1.2;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -263,6 +278,19 @@ main > section:not(:first-child)::before {
   --color-bg: #f3f6fa;
   --color-bg-shade: #e9eef5;
   --color-border: #dbe2eb;
+}
+/* Blue bands (the home's projects): the page's blue as the background, ink
+   and accent turned white. */
+[data-surface="blue"] {
+  --color-bg: #24508c;
+  --color-bg-shade: #1b3f70;
+  --color-border: rgb(255 255 255 / 0.2);
+  --color-line: rgb(255 255 255 / 0.35);
+  --color-ink: #ffffff;
+  --color-ink-muted: rgb(255 255 255 / 0.74);
+  --color-ink-subtle: rgb(255 255 255 / 0.55);
+  --color-accent: #ffffff;
+  --color-accent-strong: #ffffff;
 }
 
 /* === Page transitions — native cross-document View Transitions (no JS).

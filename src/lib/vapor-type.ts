@@ -18,6 +18,8 @@ const RECOVERY = 1.2; // s — hover vapor settling back
 const RADIUS = 0.45; // em — pointer breath radius
 const HOVER_MAX = 0.75; // max displacement under the pointer
 const BUCKETS = 8; // color/alpha steps (keeps fillStyle changes low)
+const SWAP_OUT = 0.7; // s — a swapped word breaking into vapor
+const SWAP_IN = 0.9; // s — one particle's trip home in a swapped word
 
 interface Particle {
   hx: number; // home cell, device px
@@ -28,6 +30,8 @@ interface Particle {
   phase: number;
   cd: number; // condense displacement
   hd: number; // hover displacement
+  in?: { at: number; dur: number }; // condensing back home (ms, s)
+  out?: number; // breaking into vapor since (ms)
 }
 
 const rgb = (color: string): [number, number, number] => {
@@ -49,6 +53,10 @@ export function vaporType(el: HTMLElement, vaporColor: string) {
   const sctx = solid.getContext("2d", { willReadFrequently: true })!;
 
   const ink = rgb(getComputedStyle(el).color);
+  // Each element's own color, read before the text is hidden: a word set in
+  // another color (the hero's accent word) keeps it on the canvas.
+  const colors = new Map<Element, string>();
+  for (const node of [el, ...el.querySelectorAll("*")]) colors.set(node, getComputedStyle(node).color);
   const vapor = rgb(vaporColor);
   const palette = Array.from({ length: BUCKETS }, (_, i) => {
     const d = (i + 0.5) / BUCKETS;
@@ -56,7 +64,7 @@ export function vaporType(el: HTMLElement, vaporColor: string) {
     const mix = (k: number) => Math.round(ink[k] + (vapor[k] - ink[k]) * Math.min(1, d * 2.5));
     return `rgba(${mix(0)},${mix(1)},${mix(2)},${(1 - d * d).toFixed(3)})`;
   });
-  el.style.color = "transparent";
+  for (const node of colors.keys()) (node as HTMLElement).style.color = "transparent";
 
   let particles: Particle[] = [];
   let step = 2;
@@ -92,12 +100,12 @@ export function vaporType(el: HTMLElement, vaporColor: string) {
     // Solid layer: every character where the browser put it.
     sctx.clearRect(0, 0, w, h);
     sctx.font = `${cs.fontStyle} ${cs.fontWeight} ${em}px ${cs.fontFamily}`;
-    sctx.fillStyle = `rgb(${ink.join(",")})`;
     const ascent = sctx.measureText("A").fontBoundingBoxAscent;
     const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
     const range = document.createRange();
     for (let node = walker.nextNode(); node; node = walker.nextNode()) {
       const text = node.textContent ?? "";
+      sctx.fillStyle = colors.get(node.parentElement!) ?? `rgb(${ink.join(",")})`;
       for (let i = 0; i < text.length; i++) {
         if (!text[i].trim()) continue;
         range.setStart(node, i);
@@ -127,15 +135,17 @@ export function vaporType(el: HTMLElement, vaporColor: string) {
           }
         }
         if (!inked) continue;
+        const delay = ((x - pad) / textW) * SWEEP + Math.random() * STAGGER;
         next.push({
           hx: x,
           hy: y,
           ox: (0.05 + Math.random() * 0.5) * em,
           oy: -(0.1 + Math.random() * 0.55) * em,
-          delay: ((x - pad) / textW) * SWEEP + Math.random() * STAGGER,
+          delay,
           phase: Math.random() * Math.PI * 2,
           cd: condensing || !started ? 1 : 0,
           hd: 0,
+          in: condensing ? { at: startTime + delay * 1000, dur: CONDENSE } : undefined,
         });
       }
     }
@@ -156,9 +166,15 @@ export function vaporType(el: HTMLElement, vaporColor: string) {
     const buckets: Particle[][] = Array.from({ length: BUCKETS }, () => []);
 
     for (const p of particles) {
-      if (condensing) {
-        const k = Math.min(1, Math.max(0, (elapsed - p.delay) / CONDENSE));
+      if (p.in) {
+        const k = Math.min(1, Math.max(0, (now - p.in.at) / 1000 / p.in.dur));
         p.cd = (1 - k) ** 3; // ease-out cubic
+        if (k >= 1) p.in = undefined;
+        else moving = true;
+      } else if (p.out !== undefined) {
+        const k = Math.min(1, Math.max(0, (now - p.out) / 1000 / SWAP_OUT));
+        p.cd = k * k; // ease-in
+        if (k < 1) moving = true;
       }
       let target = 0;
       if (pointer) {
@@ -169,7 +185,7 @@ export function vaporType(el: HTMLElement, vaporColor: string) {
       if (p.hd > 0) moving = true;
 
       const d = Math.max(p.cd, p.hd);
-      if (d < 0.002) continue;
+      if (!(d >= 0.002)) continue; // also skips a NaN, rather than crash the loop
       ctx.clearRect(p.hx, p.hy, step, step);
       buckets[Math.min(BUCKETS - 1, Math.floor(d * BUCKETS))].push(p);
     }
@@ -242,8 +258,50 @@ export function vaporType(el: HTMLElement, vaporColor: string) {
         if (started) return;
         started = condensing = true;
         startTime = performance.now();
+        for (const p of particles) p.in = { at: startTime + p.delay * 1000, dur: CONDENSE };
         wake();
       });
+    },
+    // Swap the text of `word` (an element inside the vapor text): the cells
+    // of `zone` (the word, or a box around it that also holds what moves with
+    // it) break into vapor, then the new text condenses in their place.
+    // Resolves once it has settled. The layout around the word must not move.
+    swap(word: HTMLElement, text: string, zone: HTMLElement = word): Promise<void> {
+      const inZone = () => {
+        const box = canvas.getBoundingClientRect();
+        const z = zone.getBoundingClientRect();
+        const k = canvas.width / box.width;
+        const m = em * 0.15;
+        const x0 = (z.left - box.left) * k - m;
+        const x1 = (z.right - box.left) * k + m;
+        const y0 = (z.top - box.top) * k - m;
+        const y1 = (z.bottom - box.top) * k + m;
+        return { x0, x1, has: (p: Particle) => p.hx >= x0 && p.hx <= x1 && p.hy >= y0 && p.hy <= y1 };
+      };
+      return ready.then(
+        () =>
+          new Promise<void>((done) => {
+            const before = inZone();
+            const t = performance.now();
+            for (const p of particles) {
+              if (before.has(p)) p.out = t + ((p.hx - before.x0) / (before.x1 - before.x0)) * 250 + Math.random() * 150;
+            }
+            wake();
+            window.setTimeout(() => {
+              word.textContent = text;
+              build();
+              const after = inZone();
+              const t2 = performance.now();
+              for (const p of particles) {
+                if (!after.has(p)) continue;
+                p.cd = 1;
+                p.in = { at: t2 + ((p.hx - after.x0) / (after.x1 - after.x0)) * 300 + Math.random() * 200, dur: SWAP_IN };
+              }
+              wake();
+              window.setTimeout(done, 500 + SWAP_IN * 1000);
+            }, 400 + SWAP_OUT * 1000);
+          }),
+      );
     },
   };
 }

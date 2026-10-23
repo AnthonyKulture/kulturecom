@@ -50,28 +50,30 @@ const clientStrings = {
   {/* 30 / 70: the form gets most of the width. */}
   <div class="mx-auto grid w-full max-w-[var(--container-wide)] gap-10 lg:grid-cols-[3fr_7fr] lg:gap-14">
     <div>
-      <Heading id="contact-title" class="font-display text-[clamp(30px,3.6vw,52px)] leading-[1.1] text-[var(--color-ink)]">
+      <Heading id="contact-title" class="cta-in font-display text-title text-[var(--color-ink)]" style="--i:0">
         <span class="block">{f.title[0]}</span>
         <span class="block text-[var(--color-ink-muted)]">{f.title[1]}</span>
       </Heading>
-      <GoogleRating lang={lang} class="mt-5 text-[15px] text-[var(--color-ink)]" />
+      <div class="cta-in" style="--i:1">
+        <GoogleRating lang={lang} class="mt-5 text-small text-[var(--color-ink)]" />
+      </div>
 
-      <div class="mt-8 hidden flex-col gap-3 lg:flex">
-        <p class="font-label text-[13px] uppercase tracking-[0.06em] text-[var(--color-ink-muted)]">{f.orWrite}</p>
+      <div class="cta-in mt-8 hidden flex-col gap-3 lg:flex" style="--i:2">
+        <p class="font-label text-small uppercase tracking-[0.06em] text-[var(--color-ink-muted)]">{f.orWrite}</p>
         <a href={mailtoHref} class="alt-contact">{f.emailLabel} <span>{CONTACT.email}</span></a>
         <a href={whatsappHref} target="_blank" rel="noopener noreferrer" class="alt-contact">{f.whatsappLabel} <span>{CONTACT.phoneDisplay}</span></a>
         <button type="button" data-callback-open class="alt-contact text-left">{f.callbackLabel} <span aria-hidden="true">→</span></button>
       </div>
     </div>
 
-    <div>
+    <div class="cta-in" style="--i:1">
       <form
         data-lead-form
         data-need={need}
         action="/api/lead"
         method="post"
         novalidate
-        class="lead-form marks"
+        class="lead-form"
         data-strings={JSON.stringify(clientStrings)}
       >
         <input type="hidden" name="type" value="project" />
@@ -82,7 +84,7 @@ const clientStrings = {
         </div>
 
         <div class="lf-head">
-          <span data-lf-count class="font-label text-[13px] uppercase tracking-[0.06em]">{f.step} 1/2</span>
+          <span data-lf-count class="font-label text-small uppercase tracking-[0.06em]">{f.step} 1/2</span>
           <span class="lf-bar" aria-hidden="true"><span data-lf-bar></span></span>
           <button type="button" data-lf-back class="lf-back" hidden>{f.back}</button>
         </div>
@@ -126,7 +128,7 @@ const clientStrings = {
             </div>
           </div>
           <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
-            <p class="text-[15px] text-[var(--color-ink-muted)]">
+            <p class="text-small text-[var(--color-ink-muted)]">
               {f.consent} <a href={f.privacyHref} class="underline underline-offset-2">{f.privacy}</a>
             </p>
             <button type="submit" data-lf-submit class="lf-submit">
@@ -137,13 +139,13 @@ const clientStrings = {
         </fieldset>
 
         <div data-lf-success class="lf-done" role="status" hidden>
-          <p class="font-display text-[clamp(26px,3vw,40px)]">{f.successTitle}</p>
-          <p class="mt-3 text-[16px] text-[var(--color-ink-muted)]">{f.successBody}</p>
+          <p class="font-display text-title">{f.successTitle}</p>
+          <p class="mt-3 text-body text-[var(--color-ink-muted)]">{f.successBody}</p>
         </div>
 
         <div data-lf-error class="lf-done" role="alert" hidden>
-          <p class="font-display text-[clamp(22px,2.6vw,34px)]">{f.errorTitle}</p>
-          <p class="mt-3 text-[16px] text-[var(--color-ink-muted)]">{f.errorBody}</p>
+          <p class="font-display text-title">{f.errorTitle}</p>
+          <p class="mt-3 text-body text-[var(--color-ink-muted)]">{f.errorBody}</p>
           <div class="mt-5 flex flex-wrap gap-3">
             <a data-lf-mail href={mailtoHref} class="lf-submit">{f.emailLabel}</a>
             <a data-lf-wa href={whatsappHref} target="_blank" rel="noopener noreferrer" class="lf-submit lf-submit--ghost">{f.whatsappLabel}</a>
@@ -152,7 +154,7 @@ const clientStrings = {
       </form>
 
       <div class="mt-8 flex flex-col gap-3 lg:hidden">
-        <p class="font-label text-[13px] uppercase tracking-[0.06em] text-[var(--color-ink-muted)]">{f.orWrite}</p>
+        <p class="font-label text-small uppercase tracking-[0.06em] text-[var(--color-ink-muted)]">{f.orWrite}</p>
         <a href={mailtoHref} class="alt-contact">{f.emailLabel} <span>{CONTACT.email}</span></a>
         <a href={whatsappHref} target="_blank" rel="noopener noreferrer" class="alt-contact">{f.whatsappLabel} <span>{CONTACT.phoneDisplay}</span></a>
         <button type="button" data-callback-open class="alt-contact text-left">{f.callbackLabel} <span aria-hidden="true">→</span></button>
@@ -169,8 +171,7 @@ const clientStrings = {
     gap: 16px;
     padding: 14px 0;
     border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
-    font-size: 17px;
-    font-weight: 500;
+    font-size: var(--text-body);
     color: var(--color-ink);
     text-decoration: none;
     cursor: pointer;
@@ -185,16 +186,11 @@ const clientStrings = {
     color: var(--color-accent);
   }
 
+  /* Pared back: no tinted box, a hairline on top, fields underlined. */
   .lead-form {
     position: relative;
-    padding: 20px;
-    border-radius: 0;
-    background: var(--color-bg-shade);
-  }
-  @media (min-width: 768px) {
-    .lead-form {
-      padding: 36px;
-    }
+    padding-top: 24px;
+    border-top: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
   }
   .lf-hp {
     position: absolute;
@@ -212,7 +208,7 @@ const clientStrings = {
   .lf-bar {
     position: relative;
     flex: 1;
-    height: 3px;
+    height: 1px;
     border-radius: 0;
     overflow: hidden;
     background: color-mix(in srgb, var(--color-ink) 10%, transparent);
@@ -226,7 +222,7 @@ const clientStrings = {
     transition: transform 0.5s var(--ease-power3);
   }
   .lf-back {
-    font-size: 14px;
+    font-size: var(--text-body);
     font-weight: 500;
     text-decoration: underline;
     text-underline-offset: 4px;
@@ -241,7 +237,7 @@ const clientStrings = {
   .lf-q {
     margin-bottom: 18px;
     font-family: var(--font-display);
-    font-size: clamp(22px, 2.2vw, 30px);
+    font-size: var(--text-title);
     font-weight: 600;
     letter-spacing: -0.015em;
     line-height: 1.2;
@@ -300,22 +296,15 @@ const clientStrings = {
     height: 100%;
     min-height: 52px;
     padding: 12px 16px;
-    border: 1px solid var(--color-border);
+    border: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
     border-radius: 0;
-    background: #ffffff;
-    font-size: 16px;
-    font-size: clamp(13px, calc(5.4cqi - 2px), 16px);
-    font-weight: 500;
+    background: transparent;
+    font-size: var(--text-body);
     transition:
       background-color 0.2s var(--ease-power3),
       color 0.2s var(--ease-power3),
       border-color 0.2s var(--ease-power3),
       transform 0.2s var(--ease-power3);
-  }
-  @container (min-width: 600px) {
-    .lf-chip span {
-      font-size: clamp(14px, calc(2.7cqi - 2.2px), 16px);
-    }
   }
   .lf-chip:hover span {
     border-color: color-mix(in srgb, var(--color-accent) 50%, transparent);
@@ -334,7 +323,7 @@ const clientStrings = {
   }
   .lf-next {
     margin-top: 16px;
-    font-size: 14px;
+    font-size: var(--text-body);
     font-weight: 500;
     color: var(--color-accent);
     text-decoration: underline;
@@ -352,16 +341,17 @@ const clientStrings = {
     gap: 6px;
   }
   .lf-field label {
-    font-size: 15px;
-    font-weight: 500;
+    font-size: var(--text-small);
+    color: var(--color-ink-muted);
   }
   .lf-field input,
   .lf-field textarea {
     width: 100%;
-    padding: 12px 14px;
-    border: 1px solid var(--color-border);
-    background: #ffffff;
-    font-size: 16px;
+    padding: 10px 0;
+    border: 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 25%, transparent);
+    background: transparent;
+    font-size: var(--text-body);
     color: var(--color-ink);
     border-radius: 0;
     transition: border-color 0.2s var(--ease-power3);
@@ -372,18 +362,18 @@ const clientStrings = {
   .lf-field input:focus,
   .lf-field textarea:focus {
     border-color: var(--color-accent);
-    outline: 3px solid color-mix(in srgb, var(--color-accent) 20%, transparent);
-    outline-offset: 0;
+    outline: none;
+    box-shadow: 0 1px 0 var(--color-accent);
   }
   .lf-field [aria-invalid="true"] {
     border-color: #9f2f2d;
   }
   .lf-hint {
-    font-size: 14px;
+    font-size: var(--text-small);
     color: var(--color-ink-muted);
   }
   .lf-err {
-    font-size: 14px;
+    font-size: var(--text-small);
     color: #9f2f2d;
   }
   .lf-submit {
@@ -394,7 +384,7 @@ const clientStrings = {
     border-radius: 0;
     background: var(--color-accent);
     color: #ffffff;
-    font-size: 15px;
+    font-size: var(--text-body);
     font-weight: 500;
     text-decoration: none;
     white-space: nowrap;
@@ -414,12 +404,12 @@ const clientStrings = {
     cursor: progress;
   }
   .lf-submit--ghost {
-    background: #ffffff;
+    background: transparent;
     color: var(--color-ink);
     border: 1px solid var(--color-border);
   }
   .lf-submit--ghost:hover {
-    background: #ffffff;
+    background: transparent;
     border-color: var(--color-ink);
   }
 
@@ -451,6 +441,21 @@ const clientStrings = {
     to { opacity: 1; transform: none; }
   }
 
+  /* Entry: title, rating, contact links and form rise in one after the other
+     when the block reaches the screen (armed by the script: visible without
+     JS). */
+  [data-cta][data-cta-wait] .cta-in {
+    opacity: 0;
+    translate: 0 18px;
+  }
+  [data-cta][data-cta-in] .cta-in {
+    opacity: 1;
+    translate: 0 0;
+    transition:
+      opacity 0.8s var(--ease-power3) calc(var(--i) * 120ms),
+      translate 0.8s var(--ease-power3) calc(var(--i) * 120ms);
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .lf-bar span,
     .lf-chip span,
@@ -467,6 +472,25 @@ const clientStrings = {
 <script>
   import { initLeadForms } from "~/lib/lead-form";
   initLeadForms();
+
+  // Entry of the contact block (see `.cta-in`). A block already on screen at
+  // load is left as it is, so nothing visible blinks out.
+  if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.querySelectorAll<HTMLElement>("[data-cta]").forEach((block) => {
+      if (block.getBoundingClientRect().top < window.innerHeight) return;
+      block.setAttribute("data-cta-wait", "");
+      const io = new IntersectionObserver(
+        ([e]) => {
+          if (!e.isIntersecting) return;
+          io.disconnect();
+          block.setAttribute("data-cta-in", "");
+          block.removeAttribute("data-cta-wait");
+        },
+        { rootMargin: "0px 0px -10% 0px" },
+      );
+      io.observe(block);
+    });
+  }
 
   // Step 1 choices come in one by one when the form reaches the screen. The
   // form is observed, not the choices: on a service page the form opens on

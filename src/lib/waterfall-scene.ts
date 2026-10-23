@@ -74,13 +74,13 @@ function tuft(x: number, y: number, s: number): string {
 
 // ------------------------------------------------------------- far away
 
-export const CLOUDS = [
+/** The clouds (lines in the svg, soft puffs in dots). */
+export const CLOUD_SET = [
   { x: 24, y: 38, len: 190, speed: 0, seed: 1 },
   { x: 330, y: 24, len: 220, speed: 0, seed: 2 },
   { x: 214, y: 70, len: 120, speed: 0, seed: 3 },
-]
-  .map(cloudFrame)
-  .join("");
+];
+export const CLOUDS = CLOUD_SET.map(cloudFrame).join("");
 
 /** Distant peaks seen through the gorge, behind the river. */
 const farPts: Pt[] = [
@@ -226,6 +226,16 @@ function rock(outline: Pt[], face: Pt[], corner: [Pt, Pt], cracks: number[], ban
   }
   return rough([corner[0], corner[1]], 0.8) + strokes(segs);
 }
+
+/** Each cliff's top edge, from the page edge to the lip of the fall. */
+export const CLIFF_TOPS: Pt[][] = [leftCliff.slice(0, 8), rightCliff.slice(0, 8)];
+
+/** The gorge's side walls, between each cliff's corner and the fall (in
+ *  shade: denser in dots). */
+export const SIDE_WALLS = [
+  `M${[...leftCliff.slice(5, 15), [168, 517]].map((p) => p.join(" ")).join("L")}Z`,
+  `M${[...rightCliff.slice(5, 15), [436, 513]].map((p) => p.join(" ")).join("L")}Z`,
+];
 
 export const CLIFFS = [
   {

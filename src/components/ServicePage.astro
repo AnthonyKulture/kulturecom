@@ -139,7 +139,7 @@ const jsonLd = {
         <span aria-hidden="true"> / </span>
         <span aria-current="page" class="text-[var(--color-ink)]">{c.name}</span>
       </nav>
-      <h1 class="mt-5 max-w-[20ch] font-display text-[clamp(34px,4.4vw,60px)] leading-[1.08] text-balance">
+      <h1 data-vapor class="mt-5 max-w-[20ch] font-display text-[clamp(34px,4.4vw,60px)] leading-[1.08] text-balance">
         {c.h1Lines.map((line, i) => (
           <span class:list={[i > 0 && "text-[var(--color-ink-muted)]"]}>{line}{i < c.h1Lines.length - 1 ? " " : ""}</span>
         ))}

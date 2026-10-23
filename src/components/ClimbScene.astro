@@ -1,0 +1,111 @@
+---
+// Fifth illustration: the hiker walking up a slope, in dots like the others
+// (src/lib/climb-halftone.ts). He walks in place while the ground and the far
+// ranges slide by, in an endless loop, like the hero. When the projects come
+// in on the blue, he condenses out of vapor with the scroll (HomeSections.astro
+// sets the entrance's progress in the section's data-in), as the site's vapor
+// type does: each dot drifts down into its place and firms up, in a sweep
+// from left to right. Decorative; still under reduced motion.
+---
+
+<canvas class="climb-dots" data-climb-dots aria-hidden="true"></canvas>
+
+<script>
+  import { CLIMB_VIEW, drawClimbTone } from "~/lib/climb-halftone";
+  import { runDots } from "~/lib/halftone";
+
+  // The vapor's clock, in its own units, run by the entrance's progress.
+  const SWEEP = 0.9; // left to right
+  const STAGGER = 0.5; // random extra delay per dot
+  const CONDENSE = 1.2; // one dot's trip home
+  const TOTAL = SWEEP + STAGGER + CONDENSE;
+  const SPAN = [0, 0.75] as const; // the share of the entrance it takes
+
+  const canvas = document.querySelector<HTMLCanvasElement>("[data-climb-dots]");
+  const section = canvas?.closest<HTMLElement>("[data-work]");
+  if (canvas) {
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let t = 0.3; // mid-step at the first frame
+    // Per dot: when it sets off, and where from (in dots).
+    let delay = new Float32Array(0);
+    let fromX = new Int16Array(0);
+    let fromY = new Int16Array(0);
+    let out = new Uint8ClampedArray(0);
+    const seed = (cols: number, rows: number): void => {
+      const n = cols * rows;
+      delay = new Float32Array(n);
+      fromX = new Int16Array(n);
+      fromY = new Int16Array(n);
+      out = new Uint8ClampedArray(n * 4);
+      for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < cols; x++) {
+          const i = y * cols + x;
+          delay[i] = (x / cols) * SWEEP + Math.random() * STAGGER;
+          fromX[i] = Math.round((Math.random() - 0.5) * 16);
+          fromY[i] = -Math.round(10 + Math.random() * 26); // above: vapor settling
+        }
+      }
+    };
+
+    /** The drawing's tones condensing: each dot drawn on its way home, faint
+     *  and high at first, firm in its place once there. */
+    const condense = (tone: CanvasRenderingContext2D, cols: number, rows: number, at: number): void => {
+      if (delay.length !== cols * rows) seed(cols, rows);
+      const img = tone.getImageData(0, 0, cols, rows);
+      const src = img.data;
+      out.fill(0);
+      for (let i = 0; i < cols * rows; i++) {
+        const a = src[i * 4 + 3];
+        if (!a) continue;
+        const q = Math.min(1, Math.max(0, (at - delay[i]) / CONDENSE));
+        if (q <= 0) continue;
+        const e = 1 - (1 - q) ** 3;
+        const x = (i % cols) + Math.round(fromX[i] * (1 - e));
+        const y = ((i / cols) | 0) + Math.round(fromY[i] * (1 - e));
+        if (x < 0 || x >= cols || y < 0 || y >= rows) continue;
+        const j = (y * cols + x) * 4 + 3;
+        const v = a * (0.3 + 0.7 * e) * Math.min(1, q * 3);
+        if (v > out[j]) out[j] = v;
+      }
+      src.set(out);
+      tone.putImageData(img, 0, 0);
+    };
+
+    runDots(
+      canvas,
+      CLIMB_VIEW,
+      (tone, cols, rows, dt) => {
+        t += dt;
+        drawClimbTone(tone, t, cols, rows);
+        // The section's entrance, if it has one.
+        const p = section?.hasAttribute("data-wait") ? Number(section.dataset.in ?? 0) : 1;
+        const at = Math.min(1, Math.max(0, (p - SPAN[0]) / (SPAN[1] - SPAN[0]))) * TOTAL;
+        if (at < TOTAL) {
+          if (at <= 0) {
+            tone.save();
+            tone.setTransform(1, 0, 0, 1, 0, 0);
+            tone.clearRect(0, 0, cols, rows);
+            tone.restore();
+          } else condense(tone, cols, rows, at);
+        }
+      },
+      still,
+    );
+  }
+</script>
+
+<style>
+  .climb-dots {
+    display: block;
+    width: 100%;
+    aspect-ratio: 600 / 700;
+    max-height: 80svh;
+    color: var(--color-accent); /* the dots' ink */
+    /* Soft edges: the drawing fades into the page instead of ending on a
+       rectangle. */
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 10%, #000 85%, transparent), linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(to bottom, transparent, #000 10%, #000 85%, transparent), linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+    mask-composite: intersect;
+  }
+</style>

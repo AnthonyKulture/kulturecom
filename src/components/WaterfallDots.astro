@@ -1,0 +1,164 @@
+---
+// Section 2's scene in dots (waterfall-scene.ts geometry, waterfall-halftone.ts
+// tones), drawn over the whole section and filmed by a camera (camera.ts).
+// The section is a scroll sequence picking up where the hero's ends: pinned,
+// it opens inside the hiker's backpack, then the camera pulls back from it to
+// show him at the foot of the waterfall, the scene settles in its place (the
+// .approach-visual box) and the text fades in. Last, still pinned, the water
+// rises in dots (flood.ts, on the .flood canvas) and fills the screen with
+// the projects' blue. At rest, or under reduced motion, the scene simply sits in
+// its box.
+---
+
+<canvas class="waterfall-dots" data-waterfall-dots aria-hidden="true"></canvas>
+
+<script>
+  import { boxIn, clamp01, film, frame, lerpBox, screenIn, seqProgress, smooth } from "~/lib/camera";
+  import type { HikerState } from "~/lib/halftone-ink";
+  import { drawFlood } from "~/lib/flood";
+  import { runDots } from "~/lib/halftone";
+  import { drawWaterfallTone } from "~/lib/waterfall-halftone";
+  import { HIKER, VIEW } from "~/lib/waterfall-scene";
+
+  const DIVE = 75; // as deep in the pack as the hero's dive ends
+  const PACK_Y = -68; // the pack, between its lid and its pocket (figure units)
+  const ARRIVE = 0.92; // the share of the pin the way in takes
+
+  const canvas = document.querySelector<HTMLCanvasElement>("[data-waterfall-dots]");
+  const stage = canvas?.closest<HTMLElement>("[data-approach]");
+  const wrap = stage?.closest<HTMLElement>("[data-approach-seq]");
+  const spacer = wrap?.querySelector<HTMLElement>("[data-seq-spacer]");
+  const visual = stage?.querySelector<HTMLElement>(".approach-visual");
+  const items = stage ? [...stage.querySelectorAll<HTMLElement>("[data-seq-item]")] : [];
+  const flood = stage?.querySelector<HTMLCanvasElement>("[data-flood]");
+  if (canvas && stage && visual) {
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const seq = !still && !!wrap && !!spacer;
+    if (seq) wrap.dataset.seq = "on";
+    // Cut, not a crossing: when the hero plays its dive too, this section is
+    // pulled up over the hero's last screen, so it pins the moment the hero's
+    // dive ends, right on top of it (hidden until then).
+    const hero = document.querySelector<HTMLElement>("[data-hero-seq]");
+    const heroStage = hero?.querySelector<HTMLElement>("[data-home-hero]");
+    const overlap = seq && hero?.dataset.seq === "on" && !!heroStage;
+    const lift = (): void => {
+      if (overlap) wrap.style.marginTop = `${-heroStage.offsetHeight}px`;
+    };
+    if (overlap) {
+      wrap.dataset.overlap = "on";
+      lift();
+      window.addEventListener("resize", lift);
+    }
+
+    // Style writes only when a value changes.
+    const last = new Map<HTMLElement, string>();
+    const set = (el: HTMLElement, prop: "opacity" | "visibility", value: string): void => {
+      const key = `${prop}:${value}`;
+      if (last.get(el) === key) return;
+      last.set(el, key);
+      el.style[prop] = value;
+    };
+
+    // The water's canvas, in device pixels, the size of the section.
+    const fctx = seq ? flood?.getContext("2d") : null;
+    let fw = 0;
+    let fh = 0;
+    let fpx = 1;
+    let drawn = -1; // the level last drawn (0: cleared)
+    const fit = (): void => {
+      if (!flood || !fctx) return;
+      fpx = Math.min(window.devicePixelRatio || 1, 2);
+      fw = flood.clientWidth;
+      fh = flood.clientHeight;
+      flood.width = Math.round(fw * fpx);
+      flood.height = Math.round(fh * fpx);
+      fctx.fillStyle = getComputedStyle(flood).color;
+      drawn = -1;
+    };
+    if (fctx) {
+      fit();
+      window.addEventListener("resize", fit);
+    }
+    const phone = window.innerWidth < 768;
+
+    // He stands on his boulder, breathing.
+    const hiker: HikerState = { x: HIKER.x, y: HIKER.y, s: HIKER.scale, phase: 0, amp: 0, masked: false };
+    const focus = { x: HIKER.x, y: HIKER.y + PACK_Y * HIKER.scale };
+    let t = 0;
+    let r = seq ? 0 : 1;
+
+    runDots(
+      canvas,
+      VIEW,
+      (tone, cols, rows, dt, px) => {
+        t += dt;
+        const target = seq ? seqProgress(wrap, spacer) : 1;
+        r = dt ? r + (target - r) * (1 - Math.exp(-dt / 0.12)) : target;
+        if (Math.abs(target - r) < 1e-4) r = target;
+        // The way in, over the first part of the pin.
+        const a = seq ? r / ARRIVE : 1;
+        // Out of the pack, fast at first, then easing back to the whole scene.
+        const back = 1 - (1 - clamp01(a / 0.5)) ** 2;
+        const settle = smooth(0.45, 0.72, a); // the scene shrinks into its place
+
+        // Then the text fades in where it stands, one line after another, all
+        // of it in by 90 % of the way in: the section holds still a moment.
+        items.forEach((el, i) => {
+          const v = seq ? smooth(0.58 + i * 0.045, 0.72 + i * 0.045, a) : 1;
+          set(el, "opacity", v < 1 ? v.toFixed(3) : "");
+        });
+
+        // Then, as soon as the text is in, the water rises, full just before
+        // the section lets go: its edge climbs from the foot of the screen to
+        // above its top, and each line of text goes under as the dots close
+        // over it.
+        const level = seq ? smooth(ARRIVE * 0.88, 0.985, r) : 0;
+        const band = Math.min(220, window.innerHeight * 0.28);
+        const edge = window.innerHeight + 40 - level * (window.innerHeight + band + 80);
+        if (level > 0) {
+          items.forEach((el) => {
+            const under = clamp01((el.getBoundingClientRect().bottom - edge) / (band * 0.5));
+            if (under > 0) set(el, "opacity", (1 - under).toFixed(3));
+          });
+        }
+        if (fctx) {
+          if (level > 0) {
+            drawFlood(fctx, fw, fh, edge, t, phone ? 6 : 7, band, fpx);
+            drawn = level;
+          } else if (drawn !== 0) {
+            fctx.setTransform(1, 0, 0, 1, 0, 0);
+            fctx.clearRect(0, 0, flood!.width, flood!.height);
+            drawn = 0;
+          }
+        }
+
+        const root = stage.getBoundingClientRect();
+        // Hidden (and not drawn) until it pins over the hero.
+        const hidden = overlap && root.top > 0.5;
+        if (overlap) set(stage, "visibility", hidden ? "hidden" : "");
+        if (hidden || level >= 1) return false; // nothing of it shows
+        const screen = screenIn(root);
+        const box = lerpBox(screen, boxIn(visual, root), settle);
+        film(tone, VIEW, box, DIVE ** (1 - back), focus, 1 - smooth(0.25, 0.6, a), screen, px);
+        const breath = still ? 0 : 0.5 - 0.5 * Math.cos((2 * Math.PI * t) / 4.2);
+        drawWaterfallTone(tone, t, hiker, breath, cols, rows);
+        frame(tone, box, { left: 0, top: 0, bottom: 0 }, px, cols, rows);
+        return { x: box.x * px, y: box.y * px, w: box.w * px, h: box.h * px }; // only the frame holds dots
+      },
+      still,
+      window.innerWidth < 768 ? 2.5 : 2, // lighter dots on phones, for a full screen of them
+    );
+  }
+</script>
+
+<style>
+  .waterfall-dots {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: var(--color-accent); /* the dots' ink */
+    pointer-events: none;
+  }
+</style>
