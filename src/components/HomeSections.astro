@@ -5,6 +5,7 @@ import { getHomeContent } from "~/lib/home-content";
 import { caseStudyPath, getCaseStudy } from "~/lib/case-studies";
 import Eyebrow from "~/components/Eyebrow.astro";
 import SignalType from "~/components/SignalType.astro";
+import WaterfallScene from "~/components/WaterfallScene.astro";
 import { GOOGLE_PROFILE } from "~/lib/facts";
 
 // Home body between the hero and the contact block:
@@ -38,19 +39,27 @@ const faqLd = {
 };
 ---
 
-{/* Conçu. Codé. Cité. — manifesto rows + comparison table. */}
+{/* Conçu. Codé. Cité. — the waterfall drawing on the left, the manifesto
+    rows on the right (each word facing its line), then the comparison table. */}
 <section class="px-4 py-20 sm:px-6 md:px-12 md:py-32" data-reveal>
   <div class="mx-auto w-full max-w-[var(--container-wide)]">
     <Eyebrow label={sheet("01", "Approche", "Approach")} class="mb-6 md:mb-8" />
-    <h2 class="max-w-[24ch] font-display text-[clamp(26px,2.8vw,40px)]">{c.pillarsTitle}</h2>
-    <ol class="mt-10 md:mt-16">
-      {c.pillars.map((p) => (
-        <li class="grid gap-2 border-t border-[var(--color-ink)]/15 py-6 md:grid-cols-12 md:items-baseline md:gap-8 md:py-9">
-          <SignalType text={p.word} class="font-display text-[clamp(44px,6.5vw,104px)] md:col-span-6" />
-          <p class="max-w-[46ch] text-[16px] leading-[1.55] text-[var(--color-ink-muted)] md:col-span-6 md:text-[18px]">{p.body}</p>
-        </li>
-      ))}
-    </ol>
+    <div class="grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-14">
+      <figure class="approach-visual" aria-hidden="true">
+        <WaterfallScene />
+      </figure>
+      <div>
+        <h2 class="max-w-[24ch] font-display text-[clamp(26px,2.8vw,40px)]">{c.pillarsTitle}</h2>
+        <ol class="pillars mt-8 md:mt-12">
+          {c.pillars.map((p) => (
+            <li class="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] items-center gap-5 border-t border-[var(--color-ink)]/15 py-5 md:gap-8 md:py-7">
+              <SignalType text={p.word} class="pillar-word font-display" />
+              <p class="text-[15px] leading-[1.5] text-[var(--color-ink-muted)] md:text-[17px]">{p.body}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
 
     {/* Phones: each criterion stacks its three answers (no sideways scroll);
         from md up, the usual table. */}
@@ -196,6 +205,25 @@ const faqLd = {
 </section>
 
 <style>
+  /* On phones the drawing sits above the text, not too tall. */
+  .approach-visual {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  @media (min-width: 1024px) {
+    .approach-visual {
+      max-width: none;
+    }
+  }
+  /* Each word sized to its column, so its line can always face it. */
+  .pillars {
+    container-type: inline-size;
+  }
+  .pillars :global(.pillar-word) {
+    font-size: clamp(34px, 12.5cqi, 92px);
+    line-height: 1;
+  }
   .compare .is-me {
     background: color-mix(in srgb, var(--color-accent) 7%, transparent);
     color: var(--color-ink);

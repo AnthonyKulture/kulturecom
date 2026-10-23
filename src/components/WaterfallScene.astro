@@ -1,0 +1,221 @@
+---
+// Second illustration: the hiker stands at the foot of a waterfall, seen
+// from behind (geometry in src/lib/waterfall-scene.ts). The drawing is static
+// markup; the loop is CSS, started by the script below once JS runs (never
+// under reduced motion) and paused while the scene is off screen.
+import Hiker from "~/components/Hiker.astro";
+import {
+  BANK,
+  BUSHES,
+  CLIFFS,
+  CLOUDS,
+  FAR,
+  FOAM,
+  HIKER,
+  LIP,
+  POOL_MARKS,
+  POOL_ROCKS,
+  RIPPLE,
+  RIPPLE_PATH,
+  RIVER,
+  SHEET,
+  SPRAY,
+  STREAKS,
+  VIEW,
+} from "~/lib/waterfall-scene";
+---
+
+<svg class="wf" data-waterfall viewBox={`0 0 ${VIEW.w} ${VIEW.h}`} focusable="false" style={`--rx:${RIPPLE.x}px;--ry:${RIPPLE.y}px`}>
+  {/* Sky, then the distant peaks and the river seen through the gorge. */}
+  <path class="wf-line wf-cloud" d={CLOUDS} />
+  <path class="wf-fill" d={FAR.fill} />
+  <path class="wf-line wf-far" d={FAR.line} />
+  <path class="wf-fill" d={RIVER.fill} />
+  <path class="wf-line" d={RIVER.banks} />
+  <path class="wf-hatch" d={RIVER.flow} />
+
+  {/* The fall: a white sheet, dashes running down it, the lip on top. */}
+  <path class="wf-fill" d={SHEET} />
+  {STREAKS.map((s) => (
+    <path
+      class="wf-streak"
+      d={s.d}
+      pathLength="100"
+      style={`stroke-dasharray:${s.dash};--o:${s.offset};stroke-dashoffset:${s.offset};--d:${s.dur}s;stroke-width:${s.width};opacity:${s.opacity}`}
+    />
+  ))}
+  <path class="wf-line" d={LIP} />
+
+  {/* The pool: rings spreading from under the foam (at rest: three sizes). */}
+  {[0.62, 0.95, 1.25].map((k, i) => (
+    <path class="wf-ripple" d={RIPPLE_PATH} style={`transform:scale(${k});--delay:${-i * 1.6}s`} />
+  ))}
+  <path class="wf-hatch" d={POOL_MARKS} />
+
+  {/* Foam boiling at the foot of the fall, spray rising from it. */}
+  {FOAM.map((f) => <path class="wf-puff" d={f.d} style={`--delay:${f.delay}s`} />)}
+  {SPRAY.map((s) => <circle class="wf-drop" cx={s.x} cy={s.y} r={s.r} style={`--delay:${s.delay}s`} />)}
+  <path class="wf-shape" d={POOL_ROCKS.fill} />
+  <path class="wf-hatch" d={POOL_ROCKS.marks} />
+
+  {/* The two rock walls framing the fall (they hide its edges and the
+      foam's sides), and the bushes on their tops. */}
+  {CLIFFS.map((c) => (
+    <g>
+      <path class="wf-shape" d={c.d} />
+      <path class="wf-hatch" d={c.rock} />
+    </g>
+  ))}
+  <path class="wf-shape" d={BUSHES} />
+
+  {/* The bank in front, and the hiker on his boulder, looking at the fall. */}
+  <path class="wf-shape" d={BANK.d} />
+  <path class="wf-line" d={`${BANK.marks}${BANK.tufts}`} />
+  <g transform={`translate(${HIKER.x} ${HIKER.y}) scale(${HIKER.scale})`} style="--k:0.8">
+    <Hiker gait="stand" />
+  </g>
+</svg>
+
+<script>
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reduced) {
+    document.querySelectorAll<SVGSVGElement>("[data-waterfall]").forEach((svg) => {
+      svg.dataset.live = "";
+      svg.dataset.paused = "";
+      new IntersectionObserver(([e]) => {
+        if (e.isIntersecting) delete svg.dataset.paused;
+        else svg.dataset.paused = "";
+      }).observe(svg);
+    });
+  }
+</script>
+
+<style>
+  .wf {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  /* Shapes are opaque white with an ink outline; lines are ink only. */
+  .wf-fill {
+    fill: var(--color-bg);
+  }
+  .wf-shape {
+    fill: var(--color-bg);
+    stroke: var(--color-accent);
+    stroke-width: 1.2;
+    stroke-linejoin: round;
+  }
+  .wf-line,
+  .wf-hatch,
+  .wf-streak,
+  .wf-ripple,
+  .wf-drop {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .wf-line {
+    stroke-width: 1.1;
+  }
+  .wf-hatch {
+    stroke-width: 0.8;
+    opacity: 0.6;
+  }
+  .wf-far {
+    opacity: 0.5;
+  }
+  .wf-cloud {
+    stroke-width: 0.9;
+    opacity: 0.55;
+  }
+  .wf-ripple {
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+    transform-box: view-box;
+    transform-origin: var(--rx) var(--ry);
+    opacity: 0.6;
+  }
+  .wf-puff {
+    fill: var(--color-bg);
+    stroke: var(--color-accent);
+    stroke-width: 1.1;
+    stroke-linejoin: round;
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+  }
+  .wf-drop {
+    stroke-width: 0.8;
+    opacity: 0.8;
+  }
+
+  /* The loop. */
+  [data-live] .wf-streak {
+    animation: wf-fall var(--d) linear infinite;
+  }
+  [data-live] .wf-puff {
+    animation: wf-boil 2.4s ease-in-out var(--delay) infinite alternate;
+  }
+  [data-live] .wf-drop {
+    animation: wf-spray 1.8s ease-out var(--delay) infinite;
+  }
+  [data-live] .wf-ripple {
+    animation: wf-ripple 4.8s ease-out var(--delay) infinite;
+  }
+  [data-live] .wf-cloud {
+    animation: wf-drift 22s ease-in-out infinite alternate;
+  }
+  .wf[data-paused],
+  .wf[data-paused] :global(*) {
+    animation-play-state: paused !important;
+  }
+
+  @keyframes wf-fall {
+    from {
+      stroke-dashoffset: var(--o);
+    }
+    to {
+      stroke-dashoffset: calc(var(--o) - 100);
+    }
+  }
+  @keyframes wf-boil {
+    from {
+      transform: scale(0.94, 0.9);
+    }
+    to {
+      transform: scale(1.04, 1.06) translateY(-1.5px);
+    }
+  }
+  @keyframes wf-spray {
+    from {
+      transform: translateY(4px);
+      opacity: 0;
+    }
+    30% {
+      opacity: 0.9;
+    }
+    to {
+      transform: translateY(-16px);
+      opacity: 0;
+    }
+  }
+  @keyframes wf-ripple {
+    from {
+      transform: scale(0.5);
+      opacity: 0.9;
+    }
+    to {
+      transform: scale(1.35);
+      opacity: 0;
+    }
+  }
+  @keyframes wf-drift {
+    from {
+      transform: translateX(-10px);
+    }
+    to {
+      transform: translateX(14px);
+    }
+  }
+</style>
