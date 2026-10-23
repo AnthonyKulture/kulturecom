@@ -125,6 +125,12 @@ const projects = getProjects(ui[lang]);
     .card-desc {
       display: none;
     }
+    /* The small cards: their result on one line. */
+    .card:not(.card--lead) .card-meta {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
   }
   @media (prefers-reduced-motion: reduce) {
     .card-media img {

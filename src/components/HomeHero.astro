@@ -467,6 +467,17 @@ const SHOW_DOORS = false;
     -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 14%, #000 86%, transparent 100%);
     mask-image: linear-gradient(to bottom, transparent 0, #000 14%, #000 86%, transparent 100%);
   }
+  /* Short phones: a little less drawing and air, so the hero holds in one
+     screen and its dive can play (HeroDots.astro only pins it then). */
+  @media (max-width: 767px) and (max-height: 740px) {
+    .hero-visual {
+      min-height: 150px;
+      margin-top: 12px;
+    }
+    .hero-middle {
+      padding-block: 16px;
+    }
+  }
   @media (min-width: 640px) {
     .hero-visual {
       margin-inline: -24px;

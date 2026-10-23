@@ -4,16 +4,19 @@
 // The section is a scroll sequence picking up where the hero's ends: pinned,
 // it opens inside the hiker's backpack, then the camera pulls back from it to
 // show him at the foot of the waterfall, the scene settles in its place (the
-// .approach-visual box) and the text fades in. Last, still pinned, the water
-// rises in dots (flood.ts, on the .flood canvas) and fills the screen with
-// the projects' blue. At rest, or under reduced motion, the scene simply sits in
-// its box.
+// .approach-visual box) and the text fades in. Where the section is taller
+// than the screen (phones), its content then slides up under the pin, as far
+// as a scroll would take it, so the three words come into view. Last, still
+// pinned, the water rises in dots (flood.ts, on the .flood canvas) and fills
+// the screen with the projects' blue. The timeline is in pixels of scroll,
+// so the slide costs exactly the scroll it shows. At rest, or under reduced
+// motion, the scene simply sits in its box.
 ---
 
 <canvas class="waterfall-dots" data-waterfall-dots aria-hidden="true"></canvas>
 
 <script>
-  import { boxIn, clamp01, film, frame, lerpBox, screenIn, seqProgress, smooth } from "~/lib/camera";
+  import { boxIn, clamp01, film, frame, lerpBox, screenIn, smooth } from "~/lib/camera";
   import type { HikerState } from "~/lib/halftone-ink";
   import { drawFlood } from "~/lib/flood";
   import { runDots } from "~/lib/halftone";
@@ -22,7 +25,11 @@
 
   const DIVE = 75; // as deep in the pack as the hero's dive ends
   const PACK_Y = -68; // the pack, between its lid and its pocket (figure units)
-  const ARRIVE = 0.92; // the share of the pin the way in takes
+  // The timeline, in screen heights of scroll: the way in, then the slide
+  // (as long as what it uncovers), then the water.
+  const ARRIVE = { phone: 1.12, wide: 1.49 };
+  const WATER = 0.26;
+  const BAR = 112; // phones: the call bar at the foot of the screen, and a margin
 
   const canvas = document.querySelector<HTMLCanvasElement>("[data-waterfall-dots]");
   const stage = canvas?.closest<HTMLElement>("[data-approach]");
@@ -31,6 +38,7 @@
   const visual = stage?.querySelector<HTMLElement>(".approach-visual");
   const items = stage ? [...stage.querySelectorAll<HTMLElement>("[data-seq-item]")] : [];
   const flood = stage?.querySelector<HTMLCanvasElement>("[data-flood]");
+  const content = stage?.querySelector<HTMLElement>("[data-approach-content]");
   if (canvas && stage && visual) {
     const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const seq = !still && !!wrap && !!spacer;
@@ -81,30 +89,69 @@
     }
     const phone = window.innerWidth < 768;
 
+    // The timeline in pixels, measured from the layout (again on resize):
+    // where the slide starts and how far it goes, where the water starts and
+    // ends; the spacer is set to end with it.
+    const tl = { arrive: 1, slide0: 0, slide: 0, water0: 0, water1: 1 };
+    const measure = (): void => {
+      if (!seq) return;
+      const vh = window.innerHeight;
+      if (content) content.style.translate = "";
+      const top = stage.getBoundingClientRect().top;
+      const lastItem = items[items.length - 1];
+      const bottom = lastItem ? lastItem.getBoundingClientRect().bottom - top : 0;
+      tl.arrive = (phone ? ARRIVE.phone : ARRIVE.wide) * vh;
+      tl.slide0 = 0.75 * tl.arrive;
+      tl.slide = Math.max(0, Math.round(bottom + (phone ? BAR : 48) - vh));
+      tl.water0 = Math.max(0.88 * tl.arrive, tl.slide0 + tl.slide);
+      tl.water1 = tl.water0 + WATER * vh;
+      spacer.style.height = `${Math.round(tl.water1 + 0.03 * vh)}px`;
+      shift = -1;
+    };
+    let shift = -1; // the slide last applied
+    measure();
+    window.addEventListener("resize", measure);
+    document.fonts?.ready.then(measure); // the text's height once its font is in
+    // Without the hero's dive before it, it does not open inside the pack.
+    const dive = overlap ? DIVE : 1;
+
     // He stands on his boulder, breathing.
     const hiker: HikerState = { x: HIKER.x, y: HIKER.y, s: HIKER.scale, phase: 0, amp: 0, masked: false };
     const focus = { x: HIKER.x, y: HIKER.y + PACK_Y * HIKER.scale };
     let t = 0;
-    let r = seq ? 0 : 1;
+    let at = 0; // how far into the pin, in px of scroll, eased
 
     runDots(
       canvas,
       VIEW,
       (tone, cols, rows, dt, px) => {
         t += dt;
-        const target = seq ? seqProgress(wrap, spacer) : 1;
-        r = dt ? r + (target - r) * (1 - Math.exp(-dt / 0.12)) : target;
-        if (Math.abs(target - r) < 1e-4) r = target;
+        const target = seq ? Math.min(Math.max(0, -wrap.getBoundingClientRect().top), spacer.offsetHeight) : 0;
+        at = dt ? at + (target - at) * (1 - Math.exp(-dt / 0.12)) : target;
+        if (Math.abs(target - at) < 0.5) at = target;
         // The way in, over the first part of the pin.
-        const a = seq ? r / ARRIVE : 1;
+        const a = seq ? at / tl.arrive : 1;
         // Out of the pack, fast at first, then easing back to the whole scene.
         const back = 1 - (1 - clamp01(a / 0.5)) ** 2;
         const settle = smooth(0.45, 0.72, a); // the scene shrinks into its place
 
+        // The content slides up under the pin, if it is taller than the
+        // screen (1:1 with the scroll).
+        if (content && seq && tl.slide) {
+          const y = Math.round(clamp01((at - tl.slide0) / tl.slide) * tl.slide);
+          if (y !== shift) {
+            shift = y;
+            content.style.translate = y ? `0 ${-y}px` : "";
+          }
+        }
+
         // Then the text fades in where it stands, one line after another, all
         // of it in by 90 % of the way in: the section holds still a moment.
+        // A line still below the screen fades in as the slide brings it up.
+        const vh = window.innerHeight;
         items.forEach((el, i) => {
-          const v = seq ? smooth(0.58 + i * 0.045, 0.72 + i * 0.045, a) : 1;
+          let v = seq ? smooth(0.58 + i * 0.045, 0.72 + i * 0.045, a) : 1;
+          if (seq && tl.slide) v = Math.min(v, clamp01((vh - (phone ? BAR : 0) - el.getBoundingClientRect().top) / 160));
           set(el, "opacity", v < 1 ? v.toFixed(3) : "");
         });
 
@@ -112,9 +159,9 @@
         // the section lets go: its edge climbs from the foot of the screen to
         // above its top, and each line of text goes under as the dots close
         // over it.
-        const level = seq ? smooth(ARRIVE * 0.88, 0.985, r) : 0;
-        const band = Math.min(220, window.innerHeight * 0.28);
-        const edge = window.innerHeight + 40 - level * (window.innerHeight + band + 80);
+        const level = seq ? smooth(tl.water0, tl.water1, at) : 0;
+        const band = Math.min(220, vh * 0.28);
+        const edge = vh + 40 - level * (vh + band + 80);
         if (level > 0) {
           items.forEach((el) => {
             const under = clamp01((el.getBoundingClientRect().bottom - edge) / (band * 0.5));
@@ -139,7 +186,7 @@
         if (hidden || level >= 1) return false; // nothing of it shows
         const screen = screenIn(root);
         const box = lerpBox(screen, boxIn(visual, root), settle);
-        film(tone, VIEW, box, DIVE ** (1 - back), focus, 1 - smooth(0.25, 0.6, a), screen, px);
+        film(tone, VIEW, box, dive ** (1 - back), focus, 1 - smooth(0.25, 0.6, a), screen, px);
         const breath = still ? 0 : 0.5 - 0.5 * Math.cos((2 * Math.PI * t) / 4.2);
         drawWaterfallTone(tone, t, hiker, breath, cols, rows);
         frame(tone, box, { left: 0, top: 0, bottom: 0 }, px, cols, rows);
