@@ -114,7 +114,7 @@
         return { x: box.x * px, y: box.y * px, w: box.w * px, h: box.h * px }; // only the frame holds dots
       },
       still,
-      window.innerWidth < 768 ? 2.5 : 2, // lighter dots on phones, for a full screen of them
+      2, // as fine on phones as on wide screens: coarser, the drawing no longer reads
     );
   }
 </script>

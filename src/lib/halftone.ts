@@ -70,6 +70,9 @@ export function runDots(
   let image: ImageData | null = null;
   let pixels = new Uint32Array(0);
   let shown: Cells = { x: 0, y: 0, w: 0, h: 0 }; // cells holding dots now
+  // Phones: the light tones lifted a little, so the drawing still reads on
+  // a small, bright screen.
+  const LIFT = Array.from({ length: 256 }, (_, v) => (window.innerWidth < 768 ? (v / 255) ** 0.6 : v / 255));
 
   /** Turn the tone of `part` into dots, clearing what was shown before. */
   const screen = (part: Cells): void => {
@@ -85,7 +88,7 @@ export function runDots(
         const row = ((part.y + y) & 3) * 4;
         const base = (part.y + y) * 2 * w2 + part.x * 2;
         for (let x = 0; x < part.w; x++) {
-          const a = data[(y * part.w + x) * 4 + 3] / 255;
+          const a = LIFT[data[(y * part.w + x) * 4 + 3]];
           if (a < 0.03) continue;
           const lv = Math.min(LEVELS - 1, Math.floor(a * LEVELS + BAYER[row + ((part.x + x) & 3)]));
           if (lv >= 0) pixels[base + x * 2] = ink[lv];
@@ -106,7 +109,8 @@ export function runDots(
     out.drawImage(dots, x0 * 2, y0 * 2, (x1 - x0) * 2, (y1 - y0) * 2, x0 * cell, y0 * cell, (x1 - x0) * cell, (y1 - y0) * cell);
   };
 
-  const coarsest = cellCss * 2;
+  // At most a step and a half coarser: beyond, the drawing stops reading.
+  const coarsest = cellCss * 1.5;
   let cost = 0; // ms per frame, smoothed
   let frames = 0;
   const draw = (dt: number): void => {

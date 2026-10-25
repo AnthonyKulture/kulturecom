@@ -4,6 +4,9 @@
 // result under the image. Hovering only zooms the image a little inside its
 // frame: nothing moves, wherever the pointer comes in. The home's entrance
 // (HomeSections.astro) wipes each image up and brings its caption in.
+// Phones: four projects, one per card, the cards sliding up one by one with
+// the scroll and stacking like folders (each sticks a little lower than the
+// one before), under the section's title and drawing (--stack-top).
 import type { Lang } from "~/i18n/ui";
 import { ui } from "~/i18n/ui";
 import { caseStudyPath } from "~/lib/case-studies";
@@ -19,12 +22,13 @@ const projects = getProjects(ui[lang]);
 
 <ol class="cards" data-cards>
   {projects.map((p, i) => (
-    <li class:list={["card", i === 0 && "card--lead"]} data-card>
+    <li class:list={["card", i === 0 && "card--lead"]} style={`--i:${i}`} data-card>
       <a href={caseStudyPath(p.slug, lang)} class="card-link">
         <span class="card-media" data-card-media>
           <img src={p.image} alt="" loading="lazy" decoding="async" width="800" height="1000" />
         </span>
         <span class="card-text" data-card-text>
+          <span class="card-num font-label text-small" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
           <span class="card-title font-display">{p.title}</span>
           {i === 0 && <span class="card-desc text-body">{p.summary}</span>}
           <span class="card-meta font-label text-small uppercase tracking-[0.06em]">{p.metric}</span>
@@ -121,15 +125,81 @@ const projects = getProjects(ui[lang]);
     outline: 2px solid var(--color-ink);
     outline-offset: 4px;
   }
+  .card-num {
+    display: none;
+  }
   @media (max-width: 767px) {
+    /* The stack of folders. */
+    .cards {
+      display: block;
+      padding-bottom: 8px;
+    }
+    .card {
+      position: sticky;
+      top: calc(var(--stack-top, 300px) + var(--i) * 14px);
+      margin-bottom: 20px;
+      padding: 10px 10px 14px;
+      background: var(--color-bg-shade);
+      box-shadow: 0 -12px 28px -16px rgb(0 0 0 / 0.55);
+    }
+    .card:nth-child(n + 5) {
+      display: none;
+    }
+    .card-media,
+    .card--lead .card-media {
+      aspect-ratio: 16 / 10;
+    }
+    .card-text {
+      grid-template-columns: auto minmax(0, 1fr);
+      column-gap: 10px;
+      padding-top: 10px;
+    }
+    .card-num {
+      display: block;
+      grid-row: span 2;
+      padding-top: 0.15em;
+      color: var(--color-ink-muted);
+    }
+    .card-title,
+    .card--lead .card-title {
+      font-size: var(--text-body);
+      font-weight: 500;
+      line-height: 1.25;
+    }
     .card-desc {
       display: none;
     }
-    /* The small cards: their result on one line. */
-    .card:not(.card--lead) .card-meta {
+    /* The result on one line. */
+    .card-meta {
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+    }
+    /* Each card comes in as it slides onto the screen (the home's script
+       marks it data-in): its image wipes up out of a zoom, its caption
+       rises after it; it goes back the same way below the screen. */
+    .cards[data-wait] .card-media {
+      transition: clip-path 0.9s var(--ease-power3);
+    }
+    .cards[data-wait] .card-media img {
+      transition:
+        scale 1.1s var(--ease-power3),
+        opacity 0.6s var(--ease-power3);
+    }
+    .cards[data-wait] .card-text {
+      transition:
+        opacity 0.7s var(--ease-power3) 0.18s,
+        translate 0.7s var(--ease-power3) 0.18s;
+    }
+    .cards[data-wait] .card:not([data-in]) .card-media {
+      clip-path: inset(100% 0 0 0);
+    }
+    .cards[data-wait] .card:not([data-in]) .card-media img {
+      scale: 1.18;
+    }
+    .cards[data-wait] .card:not([data-in]) .card-text {
+      opacity: 0;
+      translate: 0 12px;
     }
   }
   @media (prefers-reduced-motion: reduce) {

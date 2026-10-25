@@ -23,6 +23,9 @@ const workHref = lang === "fr" ? "/projets/" : "/en/work/";
 // The comparison's answers start in lower case (they used to follow "Agence :").
 const cap = (text: string): string => text.charAt(0).toUpperCase() + text.slice(1);
 const sheet = (n: string, fr: string, en: string): string => (lang === "fr" ? `Planche ${n} · ${fr}` : `Sheet ${n} · ${en}`);
+// Phones show the first questions, the others one tap away (still in the
+// page, for search engines and AI answers; FAQPage data covers them all).
+const FAQ_FIRST = 4;
 const rating = GOOGLE_PROFILE.rating.toLocaleString(lang === "fr" ? "fr-FR" : "en-GB", { minimumFractionDigits: 1 });
 
 
@@ -154,6 +157,35 @@ const faqLd = {
           ))}
         </tbody>
       </table>
+      {/* Phones: the same comparison as three cards to swipe through, one
+          per option, mine first (in blue); every criterion on each card, so
+          an option reads at a glance. Replaces the table there. */}
+      <div class="compare-swipe md:hidden" data-compare-swipe>
+        <div class="cs-track" data-cs-track>
+          {([["me", c.compare.me], ["agency", c.compare.agency], ["platform", c.compare.platform]] as const).map(([key, name], i) => (
+            <section class:list={["cs-card", key === "me" && "is-me"]} aria-label={name}>
+              <p class="cs-head">
+                <span class="cs-num font-label text-small">{`0${i + 1} / 03`}</span>
+                <span class="cs-name font-display">{name}</span>
+              </p>
+              <dl class="cs-rows">
+                {c.compare.rows.map((r) => (
+                  <div class="cs-row">
+                    <dt class="font-label text-small uppercase tracking-[0.06em]">{r.label}</dt>
+                    <dd>{cap(r[key])}</dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+          ))}
+        </div>
+        <div class="cs-foot">
+          <span class="cs-dots" aria-hidden="true">
+            <span data-cs-dot data-on></span><span data-cs-dot></span><span data-cs-dot></span>
+          </span>
+          <span class="font-label text-small uppercase tracking-[0.06em] text-[var(--color-ink-muted)]">{lang === "fr" ? "Glissez pour comparer →" : "Swipe to compare →"}</span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -184,7 +216,7 @@ const faqLd = {
         {c.reviewsLink} <span aria-hidden="true">↗</span>
       </a>
     </div>
-    <div class="min-w-0 md:col-span-8">
+    <div class="reviews-loop min-w-0 md:col-span-8">
       <div class="reviews-viewport">
         <ul class="reviews-track" data-reviews-track>
           {[...c.reviews, ...c.reviews].map((r, i) => {
@@ -228,9 +260,9 @@ const faqLd = {
         <a href="#contact" class="text-[var(--color-ink)] underline underline-offset-4 hover:text-[var(--color-accent)]">{c.faqAside}</a>
       </p>
     </div>
-    <div class="faq-list md:col-span-8">
+    <div class="faq-list md:col-span-8" data-faq-list>
       {c.faq.map((f, i) => (
-        <details class="faq group" style={`--i:${i}`}>
+        <details class:list={["faq group", i >= FAQ_FIRST && "faq-more"]} style={`--i:${i}`}>
           <summary class="flex cursor-pointer list-none items-start justify-between gap-6 py-5 text-body">
             <h3 class="font-[inherit] text-[inherit]">{f.q}</h3>
             <span class="faq-icon" aria-hidden="true"></span>
@@ -245,6 +277,11 @@ const faqLd = {
           </div>
         </details>
       ))}
+      {c.faq.length > FAQ_FIRST && (
+        <button type="button" class="faq-all font-label text-small uppercase tracking-[0.06em] md:hidden" data-faq-all aria-expanded="false">
+          {lang === "fr" ? `Voir les ${c.faq.length - FAQ_FIRST} autres questions` : `See the ${c.faq.length - FAQ_FIRST} other questions`} <span aria-hidden="true">+</span>
+        </button>
+      )}
     </div>
   </div>
   <script type="application/ld+json" set:html={JSON.stringify(faqLd)} is:inline />
@@ -347,14 +384,26 @@ const faqLd = {
   .climb-visual :global(.climb-dots) {
     max-height: 42svh;
   }
-  /* Phones: a smaller drawing, so the title, the hiker and the first card
-     share the pinned screen. */
+  /* Phones: the title and the drawing stay at the top (under the nav, the
+     script sets the offsets) while the project cards slide up under them
+     and stack (WorkCards.astro). */
   @media (max-width: 767px) {
+    .work-inner {
+      gap: 0;
+    }
+    .work-side {
+      position: sticky;
+      top: var(--nav-h, 56px);
+      z-index: 2;
+      margin-inline: -16px;
+      padding: 8px 16px 16px;
+      background: var(--color-bg);
+    }
     .climb-visual {
-      margin-top: 12px;
+      margin-top: 8px;
     }
     .climb-visual :global(.climb-dots) {
-      max-height: 24svh;
+      max-height: 17svh;
     }
   }
   @media (min-width: 1024px) {
@@ -393,12 +442,15 @@ const faqLd = {
     display: block;
     height: 45vh;
   }
+  /* Phones: not pinned as a whole (the cards' stack is the sequence there),
+     so no spacer. */
   @media (max-width: 767px) {
     [data-work-seq][data-seq="on"] > [data-work] {
+      position: relative;
       padding-top: 72px;
     }
     [data-work-seq][data-seq="on"] > .seq-spacer {
-      height: 40vh;
+      display: none;
     }
   }
   /* ===== Freelance / agency / platform ===== */
@@ -464,56 +516,111 @@ const faqLd = {
     color: #ffffff;
     font-weight: 500;
   }
-  /* Phones: one small card per criterion, each answer under its option's name. */
+  /* Phones: the swipe cards instead of the table. */
   @media (max-width: 767px) {
-    .compare,
-    .compare tbody,
-    .compare tr,
-    .compare th,
-    .compare td {
-      display: block;
-      width: auto;
-    }
-    .compare colgroup,
-    .compare thead {
+    .compare {
       display: none;
     }
-    .compare tbody tr {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      column-gap: 16px;
-      padding: 18px 0;
-    }
-    /* The criterion and my answer across, the agency and the platform side
-       by side under it: half as tall. */
-    .compare tbody th,
-    .compare td.is-me {
-      grid-column: 1 / -1;
-    }
-    .compare tbody th {
-      padding: 0 0 10px;
-    }
-    .compare td {
-      padding: 6px 0;
-    }
-    .compare td::before {
-      content: attr(data-label);
-      display: block;
-      font-family: var(--font-label);
-      font-size: var(--text-small);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      font-weight: 400;
-      color: var(--color-ink-muted);
-    }
-    .compare td.is-me {
-      margin-bottom: 4px;
-      padding: 10px 12px;
-      border-top: 0;
-    }
-    .compare td.is-me::before {
-      color: color-mix(in srgb, #ffffff 78%, transparent);
-    }
+  }
+  .compare-swipe {
+    min-width: 0;
+  }
+  .cs-track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 84%;
+    gap: 12px;
+    margin-inline: -16px;
+    padding: 4px 16px 8px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 16px;
+    scrollbar-width: none;
+  }
+  .cs-track::-webkit-scrollbar {
+    display: none;
+  }
+  .cs-card {
+    scroll-snap-align: start;
+    padding: 20px 18px 8px;
+    border: 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent);
+    background: var(--color-bg);
+  }
+  .cs-card.is-me {
+    border-color: var(--color-accent);
+    background: var(--color-accent);
+    color: #ffffff;
+  }
+  .cs-head {
+    display: grid;
+    gap: 6px;
+    padding-bottom: 14px;
+  }
+  .cs-num {
+    color: var(--color-ink-muted);
+  }
+  .is-me .cs-num {
+    color: color-mix(in srgb, #ffffff 70%, transparent);
+  }
+  .cs-name {
+    font-size: var(--text-title);
+    line-height: 1.1;
+  }
+  .is-me .cs-name::before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin: 0 10px 0.2em 0;
+    background: #ffffff;
+  }
+  .cs-row {
+    display: grid;
+    gap: 4px;
+    padding: 14px 0;
+    border-top: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+  }
+  .is-me .cs-row {
+    border-top-color: color-mix(in srgb, #ffffff 22%, transparent);
+  }
+  .cs-row dt {
+    color: var(--color-ink-muted);
+  }
+  .is-me .cs-row dt {
+    color: color-mix(in srgb, #ffffff 72%, transparent);
+  }
+  .cs-row dd {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.4;
+    color: var(--color-ink);
+  }
+  .is-me .cs-row dd {
+    color: #ffffff;
+    font-weight: 500;
+  }
+  .cs-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+  }
+  .cs-dots {
+    display: inline-flex;
+    gap: 6px;
+  }
+  .cs-dots > span {
+    width: 18px;
+    height: 2px;
+    background: color-mix(in srgb, var(--color-ink) 18%, transparent);
+    transition:
+      width 0.35s var(--ease-power3),
+      background 0.35s var(--ease-power3);
+  }
+  .cs-dots > span[data-on] {
+    width: 34px;
+    background: var(--color-accent);
   }
 
   .loop-pause {
@@ -548,12 +655,11 @@ const faqLd = {
     -webkit-mask-image: linear-gradient(90deg, #000 0, #000 82%, transparent);
     mask-image: linear-gradient(90deg, #000 0, #000 82%, transparent);
   }
-  /* Phones: the loop runs under both edges, so fade the left one too
-     (a quote is never cut off mid-word against the edge). */
+  /* Phones: no loop of quotes (too heavy there), just the rating and the
+     link to the reviews. */
   @media (max-width: 767px) {
-    .reviews-viewport {
-      -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 10%, #000 84%, transparent);
-      mask-image: linear-gradient(90deg, transparent 0, #000 10%, #000 84%, transparent);
+    .reviews-loop {
+      display: none;
     }
   }
   .reviews-track {
@@ -600,6 +706,22 @@ const faqLd = {
     }
   }
 
+  /* ===== FAQ ===== Phones: the first questions, then a button for the rest. */
+  @media (max-width: 767px) {
+    .faq-list:not([data-all]) .faq-more {
+      display: none;
+    }
+  }
+  .faq-all {
+    display: inline-flex;
+    gap: 8px;
+    margin-top: 18px;
+    padding: 6px 0;
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    cursor: pointer;
+  }
   /* ===== FAQ ===== */
   .faq-list {
     border-top: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
@@ -695,7 +817,7 @@ const faqLd = {
 </style>
 
 <script>
-  import { Hold, follow, seqProgress } from "~/lib/camera";
+  import { Hold, follow } from "~/lib/camera";
   import { initMarquee } from "~/lib/marquee";
 
   // Projets on the blue: once the approach's sequence is on (its script has
@@ -718,18 +840,20 @@ const faqLd = {
       };
 
       // What comes in, and when (shares of the pin): [element, from, to, kind].
-      // All of it in by 80 %: a short scroll. The words start faint and
+      // All of it in by the end. The words start faint and
       // blurred and come clear one after the other while the title levels
       // out of a slight tilt; the cards rise and wipe up one after another.
       type Kind = "fade" | "word" | "tilt" | "card";
       const steps: [HTMLElement, number, number, Kind][] = [];
       const items = [...work.querySelectorAll<HTMLElement>("[data-in-item]")];
-      steps.push([items[0], 0, 0.3, "fade"]);
+      steps.push([items[0], 0, 0.25, "fade"]);
       const tilt = work.querySelector<HTMLElement>("[data-in-tilt]");
-      if (tilt) steps.push([tilt, 0, 0.5, "tilt"]);
-      work.querySelectorAll<HTMLElement>("[data-in-word]").forEach((el, i) => steps.push([el, i * 0.12, 0.32 + i * 0.12, "word"]));
-      if (items[1]) steps.push([items[1], 0.2, 0.5, "fade"]);
-      work.querySelectorAll<HTMLElement>("[data-card]").forEach((card, i) => steps.push([card, 0.04 + i * 0.07, 0.42 + i * 0.07, "card"]));
+      if (tilt) steps.push([tilt, 0, 0.45, "tilt"]);
+      work.querySelectorAll<HTMLElement>("[data-in-word]").forEach((el, i) => steps.push([el, i * 0.1, 0.3 + i * 0.1, "word"]));
+      if (items[1]) steps.push([items[1], 0.2, 0.45, "fade"]);
+      // (Phones: the cards come in with the scroll, stacking; not here.)
+      const phone = window.innerWidth < 768;
+      if (!phone) work.querySelectorAll<HTMLElement>("[data-card]").forEach((card, i) => steps.push([card, 0.12 + i * 0.1, 0.55 + i * 0.1, "card"]));
       const ease = (v: number): number => 1 - (1 - v) ** 3;
       const last = new Map<HTMLElement, number>();
       const apply = (p: number): void => {
@@ -764,10 +888,11 @@ const faqLd = {
         work.dataset.in = p.toFixed(4);
       };
 
-      // The entrance takes its time (a second at least, either way); held on
-      // screen only when it falls well behind the scroll (a fast flick), and
-      // then too it waits for the approach's water.
-      const ENTER_TIME = 1.1;
+      // Once the scroll reaches it (it pins, the water has filled the
+      // screen), the entrance plays through to the end at its own pace, never
+      // left half done; it plays back the same way once the scroll goes back
+      // above it. Held on screen while it falls well behind the scroll.
+      const ENTER_TIME = 2; // unhurried: each card is seen arriving
       const LAG = 0.12;
       const hold = new Hold(work, workSeq);
       let r = 0;
@@ -781,15 +906,17 @@ const faqLd = {
         const up = hold.holdingUp();
         const pinned = hold.natural() <= 0.5;
         const waiting = !filled && !up;
-        const target = waiting ? 0 : seqProgress(workSeq, workSpacer);
+        const target = !waiting && pinned ? 1 : 0;
         r = follow(r, target, dt, 0.12, 1 / ENTER_TIME);
-        if (hold.update(dt, r < target - LAG, r > target + LAG)) r = target;
+        // (Phones: the section is not pinned, nothing to hold.)
+        if (hold.update(dt, !phone && r < target - LAG, !phone && r > target + LAG)) r = target;
         // Hidden until it pins over the approach and the water has filled it.
         const on = hold.holdingUp() || (pinned && filled);
         if (on !== shown) {
           shown = on;
           work.style.visibility = on ? "" : "hidden";
           workSeq.dataset.shown = on ? "on" : "";
+          cardsIn();
         }
         apply(on ? r : 0);
         const busy = r !== target || hold.active() || (pinned && !filled);
@@ -799,19 +926,66 @@ const faqLd = {
       const kick = (): void => {
         if (!raf) raf = requestAnimationFrame(tick);
       };
+      // Phones: each card comes in as it slides onto the screen (WorkCards'
+      // data-in), once the section itself is there; back out below it.
+      const cardList = work.querySelector<HTMLElement>("[data-cards]");
+      const cards = cardList ? [...cardList.querySelectorAll<HTMLElement>("[data-card]")] : [];
+      const cardsIn = (): void => {
+        if (!phone || !cardList) return;
+        cardList.dataset.wait = "";
+        const vh = window.innerHeight;
+        cards.forEach((card) => {
+          const r = card.getBoundingClientRect();
+          card.toggleAttribute("data-in", workSeq.dataset.shown === "on" && r.top < vh * 0.9);
+        });
+      };
+      window.addEventListener("scroll", cardsIn, { passive: true });
+      // Phones: the title block sticks under the nav, the cards stack under it.
+      const nav = document.querySelector<HTMLElement>("[data-nav-smart]");
+      const side = work.querySelector<HTMLElement>(".work-side");
+      const stack = (): void => {
+        if (!side) return;
+        const navH = nav?.offsetHeight ?? 56;
+        work.style.setProperty("--nav-h", `${navH}px`);
+        work.style.setProperty("--stack-top", `${navH + side.offsetHeight + 12}px`);
+      };
       lift();
+      stack();
+      document.fonts?.ready.then(stack);
       kick();
       window.addEventListener("resize", () => {
         lift();
+        stack();
         kick();
       });
       window.addEventListener("scroll", kick, { passive: true });
     });
   }
 
+  // The comparison's swipe cards (phones): the dots follow the card in view.
+  const csTrack = document.querySelector<HTMLElement>("[data-cs-track]");
+  const csDots = [...document.querySelectorAll<HTMLElement>("[data-cs-dot]")];
+  if (csTrack && csDots.length) {
+    const sync = (): void => {
+      const first = csTrack.firstElementChild as HTMLElement | null;
+      const step = first ? first.offsetWidth + 12 : csTrack.clientWidth;
+      const i = Math.round(csTrack.scrollLeft / step);
+      csDots.forEach((d, j) => d.toggleAttribute("data-on", j === i));
+    };
+    csTrack.addEventListener("scroll", sync, { passive: true });
+  }
+
+  // FAQ on phones: the rest of the questions on demand.
+  const faqAll = document.querySelector<HTMLButtonElement>("[data-faq-all]");
+  faqAll?.addEventListener("click", () => {
+    faqAll.closest("[data-faq-list]")?.setAttribute("data-all", "");
+    faqAll.setAttribute("aria-expanded", "true");
+    faqAll.hidden = true;
+  });
+
   // The reviews' slow loop (see marquee.ts).
   const reviews = document.querySelector<HTMLElement>("[data-reviews]");
   const reviewsTrack = reviews?.querySelector<HTMLElement>("[data-reviews-track]");
   const reviewsPause = reviews?.querySelector<HTMLButtonElement>("[data-reviews-pause]");
-  if (reviews && reviewsTrack && reviewsPause) initMarquee(reviews, reviewsTrack, reviewsPause);
+  if (reviews && reviewsTrack && reviewsPause && window.innerWidth >= 768) initMarquee(reviews, reviewsTrack, reviewsPause);
 </script>

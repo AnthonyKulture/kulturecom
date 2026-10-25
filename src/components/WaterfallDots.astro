@@ -28,11 +28,14 @@
   // The timeline, in screen heights of scroll: the way in, then the slide
   // (as long as what it uncovers), then the water.
   const ARRIVE = { phone: 1.12, wide: 1.49 };
-  const WATER = 0.26;
+  const WATER = { phone: 0.34, wide: 0.26 };
+  // A pause once the last word (Cité) and its line are in, before the water:
+  // time to read it (longer on phones, where it comes last with the slide).
+  const READ = { phone: 0.45, wide: 0.1 };
   const BAR = 112; // phones: the call bar at the foot of the screen, and a margin
   // Each part takes its time, however fast the page is scrolled (seconds,
   // either way): the way in, the slide, the water.
-  const TIME = { arrive: 1.8, slide: 0.7, water: 1 };
+  const TIME = { arrive: 1.8, slide: 0.7, water: window.innerWidth < 768 ? 1.4 : 1 };
 
   const canvas = document.querySelector<HTMLCanvasElement>("[data-waterfall-dots]");
   const stage = canvas?.closest<HTMLElement>("[data-approach]");
@@ -106,8 +109,8 @@
       tl.arrive = (phone ? ARRIVE.phone : ARRIVE.wide) * vh;
       tl.slide0 = 0.75 * tl.arrive;
       tl.slide = Math.max(0, Math.round(bottom + (phone ? BAR : 48) - vh));
-      tl.water0 = Math.max(0.88 * tl.arrive, tl.slide0 + tl.slide);
-      tl.water1 = tl.water0 + WATER * vh;
+      tl.water0 = Math.max(0.88 * tl.arrive, tl.slide0 + tl.slide) + (phone ? READ.phone : READ.wide) * vh;
+      tl.water1 = tl.water0 + (phone ? WATER.phone : WATER.wide) * vh;
       spacer.style.height = `${Math.round(tl.water1 + 0.03 * vh)}px`;
       shift = -1;
     };
@@ -219,7 +222,7 @@
         return { x: box.x * px, y: box.y * px, w: box.w * px, h: box.h * px }; // only the frame holds dots
       },
       still,
-      window.innerWidth < 768 ? 2.5 : 2, // lighter dots on phones, for a full screen of them
+      2, // as fine on phones as on wide screens: coarser, the drawing no longer reads
     );
   }
 </script>

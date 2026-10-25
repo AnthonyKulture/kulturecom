@@ -45,11 +45,13 @@ const navLabels = lang === "en"
 
     {/* TOP ROW — 3 columns: left = contact + year, center = social,
         right = nav. Each item has an inline transition-delay for the
-        cascade reveal once `[data-top-revealed]` is set on the footer. */}
-    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-4 font-label text-[13px] uppercase tracking-[0.06em] sm:text-[14px]">
+        cascade reveal once `[data-top-revealed]` is set on the footer.
+        Phones: contact across the top, services and nav side by side, the
+        social links on one line, the legal links last, in small. */}
+    <div class="footer-top grid grid-cols-2 gap-x-4 gap-y-7 sm:grid-cols-2 sm:gap-8 lg:grid-cols-4 font-label text-[13px] uppercase tracking-[0.06em] sm:text-[14px]">
 
       {/* Left : email + copyright */}
-      <div class="flex flex-col gap-1.5">
+      <div class="col-span-2 flex flex-col gap-1.5 sm:col-span-1">
         <a
           data-footer-top
           style="transition-delay:0ms"
@@ -89,7 +91,7 @@ const navLabels = lang === "en"
       </div>
 
       {/* Social */}
-      <div class="flex flex-col gap-1.5 lg:items-center">
+      <div class="col-span-2 order-last flex flex-row flex-wrap gap-x-5 gap-y-1.5 sm:order-none sm:col-span-1 sm:flex-col lg:items-center">
         <a
           data-footer-top
           style="transition-delay:240ms"
@@ -151,7 +153,7 @@ const navLabels = lang === "en"
       </div>
     </div>
 
-    <div class="mt-16 md:mt-24" />
+    <div class="mt-10 sm:mt-16 md:mt-24" />
 
     {/* HUGE NAME */}
     <h2 data-footer-name class="relative z-10 flex flex-wrap items-baseline gap-x-[0.25em] font-display text-[clamp(52px,14vw,210px)] leading-[1.05] tracking-[-0.035em]">
