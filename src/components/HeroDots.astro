@@ -56,7 +56,7 @@
     // The dive takes its time (a second and a half at least, either way).
     // Only when it falls well behind the scroll (a fast flick) is the hero
     // held on screen until it catches up, and section 2 waits for it (it
-    // reads data-lag): at an ordinary pace the scroll alone carries it, with
+    // reads data-held): at an ordinary pace the scroll alone carries it, with
     // no shifting of the stage against the scroll (that would jitter).
     const DIVE_TIME = 1.5;
     const LAG = 0.08; // how far behind counts as falling behind
@@ -73,8 +73,10 @@
         const raw = seq ? seqProgress(wrap, spacer) : 0;
         const target = cover?.dataset.shown === "on" ? Math.max(raw, q) : raw;
         q = follow(q, target, dt, 0.12, 1 / DIVE_TIME);
-        if (hold?.update(dt, q < target - LAG, q > target + LAG)) q = target;
-        if (seq) wrap.dataset.lag = (target - q).toFixed(3);
+        const behind = hold ? hold.threshold(LAG) : LAG;
+        if (hold?.update(dt, q < target - behind, q > target + behind)) q = target;
+        // Section 2 waits only while the hero is actually held (WaterfallDots).
+        if (seq) wrap.dataset.held = hold?.held() ? "on" : "";
         const open = smooth(0.04, 0.36, q); // the frame opens to the whole screen
         const clear = smooth(0.06, 0.3, q); // title and logos fade as they're pushed away
         // The camera goes into the pack, faster and faster, filling the screen

@@ -400,10 +400,23 @@ const faqLd = {
       background: var(--color-bg);
     }
     .climb-visual {
+      max-height: 20svh;
       margin-top: 8px;
+      overflow: hidden;
+      transition:
+        max-height 0.6s var(--ease-power3),
+        margin 0.6s var(--ease-power3),
+        opacity 0.4s var(--ease-power3);
     }
     .climb-visual :global(.climb-dots) {
       max-height: 17svh;
+    }
+    /* Once the first card is in, the drawing gives its room to the
+       projects (the cards rise with it, see the script). */
+    .work-side[data-compact] .climb-visual {
+      max-height: 0;
+      margin-top: 0;
+      opacity: 0;
     }
   }
   @media (min-width: 1024px) {
@@ -909,7 +922,8 @@ const faqLd = {
         const target = !waiting && pinned ? 1 : 0;
         r = follow(r, target, dt, 0.12, 1 / ENTER_TIME);
         // (Phones: the section is not pinned, nothing to hold.)
-        if (hold.update(dt, !phone && r < target - LAG, !phone && r > target + LAG)) r = target;
+        const behind = hold.threshold(LAG);
+        if (hold.update(dt, !phone && r < target - behind, !phone && r > target + behind)) r = target;
         // Hidden until it pins over the approach and the water has filled it.
         const on = hold.holdingUp() || (pinned && filled);
         if (on !== shown) {
@@ -930,10 +944,19 @@ const faqLd = {
       // data-in), once the section itself is there; back out below it.
       const cardList = work.querySelector<HTMLElement>("[data-cards]");
       const cards = cardList ? [...cardList.querySelectorAll<HTMLElement>("[data-card]")] : [];
+      let sideFull = 0; // the title block's height with its drawing
       const cardsIn = (): void => {
         if (!phone || !cardList) return;
         cardList.dataset.wait = "";
         const vh = window.innerHeight;
+        // The drawing folds away once the first card has reached its place
+        // under the title (and comes back above it).
+        if (side) {
+          if (!side.hasAttribute("data-compact")) sideFull = side.offsetHeight;
+          // (Once it has risen a little past where it rests at first.)
+          const reached = cardList.getBoundingClientRect().top < (nav?.offsetHeight ?? 56) + sideFull - 60;
+          side.toggleAttribute("data-compact", reached);
+        }
         cards.forEach((card) => {
           const r = card.getBoundingClientRect();
           card.toggleAttribute("data-in", workSeq.dataset.shown === "on" && r.top < vh * 0.9);
@@ -949,6 +972,8 @@ const faqLd = {
         work.style.setProperty("--nav-h", `${navH}px`);
         work.style.setProperty("--stack-top", `${navH + side.offsetHeight + 12}px`);
       };
+      // The cards' place follows the title block as the drawing folds.
+      if (side) new ResizeObserver(stack).observe(side);
       lift();
       stack();
       document.fonts?.ready.then(stack);

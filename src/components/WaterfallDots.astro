@@ -132,7 +132,7 @@
     const hold = seq ? new Hold(stage, wrap) : null;
     const projects = document.querySelector<HTMLElement>("[data-work-seq]");
     const LAG = 0.1; // of a screen: how far behind counts as falling behind
-    const heroDone = (): boolean => !overlap || Number(hero.dataset.lag ?? 0) < 0.08;
+    const heroDone = (): boolean => !overlap || hero.dataset.held !== "on";
 
     runDots(
       canvas,
@@ -150,7 +150,8 @@
         const rate = at < tl.arrive * 0.9 ? tl.arrive / TIME.arrive : at < tl.water0 ? Math.max(tl.slide / TIME.slide, 600) : (tl.water1 - tl.water0) / TIME.water;
         at = follow(at, target, dt, 0.12, rate, 0.5);
         const lag = LAG * window.innerHeight;
-        if (hold?.update(dt, at < target - lag, at > target + lag)) at = target;
+        const behind = hold ? hold.threshold(lag) : lag;
+        if (hold?.update(dt, at < target - behind, at > target + behind)) at = target;
         // The way in, over the first part of the pin.
         const a = seq ? at / tl.arrive : 1;
         // Out of the pack, fast at first, then easing back to the whole scene.
@@ -184,7 +185,7 @@
         const level = seq ? smooth(tl.water0, tl.water1, at) : 0;
         // The projects wait for the water, unless it is all but there
         // (HomeSections.astro).
-        if (seq) wrap.dataset.filled = level >= 0.995 || target - at < lag ? "on" : "";
+        if (seq) wrap.dataset.filled = level >= 0.995 || !hold?.held() ? "on" : "";
         const band = Math.min(220, vh * 0.28);
         const edge = vh + 40 - level * (vh + band + 80);
         if (level > 0) {

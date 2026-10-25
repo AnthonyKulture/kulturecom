@@ -134,16 +134,21 @@ const projects = getProjects(ui[lang]);
       display: block;
       padding-bottom: 8px;
     }
+    /* Each card stays on its own a while (the scroll between two cards)
+       before the next comes over it. */
     .card {
       position: sticky;
       top: calc(var(--stack-top, 300px) + var(--i) * 14px);
-      margin-bottom: 20px;
+      margin-bottom: 38svh;
       padding: 10px 10px 14px;
       background: var(--color-bg-shade);
       box-shadow: 0 -12px 28px -16px rgb(0 0 0 / 0.55);
     }
     .card:nth-child(n + 5) {
       display: none;
+    }
+    .card:nth-child(4) {
+      margin-bottom: 18svh;
     }
     .card-media,
     .card--lead .card-media {

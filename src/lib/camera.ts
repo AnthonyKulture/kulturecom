@@ -179,6 +179,17 @@ export class Hold {
     s.right = on ? "0" : "";
   }
 
+  /** Held (fixed on screen) right now. */
+  held(): boolean {
+    return this.fixed;
+  }
+
+  /** How far behind counts as behind: `lag` to start holding, next to
+   *  nothing to keep holding, so it never flickers between the two. */
+  threshold(lag: number): number {
+    return this.fixed ? lag * 0.05 : lag;
+  }
+
   /** Shifted at all (held, or being let go). */
   active(): boolean {
     return this.fixed || this.offset !== 0;
