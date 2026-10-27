@@ -15,6 +15,12 @@
 const LEVELS = 10;
 // 4×4 Bayer thresholds, centred on 0.
 const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map((v) => (v + 0.5) / 16 - 0.5);
+// Tone (0..255) to dot strength. Phones: the light tones lifted a little, so
+// the drawing still reads on a small, bright screen.
+const LIFT = {
+  phone: Array.from({ length: 256 }, (_, v) => (v / 255) ** 0.6),
+  wide: Array.from({ length: 256 }, (_, v) => v / 255),
+};
 
 /** Any CSS colour as [r, g, b]. */
 function rgb(color: string): [number, number, number] {
@@ -32,6 +38,17 @@ interface Cells {
   h: number;
 }
 
+/** A dot drawing, for whoever drives it (see runDots). */
+export interface Dots {
+  /** Draw a frame `dt` s after the last (0: the same moment again). */
+  draw(dt: number): void;
+  /** A step coarser (2 device px more per dot), redrawn there and then at
+   *  the new size; false if it is as coarse as it gets, so nothing changed. */
+  coarsen(): boolean;
+  /** What a frame costs to draw, ms (smoothed). */
+  cost(): number;
+}
+
 /**
  * Run a dot drawing on `canvas`: one tone pixel per dot, `cellCss` CSS px
  * apart, with the view box covering the frame (like "slice"). `paint` draws
@@ -42,6 +59,11 @@ interface Cells {
  * part of the tone canvas that holds anything (in tone pixels), so only that
  * part is turned into dots. If drawing gets slow (a slow device or browser),
  * the dots grow a step coarser, up to twice their size.
+ *
+ * `driven`: no loop of its own. The returned handle's draw() is the only
+ * clock, and the dots grow coarser only when its owner calls coarsen() (the
+ * scroll sequences share one pitch, changed when nothing moves). A resize,
+ * or a step coarser, redraws the same moment (dt 0) at the new size.
  */
 export function runDots(
   canvas: HTMLCanvasElement,
@@ -55,7 +77,8 @@ export function runDots(
   ) => void | false | { x: number; y: number; w: number; h: number },
   still: boolean,
   cellCss = 2,
-): void {
+  driven = false,
+): Dots {
   const out = canvas.getContext("2d")!;
   const tone = document.createElement("canvas");
   const tctx = tone.getContext("2d", { willReadFrequently: true })!;
@@ -65,14 +88,14 @@ export function runDots(
   const [r, g, b] = rgb(getComputedStyle(canvas).color);
   const ink = Array.from({ length: LEVELS }, (_, lv) => ((Math.round(((lv + 1) / LEVELS) * 255) << 24) | (b << 16) | (g << 8) | r) >>> 0);
   let cell = 2; // device px, even (two dot pixels per cell)
+  let coarser = 0; // device px added by coarsen()
   let cols = 0;
   let rows = 0;
   let image: ImageData | null = null;
   let pixels = new Uint32Array(0);
   let shown: Cells = { x: 0, y: 0, w: 0, h: 0 }; // cells holding dots now
-  // Phones: the light tones lifted a little, so the drawing still reads on
-  // a small, bright screen.
-  const LIFT = Array.from({ length: 256 }, (_, v) => (window.innerWidth < 768 ? (v / 255) ** 0.6 : v / 255));
+  // Phone or not as the screen is now (a rotation changes it).
+  const phone = window.matchMedia("(max-width: 767px)");
 
   /** Turn the tone of `part` into dots, clearing what was shown before. */
   const screen = (part: Cells): void => {
@@ -83,12 +106,13 @@ export function runDots(
       for (let x = shown.x; x < shown.x + shown.w; x++) pixels[y * 2 * w2 + x * 2] = 0;
     }
     if (part.w > 0 && part.h > 0) {
+      const lift = phone.matches ? LIFT.phone : LIFT.wide;
       const data = tctx.getImageData(part.x, part.y, part.w, part.h).data;
       for (let y = 0; y < part.h; y++) {
         const row = ((part.y + y) & 3) * 4;
         const base = (part.y + y) * 2 * w2 + part.x * 2;
         for (let x = 0; x < part.w; x++) {
-          const a = LIFT[data[(y * part.w + x) * 4 + 3]];
+          const a = lift[data[(y * part.w + x) * 4 + 3]];
           if (a < 0.03) continue;
           const lv = Math.min(LEVELS - 1, Math.floor(a * LEVELS + BAYER[row + ((part.x + x) & 3)]));
           if (lv >= 0) pixels[base + x * 2] = ink[lv];
@@ -109,35 +133,47 @@ export function runDots(
     out.drawImage(dots, x0 * 2, y0 * 2, (x1 - x0) * 2, (y1 - y0) * 2, x0 * cell, y0 * cell, (x1 - x0) * cell, (y1 - y0) * cell);
   };
 
-  // At most a step and a half coarser: beyond, the drawing stops reading.
-  const coarsest = cellCss * 1.5;
+  const dpr = (): number => Math.min(window.devicePixelRatio || 1, 2);
+  // In device px, even: as fine as asked, and at most half as big again
+  // (beyond, the drawing stops reading).
+  const finest = (): number => Math.max(2, 2 * Math.round((cellCss * dpr()) / 2));
+  const coarsest = (): number => Math.max(2, 2 * Math.round((cellCss * 1.5 * dpr()) / 2));
   let cost = 0; // ms per frame, smoothed
   let frames = 0;
+  // A step coarser, 2 device px at a time, so every step shows (a smaller
+  // one could round to the same dots and only cost a refit). Refitted at
+  // once, shown or not: a driven drawing's owner coarsens it while nothing
+  // moves, so a hidden one is not refitted later, as it comes up mid-sequence.
+  const coarsen = (): boolean => {
+    if (finest() + coarser + 2 > coarsest()) return false;
+    coarser += 2;
+    frames = 0;
+    cost = 0;
+    size();
+    draw(0);
+    return true;
+  };
   const draw = (dt: number): void => {
     if (!cols || !rows) return;
     const t0 = performance.now();
-    const part = paint(tctx, cols, rows, dt, Math.min(window.devicePixelRatio || 1, 2) / cell);
+    const part = paint(tctx, cols, rows, dt, dpr() / cell);
     if (part === false) return;
     const x = part ? Math.max(0, Math.floor(part.x)) : 0;
     const y = part ? Math.max(0, Math.floor(part.y)) : 0;
     const w = part ? Math.max(0, Math.min(cols, Math.ceil(part.x + part.w)) - x) : cols;
     const h = part ? Math.max(0, Math.min(rows, Math.ceil(part.y + part.h)) - y) : rows;
     screen({ x, y, w, h });
-    // Too slow here: coarser dots (fewer of them), a step at a time.
+    // Too slow here: coarser dots (fewer of them), a step at a time
+    // (a driven drawing leaves that to its owner).
     cost = cost * 0.9 + (performance.now() - t0) * 0.1;
-    if (dt && ++frames > 40 && cost > 11 && cellCss < coarsest) {
-      cellCss = Math.min(coarsest, cellCss * 1.25);
-      frames = 0;
-      cost = 0;
-      fit();
-    }
+    if (!driven && dt && ++frames > 40 && cost > 11) coarsen();
   };
-  const fit = (): void => {
+  const size = (): void => {
     const rect = canvas.getBoundingClientRect();
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    cell = Math.max(2, 2 * Math.round((cellCss * dpr) / 2));
-    canvas.width = Math.round(rect.width * dpr);
-    canvas.height = Math.round(rect.height * dpr);
+    const ratio = dpr();
+    cell = Math.min(coarsest(), finest() + coarser);
+    canvas.width = Math.round(rect.width * ratio);
+    canvas.height = Math.round(rect.height * ratio);
     cols = Math.ceil(canvas.width / cell);
     rows = Math.ceil(canvas.height / cell);
     tone.width = cols;
@@ -147,18 +183,23 @@ export function runDots(
     image = cols && rows ? dctx.createImageData(cols * 2, rows * 2) : null;
     pixels = image ? new Uint32Array(image.data.buffer) : new Uint32Array(0);
     shown = { x: 0, y: 0, w: 0, h: 0 };
-    const k = (Math.max(rect.width / view.w, rect.height / view.h) * dpr) / cell;
+    const k = (Math.max(rect.width / view.w, rect.height / view.h) * ratio) / cell;
     tctx.setTransform(k, 0, 0, k, (canvas.width / cell - view.w * k) / 2, (canvas.height / cell - view.h * k) / 2);
+  };
+  const fit = (): void => {
+    size();
     draw(0);
   };
   new ResizeObserver(fit).observe(canvas);
-  if (still) return;
+  const handle: Dots = { draw, coarsen, cost: () => cost };
+  if (still || driven) return handle;
 
   let raf = 0;
   let last = 0;
   let onScreen = true;
   const frame = (now: number): void => {
-    const dt = last ? Math.min(0.05, (now - last) / 1000) : 0;
+    // (A first frame after a pause counts as an ordinary one.)
+    const dt = last ? Math.min(0.05, (now - last) / 1000) : 1 / 60;
     last = now;
     raf = requestAnimationFrame(frame); // first, so one failed frame can't stop the loop
     draw(dt);
@@ -179,4 +220,5 @@ export function runDots(
   }).observe(canvas);
   document.addEventListener("visibilitychange", () => (document.hidden ? stop() : run()));
   run();
+  return handle;
 }

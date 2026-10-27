@@ -1,6 +1,7 @@
 ---
 import Nav from "~/components/Nav.astro";
 import HomeHero from "~/components/HomeHero.astro";
+import Approach from "~/components/Approach.astro";
 import HomeSections from "~/components/HomeSections.astro";
 import CTA from "~/components/CTA.astro";
 import IntroBlueprint from "~/components/IntroBlueprint.astro";
@@ -21,12 +22,83 @@ const { lang, altLang, altLangPath } = Astro.props;
   <IntroBlueprint />
   <Nav lang={lang} altLang={altLang} altLangPath={altLangPath} />
   <main id="main-content">
-    <HomeHero lang={lang} />
+    {/* The theatre: the scroll sequences (the hero's dive, then section 2)
+        play as layers of one screen that stays stuck while the spacer
+        scrolls by, one layer shown at a time (home-seq.ts directs them).
+        Without the sequences (no JS, reduced motion) the two sections
+        simply follow each other. */}
+    <div data-theatre-wrap>
+      <div data-theatre>
+        <HomeHero lang={lang} />
+        <Approach lang={lang} />
+      </div>
+      <div data-theatre-spacer aria-hidden="true"></div>
+    </div>
     <HomeSections lang={lang} />
     <CTA lang={lang} />
   </main>
 
   <script>
+    import { startHome } from "~/lib/home-seq";
     import { initReveal } from "~/lib/reveal";
     initReveal();
+    startHome();
   </script>
+
+<style is:global>
+  /* ===== The theatre ===== Only once the sequences are on (data-seq="on"
+     on the wrapper). One box as tall as the screen at its tallest (100lvh:
+     the phone toolbars coming and going don't resize it), stuck for the
+     whole spacer: the browser keeps it on screen by itself, however fast
+     the page scrolls, so a late frame only ever shows a slightly old frame
+     of the right scene, never the page under it. The layers sit on top of
+     each other in it; only the one marked data-on is shown. */
+  [data-theatre-spacer] {
+    display: none;
+  }
+  [data-theatre-wrap][data-seq="on"] {
+    overflow-anchor: none; /* the spacer changes size: the page must not follow it */
+  }
+  [data-theatre-wrap][data-seq="on"] > [data-theatre-spacer] {
+    display: block;
+  }
+  [data-theatre-wrap][data-seq="on"] > [data-theatre] {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100lvh;
+    overflow: hidden;
+    overflow: clip;
+  }
+  [data-theatre-wrap][data-seq="on"] [data-theatre] > section {
+    position: absolute;
+    inset: 0;
+  }
+  /* (At the sequences' end, data-seq-rest, the layer shown hides the others
+     by itself: they stay visible under it, in the page for assistive tech.) */
+  [data-theatre-wrap][data-seq="on"]:not([data-seq-rest]) [data-theatre] > section:not([data-on]) {
+    visibility: hidden;
+  }
+  /* The hero: down to the foot of the screen with its toolbars showing
+     (100svh), so its logos are never under them; its dots cover the rest
+     (HeroDots.astro). */
+  [data-theatre-wrap][data-seq="on"] [data-theatre] > [data-home-hero] {
+    z-index: 0;
+    inset: 0 0 auto;
+    height: 100svh;
+  }
+  /* Section 2: the whole box; on phones its content slides up inside it. */
+  [data-theatre-wrap][data-seq="on"] [data-theatre] > [data-approach] {
+    z-index: 1;
+    overflow: hidden;
+    overflow: clip;
+  }
+  /* Projets, on wide screens where it holds in one screen (moved in here by
+     the sequence): its content centred as in the page (.work), clear of the
+     nav. */
+  [data-theatre-wrap][data-seq="on"] [data-theatre] > [data-work] {
+    z-index: 2;
+    padding-top: 88px;
+    padding-bottom: 40px;
+  }
+</style>

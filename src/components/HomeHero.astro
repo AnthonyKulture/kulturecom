@@ -26,10 +26,10 @@ const LONGEST = AI_NAMES.reduce((a, b) => (b.length > a.length ? b : a));
 const SHOW_DOORS = false;
 ---
 
-{/* The hero is a scroll sequence (HeroDots.astro): pinned while the camera
-    dives into the hiker's backpack, the spacer giving the scroll it needs.
-    Without the sequence (no JS, reduced motion) the spacer is not shown. */}
-<div data-hero-seq>
+{/* The hero is a scroll sequence (HeroDots.astro), the theatre's first
+    layer (HomeContent.astro): held on screen while the camera dives into the
+    hiker's backpack. Without the sequence (no JS, reduced motion) it is a
+    plain section in the page. */}
 <section data-home-hero data-intro-hero class="relative flex min-h-[100svh] flex-col overflow-x-clip px-4 pb-12 pt-[88px] sm:px-6 md:px-12 md:pb-16 md:pt-28">
   {/* The scene in dots, under everything, over the whole hero. */}
   <HeroDots />
@@ -164,8 +164,6 @@ const SHOW_DOORS = false;
     </div>
   </div>
 </section>
-<div data-seq-spacer class="seq-spacer" aria-hidden="true"></div>
-</div>
 
 <style>
   /* ===== Doors ===== Square corners, hairline border, a drafting window on
@@ -431,24 +429,6 @@ const SHOW_DOORS = false;
       padding-block: 48px;
     }
   }
-  /* ===== Scroll sequence ===== The hero stays pinned while the spacer
-     scrolls by (HeroDots.astro sets data-seq="on"). */
-  [data-hero-seq][data-seq="on"] > [data-home-hero] {
-    position: sticky;
-    top: 0;
-  }
-  .seq-spacer {
-    display: none;
-  }
-  [data-hero-seq][data-seq="on"] > .seq-spacer {
-    display: block;
-    height: 170vh;
-  }
-  @media (max-width: 767px) {
-    [data-hero-seq][data-seq="on"] > .seq-spacer {
-      height: 120vh;
-    }
-  }
   /* ===== Hero layout with the illustration ===== */
   .hero-grid {
     position: relative;
@@ -468,7 +448,7 @@ const SHOW_DOORS = false;
     mask-image: linear-gradient(to bottom, transparent 0, #000 14%, #000 86%, transparent 100%);
   }
   /* Short phones: a little less drawing and air, so the hero holds in one
-     screen and its dive can play (HeroDots.astro only pins it then). */
+     screen and its dive can play (home-seq.ts only plays it then). */
   @media (max-width: 767px) and (max-height: 740px) {
     .hero-visual {
       min-height: 150px;
@@ -476,6 +456,13 @@ const SHOW_DOORS = false;
     }
     .hero-middle {
       padding-block: 16px;
+    }
+  }
+  /* Shorter still (iPhone SE class, toolbars showing): less drawing again, so
+     the hero still holds in one screen. */
+  @media (max-width: 767px) and (max-height: 620px) {
+    .hero-visual {
+      min-height: 96px;
     }
   }
   @media (min-width: 640px) {
@@ -612,12 +599,32 @@ const SHOW_DOORS = false;
   const word = title?.querySelector<HTMLElement>("[data-ai-word]");
   const zone = title?.querySelector<HTMLElement>("[data-ai-zone]");
   if (title && word && zone && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    const vapor = vaporType(title, getComputedStyle(document.documentElement).getPropertyValue("--color-accent"));
+    const root = document.documentElement;
+    const vapor = vaporType(title, getComputedStyle(root).getPropertyValue("--color-accent"));
     const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    // A name only changes where it is seen: the hero shown and held on
+    // screen by the scroll sequences (home-seq.ts), or, without them, the
+    // page near its top.
+    const seen = (): boolean =>
+      root.dataset.seqLayer ? root.dataset.seqLayer === "hero" && root.dataset.seqHold === "on" : window.scrollY < window.innerHeight;
+    const shown = (): Promise<void> =>
+      new Promise((done) => {
+        if (seen()) return done();
+        const check = (): void => {
+          if (!seen()) return;
+          mo.disconnect();
+          window.removeEventListener("scroll", check);
+          done();
+        };
+        const mo = new MutationObserver(check);
+        mo.observe(root, { attributes: true, attributeFilter: ["data-seq-layer", "data-seq-hold"] });
+        window.addEventListener("scroll", check, { passive: true });
+      });
     const tour = async (): Promise<void> => {
       const names = (word.dataset.words ?? "").split(",");
       await wait(3600); // the title settles and reads once first
       for (const name of [...names.slice(1), names[0]]) {
+        await shown();
         await vapor.swap(word, name, zone);
         await wait(name === names[0] ? 0 : 900);
       }
@@ -627,7 +634,6 @@ const SHOW_DOORS = false;
       void tour();
     };
     // Condense as the entry animation hands over to the real page.
-    const root = document.documentElement;
     if (root.classList.contains("intro-on")) {
       const mo = new MutationObserver(() => {
         if (root.classList.contains("intro-reveal") || !root.classList.contains("intro-on")) {

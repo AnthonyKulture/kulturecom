@@ -1,0 +1,107 @@
+---
+// Section 2 of the home, "Conçu. Codé. Cité.": the theatre's second layer
+// (HomeContent.astro), right after the hero's dive.
+import type { Lang } from "~/i18n/ui";
+import { getHomeContent } from "~/lib/home-content";
+import Eyebrow from "~/components/Eyebrow.astro";
+import WaterfallDots from "~/components/WaterfallDots.astro";
+import WaterfallScene from "~/components/WaterfallScene.astro";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const c = getHomeContent(lang);
+const sheet = (n: string, fr: string, en: string): string => (lang === "fr" ? `Planche ${n} · ${fr}` : `Sheet ${n} · ${en}`);
+---
+
+{/* Conçu. Codé. Cité. — the waterfall drawing on the right, the manifesto
+    rows on the left (each word facing its line). A scroll sequence
+    (WaterfallDots.astro), played in the theatre where the hero's dive ended:
+    it opens inside the hiker's backpack, pulls back to the waterfall, then
+    the text comes in, each of the three words condensing out of vapor as
+    it does (data-vapor-seq: the sequence starts them, not VaporTitles; on
+    phones they are plain words);
+    last the water rises from the bottom in dots and fills the screen with
+    the blue of the projects below. Without the sequence it is a plain
+    section in the page. */}
+<section class="relative px-4 py-20 sm:px-6 md:px-12 md:py-32" data-approach>
+  <WaterfallDots />
+  <canvas class="flood" data-flood aria-hidden="true"></canvas>
+  <div class="relative z-[1] mx-auto w-full max-w-[var(--container-wide)]" data-approach-content>
+    <div data-seq-item>
+      <Eyebrow label={sheet("01", "Approche", "Approach")} class="mb-6 md:mb-8" />
+    </div>
+    <div class="grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-14">
+      <figure class="approach-visual lg:order-2" aria-hidden="true">
+        <WaterfallScene />
+      </figure>
+      <div>
+        <h2 data-seq-item class="max-w-[24ch] font-display text-title">{c.pillarsTitle}</h2>
+        <ol class="pillars mt-8 md:mt-12">
+          {c.pillars.map((p) => (
+            <li data-seq-item class="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] items-center gap-5 border-t border-[var(--color-ink)]/15 py-5 md:gap-8 md:py-7">
+              <span class="pillar-word inline-block font-display text-[var(--color-accent)]" data-vapor-seq>{p.word}</span>
+              <p class="text-body text-[var(--color-ink-muted)]">{p.body}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ===== Scroll sequence ===== A layer of the theatre while it plays
+     (HomeContent.astro; data-seq="on" on its wrapper). Wide screens: the
+     section holds in one screen, its content centred, the drawing no taller
+     than the screen allows. */
+  @media (min-width: 1024px) {
+    :global([data-theatre-wrap][data-seq="on"]) [data-approach] {
+      display: flex;
+      min-height: 100svh;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 80px;
+      padding-bottom: 48px;
+    }
+    :global([data-theatre-wrap][data-seq="on"]) .approach-visual {
+      max-width: calc((100svh - 200px) * 600 / 680);
+    }
+  }
+  /* The water rising at the end of the sequence, in dots (WaterfallDots.astro
+     draws it): over everything in the section, in the projects' blue. The
+     screen's size, as the theatre (a height in % comes out short of it in
+     Safari, the section's padding off). */
+  .flood {
+    display: none;
+  }
+  :global([data-theatre-wrap][data-seq="on"]) .flood {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: block;
+    width: 100%;
+    height: 100vh;
+    height: 100lvh;
+    color: var(--color-accent);
+    pointer-events: none;
+  }
+  /* On phones the drawing sits above the text, not too tall. */
+  .approach-visual {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  @media (min-width: 1024px) {
+    .approach-visual {
+      max-width: none;
+    }
+  }
+  /* The three words share the hero title's display size. */
+  .pillars :global(.pillar-word) {
+    font-size: var(--text-display);
+    line-height: 1;
+  }
+</style>

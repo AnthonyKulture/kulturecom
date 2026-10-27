@@ -46,6 +46,7 @@ export function vaporType(el: HTMLElement, vaporColor: string) {
   const canvas = document.createElement("canvas");
   canvas.setAttribute("aria-hidden", "true");
   canvas.style.cssText = "position:absolute;pointer-events:none;";
+  const position = el.style.position; // (for dispose)
   el.style.position = "relative";
   el.append(canvas);
   const ctx = canvas.getContext("2d")!;
@@ -57,6 +58,7 @@ export function vaporType(el: HTMLElement, vaporColor: string) {
   // another color (the hero's accent word) keeps it on the canvas.
   const colors = new Map<Element, string>();
   for (const node of [el, ...el.querySelectorAll("*")]) colors.set(node, getComputedStyle(node).color);
+  const inline = [...colors.keys()].map((node) => (node as HTMLElement).style.color); // (for dispose)
   const vapor = rgb(vaporColor);
   const palette = Array.from({ length: BUCKETS }, (_, i) => {
     const d = (i + 0.5) / BUCKETS;
@@ -77,8 +79,11 @@ export function vaporType(el: HTMLElement, vaporColor: string) {
   let reach = 1; // breath radius factor (wider for a finger than a cursor)
   let raf = 0;
   let last = 0;
+  let gone = false; // disposed: plain text again
+  let pace = 1; // how long its condensing takes, as a share of the usual (start)
 
   const build = () => {
+    if (gone) return;
     const dpr = Math.min(devicePixelRatio || 1, 2);
     const box = el.getBoundingClientRect();
     const cs = getComputedStyle(el);
@@ -135,7 +140,7 @@ export function vaporType(el: HTMLElement, vaporColor: string) {
           }
         }
         if (!inked) continue;
-        const delay = ((x - pad) / textW) * SWEEP + Math.random() * STAGGER;
+        const delay = (((x - pad) / textW) * SWEEP + Math.random() * STAGGER) * pace;
         next.push({
           hx: x,
           hy: y,
@@ -145,7 +150,7 @@ export function vaporType(el: HTMLElement, vaporColor: string) {
           phase: Math.random() * Math.PI * 2,
           cd: condensing || !started ? 1 : 0,
           hd: 0,
-          in: condensing ? { at: startTime + delay * 1000, dur: CONDENSE } : undefined,
+          in: condensing ? { at: startTime + delay * 1000, dur: CONDENSE * pace } : undefined,
         });
       }
     }
@@ -203,7 +208,7 @@ export function vaporType(el: HTMLElement, vaporColor: string) {
       }
     });
 
-    if (condensing && elapsed > SWEEP + STAGGER + CONDENSE) condensing = false;
+    if (condensing && elapsed > (SWEEP + STAGGER + CONDENSE) * pace) condensing = false;
     return condensing || moving || pointer !== null;
   };
 
@@ -211,7 +216,7 @@ export function vaporType(el: HTMLElement, vaporColor: string) {
     raf = draw(now) ? requestAnimationFrame(loop) : 0;
   };
   const wake = () => {
-    if (!raf) {
+    if (!raf && !gone) {
       last = performance.now();
       raf = requestAnimationFrame(loop);
     }
@@ -244,21 +249,27 @@ export function vaporType(el: HTMLElement, vaporColor: string) {
   });
 
   let resizeTimer = 0;
-  new ResizeObserver(() => {
+  const resized = new ResizeObserver(() => {
     clearTimeout(resizeTimer);
     resizeTimer = window.setTimeout(build, 150);
-  }).observe(el);
+  });
+  resized.observe(el);
 
   const ready = document.fonts.ready.then(build);
 
   return {
-    // Condense the text in. Safe to call before fonts are ready.
-    start() {
+    // Condense the text in, in `share` of the usual time. Safe to call before
+    // fonts are ready.
+    start(share = 1) {
       ready.then(() => {
-        if (started) return;
+        if (started || gone) return;
         started = condensing = true;
         startTime = performance.now();
-        for (const p of particles) p.in = { at: startTime + p.delay * 1000, dur: CONDENSE };
+        pace = share;
+        for (const p of particles) {
+          p.delay *= share;
+          p.in = { at: startTime + p.delay * 1000, dur: CONDENSE * share };
+        }
         wake();
       });
     },
@@ -302,6 +313,17 @@ export function vaporType(el: HTMLElement, vaporColor: string) {
             }, 400 + SWAP_OUT * 1000);
           }),
       );
+    },
+    // Plain text again, for good: the canvas gone, the text in its own colour.
+    dispose() {
+      gone = true;
+      cancelAnimationFrame(raf);
+      raf = 0;
+      clearTimeout(resizeTimer);
+      resized.disconnect();
+      canvas.remove();
+      [...colors.keys()].forEach((node, i) => ((node as HTMLElement).style.color = inline[i]));
+      el.style.position = position;
     },
   };
 }

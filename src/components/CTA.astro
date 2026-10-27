@@ -473,6 +473,14 @@ const clientStrings = {
   import { initLeadForms } from "~/lib/lead-form";
   initLeadForms();
 
+  // A jump to the end of the page (End, see home-seq.ts) lands there in one
+  // step: the block is simply there, with no entry. (A jump to it,
+  // MobileBar.astro, lets it come in as it lands.)
+  const flyOver = (show: () => void): void =>
+    window.addEventListener("seq:jump", (e) => {
+      if ((e as CustomEvent).detail === "end") show();
+    });
+
   // Entry of the contact block (see `.cta-in`). A block already on screen at
   // load is left as it is, so nothing visible blinks out.
   if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -489,6 +497,10 @@ const clientStrings = {
         { rootMargin: "0px 0px -10% 0px" },
       );
       io.observe(block);
+      flyOver(() => {
+        io.disconnect();
+        block.removeAttribute("data-cta-wait");
+      });
     });
   }
 
@@ -510,6 +522,10 @@ const clientStrings = {
         { threshold: 0.25 },
       );
       io.observe(form);
+      flyOver(() => {
+        io.disconnect();
+        chips.removeAttribute("data-chips-wait");
+      });
     });
   }
 </script>

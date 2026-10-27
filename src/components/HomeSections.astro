@@ -6,13 +6,12 @@ import Eyebrow from "~/components/Eyebrow.astro";
 import ClimbScene from "~/components/ClimbScene.astro";
 import WorkCards from "~/components/WorkCards.astro";
 import GearScene from "~/components/GearScene.astro";
-import WaterfallDots from "~/components/WaterfallDots.astro";
-import WaterfallScene from "~/components/WaterfallScene.astro";
 import { GOOGLE_PROFILE } from "~/lib/facts";
 
-// Home body between the hero and the contact block:
-// "Conçu. Codé. Cité." (+ freelance / agency / platform table) → 3 recent
-// case studies → Google reviews → FAQ. One layout family per section.
+// Home body between the theatre (the hero and "Conçu. Codé. Cité.", see
+// HomeContent.astro) and the contact block: 3 recent case studies →
+// freelance / agency / platform table → Google reviews → FAQ. One layout
+// family per section.
 interface Props {
   lang: Lang;
 }
@@ -41,51 +40,16 @@ const faqLd = {
 };
 ---
 
-{/* Conçu. Codé. Cité. — the waterfall drawing on the right, the manifesto
-    rows on the left (each word facing its line). A scroll sequence
-    (WaterfallDots.astro): pinned, it opens inside the hiker's backpack where
-    the hero's dive ended, pulls back to the waterfall, then the text comes
-    in; last, still pinned, the water rises from the bottom in dots and
-    fills the screen with the blue of the projects below. The spacer gives it the
-    scroll it needs (only with the sequence). */}
-<div data-approach-seq>
-<section class="relative px-4 py-20 sm:px-6 md:px-12 md:py-32" data-approach>
-  <WaterfallDots />
-  <canvas class="flood" data-flood aria-hidden="true"></canvas>
-  <div class="relative z-[1] mx-auto w-full max-w-[var(--container-wide)]" data-approach-content>
-    <div data-seq-item>
-      <Eyebrow label={sheet("01", "Approche", "Approach")} class="mb-6 md:mb-8" />
-    </div>
-    <div class="grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-14">
-      <figure class="approach-visual lg:order-2" aria-hidden="true">
-        <WaterfallScene />
-      </figure>
-      <div>
-        <h2 data-seq-item class="max-w-[24ch] font-display text-title">{c.pillarsTitle}</h2>
-        <ol class="pillars mt-8 md:mt-12">
-          {c.pillars.map((p) => (
-            <li data-seq-item class="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] items-center gap-5 border-t border-[var(--color-ink)]/15 py-5 md:gap-8 md:py-7">
-              <span class="pillar-word inline-block font-display text-[var(--color-accent)]" data-vapor>{p.word}</span>
-              <p class="text-body text-[var(--color-ink-muted)]">{p.body}</p>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </div>
-  </div>
-</section>
-<div data-seq-spacer class="seq-spacer" aria-hidden="true"></div>
-</div>
-
 {/* Recent work — the case studies as cards, images always in view
     (WorkCards.astro), beside the title and the hiker walking up a slope, on
     the blue the approach's water filled the screen with: text and drawing in
-    white. With the approach's sequence it is pulled up over its last screen,
-    so it pins the moment the water has filled it, and its entrance follows
-    the scroll, quickly: the title word by word coming clear (as React Bits'
-    Scroll Reveal), the label and the link, the cards rising one after the
-    other, and the drawing condensing out of vapor (ClimbScene.astro). The
-    spacer gives it the little scroll it needs (only with the sequence). */}
+    white. With the sequences (home-seq.ts) it has an entrance, at its own
+    pace: the title word by word coming clear (as React Bits' Scroll Reveal),
+    the label and the link, the cards rising one after the other, and the
+    drawing condensing out of vapor (ClimbScene.astro). On wide screens it is
+    then the theatre's third layer (HomeContent.astro), shown the moment the
+    water has filled the screen; elsewhere it rises over that blue after the
+    theatre, in the page. */}
 <div data-work-seq>
 <section data-surface="blue" class="work bg-[var(--color-bg)] px-4 py-20 text-[var(--color-ink)] sm:px-6 md:px-12 md:py-32" data-work>
   <div class="work-inner mx-auto grid w-full max-w-[var(--container-wide)] gap-10 lg:grid-cols-12 lg:gap-14">
@@ -108,7 +72,6 @@ const faqLd = {
     </div>
   </div>
 </section>
-<div data-seq-spacer class="seq-spacer" aria-hidden="true"></div>
 </div>
 
 {/* Freelance, agency or platform. */}
@@ -288,79 +251,6 @@ const faqLd = {
 </section>
 
 <style>
-  /* ===== Approche: scroll sequence ===== Pinned while the spacer scrolls by
-     (WaterfallDots.astro sets data-seq="on"). */
-  [data-approach-seq][data-seq="on"] > [data-approach] {
-    position: sticky;
-    top: 0;
-  }
-  /* Wide screens: while it plays, the section holds in one screen, its
-     content centred, the drawing no taller than the screen allows. */
-  @media (min-width: 1024px) {
-    [data-approach-seq][data-seq="on"] > [data-approach] {
-      display: flex;
-      min-height: 100svh;
-      flex-direction: column;
-      justify-content: center;
-      padding-top: 80px;
-      padding-bottom: 48px;
-    }
-    [data-approach-seq][data-seq="on"] .approach-visual {
-      max-width: calc((100svh - 200px) * 600 / 680);
-    }
-  }
-  /* Pulled up over the hero's last screen (WaterfallDots.astro): on top of
-     it, and opaque, so the hero leaving underneath never shows. */
-  [data-approach-seq][data-overlap="on"] {
-    position: relative;
-    z-index: 2;
-  }
-  [data-approach-seq][data-overlap="on"] > [data-approach] {
-    background: var(--color-bg);
-  }
-  .seq-spacer {
-    display: none;
-  }
-  [data-approach-seq][data-seq="on"] > .seq-spacer {
-    display: block;
-    height: 162vh;
-  }
-  @media (max-width: 767px) {
-    [data-approach-seq][data-seq="on"] > .seq-spacer {
-      height: 122vh;
-    }
-  }
-  /* The water rising at the end of the pin, in dots (WaterfallDots.astro
-     draws it): over everything in the section, in the projects' blue. */
-  .flood {
-    display: none;
-  }
-  [data-approach-seq][data-seq="on"] .flood {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    display: block;
-    width: 100%;
-    height: 100%;
-    color: var(--color-accent);
-    pointer-events: none;
-  }
-  /* On phones the drawing sits above the text, not too tall. */
-  .approach-visual {
-    width: 100%;
-    max-width: 480px;
-    margin: 0 auto;
-  }
-  @media (min-width: 1024px) {
-    .approach-visual {
-      max-width: none;
-    }
-  }
-  /* The three words share the hero title's display size. */
-  .pillars :global(.pillar-word) {
-    font-size: var(--text-display);
-    line-height: 1;
-  }
   /* ===== Projets ===== Wide screens: one screen tall, the cards taking
      the height the section gives them; the drawing at the foot of the side
      column, as tall as what is left there. */
@@ -371,8 +261,11 @@ const faqLd = {
       flex-direction: column;
       justify-content: center;
     }
+    /* (Never squeezed, not even as the theatre's layer, a screen tall:
+       where it doesn't hold in it, it stays in the page, see home-seq.ts.) */
     .work-inner {
       height: clamp(520px, calc(100svh - 190px), 900px);
+      flex-shrink: 0;
     }
   }
   .climb-visual {
@@ -398,25 +291,44 @@ const faqLd = {
       margin-inline: -16px;
       padding: 8px 16px 16px;
       background: var(--color-bg);
+      clip-path: inset(calc(-1 * var(--nav-h, 0px)) 0 0 0);
+      transition: clip-path 0.6s var(--ease-power3);
+    }
+    /* Above it, as tall as the nav, the same blue (with the sequences, which
+       set --nav-h): the cards rising behind it as the stack leaves never
+       show over its top, not even while the nav slides in or out. */
+    .work-side::before {
+      content: "";
+      position: absolute;
+      inset: auto 0 100%;
+      height: var(--nav-h, 0px);
+      background: inherit;
     }
     .climb-visual {
       max-height: 20svh;
       margin-top: 8px;
       overflow: hidden;
-      transition:
-        max-height 0.6s var(--ease-power3),
-        margin 0.6s var(--ease-power3),
-        opacity 0.4s var(--ease-power3);
+      transition: opacity 0.4s var(--ease-power3);
     }
     .climb-visual :global(.climb-dots) {
       max-height: 17svh;
     }
-    /* Once the first card is in, the drawing gives its room to the
-       projects (the cards rise with it, see the script). */
+    /* Once the first card has risen a little past its place (a little
+       before, on short screens: see the script), the drawing gives its room
+       to the projects: the title block is cut off above it and the cards
+       slide up as much (--fold). Cut and slid, not resized: the page keeps
+       its height and the drawing its size. */
+    .work-side[data-compact] {
+      clip-path: inset(calc(-1 * var(--nav-h, 0px)) 0 var(--fold, 0px) 0);
+    }
     .work-side[data-compact] .climb-visual {
-      max-height: 0;
-      margin-top: 0;
       opacity: 0;
+    }
+    .work-cards {
+      transition: translate 0.6s var(--ease-power3);
+    }
+    .work-side[data-compact] + .work-cards {
+      translate: 0 calc(-1 * var(--fold, 0px));
     }
   }
   @media (min-width: 1024px) {
@@ -436,35 +348,9 @@ const faqLd = {
   .work-word {
     display: inline-block;
   }
-  [data-work-seq][data-seq="on"] [data-in-tilt] {
+  /* (The entrance's tilt levels out about the title's start.) */
+  [data-in-tilt] {
     transform-origin: 0 50%;
-  }
-  /* Its scroll sequence (script below): pulled up over the approach's last
-     screen, pinned while the spacer scrolls by. */
-  [data-work-seq][data-seq="on"] {
-    position: relative;
-    z-index: 3;
-  }
-  [data-work-seq][data-seq="on"] > [data-work] {
-    position: sticky;
-    top: 0;
-    padding-top: 88px;
-    padding-bottom: 40px;
-  }
-  [data-work-seq][data-seq="on"] > .seq-spacer {
-    display: block;
-    height: 45vh;
-  }
-  /* Phones: not pinned as a whole (the cards' stack is the sequence there),
-     so no spacer. */
-  @media (max-width: 767px) {
-    [data-work-seq][data-seq="on"] > [data-work] {
-      position: relative;
-      padding-top: 72px;
-    }
-    [data-work-seq][data-seq="on"] > .seq-spacer {
-      display: none;
-    }
   }
   /* ===== Freelance / agency / platform ===== */
   .compare {
@@ -735,6 +621,13 @@ const faqLd = {
     text-underline-offset: 4px;
     cursor: pointer;
   }
+  /* Wider screens show every question: no button (its room kept, as the
+     page has always had it). */
+  @media (min-width: 768px) {
+    .faq-all {
+      visibility: hidden;
+    }
+  }
   /* ===== FAQ ===== */
   .faq-list {
     border-top: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
@@ -830,161 +723,190 @@ const faqLd = {
 </style>
 
 <script>
-  import { Hold, follow } from "~/lib/camera";
+  import { scenes } from "~/lib/home-seq";
   import { initMarquee } from "~/lib/marquee";
 
-  // Projets on the blue: once the approach's sequence is on (its script has
-  // run by the first frame), pin this section too, pulled up over the
-  // approach's last screen so it is there the moment the water has filled
-  // it, and play its entrance with the scroll through the pin (eased a
-  // little), so scrolling back and forth runs it back and forth at once.
-  const workSeq = document.querySelector<HTMLElement>("[data-work-seq]");
-  const work = workSeq?.querySelector<HTMLElement>("[data-work]");
-  const workSpacer = workSeq?.querySelector<HTMLElement>("[data-seq-spacer]");
-  if (workSeq && work && workSpacer && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    requestAnimationFrame(() => {
-      const prev = document.querySelector<HTMLElement>("[data-approach-seq]");
-      const prevStage = prev?.querySelector<HTMLElement>("[data-approach]");
-      if (prev?.dataset.seq !== "on" || !prevStage) return;
-      workSeq.dataset.seq = "on";
-      work.dataset.wait = "";
-      const lift = (): void => {
-        workSeq.style.marginTop = `${-prevStage.offsetHeight}px`;
-      };
-
-      // What comes in, and when (shares of the pin): [element, from, to, kind].
-      // All of it in by the end. The words start faint and
-      // blurred and come clear one after the other while the title levels
-      // out of a slight tilt; the cards rise and wipe up one after another.
-      type Kind = "fade" | "word" | "tilt" | "card";
-      const steps: [HTMLElement, number, number, Kind][] = [];
-      const items = [...work.querySelectorAll<HTMLElement>("[data-in-item]")];
-      steps.push([items[0], 0, 0.25, "fade"]);
-      const tilt = work.querySelector<HTMLElement>("[data-in-tilt]");
-      if (tilt) steps.push([tilt, 0, 0.45, "tilt"]);
-      work.querySelectorAll<HTMLElement>("[data-in-word]").forEach((el, i) => steps.push([el, i * 0.1, 0.3 + i * 0.1, "word"]));
-      if (items[1]) steps.push([items[1], 0.2, 0.45, "fade"]);
-      // (Phones: the cards come in with the scroll, stacking; not here.)
-      const phone = window.innerWidth < 768;
-      if (!phone) work.querySelectorAll<HTMLElement>("[data-card]").forEach((card, i) => steps.push([card, 0.12 + i * 0.1, 0.55 + i * 0.1, "card"]));
-      const ease = (v: number): number => 1 - (1 - v) ** 3;
-      const last = new Map<HTMLElement, number>();
-      const apply = (p: number): void => {
-        for (const [el, from, to, kind] of steps) {
-          const e = ease(Math.min(1, Math.max(0, (p - from) / (to - from))));
-          const key = Math.round(e * 1000);
-          if (last.get(el) === key) continue;
-          last.set(el, key);
-          const done = e >= 1;
-          if (kind === "tilt") {
-            el.style.rotate = done ? "" : `${(3 * (1 - e)).toFixed(3)}deg`;
-          } else if (kind === "word") {
-            el.style.opacity = done ? "" : (0.1 + 0.9 * e).toFixed(3);
-            el.style.filter = done ? "" : `blur(${(4 * (1 - e)).toFixed(2)}px)`;
-          } else if (kind === "fade") {
-            el.style.opacity = done ? "" : e.toFixed(3);
-            el.style.translate = done ? "" : `0 ${(10 * (1 - e)).toFixed(2)}px`;
-            el.style.filter = done ? "" : `blur(${(4 * (1 - e)).toFixed(2)}px)`;
-          } else {
-            // A card: it rises, its image wipes up out of a zoom, its
-            // caption follows.
-            el.style.translate = done ? "" : `0 ${(36 * (1 - e)).toFixed(2)}px`;
-            const media = el.querySelector<HTMLElement>("[data-card-media]");
-            const img = media?.querySelector<HTMLElement>("img");
-            const text = el.querySelector<HTMLElement>("[data-card-text]");
-            if (media) media.style.clipPath = done ? "" : `inset(${((1 - e) * 100).toFixed(2)}% 0 0 0)`;
-            if (img) img.style.scale = done ? "" : (1 + 0.18 * (1 - e)).toFixed(4);
-            if (text) text.style.opacity = done ? "" : Math.max(0, e * 1.6 - 0.6).toFixed(3);
-          }
-        }
-        // The drawing's vapor reads it (ClimbScene.astro).
-        work.dataset.in = p.toFixed(4);
-      };
-
-      // Once the scroll reaches it (it pins, the water has filled the
-      // screen), the entrance plays through to the end at its own pace, never
-      // left half done; it plays back the same way once the scroll goes back
-      // above it. Held on screen while it falls well behind the scroll.
-      const ENTER_TIME = 2; // unhurried: each card is seen arriving
-      const LAG = 0.12;
-      const hold = new Hold(work, workSeq);
-      let r = 0;
-      let raf = 0;
-      let then = 0;
-      let shown: boolean | null = null;
-      const tick = (now: number): void => {
-        const dt = then ? Math.min(0.05, (now - then) / 1000) : 1 / 60;
-        then = now;
-        const filled = prev.dataset.filled === "on";
-        const up = hold.holdingUp();
-        const pinned = hold.natural() <= 0.5;
-        const waiting = !filled && !up;
-        const target = !waiting && pinned ? 1 : 0;
-        r = follow(r, target, dt, 0.12, 1 / ENTER_TIME);
-        // (Phones: the section is not pinned, nothing to hold.)
-        const behind = hold.threshold(LAG);
-        if (hold.update(dt, !phone && r < target - behind, !phone && r > target + behind)) r = target;
-        // Hidden until it pins over the approach and the water has filled it.
-        const on = hold.holdingUp() || (pinned && filled);
-        if (on !== shown) {
-          shown = on;
-          work.style.visibility = on ? "" : "hidden";
-          workSeq.dataset.shown = on ? "on" : "";
-          cardsIn();
-        }
-        apply(on ? r : 0);
-        const busy = r !== target || hold.active() || (pinned && !filled);
-        raf = busy ? requestAnimationFrame(tick) : 0;
-        if (!raf) then = 0;
-      };
-      const kick = (): void => {
-        if (!raf) raf = requestAnimationFrame(tick);
-      };
-      // Phones: each card comes in as it slides onto the screen (WorkCards'
-      // data-in), once the section itself is there; back out below it.
-      const cardList = work.querySelector<HTMLElement>("[data-cards]");
-      const cards = cardList ? [...cardList.querySelectorAll<HTMLElement>("[data-card]")] : [];
-      let sideFull = 0; // the title block's height with its drawing
-      const cardsIn = (): void => {
-        if (!phone || !cardList) return;
-        cardList.dataset.wait = "";
-        const vh = window.innerHeight;
-        // The drawing folds away once the first card has reached its place
-        // under the title (and comes back above it).
-        if (side) {
-          if (!side.hasAttribute("data-compact")) sideFull = side.offsetHeight;
-          // (Once it has risen a little past where it rests at first.)
-          const reached = cardList.getBoundingClientRect().top < (nav?.offsetHeight ?? 56) + sideFull - 60;
-          side.toggleAttribute("data-compact", reached);
-        }
-        cards.forEach((card) => {
-          const r = card.getBoundingClientRect();
-          card.toggleAttribute("data-in", workSeq.dataset.shown === "on" && r.top < vh * 0.9);
-        });
-      };
-      window.addEventListener("scroll", cardsIn, { passive: true });
-      // Phones: the title block sticks under the nav, the cards stack under it.
-      const nav = document.querySelector<HTMLElement>("[data-nav-smart]");
-      const side = work.querySelector<HTMLElement>(".work-side");
-      const stack = (): void => {
-        if (!side) return;
-        const navH = nav?.offsetHeight ?? 56;
-        work.style.setProperty("--nav-h", `${navH}px`);
-        work.style.setProperty("--stack-top", `${navH + side.offsetHeight + 12}px`);
-      };
-      // The cards' place follows the title block as the drawing folds.
-      if (side) new ResizeObserver(stack).observe(side);
-      lift();
-      stack();
-      document.fonts?.ready.then(stack);
-      kick();
-      window.addEventListener("resize", () => {
-        lift();
-        stack();
-        kick();
-      });
-      window.addEventListener("scroll", kick, { passive: true });
+  // Projets, played by home-seq.ts: its entrance (`r`, 0 to 1, at its own
+  // pace either way), as the theatre's third layer on wide screens or in the
+  // page after it elsewhere; there, on phones, its title block sticks under
+  // the nav and its cards come in one by one with the scroll and stack.
+  const work = document.querySelector<HTMLElement>("[data-work]");
+  const home = work?.parentElement;
+  const side = work?.querySelector<HTMLElement>(".work-side");
+  const cardList = work?.querySelector<HTMLElement>("[data-cards]");
+  if (work && home && side && cardList) {
+    const items = [...work.querySelectorAll<HTMLElement>("[data-in-item]")];
+    const tilt = work.querySelector<HTMLElement>("[data-in-tilt]");
+    const words = [...work.querySelectorAll<HTMLElement>("[data-in-word]")];
+    const cards = [...cardList.querySelectorAll<HTMLElement>("[data-card]")].map((el) => {
+      const media = el.querySelector<HTMLElement>("[data-card-media]");
+      return { el, media, img: media?.querySelector<HTMLElement>("img") ?? null, text: el.querySelector<HTMLElement>("[data-card-text]"), in: false };
     });
+    const drawing = side.querySelector<HTMLElement>(".climb-visual");
+    const nav = document.querySelector<HTMLElement>("[data-nav-smart]");
+    const BAR = 112; // the call bar at the foot of a phone's screen, and a margin
+
+    // What comes in, and when (shares of the entrance): [element, from, to,
+    // kind, card]. All of it in by the end. The words start faint and
+    // blurred and come clear one after the other while the title levels out
+    // of a slight tilt; the cards rise and wipe up one after another.
+    type Kind = "fade" | "word" | "tilt" | "card";
+    let steps: [HTMLElement, number, number, Kind, (typeof cards)[number] | null][] = [];
+    const ease = (v: number): number => 1 - (1 - v) ** 3;
+    const last = new Map<HTMLElement, number>();
+    const apply = (p: number): void => {
+      for (const [el, from, to, kind, card] of steps) {
+        const e = ease(Math.min(1, Math.max(0, (p - from) / (to - from))));
+        const key = Math.round(e * 1000);
+        if (last.get(el) === key) continue;
+        last.set(el, key);
+        const done = e >= 1;
+        if (kind === "tilt") {
+          el.style.rotate = done ? "" : `${(3 * (1 - e)).toFixed(3)}deg`;
+        } else if (kind === "word") {
+          el.style.opacity = done ? "" : (0.1 + 0.9 * e).toFixed(3);
+          el.style.filter = done ? "" : `blur(${(4 * (1 - e)).toFixed(2)}px)`;
+        } else if (kind === "fade") {
+          el.style.opacity = done ? "" : e.toFixed(3);
+          el.style.translate = done ? "" : `0 ${(10 * (1 - e)).toFixed(2)}px`;
+          el.style.filter = done ? "" : `blur(${(4 * (1 - e)).toFixed(2)}px)`;
+        } else if (card) {
+          // A card: it rises, its image wipes up out of a zoom, its caption
+          // follows.
+          el.style.translate = done ? "" : `0 ${(36 * (1 - e)).toFixed(2)}px`;
+          if (card.media) card.media.style.clipPath = done ? "" : `inset(${((1 - e) * 100).toFixed(2)}% 0 0 0)`;
+          if (card.img) card.img.style.scale = done ? "" : (1 + 0.18 * (1 - e)).toFixed(4);
+          if (card.text) card.text.style.opacity = done ? "" : Math.max(0, e * 1.6 - 0.6).toFixed(3);
+        }
+      }
+    };
+
+    // Phones, in the page: where the card list and each card stand in the
+    // section (px from its top, as laid out: the fold only cuts and slides,
+    // see the CSS), where the cards stack, and whether the drawing is folded.
+    let stacking = false;
+    let height = 0;
+    let vh = 0;
+    let svh = 0;
+    let listTop = 0;
+    let cardTops: [(typeof cards)[number], number][] = [];
+    let stackTop = 0;
+    let room = 0; // the drawing's, which the cards slide up into once it folds
+    let foldAt = 0; // where the list's top is when it folds
+    let compact = false;
+    // Where the title block stands (px from the section's top): before it
+    // sticks under the nav (navH), and the lowest it sticks (then it leaves);
+    // and its height.
+    let navH = 0;
+    let sideTop = 0;
+    let sideEnd = 0;
+    let sideH = 0;
+    const fold = (on: boolean): void => {
+      compact = on;
+      side.toggleAttribute("data-compact", on);
+    };
+
+    scenes.work = {
+      el: work,
+      home,
+      measure(m, layer) {
+        // Everything in by the end, then the steps for this screen. In the
+        // page the title block is simply there as it rises into view (only
+        // a layer, cut in on the water, brings it in); on phones there the
+        // cards come in with the scroll, not here.
+        apply(1);
+        last.clear();
+        steps = [];
+        if (layer) {
+          if (items[0]) steps.push([items[0], 0, 0.25, "fade", null]);
+          if (tilt) steps.push([tilt, 0, 0.45, "tilt", null]);
+          words.forEach((el, i) => steps.push([el, i * 0.1, 0.3 + i * 0.1, "word", null]));
+          if (items[1]) steps.push([items[1], 0.2, 0.45, "fade", null]);
+        }
+        if (!m.phone) cards.forEach((card, i) => steps.push([card.el, 0.12 + i * 0.1, 0.55 + i * 0.1, "card", card]));
+
+        height = work.offsetHeight;
+        vh = m.vh;
+        svh = m.svh;
+        const was = stacking;
+        stacking = m.on && m.phone && !layer;
+        if (!stacking) {
+          // (Without the sequences the stack is CSS only, as laid out.)
+          if (was) {
+            for (const v of ["--nav-h", "--stack-top", "--fold"]) work.style.removeProperty(v);
+            cardList.removeAttribute("data-wait");
+            fold(false);
+            for (const card of cards) {
+              card.in = false;
+              card.el.removeAttribute("data-in");
+            }
+          }
+          return;
+        }
+        // The title block sticks under the nav, the cards stack under it,
+        // each 14 px lower than the one before (WorkCards.astro). Its height
+        // with the drawing: folding doesn't change it.
+        navH = nav?.offsetHeight ?? 56;
+        room = drawing ? drawing.offsetHeight + (parseFloat(getComputedStyle(drawing).marginTop) || 0) : 0;
+        sideH = side.offsetHeight;
+        stackTop = navH + sideH + 12;
+        const box = work.getBoundingClientRect();
+        const inner = side.parentElement!.getBoundingClientRect();
+        sideTop = inner.top - box.top;
+        sideEnd = inner.bottom - box.top - sideH;
+        // (The list's box, less the fold's slide if it is folded.)
+        const slid = cardList.parentElement ? getComputedStyle(cardList.parentElement).translate.split(" ")[1] : "";
+        listTop = cardList.getBoundingClientRect().top - work.getBoundingClientRect().top - (parseFloat(slid) || 0);
+        cardTops = [];
+        let y = 0;
+        let gap = 0;
+        for (const card of cards) {
+          if (!card.el.offsetHeight) continue; // (not shown on phones)
+          const cs = getComputedStyle(card.el);
+          y += Math.max(gap, parseFloat(cs.marginTop) || 0);
+          cardTops.push([card, y]);
+          y += card.el.offsetHeight;
+          gap = parseFloat(cs.marginBottom) || 0;
+        }
+        // The drawing folds away once the first card has risen a little past
+        // its place under the title; on a screen too short for that card
+        // there above the call bar, as soon as it comes within the drawing's
+        // room of its place, so the room is given while it is still coming
+        // up and it settles with its caption clear of the bar.
+        const first = cardTops.length ? cardTops[0][0].el.offsetHeight : 0;
+        foldAt = stackTop + (stackTop + first + BAR > svh ? room : -72);
+        work.style.setProperty("--nav-h", `${navH}px`);
+        work.style.setProperty("--stack-top", `${stackTop}px`);
+        work.style.setProperty("--fold", `${room}px`);
+        cardList.dataset.wait = "";
+      },
+      apply,
+      flow(top) {
+        const seen = top < vh && top + height > 0;
+        if (!stacking) return { seen, navLock: top <= 0 && top + height > 0.5 * vh };
+        // The drawing folds away (see measure), and comes back just before
+        // it is there again (20 px apart, so it never flickers).
+        const list = top + listTop;
+        if (compact ? list > foldAt + 20 : list < foldAt) fold(!compact);
+        // The nav stays while the title block is under it: stuck there, and
+        // as it leaves, the cards going with it, until the last of it (its
+        // foot, less the drawing's room once folded) is off the screen (they
+        // rise past its top as they go, which the nav covers).
+        const at = Math.min(Math.max(top + sideTop, navH), top + sideEnd); // its top on screen
+        const navLock = top <= 0 && at + sideH - (compact ? room : 0) > 0;
+        // Each card comes in as it slides onto the screen (WorkCards'
+        // data-in), back out below it: where it shows, slid up into the
+        // drawing's room once that has folded.
+        const shown = list - (compact ? room : 0);
+        for (const [card, y] of cardTops) {
+          const on = shown + y < 0.9 * svh;
+          if (on === card.in) continue;
+          card.in = on;
+          card.el.toggleAttribute("data-in", on);
+        }
+        return { seen, navLock };
+      },
+    };
   }
 
   // The comparison's swipe cards (phones): the dots follow the card in view.
