@@ -8,11 +8,12 @@
 // in, its three words condensing out of vapor. Where the section is taller
 // than the screen (phones), its content then slides up, as far as a scroll
 // would take it, so the three words come into view (plain words there, read
-// as they come). Last the water rises in
-// dots (flood.ts, on the .flood canvas) and fills the screen with the
-// projects' blue. The timeline is in pixels of scroll, so the slide costs
-// exactly the scroll it shows. At rest, or under reduced motion, the scene
-// simply sits in its box.
+// as they come). Last, where Projets is the theatre's next layer (wide
+// screens), the water rises in dots (flood.ts, on the .flood canvas) and
+// fills the screen with the projects' blue; elsewhere the theatre lets go
+// there and Projets follows in the page. The timeline is in pixels of
+// scroll, so the slide costs exactly the scroll it shows. At rest, or under
+// reduced motion, the scene simply sits in its box.
 ---
 
 <canvas class="waterfall-dots" data-waterfall-dots aria-hidden="true"></canvas>
@@ -122,6 +123,7 @@
     // drawing's place and each line's, where they stand before the slide.
     let measured = false;
     let on = false;
+    let water = false; // the water rises at the end
     let phone = false;
     let vh = 0;
     let svh = 0;
@@ -195,9 +197,10 @@
 
     scenes.approach = {
       el: stage,
-      measure(m) {
+      measure(m, flood) {
         if (!still) vaporize(m.phone || !m.on);
         on = m.on;
+        water = flood;
         phone = m.phone;
         vh = m.vh;
         svh = m.svh;
@@ -247,14 +250,18 @@
             if (head && under(head) && !rows.every(under)) tl.slide = Math.ceil(Math.max(...rows.map(([, b]) => b)) - navH);
           }
         }
-        const pause = (phone ? READ.phone : READ.wide) * vh;
-        tl.water0 = Math.max(0.88 * tl.arrive, tl.slide0 + tl.slide) + pause;
-        tl.water1 = tl.water0 + (phone ? WATER.phone : WATER.wide) * vh;
+        // Without the water it ends once all of it is in: the last line, the
+        // slide, and the reader scrolls on from there.
+        if (water) {
+          const pause = (phone ? READ.phone : READ.wide) * vh;
+          tl.water0 = Math.max(0.88 * tl.arrive, tl.slide0 + tl.slide) + pause;
+          tl.water1 = tl.water0 + (phone ? WATER.phone : WATER.wide) * vh;
+        } else tl.water0 = tl.water1 = Math.max(tl.arrive, tl.slide0 + tl.slide);
         parts = [
           [0, tl.arrive * 0.9, tl.arrive / TIME.arrive],
           [tl.arrive * 0.9, tl.water0, SCROLL],
-          [tl.water0, tl.water1, (tl.water1 - tl.water0) / (phone ? TIME.water.phone : TIME.water.wide)],
         ];
+        if (water) parts.push([tl.water0, tl.water1, (tl.water1 - tl.water0) / (phone ? TIME.water.phone : TIME.water.wide)]);
         if (on) fit();
         measured = true;
         return { end: tl.water1, len: Math.round(tl.water1 + 0.03 * vh) };
@@ -274,7 +281,7 @@
         // Then, as soon as the text is in, the water rises, full just before
         // the theatre lets go: its edge climbs from the foot of the screen to
         // above its top.
-        level = on ? smooth(tl.water0, tl.water1, at) : 0;
+        level = on && water ? smooth(tl.water0, tl.water1, at) : 0;
         band = Math.min(220, vh * 0.28);
         edge = vh + 40 - level * (vh + band + 80);
         // The text fades in where it stands, one line after another, all of

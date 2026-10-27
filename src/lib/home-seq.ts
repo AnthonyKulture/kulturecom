@@ -1,8 +1,8 @@
 /**
  * The home's scroll sequences, directed from one place: the hero's dive into
  * the hiker's backpack (HeroDots.astro), then section 2 pulling back out of
- * it to the waterfall until the water fills the screen (WaterfallDots.astro),
- * then Projets coming in on that blue (HomeSections.astro, ClimbScene.astro).
+ * it to the waterfall (WaterfallDots.astro), then Projets
+ * (HomeSections.astro, ClimbScene.astro).
  *
  * They are layers of one box, the theatre (HomeContent.astro): as tall as the
  * screen at its tallest (100lvh) and stuck by CSS for the whole of its
@@ -14,9 +14,11 @@
  * that is playing and draws it. There is one loop, this one.
  *
  * Projets is the third layer only on wide screens where it holds in one
- * screen. Elsewhere it follows the theatre in the page: once the water has
- * filled the screen the theatre lets go and Projets rises over the same blue,
- * its entrance playing as it comes up, its cards coming in with the scroll.
+ * screen: section 2 ends there with the water rising until it fills the
+ * screen, and Projets comes in on that blue. Elsewhere section 2 ends once
+ * its text is all in, the theatre lets go, and Projets follows it in the
+ * page, its drawing condensing as it comes up, its cards coming in with the
+ * scroll.
  *
  * The page is marked with the layer shown (html[data-seq-layer]) and while
  * the sequences hold the screen (html[data-seq-hold]): the nav reads both. A
@@ -56,10 +58,11 @@ export interface HeroScene {
 }
 
 /** Section 2, on a timeline `at` in px of scroll, from inside the pack to
- *  the water full at `end`; the theatre holds it `len` px in all. */
+ *  its end at `end` (the water full, with `water`: Projets follows as a
+ *  layer); the theatre holds it `len` px in all. */
 export interface ApproachScene {
   el: HTMLElement;
-  measure(m: Metrics): { end: number; len: number };
+  measure(m: Metrics, water: boolean): { end: number; len: number };
   /** Its own pace at `at`, px a second. */
   rate(at: number): number;
   /** How long it takes, at its own pace, to go from `a` to `b` (s). */
@@ -79,9 +82,9 @@ export interface WorkScene {
   /** `layer`: it plays as the theatre's third layer (else in the page). */
   measure(m: Metrics, layer: boolean): void;
   apply(r: number): void;
-  /** In the page, its top `top` px down the screen: brings its cards in and
-   *  folds its drawing away there. `seen`: some of it is on screen;
-   *  `navLock`: its title is under the nav (stuck there, or leaving). */
+  /** In the page, its top `top` px down the screen: brings its cards in
+   *  there. `seen`: some of it is on screen; `navLock`: it covers the top of
+   *  the screen, under the nav. */
   flow(top: number): { seen: boolean; navLock: boolean };
 }
 
@@ -264,7 +267,7 @@ function direct(): void {
     m = { vw: theatre.clientWidth, vh: theatre.clientHeight, svh: hero.el.clientHeight, phone: phone.matches, wide: wide.matches, on };
     top = wrap.getBoundingClientRect().top + window.scrollY;
     hero.measure(m);
-    const tl = approach.measure(m);
+    const tl = approach.measure(m, layered);
     work.measure(m, layered);
     Lh = Math.max(1, Math.round((m.phone ? HERO.phone : HERO.wide) * m.vh));
     aEnd = tl.end;
@@ -370,9 +373,9 @@ function direct(): void {
       work.el.toggleAttribute("data-on", layer === "work");
       root.dataset.seqLayer = layer;
     }
-    // At their end the layer shown hides the others (all water, or Projets'
-    // blue): they are left visible under it, so that the page's title (the
-    // hero's) and section 2's are there for a screen reader.
+    // At their end the layer shown hides the others (section 2, opaque, or
+    // Projets' blue): they are left visible under it, so that the page's
+    // title (the hero's) and section 2's are there for a screen reader.
     const end = q >= 1 && at >= aEnd && (!layered || r >= 1);
     if (end !== (wrap.dataset.seqRest === "on")) {
       if (end) wrap.dataset.seqRest = "on";
@@ -486,7 +489,7 @@ function direct(): void {
     if (snapped) snaps++;
 
     // (The nav stays while the theatre holds the screen, while Projets rises
-    // after it, and while Projets' title is under it: all the way through.)
+    // after it, and while Projets is under it: all the way through.)
     if (hold !== (s <= E + S || rising || flow.navLock)) {
       hold = !hold;
       if (hold) root.dataset.seqHold = "on";

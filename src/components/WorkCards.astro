@@ -4,9 +4,8 @@
 // result under the image. Hovering only zooms the image a little inside its
 // frame: nothing moves, wherever the pointer comes in. The home's entrance
 // (HomeSections.astro) wipes each image up and brings its caption in.
-// Phones: four projects, one per card, the cards sliding up one by one with
-// the scroll and stacking like folders (each sticks a little lower than the
-// one before), under the section's title and drawing (--stack-top).
+// Phones: four projects, one under the other. In the page with the home's
+// sequences, each card comes in as it comes onto the screen.
 import type { Lang } from "~/i18n/ui";
 import { ui } from "~/i18n/ui";
 import { caseStudyPath } from "~/lib/case-studies";
@@ -129,54 +128,17 @@ const projects = getProjects(ui[lang]);
     display: none;
   }
   @media (max-width: 767px) {
-    /* The stack of folders. */
+    /* One under the other, four of them. */
     .cards {
-      display: block;
-      padding-bottom: 8px;
-    }
-    /* Each card stays on its own a while (the scroll between two cards)
-       before the next comes over it, and the last one a moment before the
-       stack goes. On a short screen no less than so many px of it: time for
-       the card's caption to come in first. */
-    .card {
-      position: sticky;
-      top: calc(var(--stack-top, 300px) + var(--i) * 14px);
-      margin-bottom: max(38svh, 250px);
-      padding: 10px 10px 14px;
-      background: var(--color-bg-shade);
-      box-shadow: 0 -12px 28px -16px rgb(0 0 0 / 0.55);
+      grid-template-columns: minmax(0, 1fr);
+      gap: 36px;
     }
     .card:nth-child(n + 5) {
       display: none;
     }
-    .card:nth-child(4) {
-      margin-bottom: max(18svh, 140px);
-    }
-    /* With the home's sequences (data-wait), the same room sits above each
-       card instead, not below the one before: a stuck card can't move into
-       its own margin, so a margin below it makes it leave before the next
-       ones are in. The four then stay stacked a moment once the last is in,
-       and go together. (Same page length either way.) */
-    .cards[data-wait] .card {
-      margin-bottom: 0;
-    }
-    .cards[data-wait] .card + .card {
-      margin-top: max(38svh, 250px);
-    }
-    .cards[data-wait]::after {
-      content: "";
-      display: block;
-      height: max(18svh, 140px);
-    }
-    /* (On a short screen the image gives up some height, cut wider: each
-       card in its place in the stack, the last and lowest one too, still
-       shows its caption above the call bar. Its width set, or Safari would
-       narrow it to keep the 16:10 under that height.) */
     .card-media,
     .card--lead .card-media {
-      width: 100%;
       aspect-ratio: 16 / 10;
-      max-height: 26svh;
     }
     .card-text {
       grid-template-columns: auto minmax(0, 1fr);
@@ -204,32 +166,33 @@ const projects = getProjects(ui[lang]);
       white-space: nowrap;
       text-overflow: ellipsis;
     }
-    /* Each card comes in as it slides onto the screen (the home's script
-       marks it data-in): its image wipes up out of a zoom, its caption
-       rises after it; it goes back the same way below the screen. */
-    .cards[data-wait] .card-media {
-      transition: clip-path 0.9s var(--ease-power3);
-    }
-    .cards[data-wait] .card-media img {
-      transition:
-        scale 1.1s var(--ease-power3),
-        opacity 0.6s var(--ease-power3);
-    }
-    .cards[data-wait] .card-text {
-      transition:
-        opacity 0.7s var(--ease-power3) 0.18s,
-        translate 0.7s var(--ease-power3) 0.18s;
-    }
-    .cards[data-wait] .card:not([data-in]) .card-media {
-      clip-path: inset(100% 0 0 0);
-    }
-    .cards[data-wait] .card:not([data-in]) .card-media img {
-      scale: 1.18;
-    }
-    .cards[data-wait] .card:not([data-in]) .card-text {
-      opacity: 0;
-      translate: 0 12px;
-    }
+  }
+  /* In the page with the home's sequences (data-wait), each card comes in
+     as it slides onto the screen (the home's script marks it data-in): its
+     image wipes up out of a zoom, its caption rises after it; it goes back
+     the same way below the screen. */
+  .cards[data-wait] .card-media {
+    transition: clip-path 0.9s var(--ease-power3);
+  }
+  .cards[data-wait] .card-media img {
+    transition:
+      scale 1.1s var(--ease-power3),
+      opacity 0.6s var(--ease-power3);
+  }
+  .cards[data-wait] .card-text {
+    transition:
+      opacity 0.7s var(--ease-power3) 0.18s,
+      translate 0.7s var(--ease-power3) 0.18s;
+  }
+  .cards[data-wait] .card:not([data-in]) .card-media {
+    clip-path: inset(100% 0 0 0);
+  }
+  .cards[data-wait] .card:not([data-in]) .card-media img {
+    scale: 1.18;
+  }
+  .cards[data-wait] .card:not([data-in]) .card-text {
+    opacity: 0;
+    translate: 0 12px;
   }
   @media (prefers-reduced-motion: reduce) {
     .card-media img {

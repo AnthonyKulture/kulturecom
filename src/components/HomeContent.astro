@@ -87,11 +87,13 @@ const { lang, altLang, altLangPath } = Astro.props;
     inset: 0 0 auto;
     height: 100svh;
   }
-  /* Section 2: the whole box; on phones its content slides up inside it. */
+  /* Section 2: the whole box; on phones its content slides up inside it.
+     Opaque: at the end the hero is left visible under it. */
   [data-theatre-wrap][data-seq="on"] [data-theatre] > [data-approach] {
     z-index: 1;
     overflow: hidden;
     overflow: clip;
+    background: var(--color-bg);
   }
   /* Projets, on wide screens where it holds in one screen (moved in here by
      the sequence): its content centred as in the page (.work), clear of the
