@@ -27,6 +27,9 @@
       gtag('consent', 'update', { analytics_storage: 'granted' });
     }
   } catch (e) {}
+  // Measure the live site only: localhost (dev, astro preview) and other
+  // hosts polluted the GA4 data.
+  if (location.hostname !== 'anthonyprofit.com') window['ga-disable-G-W64W3JKY43'] = true;
   gtag('js', new Date());
   gtag('config', 'G-W64W3JKY43');
 
