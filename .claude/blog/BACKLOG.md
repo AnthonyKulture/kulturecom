@@ -15,9 +15,9 @@ librement : l'ordre de la liste est l'ordre de parution.
 - [x] Site multilingue sur la Côte d'Azur → /blog/site-multilingue-cote-azur-hreflang/
 - [x] Prix du référencement à Nice → /blog/prix-referencement-nice-seo/
 - [x] Données structurées LocalBusiness → /blog/donnees-structurees-localbusiness-schema-org/
+- [x] Être cité par Perplexity → /blog/etre-cite-par-perplexity/
 
 ## À écrire
-- [ ] Être cité par Perplexity : comment fonctionne sa recherche et ce qui fait qu'une entreprise locale est citée
 - [ ] SEO pour restaurants à Nice : Local Pack, fiche Google, menus, et réponses IA à « où manger »
 - [ ] SEO immobilier de prestige sur la Côte d'Azur (Nice, Cannes, Monaco, Cap d'Antibes) : SEO local, multilingue et GEO
 - [ ] ChatGPT Ads pas à pas : créer et suivre sa première campagne depuis la France (Ads Manager, contextes, Negative Phrases, mesure)

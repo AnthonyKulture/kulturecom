@@ -1,0 +1,158 @@
+---
+lang: fr
+slug: etre-cite-par-perplexity
+translationKey: perplexity-citations
+title: "Être cité par Perplexity : comment fonctionne sa recherche et ce qui fait citer une entreprise locale à Nice, Cannes ou Monaco"
+metaTitle: "Être cité par Perplexity : la méthode"
+description: "Être cité par Perplexity : comment son moteur trouve, découpe et classe les pages, et ce qu'une entreprise de Nice, Cannes ou Monaco peut faire pour sortir en source."
+keywords:
+  - être cité par Perplexity
+  - référencement Perplexity
+  - Perplexity SEO
+  - PerplexityBot
+  - GEO Nice
+tags:
+  - GEO
+  - SEO
+  - IA
+  - Référencement local
+pillar: seo
+pubDate: 2026-10-27
+draft: false
+---
+
+import ServiceCTA from "~/components/blog/ServiceCTA.astro";
+import Callout from "~/components/blog/Callout.astro";
+
+Pour être cité par Perplexity, une page doit d'abord se trouver dans son index, puis contenir un passage qui répond mieux que les autres à la question posée. Perplexity ne cite pas des sites entiers : il découpe les pages en petits morceaux, les classe un par un, et met en note ceux qui ont servi à écrire la réponse.
+
+C'est une bonne nouvelle pour un commerce de Nice ou un cabinet de Monaco. Un paragraphe précis et bien placé peut être repris même si le site est petit, à condition que le robot puisse le lire.
+
+## Comment fonctionne la recherche de Perplexity ?
+
+Perplexity est un moteur de réponse : il cherche sur le web à chaque question, rédige une synthèse et l'accompagne de notes numérotées qui renvoient vers les sources. Ces notes sont la vitrine qui nous intéresse.
+
+L'équipe de Perplexity a décrit son moteur dans un [article technique publié le 25 septembre 2025](https://www.perplexity.ai/hub/blog/architecting-and-evaluating-an-ai-first-search-api), au lancement de son API de recherche. On y apprend quatre choses utiles pour une entreprise :
+
+1. L'index suit plus de 200 milliards d'URL uniques, selon Perplexity. Le moteur a donc son propre index et ne se contente pas de relayer Google.
+2. Le robot priorise certaines pages : l'article cite les « domaines faisant autorité » et les sujets encore peu couverts.
+3. Les pages sont découpées en passages autonomes, que le moteur peut retrouver et classer séparément au moment de la requête.
+4. Le classement se fait en plusieurs étapes : une recherche par mots-clés et une recherche sémantique (par le sens) tournent en parallèle, leurs résultats sont fusionnés, puis des modèles plus lourds trient le lot final.
+
+Le point 3 change la façon d'écrire. Une page « Nos services » de 1 500 mots où l'information utile est noyée au milieu a peu de chances de fournir le bon passage. Une page où chaque bloc répond seul à une question précise en a beaucoup plus.
+
+## Quels robots de Perplexity visitent votre site ?
+
+Perplexity documente deux agents dans sa [documentation officielle](https://docs.perplexity.ai/guides/bots) :
+
+| Agent | Rôle | robots.txt |
+|---|---|---|
+| PerplexityBot | Explore le web pour faire apparaître et lier des sites dans les résultats de Perplexity. Perplexity précise qu'il ne sert pas à entraîner des modèles. | Perplexity recommande de l'autoriser dans le robots.txt. |
+| Perplexity-User | Va lire une page quand un utilisateur pose une question, pour répondre et citer la source. | Ignore en général le robots.txt, puisque c'est un humain qui a déclenché la visite. |
+
+Si votre robots.txt ou votre pare-feu bloque PerplexityBot, vous sortez de son index. Ce blocage peut venir d'un plugin de sécurité ou d'une option « bloquer les robots IA » activée chez l'hébergeur ou le CDN, sans que personne ne l'ait décidé. Perplexity publie les plages d'adresses IP de ses deux agents (fichiers JSON liés dans la documentation), ce qui permet d'autoriser précisément ces robots dans un pare-feu.
+
+En août 2025, Cloudflare a [accusé Perplexity](https://blog.cloudflare.com/perplexity-is-using-stealth-undeclared-crawlers-to-evade-website-no-crawl-directives/) d'utiliser des robots non déclarés pour contourner les blocages, ce que Perplexity a contesté. Pour une entreprise qui veut être citée, la question ne se pose pas dans ce sens : vous voulez être lu, donc laissez la porte ouverte.
+
+Une ligne suffit dans le robots.txt :
+
+```txt
+User-agent: PerplexityBot
+Allow: /
+```
+
+## D'où Perplexity tire-t-il ses informations sur les commerces locaux ?
+
+Pour les questions locales, Perplexity ne s'appuie pas que sur les sites des entreprises. Il a annoncé des accords avec des plateformes d'avis :
+
+- en mars 2024, l'intégration des données de **Yelp** pour les restaurants et cafés (cartes, photos, extraits d'avis), via le programme de licence Fusion de Yelp, [rapportée par Maginative](https://www.maginative.com/article/perplexity-enhances-ai-search-engine-with-direct-yelp-data-integration/) ;
+- en janvier 2025, un partenariat avec **Tripadvisor** pour enrichir les résultats d'hôtels avec ses notes, ses photos et des résumés d'avis, [selon Engadget](https://www.engadget.com/ai/perplexity-will-now-show-hotel-information-from-tripadvisor-202923788.html).
+
+Ces annonces ne disent pas comment ces données sont pondérées aujourd'hui, ni si elles s'appliquent pareil en France. Ce que j'en retiens pour la Côte d'Azur : Yelp pèse peu à Nice, mais Tripadvisor compte pour un hôtel, un restaurant ou une activité touristique. Une fiche Tripadvisor abandonnée depuis 2022, avec de vieilles photos et des horaires faux, peut se retrouver dans une réponse de Perplexity.
+
+Le reste vient du web ouvert : votre site, la presse locale (Nice-Matin, Monaco-Matin), les guides, les blogs de voyage, les annuaires professionnels, les pages « meilleurs restaurants du Vieux-Nice » de sites éditoriaux. Quand plusieurs de ces sources disent la même chose de vous, le moteur a de quoi vous citer.
+
+## Comment écrire une page que Perplexity peut citer ?
+
+Puisque le moteur classe des passages, chaque passage doit tenir debout seul. Voici ce que j'applique sur les sites que je construis.
+
+### Répondre dans la première phrase
+
+Sous un titre comme « Livrez-vous à Monaco ? », la première phrase doit être « Oui, nous livrons à Monaco du lundi au samedi, sous 24 h. » Le détail vient après. Un passage qui commence par trois lignes de contexte perd face à celui qui répond tout de suite.
+
+### Nommer les choses au lieu de dire « ici »
+
+Un passage extrait de sa page perd son contexte. « Nous sommes juste à côté du tram » ne veut rien dire hors de la page. « Notre cabinet est rue Pastorelli, à Nice, près de l'arrêt de tramway Jean-Médecin » se suffit à lui-même. Répétez le nom de la ville, du quartier ou du service quand c'est naturel.
+
+### Mettre les faits en texte, pas en image
+
+Prix, horaires, zones desservies, langues parlées : en texte HTML, pas dans un PDF scanné ni une image de menu. Un tableau simple est souvent repris tel quel dans les réponses.
+
+### Garder les pages fraîches et datées
+
+Perplexity cherche en direct. Une page « Tarifs 2024 » envoie un mauvais signal en octobre 2026. Mettez à jour la même URL et affichez la date de mise à jour.
+
+### Confirmer avec les données structurées
+
+Le balisage `LocalBusiness` (adresse, horaires, zone desservie) ne garantit rien chez Perplexity, qui n'a rien publié sur son usage. Il aide Google et Bing, et il oblige à rendre vos informations cohérentes, ce qui sert partout. Le détail est dans le guide des [données structurées LocalBusiness](/blog/donnees-structurees-localbusiness-schema-org/).
+
+<ServiceCTA service="seo-geo" lang="fr" text="Je vérifie si Perplexity lit votre site et je réécris les pages qui doivent être citées." />
+
+## Quelles requêtes tester à Nice, Cannes et Monaco ?
+
+Avant de modifier quoi que ce soit, posez à Perplexity les questions de vos clients, en français et en anglais, et notez qui est cité. Quelques exemples par métier :
+
+| Métier | Requête FR | Requête EN |
+|---|---|---|
+| Restaurant, Vieux-Nice | « restaurant niçois traditionnel dans le Vieux-Nice ouvert le dimanche » | « authentic Niçoise food Old Town Nice open Sunday » |
+| Hôtel, Cannes | « hôtel à pied du Palais des Festivals avec parking » | « hotel walking distance Palais des Festivals with parking » |
+| Avocat, Monaco | « avocat droit des sociétés Monaco anglophone » | « English speaking corporate lawyer Monaco » |
+| Artisan, Saint-Laurent-du-Var | « plombier urgence Saint-Laurent-du-Var samedi » | « emergency plumber near Nice airport » |
+| Agence immobilière, Cap d'Antibes | « agence immobilière villa Cap d'Antibes » | « luxury villa estate agent Cap d'Antibes » |
+
+Pour chaque réponse, regardez les notes : quelles sources reviennent ? Un annuaire, un article de Nice-Matin, une fiche Tripadvisor, le site d'un concurrent ? Cette liste devient votre plan d'action. Si un guide cite trois de vos concurrents et pas vous, c'est là qu'il faut obtenir une mention. La méthode de suivi régulier (panel de questions, fréquence d'apparition, tableur) est détaillée dans l'article sur la [mesure de sa visibilité dans les IA](/blog/mesurer-visibilite-ia-chatgpt/).
+
+## La checklist pour être cité par Perplexity
+
+1. Vérifier que le robots.txt et le pare-feu laissent passer PerplexityBot.
+2. Vérifier que les pages importantes sont lisibles sans JavaScript (le contenu doit être dans le HTML).
+3. Écrire une page par service et par zone réellement desservie, chacune avec des titres en question et une réponse dès la première phrase.
+4. Mettre prix, horaires, adresse et langues en texte, identiques sur le site, Google Business Profile, Tripadvisor et les annuaires.
+5. Nettoyer les fiches tierces oubliées (Tripadvisor, PagesJaunes, annuaires de métier).
+6. Chercher des mentions dans les sources que Perplexity cite déjà sur vos requêtes.
+7. Retester les mêmes questions chaque mois et noter l'évolution.
+
+Rien de tout ça n'est propre à Perplexity. Ce sont les mêmes fondations que pour Google et ChatGPT, comme je l'explique dans [pourquoi votre entreprise n'apparaît pas dans ChatGPT](/blog/seo-geo-apparaitre-dans-chatgpt/). La différence, c'est que Perplexity montre ses sources très clairement, ce qui en fait le moteur le plus facile à diagnostiquer.
+
+## Faut-il un prestataire basé à Nice pour ça ?
+
+Non, mais connaître le terrain aide à choisir les bonnes requêtes et les bonnes sources locales. Je suis consultant SEO et GEO à Nice et je travaille aussi à distance pour des entreprises partout en France. L'audit visibilité Google + IA coûte 390 € et prend 5 jours : il teste votre présence dans ChatGPT, Perplexity et Gemini, vérifie l'accès des robots et donne un plan d'action priorisé. Le suivi SEO & GEO démarre à 490 € par mois. Tout est sur la page [SEO & GEO](/seo-geo/).
+
+<ServiceCTA service="seo-geo" lang="fr" />
+
+## Questions fréquentes
+
+### Peut-on payer pour être cité par Perplexity ?
+
+Non, les citations dans la réponse ne s'achètent pas. Elles dépendent de l'index et du classement des passages. Le seul levier est de rendre vos pages lisibles par PerplexityBot et de publier des passages qui répondent clairement aux questions de vos clients.
+
+### Perplexity utilise-t-il Google pour trouver ses sources ?
+
+Perplexity indique disposer de son propre index, qui suit plus de 200 milliards d'URL selon son article technique de septembre 2025. Être bien classé sur Google aide en pratique, parce que les mêmes qualités (pages claires, autorité, mentions) servent dans les deux moteurs, mais ce n'est pas une condition.
+
+### Bloquer les robots IA protège-t-il mon contenu ?
+
+Bloquer PerplexityBot vous retire de son index, donc des citations. Perplexity-User peut toutefois visiter une page à la demande d'un utilisateur. Pour une entreprise locale qui cherche des clients, bloquer ces robots fait surtout perdre de la visibilité.
+
+### Combien de temps pour apparaître dans les sources de Perplexity ?
+
+Comme le moteur cherche en direct, une page bien indexée peut être citée rapidement après sa publication. Les mentions dans la presse et les guides prennent plus de temps à obtenir. Comptez quelques semaines pour voir un effet, et mesurez sur plusieurs mois.
+
+<Callout title="À retenir">
+
+- Perplexity a son propre index, découpe les pages en passages et classe ces passages un par un : un paragraphe précis peut être cité même sur un petit site.
+- Laissez passer PerplexityBot dans le robots.txt et le pare-feu, sinon vous sortez de l'index.
+- Pour le local, soignez aussi Tripadvisor et la presse de la Côte d'Azur, que Perplexity peut citer à votre place.
+- Testez chaque mois les questions de vos clients et regardez les sources citées : c'est votre liste de travail.
+
+</Callout>

@@ -37,6 +37,7 @@ Références clients : Eden Rock Yacht Rental, Royal Yacht International, Sun Be
 - [Site multilingue sur la Côte d'Azur](https://anthonyprofit.com/blog/site-multilingue-cote-azur-hreflang/): structure d'URL, hreflang, adaptation des mots-clés et visibilité IA pour la clientèle étrangère.
 - [Prix du référencement à Nice](https://anthonyprofit.com/blog/prix-referencement-nice-seo/): tarifs d'un consultant SEO freelance et d'une agence, ce qui fait varier le budget, la place du GEO et les promesses à fuir.
 - [Données structurées LocalBusiness](https://anthonyprofit.com/blog/donnees-structurees-localbusiness-schema-org/): quel type Schema.org choisir, quelles propriétés remplir, exemple JSON-LD commenté et cas particuliers de la Côte d'Azur (Monaco, saisonnalité).
+- [Être cité par Perplexity](https://anthonyprofit.com/blog/etre-cite-par-perplexity/): comment Perplexity indexe, découpe et classe les pages, ses robots (PerplexityBot, Perplexity-User), ses sources locales et la checklist pour être cité à Nice, Cannes ou Monaco.
 
 ## À propos & contact
 
@@ -63,6 +64,7 @@ Références clients : Eden Rock Yacht Rental, Royal Yacht International, Sun Be
 - [Multilingual website on the French Riviera (guide)](https://anthonyprofit.com/en/blog/multilingual-website-french-riviera/): URL structure, hreflang, keyword adaptation and AI visibility.
 - [SEO cost in Nice (guide)](https://anthonyprofit.com/en/blog/seo-cost-nice-pricing/): freelance and agency SEO rates, what drives the budget, where GEO fits in and which promises to avoid.
 - [LocalBusiness schema markup (guide)](https://anthonyprofit.com/en/blog/localbusiness-schema-markup-guide/): which Schema.org type to pick, which properties to fill in, annotated JSON-LD and Riviera special cases.
+- [Get cited by Perplexity (guide)](https://anthonyprofit.com/en/blog/get-cited-by-perplexity/): how Perplexity indexes, splits and ranks pages, its crawlers, its local sources and a checklist to get cited.
 - [About](https://anthonyprofit.com/en/about/): background, method, stack.
 - [Contact](https://anthonyprofit.com/en/contact/): e-mail and WhatsApp, reply within 2 business days.
 
