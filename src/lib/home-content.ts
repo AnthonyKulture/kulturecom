@@ -402,7 +402,7 @@ export function getCallbackContent(lang: Lang): CallbackContent {
     open: "Get a call back",
     title: "I'll call you back.",
     bodyOpen: `Leave your number: I'll call you within ${CALLBACK.delayMin} minutes.`,
-    bodyClosed: `Leave your number: I'll call you as soon as I'm back (Monday to Friday, 9 am-7 pm Paris time).`,
+    bodyClosed: `Leave your number: I'll call you as soon as I'm back (Monday to Friday, 9 am-8 pm Paris time).`,
     name: "First name",
     phone: "Phone",
     submit: "Call me back",
