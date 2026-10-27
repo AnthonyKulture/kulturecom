@@ -1,0 +1,143 @@
+---
+lang: fr
+slug: geo-local-referencement-ia
+translationKey: geo-local
+title: "GEO local : comment une entreprise de Nice se fait recommander par ChatGPT, Perplexity, Gemini et Google"
+metaTitle: "GEO local : se faire recommander par l'IA"
+description: "GEO local : ce que ChatGPT, Perplexity, Gemini et les AI Overviews lisent pour recommander un prestataire près de chez vous, et comment le mesurer à Nice."
+keywords:
+  - GEO local
+  - référencement local IA
+  - consultant GEO local
+  - SEO local et IA
+  - freelance GEO local
+  - GEO référencement local
+tags:
+  - GEO
+  - SEO
+  - Référencement local
+  - IA
+pillar: seo
+pubDate: 2026-10-27
+draft: false
+---
+
+import ServiceCTA from "~/components/blog/ServiceCTA.astro";
+import Callout from "~/components/blog/Callout.astro";
+
+Le **GEO local**, c'est l'art de faire citer votre entreprise quand quelqu'un demande à ChatGPT, Perplexity, Gemini ou à Google « un bon [métier] près de chez moi ». Les IA ne devinent rien : elles recoupent votre fiche Google, vos avis, les annuaires, votre site et ce que d'autres sites disent de vous, puis elles nomment les entreprises sur lesquelles toutes ces sources sont d'accord.
+
+Je suis freelance SEO & GEO à Nice et c'est le travail que je fais pour des entreprises de la Côte d'Azur. Cette page est le point d'entrée : elle explique le mécanisme, liste les signaux qui comptent et donne une méthode de mesure. Chaque levier a son guide détaillé, en lien.
+
+## Qu'est-ce que le GEO local ?
+
+Le **GEO**, ou *Generative Engine Optimization*, désigne l'ensemble des actions qui rendent une entreprise visible dans les réponses rédigées par les moteurs d'IA générative. Le **GEO local** en est la déclinaison géographique : être recommandé sur les requêtes qui associent un métier et un lieu (« architecte d'intérieur Nice », « dentiste ouvert le samedi à Antibes », « qui peut refaire mon site à Cannes »).
+
+La différence avec le SEO local tient au format de la réponse :
+
+| | SEO local | GEO local |
+|---|---|---|
+| Où l'on apparaît | Local Pack (carte + 3 fiches), résultats Google | Réponse de ChatGPT, Perplexity, Gemini, AI Overviews, AI Mode |
+| Ce que voit l'internaute | Une liste de liens et de fiches | Quelques noms, souvent avec une justification |
+| Ce qui est jugé | Pertinence, proximité, notoriété de la fiche | Cohérence et convergence des sources sur votre entreprise |
+
+Les deux ne s'opposent pas. Le **référencement local IA** repose sur les fondations du SEO local : une IA qui ne trouve pas votre entreprise dans les sources qu'elle consulte ne peut pas la recommander. J'ai décrit cette architecture en trois couches (SEO, Maps, IA) dans [dominer Google à Nice](/blog/referencement-nice-dominer-google-et-ia/).
+
+## Comment une IA choisit-elle un prestataire « près de chez moi » ?
+
+Sur une question locale, aucun de ces moteurs ne répond de mémoire. Ils lancent une recherche, récupèrent des pages et des fiches, puis rédigent à partir de ce qu'ils ont trouvé. Ce qui change d'un moteur à l'autre, c'est **où ils cherchent**.
+
+- **Google (AI Overviews et AI Mode)** s'appuie sur son index et ses systèmes de classement habituels. Dans sa documentation [« AI features and your website »](https://developers.google.com/search/docs/appearance/ai-features), Google cite nommément la fiche **Google Business Profile** comme moyen pour une entreprise locale d'être visible dans ses réponses IA. Le détail, depuis leur arrivée en France en juillet 2026, est dans mon guide [AI Overviews et AI Mode pour les entreprises locales](/blog/ai-overviews-ai-mode-google-entreprises-locales/).
+- **ChatGPT** fait une recherche web quand la question le demande. OpenAI ne publie pas la liste de ses fournisseurs de données locales ; les analyses du secteur citent l'index Bing, des annuaires et des sites d'avis.
+- **Perplexity** interroge son propre index et a annoncé des partenariats de données avec Yelp et Tripadvisor. Je détaille son fonctionnement dans [être cité par Perplexity](/blog/etre-cite-par-perplexity/).
+- **Gemini** puise dans l'écosystème Google, Maps compris.
+
+Conséquence pratique : on ne « référence » pas une entreprise dans une IA comme on soumet un site à un annuaire. On rend son entreprise **identique et facile à trouver partout où ces moteurs regardent**. Une IA qui lit trois horaires différents, deux adresses et un nom tronqué hésite, et cite un concurrent mieux documenté.
+
+## Les 6 signaux que lisent les IA en local
+
+### 1. La fiche Google Business Profile
+
+C'est la source la plus directe pour Google, Gemini et l'AI Mode, qui en reprennent la note, les horaires et un résumé des avis. Catégorie principale exacte, services listés, horaires exceptionnels, photos récentes : tout est dans le [guide de la fiche Google Business Profile à Nice](/blog/google-business-profile-nice-guide/).
+
+### 2. Les avis, et surtout ce qu'ils racontent
+
+La note compte, le texte des avis compte autant. Un avis qui écrit « refonte du site d'un restaurant du Vieux-Nice, livrée avant la saison » donne à une IA de quoi vous associer à une demande précise. Demandez des avis détaillés, légalement, et répondez à chacun.
+
+### 3. Des citations cohérentes dans les annuaires
+
+Une **citation**, en SEO local, est une mention de votre nom, adresse et téléphone (le **NAP**) sur un site tiers. Les IA s'en servent pour vérifier qu'une entreprise existe et où elle se trouve. Les plus utiles en France : Bing Places, Apple Business Connect, PagesJaunes, et les annuaires de votre métier (Tripadvisor ou TheFork pour un restaurant, Doctolib pour un praticien). Une seule règle : **le même NAP partout**, au caractère près.
+
+### 4. Les données structurées LocalBusiness
+
+Le balisage Schema.org `LocalBusiness` décrit votre entreprise dans un format lisible par les machines : type d'activité, adresse, horaires, zone desservie. Google précise qu'il n'est pas requis pour ses fonctions IA ; Bing dit s'en servir pour ses modèles. Son vrai mérite : il oblige à mettre au propre des informations qui doivent correspondre à la page et à la fiche. Exemple JSON-LD commenté dans le guide des [données structurées LocalBusiness](/blog/donnees-structurees-localbusiness-schema-org/).
+
+### 5. Des pages services qui nomment la ville
+
+Une IA qui cherche « création de site vitrine à Nice » récupère des pages qui répondent à cette question, pas une page d'accueil générique. Chaque prestation réelle mérite sa page, avec la ville, la zone couverte, le délai et un ordre de prix en texte. Une page par service, pas une page par variante de mot-clé : Google classe les pages produites en série pour chaque ville parmi les abus de contenu à grande échelle.
+
+### 6. Les mentions sur des sites tiers
+
+C'est le signal le plus sous-estimé du **SEO local et IA**. Les moteurs génératifs aiment citer ce que d'autres disent de vous : un article de presse locale, une sélection « les meilleurs… à Nice », le site d'un partenaire, une association professionnelle, un événement de la CCI. Une mention éditoriale sur un site que l'IA juge fiable pèse plus que dix fiches d'annuaire.
+
+<ServiceCTA service="seo-geo" lang="fr" text="Je fais du GEO local pour des entreprises de Nice et de la Côte d'Azur : audit des sources que lisent les IA, fiche Google, pages services, mentions tierces." />
+
+## Comment mesurer son GEO local en 30 minutes ?
+
+La mesure la plus simple reste la plus parlante : poser aux IA les questions que posent vos clients, et noter ce qu'elles répondent.
+
+1. **Écrivez 10 prompts réalistes**, formulés comme un client, pas comme un référenceur. Mélangez requêtes de découverte (« meilleur concepteur de site web à Nice »), requêtes de besoin (« qui peut créer un site pour mon restaurant à Antibes ? ») et requêtes de marque (« que penser de [votre entreprise] ? »).
+2. **Testez dans ChatGPT, Perplexity, Gemini et l'AI Mode de Google**, en session neuve : navigation privée ou mode temporaire, sans historique ni mémoire qui orienterait la réponse.
+3. **Notez quatre choses** pour chaque réponse : êtes-vous cité ? À quel rang ? Quelles sources sont en lien ? Vos informations sont-elles exactes ?
+4. **Répétez chaque prompt deux ou trois fois.** Les réponses varient d'un essai à l'autre ; c'est la fréquence d'apparition qui compte, pas un résultat isolé.
+
+Une grille de ce type suffit (les valeurs sont un exemple de remplissage) :
+
+| Prompt | ChatGPT | Perplexity | Gemini | AI Mode |
+|---|---|---|---|---|
+| Meilleur concepteur de site web à Nice | cité 2/3 | non cité | … | … |
+| Agence pour créer un site de restaurant à Antibes | … | … | … | … |
+
+La colonne la plus utile est souvent celle des **sources citées**. Si Perplexity nomme trois concurrents en s'appuyant sur le même article de blog local, c'est là qu'il faut obtenir une mention. La version complète, avec GA4, Search Console et logs serveur, est dans [mesurer sa visibilité IA](/blog/mesurer-visibilite-ia-chatgpt/).
+
+## Faut-il un consultant GEO local ?
+
+Rien de ce qui précède n'est secret, et une entreprise organisée peut avancer seule. Le travail d'un **consultant GEO local** consiste surtout à faire tenir l'ensemble : savoir quelles sources pèsent dans votre métier et votre ville, corriger les incohérences que personne ne voit, écrire les pages qui répondent vraiment, et suivre l'effet mois après mois.
+
+Ma méthode, à Nice comme à distance, va dans cet ordre :
+
+1. **Audit des sources** : ce que répondent les IA aujourd'hui, ce qu'elles citent, où vos informations divergent.
+2. **Hygiène des données** : un NAP unique sur le site, la fiche Google, Bing Places, Apple Business Connect et les annuaires.
+3. **Fiche Google et avis** : catégories, services, photos, réponses aux avis.
+4. **Pages services** : une par prestation, avec la ville, rédigées pour répondre et balisées proprement.
+5. **Mentions tierces** : presse locale, partenaires, sélections thématiques.
+6. **Mesure mensuelle** du panel de prompts.
+
+Comme je conçois aussi les sites, le code, le balisage et le contenu sont pensés ensemble, sans couche de rustines. Pour le contexte plus large du GEO, hors local, lisez [pourquoi votre entreprise n'apparaît pas dans ChatGPT](/blog/seo-geo-apparaitre-dans-chatgpt/).
+
+## Questions fréquentes
+
+### Le GEO local remplace-t-il le SEO local ?
+
+Non, il s'appuie dessus. Les IA récupèrent leurs informations dans les index des moteurs, les fiches et les annuaires. Une entreprise invisible en SEO local a très peu de chances d'être recommandée par une IA.
+
+### Peut-on payer pour être recommandé par ChatGPT ?
+
+Pas dans les réponses elles-mêmes. Les citations d'une réponse ChatGPT ne s'achètent pas. OpenAI a ouvert en France des emplacements publicitaires, signalés comme tels et séparés des réponses ; c'est un autre levier, que je décris dans le [guide ChatGPT Ads](/blog/chatgpt-ads-publicite-chatgpt-guide/).
+
+### En combien de temps voit-on un effet ?
+
+Les corrections de fiche et de NAP se répercutent en quelques semaines sur Google. Les mentions tierces et les nouvelles pages demandent plutôt plusieurs mois avant d'être reprises régulièrement par les IA. D'où l'intérêt de mesurer chaque mois avec le même panel de prompts.
+
+<Callout title="À retenir">
+
+- Le GEO local consiste à être cité par ChatGPT, Perplexity, Gemini et les réponses IA de Google sur les requêtes « métier + ville ».
+- Les IA recoupent leurs sources : fiche Google Business Profile, avis, annuaires, données structurées, pages services et mentions tierces doivent dire la même chose.
+- Google cite lui-même la fiche Google Business Profile comme levier de visibilité locale dans ses réponses IA.
+- On mesure avec un panel de 10 prompts réalistes, testés dans chaque IA, en notant présence, rang et sources citées.
+
+</Callout>
+
+Vous voulez savoir ce que les IA répondent aujourd'hui quand on cherche votre métier à Nice ? C'est le point de départ de mon [accompagnement SEO & GEO](/seo-geo/).
+
+<ServiceCTA service="seo-geo" lang="fr" />

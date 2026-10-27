@@ -38,6 +38,7 @@ Références clients : Eden Rock Yacht Rental, Royal Yacht International, Sun Be
 - [Prix du référencement à Nice](https://anthonyprofit.com/blog/prix-referencement-nice-seo/): tarifs d'un consultant SEO freelance et d'une agence, ce qui fait varier le budget, la place du GEO et les promesses à fuir.
 - [Données structurées LocalBusiness](https://anthonyprofit.com/blog/donnees-structurees-localbusiness-schema-org/): quel type Schema.org choisir, quelles propriétés remplir, exemple JSON-LD commenté et cas particuliers de la Côte d'Azur (Monaco, saisonnalité).
 - [Être cité par Perplexity](https://anthonyprofit.com/blog/etre-cite-par-perplexity/): comment Perplexity indexe, découpe et classe les pages, ses robots (PerplexityBot, Perplexity-User), ses sources locales et la checklist pour être cité à Nice, Cannes ou Monaco.
+- [GEO local](https://anthonyprofit.com/blog/geo-local-referencement-ia/): comment une entreprise locale se fait recommander par ChatGPT, Perplexity, Gemini et les réponses IA de Google (fiche Google, avis, citations NAP, LocalBusiness, pages services, mentions tierces) et comment le mesurer avec un panel de prompts.
 
 ## À propos & contact
 
@@ -65,6 +66,7 @@ Références clients : Eden Rock Yacht Rental, Royal Yacht International, Sun Be
 - [SEO cost in Nice (guide)](https://anthonyprofit.com/en/blog/seo-cost-nice-pricing/): freelance and agency SEO rates, what drives the budget, where GEO fits in and which promises to avoid.
 - [LocalBusiness schema markup (guide)](https://anthonyprofit.com/en/blog/localbusiness-schema-markup-guide/): which Schema.org type to pick, which properties to fill in, annotated JSON-LD and Riviera special cases.
 - [Get cited by Perplexity (guide)](https://anthonyprofit.com/en/blog/get-cited-by-perplexity/): how Perplexity indexes, splits and ranks pages, its crawlers, its local sources and a checklist to get cited.
+- [Local GEO (guide)](https://anthonyprofit.com/en/blog/local-geo-generative-engine-optimization/): how a local business gets recommended by ChatGPT, Perplexity, Gemini and Google's AI answers, the six signals they read and a simple prompt-based way to measure it.
 - [About](https://anthonyprofit.com/en/about/): background, method, stack.
 - [Contact](https://anthonyprofit.com/en/contact/): e-mail and WhatsApp, reply within 2 business days.
 
