@@ -154,7 +154,7 @@ const jsonLd = {
         <li class="fact">{labels.place}</li>
       </ul>
       <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
-        <a href="#contact" class="group btn btn-primary">
+        <a href="#contact" data-project-open={id} class="group btn btn-primary">
           {labels.cta}
           <span aria-hidden="true" class="transition-transform duration-300 ease-out group-hover:translate-x-1">→</span>
         </a>
@@ -210,7 +210,7 @@ const jsonLd = {
                   </li>
                 ))}
               </ul>
-              <a href="#contact" data-need={id} class="btn btn-secondary mt-6 self-start">{labels.choose}</a>
+              <a href="#contact" data-project-open={id} class="btn btn-secondary mt-6 self-start">{labels.choose}</a>
             </article>
           );
         })}

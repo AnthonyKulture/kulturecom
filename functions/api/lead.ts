@@ -1,6 +1,7 @@
 /**
- * POST /api/lead — contact form and callback requests (Cloudflare Pages
- * Function, deployed with the site). Each lead is e-mailed through Resend
+ * POST /api/lead — contact form, guided project form and callback requests
+ * (Cloudflare Pages Function, deployed with the site). Each lead is e-mailed
+ * through Resend
  * (or Brevo when no Resend key is set); a callback request is flagged
  * [RAPPEL] in the subject so the phone notification stands out.
  *
@@ -30,6 +31,40 @@ const NEEDS: Record<string, string> = {
   checkup: "Check-up visibilité IA offert",
   other: "Autre",
 };
+
+// Answers of the guided form (src/lib/project-form.ts holds the visitor's
+// wording, in both languages; these are for the e-mail).
+const DETAILS: Record<string, string> = {
+  first: "Un premier site",
+  redo: "Refaire le site actuel",
+  shop: "Boutique ou réservations en ligne",
+  maps: "Sortir sur Google Maps",
+  google: "Monter dans Google",
+  ai: "Être cité par les IA",
+  ads: "Lancer ChatGPT Ads",
+  audit: "Faire le point (audit)",
+  automate: "Automatiser une tâche répétitive",
+  assistant: "Un assistant IA pour ses clients",
+  tool: "Un outil métier sur-mesure",
+  unsure: "Ne sait pas encore ce qui est possible",
+  logo: "Un logo",
+  identity: "Une identité complète",
+  refresh: "Moderniser son image",
+};
+const TIMELINES: Record<string, string> = {
+  asap: "Dès que possible",
+  month: "Dans le mois",
+  quarter: "D'ici 2 à 3 mois",
+  open: "Pas de date précise",
+};
+const BUDGETS: Record<string, string> = {
+  lt500: "Moins de 500 €",
+  "500-1500": "500 à 1 500 €",
+  "1500-3000": "1 500 à 3 000 €",
+  gt3000: "Plus de 3 000 €",
+  advice: "Ne sait pas, à conseiller",
+};
+const CHANNELS: Record<string, string> = { email: "E-mail", phone: "Téléphone", whatsapp: "WhatsApp" };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const PHONE_RE = /^\+?[\d\s().-]{6,20}$/;
@@ -61,11 +96,21 @@ export async function onRequestPost({ request, env }: { request: Request; env: E
   const message = clean(data.message, 1000);
   const need = clean(data.need, 20);
   const page = clean(data.page, 200);
+  const detail = DETAILS[clean(data.detail, 20)];
+  const site = clean(data.site, 200);
+  const timeline = TIMELINES[clean(data.timeline, 20)];
+  const budget = BUDGETS[clean(data.budget, 20)];
+  const channel = CHANNELS[clean(data.channel, 20)];
 
+  // A project needs a first name and a way to reply: an e-mail, or a phone
+  // number for those who chose a call or WhatsApp in the guided form.
   const valid =
     type === "callback"
       ? validPhone(phone)
-      : !!name && EMAIL_RE.test(email) && (!phone || validPhone(phone));
+      : !!name &&
+        (EMAIL_RE.test(email) || validPhone(phone)) &&
+        (!email || EMAIL_RE.test(email)) &&
+        (!phone || validPhone(phone));
   if (!valid) return reply(422, isJson, "invalid");
 
   if (!(env.RESEND_API_KEY || env.BREVO_API_KEY) || !env.LEAD_FROM) return reply(503, isJson, "not_configured");
@@ -96,8 +141,13 @@ export async function onRequestPost({ request, env }: { request: Request; env: E
           "Nouvelle demande de projet",
           "",
           `Besoin : ${NEEDS[need] ?? "non renseigné"}`,
+          ...(detail ? [`Précision : ${detail}`] : []),
+          ...(site ? [`Site actuel : ${site}`] : []),
+          ...(timeline ? [`Délai : ${timeline}`] : []),
+          ...(budget ? [`Budget : ${budget}`] : []),
           `Prénom : ${name}`,
-          `E-mail : ${email}`,
+          ...(channel ? [`Répondre par : ${channel}`] : []),
+          `E-mail : ${email || "non renseigné"}`,
           `Téléphone : ${phone || "non renseigné"}`,
           "",
           "Message :",
@@ -109,7 +159,7 @@ export async function onRequestPost({ request, env }: { request: Request; env: E
   const subject =
     type === "callback"
       ? `[RAPPEL] ${phone}${name ? ` · ${name}` : ""}`
-      : `[Contact] ${NEEDS[need] ?? "Projet"} · ${name}`;
+      : `[Contact] ${NEEDS[need] ?? "Projet"}${budget ? ` · ${budget}` : ""} · ${name}`;
 
   const to = env.LEAD_TO || "contact@kulturecom.fr";
   const text = lines.join("\n");
@@ -122,7 +172,7 @@ export async function onRequestPost({ request, env }: { request: Request; env: E
           body: JSON.stringify({
             from: `anthonyprofit.com <${env.LEAD_FROM}>`,
             to: [to],
-            ...(type === "project" ? { reply_to: email } : {}),
+            ...(type === "project" && email ? { reply_to: email } : {}),
             subject,
             text,
           }),
@@ -133,7 +183,7 @@ export async function onRequestPost({ request, env }: { request: Request; env: E
           body: JSON.stringify({
             sender: { name: "anthonyprofit.com", email: env.LEAD_FROM },
             to: [{ email: to }],
-            ...(type === "project" ? { replyTo: { email, name } } : {}),
+            ...(type === "project" && email ? { replyTo: { email, name } } : {}),
             subject,
             textContent: text,
           }),

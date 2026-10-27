@@ -15,7 +15,7 @@ const contactHref = fr ? "/contact/" : "/en/contact/";
 ---
 
 <div data-mobile-bar class="mobile-bar" data-visible="false">
-  <a href={contactHref} data-to-contact class="mb-btn mb-btn--primary">{fr ? "Démarrer un projet" : "Start a project"}</a>
+  <a href={contactHref} data-project-open class="mb-btn mb-btn--primary">{fr ? "Démarrer un projet" : "Start a project"}</a>
   <button type="button" data-callback-open class="mb-btn">{fr ? "Être rappelé" : "Call me back"}</button>
 </div>
 
@@ -111,10 +111,10 @@ const contactHref = fr ? "/contact/" : "/en/contact/";
     update();
   }
 
-  // "Démarrer un projet" links go to the page's own contact block when there
-  // is one (home, services, case studies) instead of loading /contact/; so do
-  // the in-page "#contact" buttons. The block lands centred on screen, or just
-  // under the menu when it is taller than the screen.
+  // In-page "#contact" links go to the page's contact block. The block lands
+  // centred on screen, or just under the menu when it is taller than the
+  // screen. ("Démarrer un projet" links open the guided form instead:
+  // ProjectDialog.astro.)
   const stillMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const goToContact = (contact: HTMLElement, smooth: boolean): void => {
     // A jump: the home's scroll sequences let it fly over them, and first
@@ -138,7 +138,7 @@ const contactHref = fr ? "/contact/" : "/en/contact/";
     window.scrollTo({ top: Math.max(0, y), behavior: smooth && !stillMotion ? "smooth" : "auto" });
   };
   document.addEventListener("click", (e) => {
-    const link = (e.target as HTMLElement).closest<HTMLAnchorElement>('[data-to-contact], a[href="#contact"]');
+    const link = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href="#contact"]:not([data-project-open])');
     const contact = document.getElementById("contact");
     if (!link || !contact) return;
     e.preventDefault();

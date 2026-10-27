@@ -101,7 +101,7 @@ const isCurrent = (href: string): boolean => path === href || (href !== homeHref
     </div>
 
     <div class="flex items-center gap-4 sm:gap-5">
-      <a href={contactHref} data-to-contact data-intro-box="CTA" class="nav-cta hidden sm:inline-flex">{ctaLabel}</a>
+      <a href={contactHref} data-project-open data-intro-box="CTA" class="nav-cta hidden sm:inline-flex">{ctaLabel}</a>
       <span class="font-label inline-flex items-center gap-1 text-[13px] uppercase tracking-[0.06em] sm:text-[14px]">
         <a href={enHref} hreflang="en" aria-current={lang === "en" ? "page" : undefined} class:list={["no-underline hover:underline underline-offset-4", lang === "en" ? "font-bold" : "opacity-60 hover:opacity-100"]}>EN</a>
         <span aria-hidden="true" class="opacity-60">/</span>

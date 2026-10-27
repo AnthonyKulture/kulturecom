@@ -1,6 +1,7 @@
 /**
  * Client side of the contact form (CTA.astro) and the callback dialog
- * (CallbackDialog.astro): step flow, validation, submission to the Cloudflare
+ * (CallbackDialog.astro); the guided project form (ProjectDialog.astro) sends
+ * through it too: step flow, validation, submission to the Cloudflare
  * Pages Function `/api/lead`, GA4 `generate_lead`, and a prefilled e-mail /
  * WhatsApp fallback if the request fails.
  */
@@ -29,6 +30,8 @@ const PHONE_RE = /^\+?[\d\s().-]{6,20}$/;
 
 export const isValidPhone = (v: string): boolean =>
   PHONE_RE.test(v) && v.replace(/\D/g, "").length >= 6;
+
+export const isValidEmail = (v: string): boolean => EMAIL_RE.test(v);
 
 /** First-touch campaign data captured on landing (Analytics.astro). */
 const attribution = (): Record<string, string> => {
@@ -122,8 +125,7 @@ function initForm(form: HTMLFormElement): void {
     });
   });
 
-  // Prefill from a page (service page passes its need) or from a link like
-  // the hero's "check-up offert" (`data-need`).
+  // Prefill from a page (a service page passes its need).
   const preselect = (need: string): void => {
     const radio = form.querySelector<HTMLInputElement>(`input[name=need][value="${need}"]`);
     if (!radio) return;
@@ -134,10 +136,6 @@ function initForm(form: HTMLFormElement): void {
   };
   if (form.dataset.need) preselect(form.dataset.need);
   else show(0, false);
-  document.addEventListener("click", (e) => {
-    const trigger = (e.target as HTMLElement).closest<HTMLElement>("[data-need]");
-    if (trigger && trigger !== form && trigger.dataset.need) preselect(trigger.dataset.need);
-  });
 
   const setError = (name: string, message: string): boolean => {
     const input = form.elements.namedItem(name) as HTMLInputElement;
