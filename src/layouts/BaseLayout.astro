@@ -173,6 +173,13 @@ const graph: Record<string, any>[] = [
     },
     // Pin of the Google Business Profile.
     "geo": { "@type": "GeoCoordinates", "latitude": 43.7072786, "longitude": 7.2591778 },
+    // Same hours as the Google Business Profile; change both together.
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      "opens": "09:00",
+      "closes": "19:00",
+    },
     // City-level areaServed sharpens relevance for "Nice"/"Côte d'Azur" queries
     // (LLMs + local pack score city entities higher than a bare Country).
     "areaServed": AREA_SERVED,

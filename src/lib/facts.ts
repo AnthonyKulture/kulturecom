@@ -24,7 +24,7 @@ export const CONTACT = {
 export const GOOGLE_PROFILE = {
   url: "https://www.google.com/maps?cid=13963690267531536578",
   rating: 5,
-  reviewCount: 17,
+  reviewCount: 22,
 } as const;
 
 /**

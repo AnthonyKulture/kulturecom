@@ -94,7 +94,7 @@ const CONTENT: Record<ServiceId, Record<Lang, ServicePageContent>> = {
     fr: {
       name: "Création de site internet",
       eyebrow: "Service · Développement",
-      h1Lines: ["Création de", "site sur-mesure."],
+      h1Lines: ["Création de site", "sur-mesure à Nice."],
       lead: "Des sites internet conçus et codés à la main sur la Côte d'Azur — rapides, accessibles, taillés pour votre marque. Aucun template, aucun compromis sur la performance.",
       intro: [
         "Un site sur-mesure n'est pas un thème acheté qu'on habille à vos couleurs. C'est une architecture pensée pour vos objectifs : convertir, rassurer, durer. Je conçois et développe chaque projet de la première maquette à la mise en ligne — design, code et performance sous une seule main, sans agence à trois équipes qui se renvoient des fichiers.",
