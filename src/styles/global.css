@@ -315,6 +315,11 @@ main > section:not(:first-child)::before {
   opacity: 0;
   transform: translateY(18px);
 }
+/* Revealed late (a fast scroll, a jump): simply there, with what it holds. */
+.reveal-on [data-reveal][data-instant],
+.reveal-on [data-reveal][data-instant] * {
+  transition: none !important;
+}
 
 @media (prefers-reduced-motion: reduce) {
   html {

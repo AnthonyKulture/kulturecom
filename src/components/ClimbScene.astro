@@ -2,10 +2,10 @@
 // Fifth illustration: the hiker walking up a slope, in dots like the others
 // (src/lib/climb-halftone.ts). He walks in place while the ground and the far
 // ranges slide by, in an endless loop, like the hero. When the projects come
-// in on the blue, he condenses out of vapor with the scroll (HomeSections.astro
-// sets the entrance's progress in the section's data-in), as the site's vapor
-// type does: each dot drifts down into its place and firms up, in a sweep
-// from left to right. Decorative; still under reduced motion.
+// in on the blue, he condenses out of vapor over their entrance (home-seq.ts
+// plays it and draws him), as the site's vapor type does: each dot drifts
+// down into its place and firms up, in a sweep from left to right.
+// Decorative; still under reduced motion.
 ---
 
 <canvas class="climb-dots" data-climb-dots aria-hidden="true"></canvas>
@@ -13,6 +13,7 @@
 <script>
   import { CLIMB_VIEW, drawClimbTone } from "~/lib/climb-halftone";
   import { runDots } from "~/lib/halftone";
+  import { scenes } from "~/lib/home-seq";
 
   // The vapor's clock, in its own units, run by the entrance's progress.
   const SWEEP = 0.9; // left to right
@@ -22,10 +23,10 @@
   const SPAN = [0.05, 0.95] as const; // the share of the entrance it takes
 
   const canvas = document.querySelector<HTMLCanvasElement>("[data-climb-dots]");
-  const section = canvas?.closest<HTMLElement>("[data-work]");
   if (canvas) {
     const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let t = 0.3; // mid-step at the first frame
+    let r = 1; // the entrance (none: he is simply there)
     // Per dot: when it sets off, and where from (in dots).
     let delay = new Float32Array(0);
     let fromX = new Int16Array(0);
@@ -71,15 +72,13 @@
       tone.putImageData(img, 0, 0);
     };
 
-    runDots(
+    const dots = runDots(
       canvas,
       CLIMB_VIEW,
       (tone, cols, rows, dt) => {
         t += dt;
         drawClimbTone(tone, t, cols, rows);
-        // The section's entrance, if it has one.
-        const p = section?.hasAttribute("data-wait") ? Number(section.dataset.in ?? 0) : 1;
-        const at = Math.min(1, Math.max(0, (p - SPAN[0]) / (SPAN[1] - SPAN[0]))) * TOTAL;
+        const at = Math.min(1, Math.max(0, (r - SPAN[0]) / (SPAN[1] - SPAN[0]))) * TOTAL;
         if (at < TOTAL) {
           if (at <= 0) {
             tone.save();
@@ -90,7 +89,16 @@
         }
       },
       still,
+      2,
+      true,
     );
+
+    scenes.climb = {
+      draw(dt, v) {
+        r = v;
+        dots.draw(dt);
+      },
+    };
   }
 </script>
 

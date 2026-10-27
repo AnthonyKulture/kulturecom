@@ -96,7 +96,18 @@ const contactHref = fr ? "/contact/" : "/en/contact/";
       }).observe(contact);
     }
     if (consent) new MutationObserver(update).observe(consent, { attributes: true, attributeFilter: ["hidden"] });
-    window.addEventListener("scroll", update, { passive: true });
+    // (Once a frame at most.)
+    let queued = 0;
+    window.addEventListener(
+      "scroll",
+      () => {
+        queued ||= requestAnimationFrame(() => {
+          queued = 0;
+          update();
+        });
+      },
+      { passive: true },
+    );
     update();
   }
 
@@ -106,6 +117,10 @@ const contactHref = fr ? "/contact/" : "/en/contact/";
   // under the menu when it is taller than the screen.
   const stillMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const goToContact = (contact: HTMLElement, smooth: boolean): void => {
+    // A jump: the home's scroll sequences let it fly over them, and first
+    // settle the page's length, so it is measured as it will stay
+    // (home-seq.ts); the contact block, where it lands, still comes in.
+    window.dispatchEvent(new CustomEvent("seq:jump", { detail: "contact" }));
     const rects = [...contact.children]
       .filter((c): c is HTMLDivElement => c instanceof HTMLDivElement)
       .map((c) => c.getBoundingClientRect());

@@ -135,11 +135,13 @@ const projects = getProjects(ui[lang]);
       padding-bottom: 8px;
     }
     /* Each card stays on its own a while (the scroll between two cards)
-       before the next comes over it. */
+       before the next comes over it, and the last one a moment before the
+       stack goes. On a short screen no less than so many px of it: time for
+       the card's caption to come in first. */
     .card {
       position: sticky;
       top: calc(var(--stack-top, 300px) + var(--i) * 14px);
-      margin-bottom: 38svh;
+      margin-bottom: max(38svh, 250px);
       padding: 10px 10px 14px;
       background: var(--color-bg-shade);
       box-shadow: 0 -12px 28px -16px rgb(0 0 0 / 0.55);
@@ -148,11 +150,33 @@ const projects = getProjects(ui[lang]);
       display: none;
     }
     .card:nth-child(4) {
-      margin-bottom: 18svh;
+      margin-bottom: max(18svh, 140px);
     }
+    /* With the home's sequences (data-wait), the same room sits above each
+       card instead, not below the one before: a stuck card can't move into
+       its own margin, so a margin below it makes it leave before the next
+       ones are in. The four then stay stacked a moment once the last is in,
+       and go together. (Same page length either way.) */
+    .cards[data-wait] .card {
+      margin-bottom: 0;
+    }
+    .cards[data-wait] .card + .card {
+      margin-top: max(38svh, 250px);
+    }
+    .cards[data-wait]::after {
+      content: "";
+      display: block;
+      height: max(18svh, 140px);
+    }
+    /* (On a short screen the image gives up some height, cut wider: each
+       card in its place in the stack, the last and lowest one too, still
+       shows its caption above the call bar. Its width set, or Safari would
+       narrow it to keep the 16:10 under that height.) */
     .card-media,
     .card--lead .card-media {
+      width: 100%;
       aspect-ratio: 16 / 10;
+      max-height: 26svh;
     }
     .card-text {
       grid-template-columns: auto minmax(0, 1fr);

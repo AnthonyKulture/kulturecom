@@ -365,18 +365,15 @@ const isCurrent = (href: string): boolean => path === href || (href !== homeHref
     const DELTA = 6;
     let lastY = window.scrollY;
     let ticking = false;
-    // The home's scroll sequences (HomeHero, WaterfallDots, ClimbScene): the
-    // nav stays while one of them holds the screen.
-    // (Looked up each time: they switch themselves on after this runs.)
-    const pinned = () =>
-      [...document.querySelectorAll<HTMLElement>('[data-seq="on"]')].some((s) => {
-        const r = s.getBoundingClientRect();
-        return r.top <= 1 && r.bottom >= window.innerHeight - 1;
-      });
+    // The home's scroll sequences (home-seq.ts) mark the page: the nav stays
+    // while they hold the screen, and has its background over any of their
+    // scenes but the hero's (one played back at the very top).
+    const root = document.documentElement;
+    const pinned = () => root.dataset.seqHold === "on";
 
     const update = () => {
       const y = window.scrollY;
-      nav.dataset.scrolled = String(y > 8);
+      nav.dataset.scrolled = String(y > 8 || (root.dataset.seqLayer ?? "hero") !== "hero");
       if (!reduce) {
         const delta = y - lastY;
         if (y < HIDE_AFTER || delta < -DELTA || pinned()) nav.dataset.hidden = "false";
@@ -396,6 +393,11 @@ const isCurrent = (href: string): boolean => path === href || (href !== homeHref
       },
       { passive: true }
     );
+    // (In the same frame as the sequences change them.)
+    new MutationObserver(update).observe(root, { attributes: true, attributeFilter: ["data-seq-hold", "data-seq-layer"] });
+    // They also give back the room they kept below them by moving the page
+    // up under the reader, scroll and all: not a scroll up.
+    window.addEventListener("seq:reclaim", () => (lastY = window.scrollY));
   })();
 
   // Services dropdown — click / Enter toggles, Esc or outside click closes.

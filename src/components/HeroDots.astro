@@ -2,41 +2,30 @@
 // The hero scene in dots (hero-scene.ts world, hero-halftone.ts tones), drawn
 // over the whole hero and filmed by a camera (camera.ts). At rest the camera
 // frames the scene in the drawing's place (the .hero-visual box); as the page
-// scrolls through the pinned hero, the title and logos clear away, the frame
-// opens to the whole screen and the camera dives into the hiker's backpack
-// until it fills the screen. Section 2 starts from that same backpack
-// (WaterfallDots.astro). Still frame in its box under reduced motion.
+// scrolls through the theatre (home-seq.ts plays the dive), the title and
+// logos clear away, the frame opens to the whole screen and the camera dives
+// into the hiker's backpack until it fills the screen. Section 2 starts from
+// that same backpack (WaterfallDots.astro). Still frame in its box under
+// reduced motion.
 ---
 
 <canvas class="hero-dots" data-hero-dots data-intro-item style="--i:4" aria-hidden="true"></canvas>
 
 <script>
-  import { Hold, boxIn, clamp01, film, follow, frame, lerpBox, screenIn, seqProgress, smooth } from "~/lib/camera";
+  import { PACK, boxIn, clamp01, film, frame, lerpBox, smooth, type Box } from "~/lib/camera";
   import type { HikerState } from "~/lib/halftone-ink";
   import { runDots } from "~/lib/halftone";
   import { drawHeroTone } from "~/lib/hero-halftone";
   import { CX, FEET_Y, VIEW, advance, createScene } from "~/lib/hero-scene";
-
-  const DIVE = 75; // how far the camera zooms in: the pack just fills the screen
-  const PACK_Y = -68; // the pack, between its lid and its pocket (figure units)
+  import { scenes } from "~/lib/home-seq";
 
   const canvas = document.querySelector<HTMLCanvasElement>("[data-hero-dots]");
   const stage = canvas?.closest<HTMLElement>("[data-home-hero]");
-  const wrap = stage?.closest<HTMLElement>("[data-hero-seq]");
-  const spacer = wrap?.querySelector<HTMLElement>("[data-seq-spacer]");
   const visual = stage?.querySelector<HTMLElement>(".hero-visual");
   const fading = stage ? [...stage.querySelectorAll<HTMLElement>("[data-hero-fade]")] : [];
   if (canvas && stage && visual) {
     const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    // The sequence runs only with motion, and only if the hero fits a screen
-    // (it stays pinned while it plays).
-    const seq = !still && !!wrap && !!spacer && stage.offsetHeight <= window.innerHeight + 8;
-    if (seq) wrap.dataset.seq = "on";
-    const desktop = window.matchMedia("(min-width: 1024px)");
 
-    // Section 2 pins right over the hero when the dive ends (WaterfallDots):
-    // from then on nothing of the hero is seen, so it is not drawn.
-    const cover = document.querySelector<HTMLElement>("[data-approach-seq]");
     // Style writes only when a value changes.
     const last = new Map<HTMLElement, string>();
     const set = (el: HTMLElement, opacity: string, transform: string, events: string): void => {
@@ -50,47 +39,66 @@
 
     const scene = createScene();
     const hiker: HikerState = { x: CX, y: FEET_Y, s: 1.3, phase: 0, amp: still ? 0 : 1, masked: false };
-    const focus = { x: CX, y: FEET_Y + PACK_Y * hiker.s };
+    const focus = { x: CX, y: FEET_Y + PACK.y * hiker.s };
     let pace = 1;
-    let q = 0;
-    // The dive takes its time (a second and a half at least, either way).
-    // Only when it falls well behind the scroll (a fast flick) is the hero
-    // held on screen until it catches up, and section 2 waits for it (it
-    // reads data-held): at an ordinary pace the scroll alone carries it, with
-    // no shifting of the stage against the scroll (that would jitter).
-    const DIVE_TIME = 1.5;
-    const LAG = 0.08; // how far behind counts as falling behind
-    const hold = seq ? new Hold(stage, wrap) : null;
+    let q = 0; // the dive (home-seq.ts plays it)
+    // Measured with the layout (home-seq.ts), in the canvas' terms: the
+    // drawing's place at rest, and the screen (the theatre's box).
+    let measured = false;
+    let rest: Box = { x: 0, y: 0, w: 0, h: 0 };
+    let screen: Box = rest;
+    let wide = false;
+    // The frame opens to the whole screen.
+    const opening = (): { open: number; box: Box } => {
+      const open = smooth(0.04, 0.36, q);
+      return { open, box: lerpBox(rest, screen, open) };
+    };
 
-    runDots(
+    const dots = runDots(
       canvas,
       VIEW,
       (tone, cols, rows, dt, px) => {
-        // Where the scroll is in the sequence, through a light spring, at
-        // the dive's own pace.
-        // While section 2 is on top of it (playing back, on the way up), the
-        // dive waits for it rather than unwinding unseen.
-        const raw = seq ? seqProgress(wrap, spacer) : 0;
-        const target = cover?.dataset.shown === "on" ? Math.max(raw, q) : raw;
-        q = follow(q, target, dt, 0.12, 1 / DIVE_TIME);
-        const behind = hold ? hold.threshold(LAG) : LAG;
-        if (hold?.update(dt, q < target - behind, q > target + behind)) q = target;
-        // Section 2 waits only while the hero is actually held (WaterfallDots).
-        if (seq) wrap.dataset.held = hold?.held() ? "on" : "";
-        const open = smooth(0.04, 0.36, q); // the frame opens to the whole screen
-        const clear = smooth(0.06, 0.3, q); // title and logos fade as they're pushed away
+        if (!measured) return false;
+        const { open, box } = opening();
         // The camera goes into the pack, faster and faster, filling the screen
         // only at the very end: the cut to section 2 is a flash.
         const dive = clamp01((q - 0.24) / 0.76) ** 1.6;
 
-        // The opening frame pushes the title and logos out to the left: they
-        // move as far as its edge does (on phones, where it opens upward and
-        // downward, a third of the screen's width).
-        const root = stage.getBoundingClientRect();
-        const screen = screenIn(root);
-        const rest = boxIn(visual, root);
-        const box = lerpBox(rest, screen, open);
-        const push = desktop.matches ? rest.x - box.x : open * screen.w * 0.34;
+        // He stops walking as the camera comes up to him; the world stops with him.
+        pace += (1 - smooth(0.04, 0.3, q) - pace) * Math.min(1, dt * 6);
+        advance(scene, dt, pace);
+        hiker.phase += dt / 1.1;
+        hiker.amp = still ? 0 : 1 - smooth(0.16, 0.42, q);
+
+        film(tone, VIEW, box, PACK.dive ** dive, focus, smooth(0.24, 0.7, q), screen, px);
+        drawHeroTone(tone, scene, hiker, cols, rows);
+        // At rest the drawing melts into the page on its edges (left on wide
+        // screens), as its frame did; the edges go as the frame opens.
+        const edges = 1 - open;
+        frame(tone, box, { left: wide ? 0.24 * edges : 0, top: 0.12 * edges, bottom: 0.14 * edges }, px, cols, rows);
+        return { x: box.x * px, y: box.y * px, w: box.w * px, h: box.h * px }; // only the frame holds dots
+      },
+      still,
+      2, // as fine on phones as on wide screens: coarser, the drawing no longer reads
+      true,
+    );
+
+    scenes.hero = {
+      el: stage,
+      measure(m) {
+        rest = boxIn(visual, stage.getBoundingClientRect());
+        screen = { x: 0, y: 0, w: m.vw, h: m.vh };
+        wide = m.wide;
+        measured = true;
+      },
+      apply(v) {
+        q = v;
+        // Title and logos fade as they're pushed away, out to the left: as far
+        // as the opening frame's edge goes (on phones, where it opens upward
+        // and downward, a third of the screen's width).
+        const clear = smooth(0.06, 0.3, q);
+        const { open, box } = opening();
+        const push = wide ? rest.x - box.x : open * screen.w * 0.34;
         for (const el of fading) {
           set(
             el,
@@ -99,25 +107,10 @@
             clear > 0.5 ? "none" : "",
           );
         }
-        if (cover?.dataset.shown === "on") return false;
-
-        // He stops walking as the camera comes up to him; the world stops with him.
-        pace += (1 - smooth(0.04, 0.3, q) - pace) * Math.min(1, dt * 6);
-        advance(scene, dt, pace);
-        hiker.phase += dt / 1.1;
-        hiker.amp = still ? 0 : 1 - smooth(0.16, 0.42, q);
-
-        film(tone, VIEW, box, DIVE ** dive, focus, smooth(0.24, 0.7, q), screen, px);
-        drawHeroTone(tone, scene, hiker, cols, rows);
-        // At rest the drawing melts into the page on its edges (left on wide
-        // screens), as its frame did; the edges go as the frame opens.
-        const edges = 1 - open;
-        frame(tone, box, { left: desktop.matches ? 0.24 * edges : 0, top: 0.12 * edges, bottom: 0.14 * edges }, px, cols, rows);
-        return { x: box.x * px, y: box.y * px, w: box.w * px, h: box.h * px }; // only the frame holds dots
       },
-      still,
-      2, // as fine on phones as on wide screens: coarser, the drawing no longer reads
-    );
+      draw: dots.draw,
+      dots,
+    };
   }
 </script>
 
@@ -130,5 +123,13 @@
     height: 100%;
     color: var(--color-accent); /* the dots' ink */
     pointer-events: none;
+  }
+  /* In the theatre (HomeContent.astro) the hero only reaches the foot of the
+     screen with its toolbars showing; the dots run on to its full height, so
+     they cover the whole theatre whatever the toolbars do. */
+  :global([data-theatre-wrap][data-seq="on"]) .hero-dots {
+    bottom: auto;
+    height: 100vh;
+    height: 100lvh;
   }
 </style>
