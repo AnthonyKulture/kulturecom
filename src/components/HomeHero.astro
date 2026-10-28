@@ -6,6 +6,7 @@ import { fromPrice } from "~/lib/facts";
 import { CLIENT_LOGOS } from "~/lib/clients";
 import HeroDots from "~/components/HeroDots.astro";
 import HeroScene from "~/components/HeroScene.astro";
+import GoogleRating from "~/components/GoogleRating.astro";
 
 interface Props {
   lang: Lang;
@@ -54,6 +55,14 @@ const SHOW_DOORS = false;
     <p data-intro-item data-intro-box="COPY" data-intro-text style="--i:3" class="mt-4 max-w-[54ch] text-balance text-body text-[var(--color-ink-muted)] md:mt-5">
       {c.sub}
     </p>
+
+    {/* The way in (the guided form, ProjectDialog.astro), the Google rating
+        beside it. The nav's own steps aside while this one is there (script
+        below). */}
+    <div data-intro-item style="--i:4" class="hero-cta mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 md:mt-8">
+      <a href="#contact" data-project-open data-hero-cta data-intro-box="CTA" class="btn btn-primary">{lang === "fr" ? "Démarrer un projet" : "Start a project"} <span aria-hidden="true">→</span></a>
+      <GoogleRating lang={lang} class="text-small text-[var(--color-ink-muted)]" />
+    </div>
     </div>
 
     {/* The drawing's place: the camera frames the dot scene here at rest;
@@ -451,18 +460,26 @@ const SHOW_DOORS = false;
      screen and its dive can play (home-seq.ts only plays it then). */
   @media (max-width: 767px) and (max-height: 740px) {
     .hero-visual {
-      min-height: 150px;
+      min-height: 80px;
       margin-top: 12px;
+    }
+    .hero-cta {
+      margin-top: 16px;
+      row-gap: 8px;
     }
     .hero-middle {
       padding-block: 16px;
     }
   }
-  /* Shorter still (iPhone SE class, toolbars showing): less drawing again, so
-     the hero still holds in one screen. */
+  /* Shorter still (iPhone SE class, toolbars showing): less drawing again,
+     and the client logos make way (the Google rating stays the hero's proof),
+     so the hero still holds in one screen. */
   @media (max-width: 767px) and (max-height: 620px) {
     .hero-visual {
-      min-height: 96px;
+      min-height: 72px;
+    }
+    .logo-marquee {
+      display: none;
     }
   }
   @media (min-width: 640px) {
@@ -645,5 +662,24 @@ const SHOW_DOORS = false;
     } else {
       play();
     }
+  }
+
+  // The nav's "Démarrer un projet" steps aside while the hero's own is there
+  // to be clicked (Nav.astro): on screen, and not yet cleared away by the
+  // dive (HeroDots.astro turns the hero's text off to the pointer as it
+  // fades). The page is marked once it is gone.
+  const cta = document.querySelector<HTMLElement>("[data-hero-cta]");
+  const text = cta?.closest<HTMLElement>("[data-hero-fade]");
+  if (cta && text) {
+    const root = document.documentElement;
+    let inView = true;
+    const update = (): void => {
+      root.toggleAttribute("data-hero-cta-gone", !inView || text.style.pointerEvents === "none");
+    };
+    new IntersectionObserver(([e]) => {
+      inView = e.isIntersecting;
+      update();
+    }).observe(cta);
+    new MutationObserver(update).observe(text, { attributes: true, attributeFilter: ["style"] });
   }
 </script>
