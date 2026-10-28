@@ -10,7 +10,7 @@
  *   BREVO_API_KEY  secret, Brevo API key, used only without RESEND_API_KEY
  *   LEAD_FROM      sender on the domain verified with the provider,
  *                  e.g. hello@anthonyprofit.com
- *   LEAD_TO        recipient (optional, defaults to contact@kulturecom.fr)
+ *   LEAD_TO        recipient (optional, defaults to anthony@anthonyprofit.com)
  *
  * Without them the endpoint answers 503 and the form shows its prefilled
  * e-mail / WhatsApp fallback, so no request is lost.
@@ -161,7 +161,7 @@ export async function onRequestPost({ request, env }: { request: Request; env: E
       ? `[RAPPEL] ${phone}${name ? ` · ${name}` : ""}`
       : `[Contact] ${NEEDS[need] ?? "Projet"}${budget ? ` · ${budget}` : ""} · ${name}`;
 
-  const to = env.LEAD_TO || "contact@kulturecom.fr";
+  const to = env.LEAD_TO || "anthony@anthonyprofit.com";
   const text = lines.join("\n");
   const provider = env.RESEND_API_KEY ? "resend" : "brevo";
   const res =
@@ -216,7 +216,7 @@ function reply(status: number, isJson: boolean, error?: string, id?: string): Re
   const ok = status === 200;
   const text = ok
     ? "Merci, votre demande est bien reçue. Je vous réponds sous 48 h ouvrées."
-    : "L'envoi n'a pas abouti. Écrivez-moi à contact@kulturecom.fr ou sur WhatsApp au +33 6 60 50 16 82.";
+    : "L'envoi n'a pas abouti. Écrivez-moi à anthony@anthonyprofit.com ou sur WhatsApp au +33 6 60 50 16 82.";
   const html = `<!doctype html><html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>${ok ? "Merci" : "Envoi impossible"}</title><body style="margin:0;padding:48px 20px;font:18px/1.5 system-ui,sans-serif;background:#efe9dc;color:#0b0b0b"><p>${text}</p><p><a href="/" style="color:inherit">Retour au site</a></p></body></html>`;
   return new Response(html, { status, headers: { "content-type": "text/html; charset=utf-8" } });
 }

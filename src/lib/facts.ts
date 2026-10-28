@@ -8,7 +8,7 @@ import type { ServiceId } from "~/lib/service-pages";
  * trust problem.
  */
 export const CONTACT = {
-  email: "contact@kulturecom.fr",
+  email: "anthony@anthonyprofit.com",
   phoneDisplay: "+33 6 60 50 16 82",
   phoneHref: "tel:+33660501682",
   /** wa.me format: digits only, country code first. */

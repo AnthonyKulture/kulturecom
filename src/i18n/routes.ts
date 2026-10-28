@@ -73,7 +73,7 @@ export const routes: Record<string, RouteMeta> = {
     pageType: "ContactPage",
     title: `Contact — discutons de votre projet web | Anthony Profit`,
     description:
-      "Un projet de site sur-mesure, une refonte ou du SEO ? Écrivez-moi à contact@kulturecom.fr ou sur WhatsApp. Réponse sous 48 h ouvrées.",
+      "Un projet de site sur-mesure, une refonte ou du SEO ? Écrivez-moi à anthony@anthonyprofit.com ou sur WhatsApp. Réponse sous 48 h ouvrées.",
   },
   "/mentions-legales/": {
     lang: "fr",
@@ -224,7 +224,7 @@ export const routes: Record<string, RouteMeta> = {
     pageType: "ContactPage",
     title: `Contact — let's talk about your web project | Anthony Profit`,
     description:
-      "A custom website, a redesign or SEO work? Email contact@kulturecom.fr or reach me on WhatsApp. Reply within 48 business hours.",
+      "A custom website, a redesign or SEO work? Email anthony@anthonyprofit.com or reach me on WhatsApp. Reply within 48 business hours.",
   },
   "/en/legal-notice/": {
     lang: "en",
