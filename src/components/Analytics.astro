@@ -21,10 +21,12 @@
     analytics_storage: 'denied',
     wait_for_update: 500,
   });
-  // Restore a previously granted choice before the first measurement hit.
+  // Restore a previously granted choice before the first measurement hit:
+  // audience and ad measurement (Google Ads counts the leads its clicks bring),
+  // never ad personalization.
   try {
-    if (localStorage.getItem('ap-consent') === 'granted') {
-      gtag('consent', 'update', { analytics_storage: 'granted' });
+    if (localStorage.getItem('ap-consent-2') === 'granted') {
+      gtag('consent', 'update', { analytics_storage: 'granted', ad_storage: 'granted', ad_user_data: 'granted' });
     }
   } catch (e) {}
   // Measure the live site only: localhost (dev, astro preview) and other
@@ -40,7 +42,7 @@
     if (!sessionStorage.getItem('ap-attrib')) {
       var q = new URLSearchParams(location.search);
       var attrib = { landing: location.pathname };
-      ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'oppref', 'gclid'].forEach(function (k) {
+      ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'oppref', 'gclid', 'gbraid', 'wbraid'].forEach(function (k) {
         var v = q.get(k);
         if (v) attrib[k] = v.slice(0, 120);
       });

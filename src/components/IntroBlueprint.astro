@@ -2,14 +2,18 @@
 // Blueprint entry animation for the home page (see src/lib/intro.ts), once per
 // visit (a refresh starts back at the top). The inline script decides BEFORE
 // first paint whether it plays: not with reduced motion, nor when it already
-// played in this tab. Nothing renders when it doesn't.
+// played in this tab, nor for a visit that came from an ad (the drawing would
+// hide the message for ~5 s from a paid click). Nothing renders when it doesn't.
 ---
 
 <script is:inline>
   (function () {
     try {
       var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if (!reduce && sessionStorage.getItem("ap-intro") !== "seen") {
+      // The visit's first-touch campaign data, stored by Analytics.astro (head).
+      var a = JSON.parse(sessionStorage.getItem("ap-attrib") || "{}");
+      var ad = a.gclid || a.gbraid || a.wbraid || a.oppref || /^(cpc|ppc|paid)/i.test(a.utm_medium || "");
+      if (!reduce && !ad && sessionStorage.getItem("ap-intro") !== "seen") {
         sessionStorage.setItem("ap-intro", "seen");
         document.documentElement.classList.add("intro-on");
         // A refresh starts from the top so the drawing lines up with the page.

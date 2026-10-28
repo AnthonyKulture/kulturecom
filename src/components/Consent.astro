@@ -1,8 +1,10 @@
 ---
 // RGPD/CNIL consent banner. Shown until the visitor accepts or declines; the
-// choice is stored in localStorage ('ap-consent'). "Accept" calls Consent Mode
-// v2 update → granted (GA4 may then set cookies); "Decline" keeps it denied
-// (GA4 stays cookieless). Pairs with Analytics.astro.
+// choice is stored in localStorage ('ap-consent-2': 'ap-consent' only covered
+// audience measurement, so earlier visitors are asked again). "Accept" calls
+// Consent Mode v2 update → audience and ad measurement granted (GA4 and the
+// Google Ads click cookie), ad personalization stays denied; "Decline" keeps
+// it all denied (GA4 stays cookieless). Pairs with Analytics.astro.
 import type { Lang } from "~/i18n/ui";
 
 interface Props {
@@ -13,7 +15,7 @@ const { lang } = Astro.props;
 const t =
   lang === "fr"
     ? {
-        text: "Ce site utilise des cookies de mesure d'audience (Google Analytics) pour comprendre son trafic.",
+        text: "Ce site utilise des cookies (Google Analytics, Google Ads) pour mesurer son audience et ses publicités.",
         accept: "Accepter",
         decline: "Refuser",
         privacy: "En savoir plus",
@@ -21,7 +23,7 @@ const t =
         aria: "Consentement aux cookies",
       }
     : {
-        text: "This site uses analytics cookies (Google Analytics) to understand its traffic.",
+        text: "This site uses cookies (Google Analytics, Google Ads) to measure its traffic and its ads.",
         accept: "Accept",
         decline: "Decline",
         privacy: "Learn more",
@@ -66,7 +68,7 @@ const t =
 
 <script is:inline>
   (function () {
-    var KEY = "ap-consent";
+    var KEY = "ap-consent-2";
     var el = document.querySelector("[data-consent-banner]");
     if (!el) return;
     var stored = null;
@@ -80,7 +82,7 @@ const t =
         localStorage.setItem(KEY, value);
       } catch (e) {}
       if (value === "granted" && typeof window.gtag === "function") {
-        window.gtag("consent", "update", { analytics_storage: "granted" });
+        window.gtag("consent", "update", { analytics_storage: "granted", ad_storage: "granted", ad_user_data: "granted" });
       }
       el.hidden = true;
     }
