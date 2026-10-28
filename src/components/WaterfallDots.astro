@@ -264,7 +264,7 @@
         if (water) parts.push([tl.water0, tl.water1, (tl.water1 - tl.water0) / (phone ? TIME.water.phone : TIME.water.wide)]);
         if (on) fit();
         measured = true;
-        return { end: tl.water1, len: Math.round(tl.water1 + 0.03 * vh) };
+        return { end: tl.water1, len: Math.round(tl.water1 + 0.03 * vh), rest: tl.water0 };
       },
       rate,
       time: span,

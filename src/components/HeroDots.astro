@@ -64,10 +64,11 @@
         // only at the very end: the cut to section 2 is a flash.
         const dive = clamp01((q - 0.24) / 0.76) ** 1.6;
 
-        // He stops walking as the camera comes up to him; the world stops with him.
+        // He stops walking as the camera comes up to him; the world stops with
+        // him, his steps slowing with it.
         pace += (1 - smooth(0.04, 0.3, q) - pace) * Math.min(1, dt * 6);
         advance(scene, dt, pace);
-        hiker.phase += dt / 1.1;
+        hiker.phase += (dt * pace) / 1.1;
         hiker.amp = still ? 0 : 1 - smooth(0.16, 0.42, q);
 
         film(tone, VIEW, box, PACK.dive ** dive, focus, smooth(0.24, 0.7, q), screen, px);

@@ -59,10 +59,11 @@ export interface HeroScene {
 
 /** Section 2, on a timeline `at` in px of scroll, from inside the pack to
  *  its end at `end` (the water full, with `water`: Projets follows as a
- *  layer); the theatre holds it `len` px in all. */
+ *  layer); the theatre holds it `len` px in all. Its text is all in at
+ *  `rest` (where the water starts). */
 export interface ApproachScene {
   el: HTMLElement;
-  measure(m: Metrics, water: boolean): { end: number; len: number };
+  measure(m: Metrics, water: boolean): { end: number; len: number; rest: number };
   /** Its own pace at `at`, px a second. */
   rate(at: number): number;
   /** How long it takes, at its own pace, to go from `a` to `b` (s). */
@@ -135,6 +136,9 @@ const RECLAIM = 300; // ms without scrolling before the slack is given back
 // A jump (the contact CTA, Home, End) has landed once its scroll has ended,
 // or not moved for this long (ms), and at the latest after the other.
 const LANDED = { still: 150, max: 2000 };
+// The hint to scroll on shows once the reader has been still this long (ms)
+// where the sequences wait on the scroll to go on.
+const HINT = 1500;
 
 /** Take the home's sequences over, once every component script has run. */
 export function startHome(): void {
@@ -156,6 +160,7 @@ function direct(): void {
   const wrap = document.querySelector<HTMLElement>("[data-theatre-wrap]");
   const theatre = wrap?.querySelector<HTMLElement>(":scope > [data-theatre]");
   const spacer = wrap?.querySelector<HTMLElement>(":scope > [data-theatre-spacer]");
+  const hint = theatre?.querySelector<HTMLElement>(":scope > [data-seq-hint]");
   if (!hero || !approach || !work || !climb || !wrap || !theatre || !spacer) return;
   const root = document.documentElement;
   const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -174,6 +179,7 @@ function direct(): void {
   let La = 0;
   let Lw = 0;
   let aEnd = 0;
+  let aRest = 0; // section 2's text all in
   let E = 0;
   let S = 0;
   let slack = 0; // what S is while they play
@@ -196,6 +202,7 @@ function direct(): void {
   let raf = 0;
   let last = 0;
   let moved = 0; // when the scroll last moved (ms)
+  let calm = 0; // when the reader last wasn't still where they wait on the scroll (ms)
   let frozen = 0; // a jump is flying over the sequences: until when at the latest (ms)
   let flown = false; // its scroll has moved
   let landed = false; // and has ended
@@ -271,6 +278,7 @@ function direct(): void {
     work.measure(m, layered);
     Lh = Math.max(1, Math.round((m.phone ? HERO.phone : HERO.wide) * m.vh));
     aEnd = tl.end;
+    aRest = tl.rest;
     La = tl.len;
     Lw = layered ? Math.round(WORK * m.vh) : 0;
     E = Lh + La + Lw;
@@ -310,6 +318,7 @@ function direct(): void {
     S = 0;
     spacer.style.height = "";
     hold = false;
+    hint?.removeAttribute("data-show");
     delete root.dataset.seqLayer;
     delete root.dataset.seqHold;
     delete wrap.dataset.seqRest;
@@ -494,6 +503,19 @@ function direct(): void {
       hold = !hold;
       if (hold) root.dataset.seqHold = "on";
       else delete root.dataset.seqHold;
+    }
+    // The hint to scroll on, once the reader has been still a while where the
+    // sequences wait on the scroll to go on (the hero, section 2 until its
+    // text is all in): not while they play, at their end, nor under the
+    // page's entry animation.
+    if (hint) {
+      const waits = !frozen && now !== moved && q === q0 && at === a0 && (q < 1 || (at < aEnd && at <= aRest)) && !root.classList.contains("intro-on");
+      if (!waits) calm = now;
+      const shown = now - calm > HINT;
+      if (shown !== hint.hasAttribute("data-show")) {
+        if (shown) hint.dataset.step = q < 1 ? "hero" : "approach";
+        hint.toggleAttribute("data-show", shown);
+      }
     }
     show();
 
