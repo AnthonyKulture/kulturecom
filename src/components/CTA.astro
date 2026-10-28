@@ -13,11 +13,16 @@ interface Props {
   // Pre-selected need (a service page passes its id): the form then opens on
   // the contact step, one click shorter.
   need?: string;
+  // The classic form, on the /contact/ page (where the "Démarrer un projet"
+  // links lead without JS). At the foot of the other pages, only the button
+  // that opens the guided form (ProjectDialog.astro) and the contact details.
+  form?: boolean;
 }
 
-const { lang, headingLevel = 2, need } = Astro.props;
+const { lang, headingLevel = 2, need, form = false } = Astro.props;
 const f = getFormContent(lang);
 const Heading = `h${headingLevel}` as "h1" | "h2";
+const contactHref = lang === "fr" ? "/contact/" : "/en/contact/";
 
 const mailtoHref = `mailto:${CONTACT.email}?subject=${encodeURIComponent(f.mailSubject)}`;
 const whatsappHref = `https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(f.whatsappMessage)}`;
@@ -47,8 +52,9 @@ const clientStrings = {
   <div class="mx-auto w-full max-w-[var(--container-wide)]">
     <Eyebrow label={lang === "fr" ? "Dernière planche · Contact" : "Last sheet · Contact"} class="mb-8 md:mb-10" />
   </div>
-  {/* 30 / 70: the form gets most of the width. */}
-  <div class="mx-auto grid w-full max-w-[var(--container-wide)] gap-10 lg:grid-cols-[3fr_7fr] lg:gap-14">
+  {/* With the form, 30 / 70: the form gets most of the width. Without, the
+      button under the title, the contact details beside it. */}
+  <div class:list={["mx-auto grid w-full max-w-[var(--container-wide)] gap-10 lg:gap-14", form ? "lg:grid-cols-[3fr_7fr]" : "lg:grid-cols-2"]}>
     <div>
       <Heading id="contact-title" class="cta-in font-display text-title text-[var(--color-ink)]" style="--i:0">
         <span class="block">{f.title[0]}</span>
@@ -58,15 +64,22 @@ const clientStrings = {
         <GoogleRating lang={lang} class="mt-5 text-small text-[var(--color-ink)]" />
       </div>
 
+      {form ? (
       <div class="cta-in mt-8 hidden flex-col gap-3 lg:flex" style="--i:2">
         <p class="font-label text-small uppercase tracking-[0.06em] text-[var(--color-ink-muted)]">{f.orWrite}</p>
         <a href={mailtoHref} class="alt-contact">{f.emailLabel} <span>{CONTACT.email}</span></a>
         <a href={whatsappHref} target="_blank" rel="noopener noreferrer" class="alt-contact">{f.whatsappLabel} <span>{CONTACT.phoneDisplay}</span></a>
         <button type="button" data-callback-open class="alt-contact text-left">{f.callbackLabel} <span aria-hidden="true">→</span></button>
       </div>
+      ) : (
+      <div class="cta-in mt-8" style="--i:2">
+        <a href={contactHref} data-project-open={need ?? ""} class="btn btn-primary">{lang === "fr" ? "Démarrer un projet" : "Start a project"} <span aria-hidden="true">→</span></a>
+      </div>
+      )}
     </div>
 
     <div class="cta-in" style="--i:1">
+      {form && (
       <form
         data-lead-form
         data-need={need}
@@ -152,8 +165,9 @@ const clientStrings = {
           </div>
         </div>
       </form>
+      )}
 
-      <div class="mt-8 flex flex-col gap-3 lg:hidden">
+      <div class:list={["flex flex-col gap-3", form && "mt-8 lg:hidden"]}>
         <p class="font-label text-small uppercase tracking-[0.06em] text-[var(--color-ink-muted)]">{f.orWrite}</p>
         <a href={mailtoHref} class="alt-contact">{f.emailLabel} <span>{CONTACT.email}</span></a>
         <a href={whatsappHref} target="_blank" rel="noopener noreferrer" class="alt-contact">{f.whatsappLabel} <span>{CONTACT.phoneDisplay}</span></a>
