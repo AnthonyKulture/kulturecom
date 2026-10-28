@@ -76,8 +76,10 @@
   html {
     color-scheme: light;
     font-family: var(--font-sans);
-    /* No rubber-band overscroll (Mac Chrome) on the cream page. */
-    overscroll-behavior: none;
+    /* No rubber-band overscroll (Mac Chrome) on the cream page, up and down
+       only: sideways, the overscroll is the trackpad's two-finger swipe back
+       and forward through history. */
+    overscroll-behavior-y: none;
     /* Clip horizontal overflow at the ROOT with `clip` (not `hidden`): no scroll
        container is created, so the viewport keeps scrolling natively. */
     overflow-x: clip;
@@ -104,7 +106,7 @@
        stays `visible` and the viewport scrolls natively again. Safari/touch
        propagate differently and were unaffected. */
     overflow-x: clip;
-    overscroll-behavior: none;
+    overscroll-behavior-y: none;
   }
 
   ::selection {
