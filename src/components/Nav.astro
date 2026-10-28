@@ -52,10 +52,16 @@ const instagramUrl = "https://www.instagram.com/antho_profit/";
 const behanceUrl = "https://www.behance.net/anthonyprofit";
 const path = Astro.url.pathname;
 const isCurrent = (href: string): boolean => path === href || (href !== homeHref && path.startsWith(href));
+// The name, a letter at a time: they come in one after the other on arrival
+// (`c`), and all but the initials fold away once the page is scrolled (`k`,
+// their place in the fold).
+const letters = (word: string, from: number) => [...word].map((ch, k) => ({ ch, c: from + k, k }));
 ---
 
-{/* Smart nav — transparent at the top, cream + hairline once scrolled; hides
-    on scroll-down, comes back on scroll-up. */}
+{/* Smart nav. At the top: transparent, the name in full. Once scrolled: a
+    floating bar between the page's side guides, with crop marks, and the
+    name folds into its initials (A•P), unfolding again under the pointer.
+    Hides on scroll-down, comes back on scroll-up. */}
 <header
   data-nav-smart
   data-hidden="false"
@@ -65,23 +71,23 @@ const isCurrent = (href: string): boolean => path === href || (href !== homeHref
   <nav
     data-intro-item
     style="--i:0"
-    class="mx-auto flex h-16 w-full max-w-[var(--container-wide)] items-center justify-between gap-4 px-4 sm:px-6 md:h-[72px] md:px-12"
+    class="nav-row mx-auto h-16 w-full max-w-[var(--container-wide)] gap-4 px-4 sm:px-6 md:h-[72px] md:px-12"
     aria-label={fr ? "Navigation principale" : "Main navigation"}
   >
-    <a href={homeHref} aria-label="Anthony Profit" data-intro-box="LOGO" class="inline-flex shrink-0 items-baseline text-[var(--color-ink)] no-underline">
-      <span class="font-display text-[21px] leading-none tracking-[-0.02em] max-[379px]:text-[18px] md:text-[23px]">Anthony<span aria-hidden="true" class="mx-[0.2em] inline-block size-[0.22em] rounded-full bg-[var(--color-accent)] align-[0.14em]"></span>Profit</span>
+    <a href={homeHref} aria-label="Anthony Profit" data-intro-box="LOGO" class="brand justify-self-start text-[var(--color-ink)] no-underline">
+      <span aria-hidden="true" class="font-display text-[21px] leading-none tracking-[-0.02em] max-[379px]:text-[18px] md:text-[23px]"><span class="b-ch" style="--c:0">A</span><span class="b-fold"><span>{letters("nthony", 1).map((l) => <span class="b-ch" style={`--c:${l.c};--k:${l.k}`}>{l.ch}</span>)}</span></span><span class="b-dot"></span><span class="b-ch" style="--c:7">P</span><span class="b-fold"><span>{letters("rofit", 8).map((l) => <span class="b-ch" style={`--c:${l.c};--k:${l.k}`}>{l.ch}</span>)}</span></span></span>
     </a>
 
-    <div data-intro-box="NAV" class="hidden items-center gap-7 lg:flex">
+    <div data-intro-box="NAV" class="hidden items-center gap-8 lg:flex">
       <div class="nav-dd" data-dd>
-        <button type="button" class="nav-link inline-flex items-center gap-1.5" aria-expanded="false" aria-controls="nav-services" data-dd-toggle>
-          {t.nav.services}
-          <svg aria-hidden="true" viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 4.5 L6 8.5 L10 4.5" /></svg>
+        <button type="button" class="nav-link nav-item inline-flex items-center gap-1.5" style="--n:0" aria-expanded="false" aria-controls="nav-services" data-dd-toggle>
+          <span class="roll"><span>{t.nav.services}</span><span aria-hidden="true">{t.nav.services}</span></span>
+          <svg class="dd-chevron" aria-hidden="true" viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 4.5 L6 8.5 L10 4.5" /></svg>
         </button>
         <div id="nav-services" class="nav-dd-panel" data-dd-panel>
           <ul class="grid gap-1">
-            {services.map((s) => (
-              <li>
+            {services.map((s, i) => (
+              <li style={`--n:${i}`}>
                 <a href={s.href} class="dd-item">
                   <span class="flex flex-col">
                     <span class="text-[15px] font-medium">{s.title}</span>
@@ -95,14 +101,23 @@ const isCurrent = (href: string): boolean => path === href || (href !== homeHref
           <a href={servicesHref} class="mt-2 block px-3 py-2 font-label text-[13px] uppercase tracking-[0.06em] underline underline-offset-4 hover:text-[var(--color-accent)]">{allServices}</a>
         </div>
       </div>
-      {links.map((l) => (
-        <a href={l.href} class="nav-link" aria-current={isCurrent(l.href) ? "page" : undefined}>{l.label}</a>
+      {links.map((l, i) => (
+        <a href={l.href} class="nav-link nav-item" style={`--n:${i + 1}`} aria-current={isCurrent(l.href) ? "page" : undefined}>
+          <span class="roll"><span>{l.label}</span><span aria-hidden="true">{l.label}</span></span>
+        </a>
       ))}
     </div>
 
-    <div class="flex items-center gap-4 sm:gap-5">
-      <a href={contactHref} data-project-open data-intro-box="CTA" class="nav-cta hidden sm:inline-flex">{ctaLabel}</a>
-      <span class="font-label inline-flex items-center gap-1 text-[13px] uppercase tracking-[0.06em] sm:text-[14px]">
+    <div class="flex items-center justify-self-end gap-4 sm:gap-5">
+      <a href={contactHref} data-project-open data-intro-box="CTA" class="nav-cta nav-item hidden sm:inline-flex" style="--n:4">
+        <span class="cta-label"><span class="roll"><span>{ctaLabel}</span><span aria-hidden="true">{ctaLabel}</span></span></span>
+        <span class="cta-arrow" aria-hidden="true">
+          {[0, 1].map(() => (
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8h11M9 4l4 4-4 4" /></svg>
+          ))}
+        </span>
+      </a>
+      <span class="nav-item font-label inline-flex items-center gap-1 text-[13px] uppercase tracking-[0.06em] sm:text-[14px]" style="--n:5">
         <a href={enHref} hreflang="en" aria-current={lang === "en" ? "page" : undefined} class:list={["no-underline hover:underline underline-offset-4", lang === "en" ? "font-bold" : "opacity-60 hover:opacity-100"]}>EN</a>
         <span aria-hidden="true" class="opacity-60">/</span>
         <a href={frHref} hreflang="fr" aria-current={lang === "fr" ? "page" : undefined} class:list={["no-underline hover:underline underline-offset-4", lang === "fr" ? "font-bold" : "opacity-60 hover:opacity-100"]}>FR</a>
@@ -113,7 +128,8 @@ const isCurrent = (href: string): boolean => path === href || (href !== homeHref
         aria-expanded="false"
         aria-controls="mobile-menu"
         aria-label={menuLabel}
-        class="burger -mr-1 grid h-10 w-7 place-items-center text-[var(--color-ink)] lg:hidden"
+        class="burger nav-item -mr-1 grid h-10 w-7 place-items-center text-[var(--color-ink)] lg:hidden"
+        style="--n:5"
       >
         <span class="burger-box" aria-hidden="true">
           <span class="burger-line"></span>
@@ -188,39 +204,241 @@ const isCurrent = (href: string): boolean => path === href || (href !== homeHref
 <style is:global>
   .site-nav {
     color: var(--color-ink);
-    transition:
-      transform 0.5s var(--ease-power3),
-      background-color 0.3s var(--ease-power3),
-      border-color 0.3s var(--ease-power3);
-    border-bottom: 1px solid transparent;
-  }
-  .site-nav[data-scrolled="true"] {
-    background: color-mix(in srgb, var(--color-bg) 90%, transparent);
-    border-bottom-color: color-mix(in srgb, var(--color-ink) 10%, transparent);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    transition: transform 0.5s var(--ease-power3);
   }
   .site-nav[data-hidden="true"] {
     transform: translateY(-100%);
   }
+  /* The row: the name, the links in the middle of the screen, the actions. */
+  .nav-row {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+  @media (min-width: 1024px) {
+    .nav-row {
+      grid-template-columns: 1fr auto 1fr;
+    }
+  }
+  /* Once scrolled, a floating bar from one side guide of the page to the
+     other (global.css), crop marks just outside its corners (as `.marks`). */
+  .nav-row::before,
+  .nav-row::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0;
+    transition:
+      opacity 0.35s var(--ease-power3),
+      transform 0.6s var(--ease-power3);
+  }
+  .nav-row::before {
+    inset: 6px calc(var(--page-pad) / 2);
+    border: 1px solid color-mix(in srgb, var(--color-ink) 9%, transparent);
+    background: color-mix(in srgb, var(--color-bg) 86%, transparent);
+    box-shadow: 0 12px 32px -20px rgb(16 37 70 / 0.35);
+    backdrop-filter: blur(14px) saturate(1.3);
+    -webkit-backdrop-filter: blur(14px) saturate(1.3);
+    transform: translateY(-6px) scale(0.99);
+  }
+  @media (min-width: 768px) {
+    .nav-row::before {
+      inset: 10px calc(var(--page-pad) / 2);
+    }
+    .nav-row::after {
+      --m: var(--color-line);
+      inset: 0 calc(var(--page-pad) / 2 - 10px);
+      background:
+        linear-gradient(var(--m), var(--m)) left 0 top 10px / 6px 1px no-repeat,
+        linear-gradient(var(--m), var(--m)) left 10px top 0 / 1px 6px no-repeat,
+        linear-gradient(var(--m), var(--m)) right 0 top 10px / 6px 1px no-repeat,
+        linear-gradient(var(--m), var(--m)) right 10px top 0 / 1px 6px no-repeat,
+        linear-gradient(var(--m), var(--m)) left 0 bottom 10px / 6px 1px no-repeat,
+        linear-gradient(var(--m), var(--m)) left 10px bottom 0 / 1px 6px no-repeat,
+        linear-gradient(var(--m), var(--m)) right 0 bottom 10px / 6px 1px no-repeat,
+        linear-gradient(var(--m), var(--m)) right 10px bottom 0 / 1px 6px no-repeat;
+    }
+  }
+  .site-nav[data-scrolled="true"] .nav-row::before,
+  .site-nav[data-scrolled="true"] .nav-row::after {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ===== The name ===== Its letters come in one after the other on arrival,
+     the dot last. Scrolled, all but the initials fold away (A•P), and come
+     back under the pointer. */
+  .brand {
+    display: inline-flex;
+    align-items: baseline;
+  }
+  .b-ch {
+    display: inline-block;
+    animation: b-in 0.8s var(--ease-power3) backwards;
+    animation-delay: calc(0.12s + var(--c) * 35ms);
+  }
+  .b-dot {
+    display: inline-block;
+    width: 0.22em;
+    height: 0.22em;
+    margin-inline: 0.2em;
+    border-radius: 50%;
+    background: var(--color-accent);
+    vertical-align: 0.14em;
+    animation: b-dot 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.68s backwards;
+  }
+  @keyframes b-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.45em);
+      filter: blur(4px);
+    }
+  }
+  @keyframes b-dot {
+    from {
+      transform: scale(0);
+    }
+  }
+  .b-fold {
+    display: inline-grid;
+    grid-template-columns: 1fr;
+    transition: grid-template-columns 0.7s var(--ease-power3);
+  }
+  .b-fold > span {
+    min-width: 0;
+    white-space: nowrap;
+    /* Clipped sideways only, so the y keeps its tail. */
+    clip-path: inset(-0.4em 0 -0.4em 0);
+  }
+  .b-fold .b-ch {
+    transition:
+      opacity 0.35s var(--ease-power3),
+      transform 0.5s var(--ease-power3);
+    transition-delay: calc(var(--k) * 25ms);
+  }
+  .site-nav[data-scrolled="true"] .b-fold {
+    grid-template-columns: 0fr;
+  }
+  .site-nav[data-scrolled="true"] .b-fold .b-ch {
+    opacity: 0;
+    transform: translateX(-0.25em);
+    transition-delay: 0s;
+  }
+  @media (hover: hover) {
+    .site-nav[data-scrolled="true"] .brand:hover .b-fold {
+      grid-template-columns: 1fr;
+    }
+    .site-nav[data-scrolled="true"] .brand:hover .b-fold .b-ch {
+      opacity: 1;
+      transform: none;
+      transition-delay: calc(var(--k) * 25ms);
+    }
+  }
+  .site-nav[data-scrolled="true"] .brand:focus-visible .b-fold {
+    grid-template-columns: 1fr;
+  }
+  .site-nav[data-scrolled="true"] .brand:focus-visible .b-fold .b-ch {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* The rest of the bar comes in after the name. */
+  .nav-item {
+    animation: nav-in 0.7s var(--ease-power3) backwards;
+    animation-delay: calc(0.5s + var(--n, 0) * 60ms);
+  }
+  @keyframes nav-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+  }
+  /* Under the home's entry animation, all of it waits for the page to be
+     revealed (IntroBlueprint.astro). */
+  html.intro-on:not(.intro-reveal) .site-nav :is(.b-ch, .b-dot, .nav-item) {
+    animation-play-state: paused;
+  }
+
+  /* ===== Links ===== The label rolls up to a copy of itself; the page shown
+     (and the one pointed at) gets the name's dot under it. */
   .nav-link {
+    position: relative;
     font-size: 15px;
     font-weight: 500;
     color: var(--color-ink);
     text-decoration: none;
     cursor: pointer;
-    text-underline-offset: 6px;
   }
-  .nav-link:hover,
-  .nav-link[aria-current="page"],
-  .nav-link[aria-expanded="true"] {
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
+  .roll {
+    display: inline-grid;
+    overflow: hidden;
   }
+  .roll > span {
+    grid-area: 1 / 1;
+    transition: transform 0.5s var(--ease-power3);
+  }
+  .roll > span + span {
+    transform: translateY(105%);
+  }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -9px;
+    width: 4px;
+    height: 4px;
+    margin-left: -2px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    transform: scale(0);
+    transition: transform 0.4s var(--ease-power3);
+  }
+  .nav-dd .nav-link::after {
+    margin-left: -9px; /* under the word, not the chevron */
+  }
+  .nav-link[aria-current="page"]::after,
+  .nav-link[aria-expanded="true"]::after,
+  .nav-link:focus-visible::after {
+    transform: none;
+  }
+  .nav-link:focus-visible .roll > span,
+  .nav-cta:focus-visible .roll > span {
+    transform: translateY(-105%);
+  }
+  .nav-link:focus-visible .roll > span + span,
+  .nav-cta:focus-visible .roll > span + span {
+    transform: none;
+  }
+  @media (hover: hover) {
+    .nav-link:hover::after {
+      transform: none;
+    }
+    .nav-link:hover .roll > span,
+    .nav-cta:hover .roll > span {
+      transform: translateY(-105%);
+    }
+    .nav-link:hover .roll > span + span,
+    .nav-cta:hover .roll > span + span {
+      transform: none;
+    }
+  }
+  .dd-chevron {
+    transition: transform 0.4s var(--ease-power3);
+  }
+  .nav-dd[data-open] .dd-chevron {
+    transform: rotate(180deg);
+  }
+
+  /* ===== "Démarrer un projet" ===== A darker blue rises through it, the
+     label rolls, the arrow in its own cell goes out and comes back in. */
   .nav-cta {
-    align-items: center;
-    padding: 10px 18px;
-    border-radius: 0;
+    position: relative;
+    isolation: isolate;
+    align-items: stretch;
+    overflow: hidden;
     background: var(--color-accent);
     color: #ffffff;
     font-size: 14px;
@@ -228,14 +446,68 @@ const isCurrent = (href: string): boolean => path === href || (href !== homeHref
     text-decoration: none;
     white-space: nowrap;
     transition:
-      background-color 0.2s var(--ease-power3),
-      transform 0.2s var(--ease-power3);
+      transform 0.3s var(--ease-power3),
+      opacity 0.4s var(--ease-power3),
+      visibility 0.4s;
   }
-  .nav-cta:hover {
+  .nav-cta::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
     background: var(--color-accent-strong);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.5s var(--ease-power3);
+  }
+  .cta-label {
+    padding: 10px 16px 10px 18px;
+  }
+  .cta-arrow {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    border-left: 1px solid rgb(255 255 255 / 0.22);
+    overflow: hidden;
+  }
+  .cta-arrow svg {
+    grid-area: 1 / 1;
+    transition: transform 0.5s var(--ease-power3);
+  }
+  .cta-arrow svg + svg {
+    transform: translateX(-200%);
+  }
+  .nav-cta:focus-visible::before {
+    transform: none;
+  }
+  .nav-cta:focus-visible .cta-arrow svg {
+    transform: translateX(200%);
+  }
+  .nav-cta:focus-visible .cta-arrow svg + svg {
+    transform: none;
+  }
+  @media (hover: hover) {
+    .nav-cta:hover::before {
+      transform: none;
+    }
+    .nav-cta:hover .cta-arrow svg {
+      transform: translateX(200%);
+    }
+    .nav-cta:hover .cta-arrow svg + svg {
+      transform: none;
+      transition-delay: 0.08s;
+    }
   }
   .nav-cta:active {
     transform: scale(0.98);
+  }
+  /* On the home it steps aside while the hero's own is there to be clicked:
+     no two of them on screen (HomeHero.astro marks the page once that one
+     is gone), and drops back in once that one is gone. */
+  html:has([data-hero-cta]):not([data-hero-cta-gone]) .nav-cta {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
   }
 
   /* Services dropdown — opens on hover (pointer) or click/keyboard. */
@@ -296,6 +568,48 @@ const isCurrent = (href: string): boolean => path === href || (href !== homeHref
   .dd-item:focus-visible {
     background: var(--color-bg-shade);
   }
+  /* A blue rule rises on the left of the service pointed at; the four come
+     in one after the other as the panel opens. */
+  .dd-item {
+    position: relative;
+  }
+  .dd-item::before {
+    content: "";
+    position: absolute;
+    top: 8px;
+    bottom: 8px;
+    left: 0;
+    width: 2px;
+    background: var(--color-accent);
+    transform: scaleY(0);
+    transition: transform 0.35s var(--ease-power3);
+  }
+  .dd-item:hover::before,
+  .dd-item:focus-visible::before {
+    transform: none;
+  }
+  .nav-dd-panel li {
+    opacity: 0;
+    transform: translateY(6px);
+    transition:
+      opacity 0.3s var(--ease-power3),
+      transform 0.45s var(--ease-power3);
+  }
+  .nav-dd[data-open] .nav-dd-panel li {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(60ms + var(--n) * 45ms);
+  }
+  @media (hover: hover) {
+    .nav-dd:hover .nav-dd-panel li {
+      opacity: 1;
+      transform: none;
+      transition-delay: calc(60ms + var(--n) * 45ms);
+    }
+    .nav-dd:hover .dd-chevron {
+      transform: rotate(180deg);
+    }
+  }
 
   /* Burger — two lines; the overlay's close button is locked to an ✕. */
   .burger-box {
@@ -352,11 +666,23 @@ const isCurrent = (href: string): boolean => path === href || (href !== homeHref
     .burger-line { transition: none; }
     .menu-inner,
     .menu-fade { transform: none; opacity: 1; }
+    .site-nav :is(.b-ch, .b-dot, .nav-item) { animation: none; }
+    .nav-row::before,
+    .nav-row::after,
+    .b-fold,
+    .b-fold .b-ch,
+    .roll > span,
+    .nav-link::after,
+    .nav-cta,
+    .nav-cta::before,
+    .cta-arrow svg,
+    .nav-dd-panel li { transition: none; }
   }
 </style>
 
 <script>
-  // Smart nav: background once scrolled; hide on scroll-down, show on scroll-up.
+  // Smart nav: the floating bar and the folded name once scrolled; hide on
+  // scroll-down, show on scroll-up.
   (() => {
     const nav = document.querySelector<HTMLElement>("[data-nav-smart]");
     if (!nav) return;
