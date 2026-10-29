@@ -43,6 +43,11 @@ for (const lang of ["fr", "en"]) {
 
 export default defineConfig({
   site: "https://anthonyprofit.com",
+  // Case studies taken off the site: their old address leads to the work page.
+  redirects: {
+    "/projets/vaulk": "/projets/",
+    "/en/work/vaulk": "/en/work/",
+  },
   i18n: {
     defaultLocale: "fr",
     locales: ["fr", "en"],
