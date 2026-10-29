@@ -159,6 +159,27 @@
     "project6.result": "A site worthy of a real manufacturer, campaigns and SEO steered by the numbers, and tracking that carries on month after month.",
     "project6.stack": "Astro · paid search · SEO · consent-based Google Analytics",
     "project6.role_meta": "Custom development, paid search, SEO, tracking — ongoing engagement",
-    "project6.link": "alexalu.com"
+    "project6.link": "alexalu.com",
+    "project7.title": "CK Atelier",
+    "project7.headline": "The art of sewing, from a Cannes workshop to an online shop",
+    "project7.client": "CK Atelier · Cannes",
+    "project7.tag": "WordPress · WooCommerce",
+    "project7.problem": "Bring a designer, a shop and an alterations workshop under one storefront, without one overshadowing the others.",
+    "project7.summary": "Showcase site and WordPress / WooCommerce online shop for a sewing and design workshop in Cannes.",
+    "project7.metric": "Cannes · ckatelier.com",
+    "project7.subtitle": "WordPress development · WooCommerce shop",
+    "project7.context.label": "Context",
+    "project7.context": "CK Atelier is a sewing workshop on rue Borniol in Cannes, founded by Keren Besset Creppy, a graduate of LaSalle College in Montreal, after several years in fashion in North America and France. The workshop brings several trades together: its own womenswear collection and bags, sewing kits and patterns to make at home, alterations for women and men, and made-to-measure tailoring.",
+    "project7.challenge.label": "The challenge",
+    "project7.challenge": "A workshop that is at once a brand, a shop and a local service. The site had to give each of these trades its place, carry the designer's vision (clothing thought of as architecture, with an artistic touch) and let people buy the collection, the kits and the patterns online.",
+    "project7.role.label": "My role",
+    "project7.role": "Design and development of the site on WordPress, with a WooCommerce shop for the collection, the sewing kits and the patterns.",
+    "project7.approach.label": "Approach",
+    "project7.approach": "A home page that clearly lays out the workshop's six worlds: the workshop, the womenswear collection, the sewing kits, the patterns, alterations and made-to-measure. Each world has its own page, carried by the designer's photos and sketches, and the first three lead straight to the shop. WooCommerce handles the cart and payment, and WordPress lets the workshop add its creations itself.",
+    "project7.result.label": "Outcome",
+    "project7.result": "A site that shows the workshop in its full breadth, from design to service, and an online shop that sells the collection, kits and patterns beyond Cannes.",
+    "project7.stack": "WordPress · WooCommerce",
+    "project7.role_meta": "WordPress / WooCommerce design and development",
+    "project7.link": "ckatelier.com"
   }
 }
