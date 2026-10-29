@@ -24,6 +24,7 @@ Références clients : Eden Rock Yacht Rental, Royal Yacht International, Sun Be
 - [Eden Rock Yacht Rental](https://anthonyprofit.com/projets/eden-rock-yacht-rental/): extension yachting d'Eden Rock – St Barths (icône de l'hôtellerie depuis 1953). Identité, site WordPress, SEO. Site : https://edenrockyachtrental.com
 - [Movida](https://anthonyprofit.com/projets/movida/): bar-restaurant festif sur la Promenade des Anglais à Nice (brunch, cocktails, DJ sets, privatisations). Site WordPress, maintenance et SEO local. Site : https://movida.today
 - [AlexAlu](https://anthonyprofit.com/projets/alexalu/): fabricant de menuiseries aluminium sur mesure à Chaumont-en-Vexin (Oise), 800 chantiers depuis 2015. Site sur-mesure en Astro, référencement payant, SEO et suivi. Site : https://alexalu.com
+- [CK Atelier](https://anthonyprofit.com/projets/ck-atelier/): atelier de couture et de création à Cannes (collection femme, kits de couture, patrons, retouches, sur-mesure). Site WordPress et boutique WooCommerce. Site : https://www.ckatelier.com
 
 ## Guides
 
@@ -54,7 +55,7 @@ Références clients : Eden Rock Yacht Rental, Royal Yacht International, Sun Be
 - [Tools, apps & AI](https://anthonyprofit.com/en/apps-ai-tools/): business tools, web and mobile apps, built-in AI (Claude / OpenAI APIs), automations and integrations.
 - [SEO & GEO](https://anthonyprofit.com/en/seo-geo/): Google ranking + visibility in AI engines + ChatGPT Ads campaigns (open to advertisers in France and across Europe since late August 2026).
 - [Brand identity](https://anthonyprofit.com/en/brand-design/): art direction, brand system, applications.
-- [Case studies](https://anthonyprofit.com/en/work/): Surly, Sun Beach House, Royal Yacht International, Eden Rock Yacht Rental, Movida, AlexAlu.
+- [Case studies](https://anthonyprofit.com/en/work/): Surly, Sun Beach House, Royal Yacht International, Eden Rock Yacht Rental, Movida, AlexAlu, CK Atelier.
 - [SEO, GEO & ChatGPT (guide)](https://anthonyprofit.com/en/blog/seo-geo-appear-in-chatgpt/): why your business doesn't show up in ChatGPT, and how to fix it.
 - [Local SEO in Nice (guide)](https://anthonyprofit.com/en/blog/rank-on-google-in-nice-local-seo/): the 3-layer system to dominate your local market on the French Riviera.
 - [ChatGPT Ads (guide)](https://anthonyprofit.com/en/blog/chatgpt-ads-advertising-guide/): how advertising in ChatGPT works in Europe and which Riviera businesses should test it.

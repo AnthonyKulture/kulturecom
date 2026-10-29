@@ -6,18 +6,18 @@ type Translations = (typeof ui)[Lang];
 /**
  * Single source of truth for the case-study pages AND the project grid.
  *
- * Maps each on-page POSITION to its project ENTITY key (project1..project6 in
+ * Maps each on-page POSITION to its project ENTITY key (project1..project7 in
  * the i18n files), its hero asset, the canonical URL of the live client site,
  * and the display number. `projects-data.ts` builds the homepage/work grid from
  * this same list, so the slug ↔ asset ↔ order mapping can never drift between
  * the grid and the detail pages.
  *
- * Display order: Surly → Eden Rock → Sun Beach House → Royal Yacht → Movida → AlexAlu.
+ * Display order: Surly → Eden Rock → Sun Beach House → Royal Yacht → Movida → AlexAlu → CK Atelier.
  */
 export interface CaseStudyMeta {
   /** URL slug — stable across locales (/projets/<slug>/ ↔ /en/work/<slug>/). */
   slug: string;
-  /** i18n entity key (project1..project6) the deep fields are read from. */
+  /** i18n entity key (project1..project7) the deep fields are read from. */
   key: string;
   /** Hero image (also the video poster when `video` is set). */
   image: string;
@@ -61,7 +61,7 @@ export const CASE_STUDIES: CaseStudyMeta[] = [
   {
     slug: "movida",
     key: "project2",
-    image: "/hero-slides/movida.webp",
+    image: "/hero-slides/movida-neon.webp",
     liveUrl: "https://movida.today",
     num: "05",
   },
@@ -71,6 +71,13 @@ export const CASE_STUDIES: CaseStudyMeta[] = [
     image: "/hero-slides/alexalu.webp",
     liveUrl: "https://alexalu.com",
     num: "06",
+  },
+  {
+    slug: "ck-atelier",
+    key: "project7",
+    image: "/hero-slides/ck-atelier.webp",
+    liveUrl: "https://www.ckatelier.com",
+    num: "07",
   },
 ];
 

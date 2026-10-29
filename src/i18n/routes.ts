@@ -64,7 +64,7 @@ export const routes: Record<string, RouteMeta> = {
     pageType: "CollectionPage",
     title: `Projets — études de cas web, design & SEO | Anthony Profit`,
     description:
-      "Sélection de projets : Surly, Sun Beach House, Royal Yacht International, Eden Rock, Movida, AlexAlu. Identité, développement sur-mesure et SEO/GEO. Des preuves, pas des promesses.",
+      "Sélection de projets : Surly, Sun Beach House, Royal Yacht International, Eden Rock, Movida, AlexAlu, CK Atelier. Identité, développement sur-mesure et SEO/GEO. Des preuves, pas des promesses.",
   },
   "/contact/": {
     lang: "fr",
@@ -196,7 +196,15 @@ export const routes: Record<string, RouteMeta> = {
     title: `AlexAlu — menuiserie aluminium | Étude de cas Astro, SEA & SEO`,
     description:
       "Étude de cas AlexAlu : site sur-mesure en Astro, référencement payant, SEO et suivi pour un fabricant de menuiseries aluminium dans l'Oise. Des demandes de devis pilotées par les chiffres.",
+  },  "/projets/ck-atelier/": {
+    lang: "fr",
+    alt: "/en/work/ck-atelier/",
+    crumb: "CK Atelier",
+    title: `CK Atelier — atelier de couture à Cannes | Étude de cas WordPress`,
+    description:
+      "Étude de cas CK Atelier : site vitrine et boutique WooCommerce pour un atelier de couture et de création à Cannes. Collection, kits, patrons, retouches et sur-mesure.",
   },
+
 
   // ---- EN ----
   "/en/": {
@@ -223,7 +231,7 @@ export const routes: Record<string, RouteMeta> = {
     pageType: "CollectionPage",
     title: `Work — web, design & SEO case studies | Anthony Profit`,
     description:
-      "Selected projects: Surly, Sun Beach House, Royal Yacht International, Eden Rock, Movida, AlexAlu. Identity, custom development and SEO/GEO. Proof, not promises.",
+      "Selected projects: Surly, Sun Beach House, Royal Yacht International, Eden Rock, Movida, AlexAlu, CK Atelier. Identity, custom development and SEO/GEO. Proof, not promises.",
   },
   "/en/contact/": {
     lang: "en",
@@ -355,7 +363,15 @@ export const routes: Record<string, RouteMeta> = {
     title: `AlexAlu — aluminium joinery | Astro, paid search & SEO case study`,
     description:
       "AlexAlu case study: custom Astro site, paid search, SEO and tracking for an aluminium joinery manufacturer north of Paris. Quote requests steered by the numbers.",
+  },  "/en/work/ck-atelier/": {
+    lang: "en",
+    alt: "/projets/ck-atelier/",
+    crumb: "CK Atelier",
+    title: `CK Atelier — sewing workshop in Cannes | WordPress case study`,
+    description:
+      "CK Atelier case study: showcase site and WooCommerce shop for a sewing and design workshop in Cannes. Collection, kits, patterns, alterations and made-to-measure.",
   },
+
 };
 
 export const getRoute = (pathname: string): RouteMeta | undefined =>

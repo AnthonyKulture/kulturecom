@@ -159,6 +159,27 @@
     "project6.result": "Un site à la hauteur d'un vrai fabricant, des campagnes et un référencement pilotés par les chiffres, et un suivi qui continue mois après mois.",
     "project6.stack": "Astro · référencement payant · SEO · Google Analytics avec consentement",
     "project6.role_meta": "Développement sur-mesure, SEA, SEO, suivi — accompagnement en cours",
-    "project6.link": "alexalu.com"
+    "project6.link": "alexalu.com",
+    "project7.title": "CK Atelier",
+    "project7.headline": "L'art de la couture, de l'atelier cannois à la boutique en ligne",
+    "project7.client": "CK Atelier · Cannes",
+    "project7.tag": "WordPress · WooCommerce",
+    "project7.problem": "Réunir sous une même vitrine une créatrice, une boutique et un atelier de retouches, sans que l'un efface l'autre.",
+    "project7.summary": "Site vitrine et boutique en ligne WordPress / WooCommerce pour un atelier de couture et de création à Cannes.",
+    "project7.metric": "Cannes · ckatelier.com",
+    "project7.subtitle": "Développement WordPress · Boutique WooCommerce",
+    "project7.context.label": "Le contexte",
+    "project7.context": "CK Atelier est un atelier de couture installé rue Borniol à Cannes, fondé par Keren Besset Creppy, diplômée du Collège LaSalle de Montréal, après plusieurs années dans la mode en Amérique du Nord et en France. L'atelier réunit plusieurs métiers : sa propre collection femme et ses sacs, des kits de couture et des patrons à coudre soi-même, des retouches femmes et hommes, et la couture sur mesure.",
+    "project7.challenge.label": "Le défi",
+    "project7.challenge": "Un atelier qui est à la fois une marque, une boutique et un service de proximité. Le site devait faire exister chacun de ces métiers, porter la vision de la créatrice (le vêtement pensé comme une architecture, avec une touche artistique) et permettre d'acheter en ligne la collection, les kits et les patrons.",
+    "project7.role.label": "Mon rôle",
+    "project7.role": "Conception et développement du site sur WordPress, avec une boutique WooCommerce pour la collection, les kits de couture et les patrons.",
+    "project7.approach.label": "L'approche",
+    "project7.approach": "Une page d'accueil qui distribue clairement les six univers de l'atelier : l'atelier, la collection femme, les kits de couture, les patrons, les retouches et le sur-mesure. Chaque univers a sa page, porté par les photos et les croquis de la créatrice, et les trois premiers mènent directement à la boutique. WooCommerce gère le panier et le paiement, et WordPress laisse l'atelier ajouter ses créations lui-même.",
+    "project7.result.label": "Le résultat",
+    "project7.result": "Un site qui montre l'atelier dans toute sa largeur, de la création au service, et une boutique en ligne qui vend la collection, les kits et les patrons au-delà de Cannes.",
+    "project7.stack": "WordPress · WooCommerce",
+    "project7.role_meta": "Conception et développement WordPress / WooCommerce",
+    "project7.link": "ckatelier.com"
   }
 }

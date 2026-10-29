@@ -12,7 +12,7 @@ const { lang } = Astro.props;
 const t = ui[lang];
 
 // Shared with ProjectsMobile.astro via src/lib/projects-data.ts (single source
-// of truth). Display order: Surly → Eden Rock → Sun Beach House → Royal Yacht → Movida → AlexAlu.
+// of truth). Display order: Surly → Eden Rock → Sun Beach House → Royal Yacht → Movida → AlexAlu → CK Atelier.
 const projects = getProjects(t);
 
 // Each card links to its case-study page (/projets/<slug>/ ↔ /en/work/<slug>/).
@@ -40,8 +40,8 @@ const workBase = lang === "fr" ? "/projets/" : "/en/work/";
       </p>
     </header>
 
-    <!-- 6 equal cards in a horizontal row -->
-    <div class="mt-[clamp(20px,3vh,40px)] grid grid-cols-6 gap-3 md:gap-5 flex-1 min-h-0">
+    <!-- 7 equal cards in a horizontal row -->
+    <div class="mt-[clamp(20px,3vh,40px)] grid grid-cols-7 gap-3 md:gap-5 flex-1 min-h-0">
       {
         projects.map((p) => (
           <article data-project-card class="flex flex-col min-h-0">
