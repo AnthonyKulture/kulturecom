@@ -15,7 +15,7 @@ export const CLIENT_LOGOS: ClientLogo[] = [
   { id: "edenrock", name: "Eden Rock Yacht Rental", w: 132, h: 40 },
   { id: "royalyacht", name: "Royal Yacht International", w: 163, h: 31 },
   { id: "sunbeach", name: "Sun Beach House", w: 67, h: 58 },
-  { id: "vaulk", name: "Vaulk", w: 176, h: 19 },
+  { id: "alexalu", name: "AlexAlu", w: 150, h: 33 },
   { id: "surly", name: "Surly", w: 112, h: 46 },
   { id: "ibd", name: "IBD Monaco", w: 95, h: 54 },
   { id: "adaly", name: "Adaly Yacht", w: 114, h: 46 },

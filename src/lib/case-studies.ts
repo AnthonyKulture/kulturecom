@@ -6,22 +6,22 @@ type Translations = (typeof ui)[Lang];
 /**
  * Single source of truth for the case-study pages AND the project grid.
  *
- * Maps each on-page POSITION to its project ENTITY key (project1..project5 in
+ * Maps each on-page POSITION to its project ENTITY key (project1..project6 in
  * the i18n files), its hero asset, the canonical URL of the live client site,
  * and the display number. `projects-data.ts` builds the homepage/work grid from
  * this same list, so the slug ↔ asset ↔ order mapping can never drift between
  * the grid and the detail pages.
  *
- * Display order: Surly → Eden Rock → Sun Beach House → Royal Yacht → Vaulk.
+ * Display order: Surly → Eden Rock → Sun Beach House → Royal Yacht → Movida → AlexAlu.
  */
 export interface CaseStudyMeta {
   /** URL slug — stable across locales (/projets/<slug>/ ↔ /en/work/<slug>/). */
   slug: string;
-  /** i18n entity key (project1..project5) the deep fields are read from. */
+  /** i18n entity key (project1..project6) the deep fields are read from. */
   key: string;
   /** Hero image (also the video poster when `video` is set). */
   image: string;
-  /** Optional hero video (Vaulk). */
+  /** Optional hero video. */
   video?: string;
   /** Canonical https URL of the live client site — a real outbound entity link. */
   liveUrl: string;
@@ -59,13 +59,18 @@ export const CASE_STUDIES: CaseStudyMeta[] = [
     num: "04",
   },
   {
-    slug: "vaulk",
+    slug: "movida",
     key: "project2",
-    image: "/hero-slides/vaulk.webp",
-    video:
-      "https://fabulous-event-3b100f58f8.media.strapiapp.com/header_desktop_video_v2_59a6bf4363.webm",
-    liveUrl: "https://vaulk.com",
+    image: "/hero-slides/movida.webp",
+    liveUrl: "https://movida.today",
     num: "05",
+  },
+  {
+    slug: "alexalu",
+    key: "project6",
+    image: "/hero-slides/alexalu.webp",
+    liveUrl: "https://alexalu.com",
+    num: "06",
   },
 ];
 

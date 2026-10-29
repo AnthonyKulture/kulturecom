@@ -67,7 +67,7 @@ export const SERVICE_PAGES: ServicePageMeta[] = [
   {
     id: "web",
     path: { fr: "/creation-site-internet/", en: "/en/web-development/" },
-    proofSlugs: ["vaulk", "surly", "sun-beach-house"],
+    proofSlugs: ["alexalu", "surly", "sun-beach-house"],
   },
   {
     id: "seo",

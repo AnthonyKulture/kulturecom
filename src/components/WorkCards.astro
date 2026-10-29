@@ -1,7 +1,7 @@
 ---
 // Recent work as cards, images always in view: the first project large, the
-// four others in a 2×2 beside it (wide screens), each with its name and its
-// result under the image. Hovering only zooms the image a little inside its
+// next four in a 2×2 beside it (wide screens), each with its name and its
+// result under the image; the sixth stays on the work page. Hovering only zooms the image a little inside its
 // frame: nothing moves, wherever the pointer comes in. The home's entrance
 // (HomeSections.astro) wipes each image up and brings its caption in.
 // Phones: four projects, one under the other. In the page with the home's
@@ -45,6 +45,9 @@ const projects = getProjects(ui[lang]);
   }
   .card--lead {
     grid-column: 1 / -1;
+  }
+  .card:nth-child(n + 6) {
+    display: none;
   }
   @media (min-width: 1024px) {
     /* The lead card down the left, the others two by two on the right; the
