@@ -23,7 +23,7 @@ export interface ProjectEntry {
  * of truth for slug / asset / order — so the grid and the case-study detail
  * pages can never drift. `slug` lets each card link to its case study.
  *
- * Display order: Surly → Eden Rock → Sun Beach House → Royal Yacht → Vaulk.
+ * Display order: Surly → Eden Rock → Sun Beach House → Royal Yacht → Movida → AlexAlu.
  */
 export function getProjects(t: Translations): ProjectEntry[] {
   const p = t.projects as Record<string, string>;

@@ -6,7 +6,7 @@ Anthony Profit conçoit des sites et des outils pensés pour être trouvés sur 
 
 Avis Google : 5,0/5 sur 17 avis (https://www.google.com/maps?cid=13963690267531536578).
 
-Références clients : Eden Rock Yacht Rental, Royal Yacht International, Sun Beach House, Vaulk, Surly, IBD Monaco, Adaly Yacht, Agence Talisman, Movida, Orcal Motor, CK Atelier, Joseph (Cap 3000), Lou Bantry, Cibo Trattoria, Sana Jardins, Les Cordistes.
+Références clients : Eden Rock Yacht Rental, Royal Yacht International, Sun Beach House, Surly, AlexAlu, IBD Monaco, Adaly Yacht, Agence Talisman, Movida, Orcal Motor, CK Atelier, Joseph (Cap 3000), Lou Bantry, Cibo Trattoria, Sana Jardins, Les Cordistes.
 
 ## Services
 
@@ -19,10 +19,11 @@ Références clients : Eden Rock Yacht Rental, Royal Yacht International, Sun Be
 ## Études de cas
 
 - [Surly](https://anthonyprofit.com/projets/surly/): marketplace banque & assurance co-fondée, Anthony Profit en est le CTO depuis 2022. React · Supabase. 1 600 consultants référencés, 8 entreprises clientes, projet toujours actif. Site : https://surly.fr
-- [Vaulk](https://anthonyprofit.com/projets/vaulk/): abris durcis NRBC conçus en France, livrables en 7 jours. Site éditorial cinématographique, Next.js · Strapi · 3D au scroll, livré en 3 mois. Site : https://vaulk.com
 - [Sun Beach House](https://anthonyprofit.com/projets/sun-beach-house/): agence indépendante de villas de luxe à Saint-Barthélemy depuis 1996. Identité, site éditorial, SEO + GEO en continu. Next.js · Sanity Studio · vidéo Mux. Site : https://sun-beach-house.com
 - [Royal Yacht International](https://anthonyprofit.com/projets/royal-yacht-international/): courtier de superyachts basé à Monaco (charter, vente, gestion, construction). Refonte d'identité, site WordPress, SEO. Site : https://royalyachtinternational.com
 - [Eden Rock Yacht Rental](https://anthonyprofit.com/projets/eden-rock-yacht-rental/): extension yachting d'Eden Rock – St Barths (icône de l'hôtellerie depuis 1953). Identité, site WordPress, SEO. Site : https://edenrockyachtrental.com
+- [Movida](https://anthonyprofit.com/projets/movida/): bar-restaurant festif sur la Promenade des Anglais à Nice (brunch, cocktails, DJ sets, privatisations). Site WordPress, maintenance et SEO local. Site : https://movida.today
+- [AlexAlu](https://anthonyprofit.com/projets/alexalu/): fabricant de menuiseries aluminium sur mesure à Chaumont-en-Vexin (Oise), 800 chantiers depuis 2015. Site sur-mesure en Astro, référencement payant, SEO et suivi. Site : https://alexalu.com
 
 ## Guides
 
@@ -53,7 +54,7 @@ Références clients : Eden Rock Yacht Rental, Royal Yacht International, Sun Be
 - [Tools, apps & AI](https://anthonyprofit.com/en/apps-ai-tools/): business tools, web and mobile apps, built-in AI (Claude / OpenAI APIs), automations and integrations.
 - [SEO & GEO](https://anthonyprofit.com/en/seo-geo/): Google ranking + visibility in AI engines + ChatGPT Ads campaigns (open to advertisers in France and across Europe since late August 2026).
 - [Brand identity](https://anthonyprofit.com/en/brand-design/): art direction, brand system, applications.
-- [Case studies](https://anthonyprofit.com/en/work/): Surly, Vaulk, Sun Beach House, Royal Yacht International, Eden Rock Yacht Rental.
+- [Case studies](https://anthonyprofit.com/en/work/): Surly, Sun Beach House, Royal Yacht International, Eden Rock Yacht Rental, Movida, AlexAlu.
 - [SEO, GEO & ChatGPT (guide)](https://anthonyprofit.com/en/blog/seo-geo-appear-in-chatgpt/): why your business doesn't show up in ChatGPT, and how to fix it.
 - [Local SEO in Nice (guide)](https://anthonyprofit.com/en/blog/rank-on-google-in-nice-local-seo/): the 3-layer system to dominate your local market on the French Riviera.
 - [ChatGPT Ads (guide)](https://anthonyprofit.com/en/blog/chatgpt-ads-advertising-guide/): how advertising in ChatGPT works in Europe and which Riviera businesses should test it.

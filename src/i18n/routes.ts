@@ -64,7 +64,7 @@ export const routes: Record<string, RouteMeta> = {
     pageType: "CollectionPage",
     title: `Projets — études de cas web, design & SEO | Anthony Profit`,
     description:
-      "Sélection de projets : Surly, Vaulk, Sun Beach House, Royal Yacht International, Eden Rock. Identité, développement sur-mesure et SEO/GEO. Des preuves, pas des promesses.",
+      "Sélection de projets : Surly, Sun Beach House, Royal Yacht International, Eden Rock, Movida, AlexAlu. Identité, développement sur-mesure et SEO/GEO. Des preuves, pas des promesses.",
   },
   "/contact/": {
     lang: "fr",
@@ -181,13 +181,21 @@ export const routes: Record<string, RouteMeta> = {
     description:
       "Étude de cas Royal Yacht International : refonte d'identité, site WordPress et SEO pour un courtier de superyachts à Monaco. Crédibilité et visibilité internationale.",
   },
-  "/projets/vaulk/": {
+  "/projets/movida/": {
     lang: "fr",
-    alt: "/en/work/vaulk/",
-    crumb: "Vaulk",
-    title: `Vaulk — abris durcis NRBC | Étude de cas web & 3D`,
+    alt: "/en/work/movida/",
+    crumb: "Movida",
+    title: `Movida — bar-restaurant à Nice | Étude de cas WordPress & SEO`,
     description:
-      "Étude de cas Vaulk : site éditorial et cinématographique pour un concepteur d'abris de protection civile. Next.js, Strapi, intégration 3D et vidéo au scroll. Livré en 3 mois.",
+      "Étude de cas Movida : site WordPress, maintenance et SEO local pour un bar-restaurant festif sur la Promenade des Anglais, à Nice. Un site que l'équipe fait vivre elle-même.",
+  },
+  "/projets/alexalu/": {
+    lang: "fr",
+    alt: "/en/work/alexalu/",
+    crumb: "AlexAlu",
+    title: `AlexAlu — menuiserie aluminium | Étude de cas Astro, SEA & SEO`,
+    description:
+      "Étude de cas AlexAlu : site sur-mesure en Astro, référencement payant, SEO et suivi pour un fabricant de menuiseries aluminium dans l'Oise. Des demandes de devis pilotées par les chiffres.",
   },
 
   // ---- EN ----
@@ -215,7 +223,7 @@ export const routes: Record<string, RouteMeta> = {
     pageType: "CollectionPage",
     title: `Work — web, design & SEO case studies | Anthony Profit`,
     description:
-      "Selected projects: Surly, Vaulk, Sun Beach House, Royal Yacht International, Eden Rock. Identity, custom development and SEO/GEO. Proof, not promises.",
+      "Selected projects: Surly, Sun Beach House, Royal Yacht International, Eden Rock, Movida, AlexAlu. Identity, custom development and SEO/GEO. Proof, not promises.",
   },
   "/en/contact/": {
     lang: "en",
@@ -332,13 +340,21 @@ export const routes: Record<string, RouteMeta> = {
     description:
       "Royal Yacht International case study: brand redesign, WordPress site and SEO for a Monaco superyacht broker. Credibility and international visibility.",
   },
-  "/en/work/vaulk/": {
+  "/en/work/movida/": {
     lang: "en",
-    alt: "/projets/vaulk/",
-    crumb: "Vaulk",
-    title: `Vaulk — CBRN-hardened shelters | Web & 3D case study`,
+    alt: "/projets/movida/",
+    crumb: "Movida",
+    title: `Movida — bar-restaurant in Nice | WordPress & SEO case study`,
     description:
-      "Vaulk case study: an editorial, cinematic site for a designer of civil-protection shelters. Next.js, Strapi, scroll-driven 3D and video. Shipped in 3 months.",
+      "Movida case study: WordPress site, maintenance and local SEO for a festive bar-restaurant on the Promenade des Anglais in Nice. A site the team runs itself.",
+  },
+  "/en/work/alexalu/": {
+    lang: "en",
+    alt: "/projets/alexalu/",
+    crumb: "AlexAlu",
+    title: `AlexAlu — aluminium joinery | Astro, paid search & SEO case study`,
+    description:
+      "AlexAlu case study: custom Astro site, paid search, SEO and tracking for an aluminium joinery manufacturer north of Paris. Quote requests steered by the numbers.",
   },
 };
 
