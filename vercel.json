@@ -1,10 +1,4 @@
 {
-  "redirects": [
-    { "source": "/projets/vaulk", "destination": "/projets/", "permanent": true },
-    { "source": "/projets/vaulk/", "destination": "/projets/", "permanent": true },
-    { "source": "/en/work/vaulk", "destination": "/en/work/", "permanent": true },
-    { "source": "/en/work/vaulk/", "destination": "/en/work/", "permanent": true }
-  ],
   "headers": [
     {
       "source": "/(.*)",
