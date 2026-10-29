@@ -14,20 +14,22 @@ const t = ui[lang];
 // Shared with ProjectsMobile.astro via src/lib/projects-data.ts (single source
 // of truth). Display order: Surly → Eden Rock → Sun Beach House → Royal Yacht → Movida → AlexAlu → CK Atelier.
 const projects = getProjects(t);
+const total = String(projects.length).padStart(2, "0");
 
 // Each card links to its case-study page (/projets/<slug>/ ↔ /en/work/<slug>/).
 const workBase = lang === "fr" ? "/projets/" : "/en/work/";
+const contactHref = lang === "fr" ? "/contact/" : "/en/contact/";
+const caseLabel = lang === "fr" ? "Voir l'étude de cas" : "Read the case study";
+const cursorLabel = lang === "fr" ? "Voir le projet" : "View project";
+
+// The images take turns between three shapes (wide, portrait, square) so the
+// row reads like a contact sheet rather than a grid.
+const SHAPES = ["wide", "tall", "square"] as const;
 ---
 
-<section
-  data-projects
-  class="relative flex h-full min-h-[100dvh] flex-col overflow-hidden bg-[var(--color-bg)] px-4 sm:px-6 md:px-10"
-  aria-label={t.projects.eyebrow}
->
-  <div class="mx-auto flex w-full max-w-[var(--container-wide)] flex-1 min-h-0 flex-col pt-[clamp(40px,6vh,72px)] pb-[clamp(20px,3vh,40px)]">
-
-    <!-- Header : eyebrow + title + count -->
-    <header class="flex items-end justify-between gap-6 shrink-0">
+<section data-gallery class="pg" aria-label={t.projects.eyebrow}>
+  <div class="pg-inner">
+    <header class="pg-head">
       <div>
         <Eyebrow label={t.projects.eyebrow} class="mb-3" />
         <h2 class="font-display text-[clamp(26px,2.8vw,40px)] leading-[1.15] tracking-[-0.04em] text-[var(--color-ink)]">
@@ -35,84 +37,386 @@ const workBase = lang === "fr" ? "/projets/" : "/en/work/";
           <span class="block">{t.projects["title.line2"]}</span>
         </h2>
       </div>
-      <p class="font-label shrink-0 text-[13px] uppercase tracking-[0.06em] text-[var(--color-ink-subtle)]">
-        {String(projects.length).padStart(2, "0")} / {t.projects["count.label"]}
+      <p class="pg-count font-label" aria-hidden="true">
+        <span class="pg-count-win"><span data-gallery-now>01</span></span>
+        <span class="pg-count-total">/ {total}</span>
       </p>
     </header>
 
-    <!-- 7 equal cards in a horizontal row -->
-    <div class="mt-[clamp(20px,3vh,40px)] grid grid-cols-7 gap-3 md:gap-5 flex-1 min-h-0">
-      {
-        projects.map((p) => (
-          <article data-project-card class="flex flex-col min-h-0">
-            <a
-              href={`${workBase}${p.slug}/`}
-              aria-label={`${p.title} — ${lang === "fr" ? "étude de cas" : "case study"}`}
-              class="group flex h-full min-h-0 flex-col no-underline"
-            >
-            <div class="relative flex-1 min-h-0 overflow-hidden">
-              {p.video ? (
-                <video
-                  src={p.video}
-                  poster={p.image}
-                  autoplay
-                  muted
-                  loop
-                  playsinline
-                  preload="metadata"
-                  aria-label={`${p.title} — ${p.tag}`}
-                  class="absolute inset-0 block h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                />
-              ) : (
-                <img
-                  src={p.image}
-                  alt={`${p.title} — ${p.tag}`}
-                  width="500"
-                  height="700"
-                  loading="lazy"
-                  class="absolute inset-0 block h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                />
-              )}
-              <span class="font-label absolute left-2 top-2 bg-[var(--color-bg)]/90 px-1.5 py-0.5 text-[13px] uppercase tracking-[0.06em] text-[var(--color-ink)]">
-                {p.num}
+    <div class="pg-viewport" data-gallery-viewport>
+      <ol class="pg-track" data-gallery-track>
+        {projects.map((p, i) => (
+          <li class:list={["pg-panel", `pg-panel--${SHAPES[i % SHAPES.length]}`]} data-gallery-panel>
+            <a href={`${workBase}${p.slug}/`} class="pg-card" aria-label={`${p.title} — ${caseLabel}`}>
+              <span class="pg-num font-display" aria-hidden="true" data-gallery-num>{p.num}</span>
+              <span class="pg-media" data-gallery-media>
+                <span class="pg-zoom">
+                  {p.video ? (
+                    <video
+                      src={p.video}
+                      poster={p.image}
+                      autoplay
+                      muted
+                      loop
+                      playsinline
+                      preload="metadata"
+                      aria-hidden="true"
+                      data-gallery-img
+                    />
+                  ) : (
+                    <img
+                      src={p.image}
+                      alt={`${p.title} — ${p.tag}`}
+                      width="900"
+                      height="700"
+                      loading={i < 3 ? "eager" : "lazy"}
+                      decoding="async"
+                      data-gallery-img
+                    />
+                  )}
+                </span>
+                <span class="pg-stamp font-label">
+                  <span class="pg-dot" aria-hidden="true"></span>
+                  {p.metric}
+                </span>
               </span>
-
-              {/* Result stamp — bottom-right, dark ink with accent dot. The
-                  metric is the visual proof : it stays visible at all times. */}
-              <div class="font-label absolute bottom-2 right-2 inline-flex items-center gap-1.5 bg-[var(--color-ink)] px-2.5 py-1 text-[13px] leading-tight text-[var(--color-bg)] max-w-[calc(100%-1rem)]">
-                <span aria-hidden="true" class="inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-accent)] shrink-0"></span>
-                <span class="truncate">{p.metric}</span>
-              </div>
-
-              {/* Hover overlay — problem + summary revealed on hover (desktop only).
-                  Cream backdrop, ink text. Pure CSS transition, no JS. */}
-              <div class="pointer-events-none absolute inset-0 flex flex-col justify-end gap-2 bg-gradient-to-t from-[var(--color-bg)] via-[var(--color-bg)]/95 to-transparent p-3 opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100">
-                <p class="font-lead text-[clamp(17px,0.9vw,18px)] leading-snug text-[var(--color-ink)]">
-                  {p.problem}
-                </p>
-                <p class="text-[clamp(17px,0.8vw,18px)] leading-snug text-[var(--color-ink-muted)]">
-                  {p.summary}
-                </p>
-              </div>
-            </div>
-            {/* Fixed-height meta block : 3 single-line elements with line-clamp-1
-                guarantee the bottom text block has identical height across all
-                cards, so the flex-1 image area above also matches. */}
-            <div class="mt-2 flex shrink-0 flex-col gap-0.5 min-h-[60px]">
-              <h3 class="font-sans text-[clamp(17px,1.05vw,18px)] font-medium leading-snug tracking-normal text-[var(--color-ink)] line-clamp-1">
-                {p.title}
-              </h3>
-              <p class="text-[clamp(17px,0.8vw,18px)] leading-snug text-[var(--color-ink-muted)] line-clamp-1">
-                {p.client}
-              </p>
-              <span class="mt-0.5 text-[15px] leading-snug text-[var(--color-ink-muted)] line-clamp-1">
-                {p.tag}
+              <span class="pg-text">
+                <span class="pg-client font-label">{p.client}</span>
+                <span class="pg-title font-display">{p.title}</span>
+                <span class="pg-foot">
+                  <span class="pg-tag font-label">{p.tag}</span>
+                  <span class="pg-more">{caseLabel} <span aria-hidden="true">→</span></span>
+                </span>
               </span>
-            </div>
             </a>
-          </article>
-        ))
-      }
+          </li>
+        ))}
+        <li class="pg-panel pg-panel--end" data-gallery-panel>
+          <div class="pg-end">
+            <p class="pg-end-kicker font-label">{lang === "fr" ? "Le prochain" : "Up next"}</p>
+            <p class="pg-end-title font-display">
+              {lang === "fr" ? "Et si le prochain projet, c'était le vôtre ?" : "What if the next project were yours?"}
+            </p>
+            <a href={contactHref} class="btn btn-primary">
+              {lang === "fr" ? "Démarrer un projet" : "Start a project"} <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </li>
+      </ol>
     </div>
+
+    <div class="pg-bar" aria-hidden="true"><span data-gallery-bar></span></div>
   </div>
+
+  <span class="pg-cursor font-label" aria-hidden="true" data-gallery-cursor>{cursorLabel}</span>
 </section>
+
+<style>
+  .pg {
+    position: relative;
+    background: var(--color-bg);
+    color: var(--color-ink);
+  }
+  .pg-inner {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(20px, 3vh, 36px);
+    padding: clamp(40px, 6vh, 72px) 0 clamp(24px, 4vh, 44px);
+  }
+  /* Pinned: the section fills the screen under the floating nav. */
+  .pg[data-enhanced] .pg-inner {
+    height: 100dvh;
+    gap: clamp(12px, 2vh, 24px);
+    padding-top: calc(72px + clamp(12px, 2.5vh, 32px));
+    padding-bottom: clamp(16px, 3vh, 32px);
+  }
+  .pg-head,
+  .pg-bar {
+    width: 100%;
+    max-width: var(--container-wide);
+    margin: 0 auto;
+    padding: 0 clamp(16px, 3vw, 48px);
+  }
+  .pg-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .pg-count {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4em;
+    font-size: clamp(28px, 3vw, 44px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .pg-count-win {
+    display: inline-block;
+    overflow: hidden;
+    height: 1em;
+  }
+  .pg-count-win > span {
+    display: block;
+  }
+  .pg-count-total {
+    font-size: 0.42em;
+    color: var(--color-ink-subtle);
+  }
+
+  /* Without the pin (no script, reduced motion): a row you swipe through. */
+  .pg-viewport {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .pg-viewport::-webkit-scrollbar {
+    display: none;
+  }
+  .pg[data-enhanced] .pg-viewport {
+    overflow: hidden;
+    scroll-snap-type: none;
+    flex: 1 1 0;
+    min-height: 0;
+  }
+  .pg-track {
+    /* The pictures take what the screen leaves once the nav, the heading and
+       the captions are counted. */
+    --h: clamp(220px, calc(100dvh - 520px), 620px);
+    display: flex;
+    align-items: flex-start;
+    gap: clamp(40px, 5vw, 96px);
+    width: max-content;
+    padding: clamp(56px, 8vh, 84px) max(clamp(16px, 3vw, 48px), calc((100vw - var(--container-wide)) / 2 + 48px)) 0;
+    will-change: transform;
+  }
+  .pg-panel {
+    position: relative;
+    flex: none;
+    scroll-snap-align: start;
+  }
+  .pg-panel--wide { --ar: 16 / 10; }
+  .pg-panel--tall { --ar: 4 / 5; }
+  .pg-panel--square { --ar: 1 / 1; }
+  .pg-panel--tall,
+  .pg-panel--square {
+    margin-top: clamp(8px, 2vh, 24px);
+  }
+
+  .pg-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    width: calc(var(--h) * var(--ar));
+    min-width: 280px;
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+  .pg-num {
+    position: absolute;
+    bottom: calc(100% + 10px); /* just above the picture; GSAP owns its transform (the drift) */
+    left: -0.06em;
+    z-index: 1;
+    font-size: clamp(56px, 5.5vw, 96px);
+    line-height: 0.8;
+    letter-spacing: -0.06em;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--color-ink);
+    pointer-events: none;
+  }
+  .pg-media {
+    position: relative;
+    display: block;
+    height: var(--h);
+    overflow: hidden;
+    background: var(--color-bg-shade);
+  }
+  .pg-zoom {
+    position: absolute;
+    inset: 0;
+    display: block;
+    transition: scale 0.9s var(--ease-power3);
+  }
+  .pg-zoom img,
+  .pg-zoom video {
+    position: absolute;
+    top: 0;
+    left: -8%;
+    width: 116%;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+  }
+  .pg-card:hover .pg-zoom,
+  .pg-card:focus-visible .pg-zoom {
+    scale: 1.05;
+  }
+  .pg-stamp {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    max-width: calc(100% - 20px);
+    padding: 4px 10px;
+    background: var(--color-ink);
+    color: var(--color-bg);
+    font-size: 13px;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .pg-dot {
+    width: 6px;
+    height: 6px;
+    flex: none;
+    border-radius: 999px;
+    background: var(--color-accent);
+    filter: brightness(1.8);
+  }
+
+  .pg-text {
+    display: grid;
+    gap: 6px;
+    max-width: 52ch;
+  }
+  .pg-client {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-ink-muted);
+  }
+  .pg-title,
+  .pg-tag {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .pg-title {
+    font-size: clamp(26px, 2.4vw, 40px);
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+  }
+  .pg-foot {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px 16px;
+    margin-top: 6px;
+    padding-top: 10px;
+    border-top: 1px solid var(--color-line);
+  }
+  .pg-tag {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-ink-muted);
+  }
+  .pg-more {
+    flex: none;
+    font-size: 15px;
+    font-weight: 500;
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+    transition: background-size 0.5s var(--ease-power3);
+  }
+  .pg-card:hover .pg-more,
+  .pg-card:focus-visible .pg-more {
+    background-size: 100% 1px;
+  }
+  .pg-card:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 6px;
+  }
+
+  .pg-panel--end {
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+  }
+  .pg-end {
+    display: grid;
+    justify-items: start;
+    gap: 20px;
+    width: clamp(280px, 30vw, 460px);
+    padding-left: clamp(24px, 3vw, 48px);
+    border-left: 1px solid var(--color-line);
+  }
+  .pg-end-kicker {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-ink-muted);
+  }
+  .pg-end-title {
+    font-size: clamp(28px, 2.8vw, 44px);
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+  }
+
+  .pg-bar {
+    position: relative;
+  }
+  .pg-bar::before,
+  .pg-bar > span {
+    content: "";
+    display: block;
+    height: 1px;
+  }
+  .pg-bar::before {
+    background: var(--color-line);
+  }
+  .pg-bar > span {
+    position: absolute;
+    left: clamp(16px, 3vw, 48px);
+    right: clamp(16px, 3vw, 48px);
+    top: -0.5px;
+    height: 2px;
+    background: var(--color-ink);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+  }
+  .pg:not([data-enhanced]) .pg-bar {
+    display: none;
+  }
+
+  /* The pill that follows the pointer over a picture. */
+  .pg-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 40;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: var(--color-ink);
+    color: var(--color-bg);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    scale: 0.4;
+    translate: -50% -50%;
+    transition:
+      opacity 0.3s var(--ease-power3),
+      scale 0.4s var(--ease-power3);
+  }
+  .pg-cursor[data-on] {
+    opacity: 1;
+    scale: 1;
+  }
+  @media (hover: none) {
+    .pg-cursor {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  import { initProjectsGallery } from "~/lib/projects-gallery";
+  initProjectsGallery();
+</script>
