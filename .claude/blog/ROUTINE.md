@@ -63,6 +63,17 @@ et sur l'EN avant d'écrire les fichiers. Règles dures :
 - Optionnel : si le sujet appelle un dessin spécifique sur l'index, ajoute une entrée à `BY_KEY` dans
   `src/components/blog/PostDrawing.astro` en réutilisant une figure existante (`serp`, `chat`, `ads`, `aiSerp`, `chart`,
   `coast` + `city`, `profile`, `langs`). Ne modifie rien d'autre dans les composants.
+- Visuel réseaux sociaux (carré 1080 × 1080, en FR, dans la DA du site) :
+  ```bash
+  node .claude/blog/social-card.mjs --out .claude/blog/social/<slug-fr>.png \
+    --kicker "SEO local · Nice" \
+    --title "Votre restaurant sur *Google Maps* et dans ChatGPT" \
+    --subtitle "Fiche Google, menu en texte, avis récents : ce qui fait sortir un restaurant niçois."
+  ```
+  `--kicker` : thème + ville en 2 à 4 mots. `--title` : une accroche de 4 à 9 mots, plus percutante que le H1 (pas
+  une copie), avec **un seul** passage entre `*astérisques*` qui passera en bleu. `--subtitle` : une phrase de 10 à
+  18 mots qui dit ce que l'article apporte. Mêmes règles Humanizer que l'article (zéro tiret cadratin ou
+  demi-cadratin), et aucun chiffre qui ne figure pas dans l'article. Ne modifie pas le script.
 - Coche le sujet dans `.claude/blog/BACKLOG.md` (`- [x] … → /blog/<slug-fr>/`). S'il reste moins de 4 sujets non
   cochés, ajoute 6 nouveaux sujets dans le même esprit (local Nice / Cannes / Monaco, SEO, GEO, ChatGPT Ads), sans
   doublon avec les articles existants.
@@ -78,18 +89,25 @@ et sur l'EN avant d'écrire les fichiers. Règles dures :
    for h in $(grep -ohE 'href="/[^"#?]*' dist/blog/*/index.html dist/en/blog/*/index.html | sed 's/href="//' | sort -u); do p="dist${h%/}/index.html"; [ -f "$p" ] || [ -f "dist$h" ] || echo "BROKEN $h"; done
    ```
 4. `grep -c '[—–]'` sur les deux .mdx = 0.
+5. Le script du visuel sort `OK` (code 2 = texte qui déborde : raccourcis et relance). Ouvre le PNG avec `Read` et
+   vérifie : texte lisible, rien de coupé, accents corrects, un seul passage en bleu. Un visuel raté ne bloque pas
+   l'article : publie l'article sans l'image et signale-le dans le compte-rendu.
 Si une étape échoue et que tu ne peux pas la corriger proprement : ne pousse rien, termine en expliquant pourquoi.
 
 ## 6. Publication
 ```bash
 git pull --rebase origin main
-git add src/content/blog/fr/<slug-fr>.mdx src/content/blog/en/<slug-en>.mdx public/llms.txt .claude/blog/BACKLOG.md
+git add src/content/blog/fr/<slug-fr>.mdx src/content/blog/en/<slug-en>.mdx public/llms.txt .claude/blog/BACKLOG.md \
+  .claude/blog/social/<slug-fr>.png
 # + src/components/blog/PostDrawing.astro si modifié
 git commit -m "feat(blog): <titre FR court>" -m "Co-Authored-By: Claude <noreply@anthropic.com>"
 git push origin main
 ```
 N'ajoute que ces fichiers. Ne touche à rien d'autre dans le dépôt.
 
+Après le push, envoie le visuel avec `SendUserFile` (`.claude/blog/social/<slug-fr>.png`, `status: "proactive"`) pour
+qu'Anthony le récupère et le poste. Il reste aussi dans le dépôt (`.claude/blog/social/`, hors du site publié).
+
 ## 7. Compte-rendu final
-Sujet, mot-clé principal, URLs FR et EN, nombre de mots FR, liens internes, sources pour chaque chiffre clé, points
+Sujet, mot-clé principal, URLs FR et EN, chemin du visuel et son texte (pour la légende du post), nombre de mots FR, liens internes, sources pour chaque chiffre clé, points
 incertains, hash du commit et confirmation du push.
