@@ -48,7 +48,7 @@ export const CASE_STUDIES: CaseStudyMeta[] = [
     slug: "sun-beach-house",
     key: "project3",
     image: "/hero-slides/sunbeachhouse.webp",
-    liveUrl: "https://sun-beach-house.com",
+    liveUrl: "https://www.sun-beach-house.com",
     num: "03",
   },
   {

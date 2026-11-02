@@ -19,7 +19,7 @@ Références clients : Eden Rock Yacht Rental, Royal Yacht International, Sun Be
 ## Études de cas
 
 - [Surly](https://anthonyprofit.com/projets/surly/): marketplace banque & assurance co-fondée, Anthony Profit en est le CTO depuis 2022. React · Supabase. 1 600 consultants référencés, 8 entreprises clientes, projet toujours actif. Site : https://surly.fr
-- [Sun Beach House](https://anthonyprofit.com/projets/sun-beach-house/): agence indépendante de villas de luxe à Saint-Barthélemy depuis 1996. Identité, site éditorial, SEO + GEO en continu. Next.js · Sanity Studio · vidéo Mux. Site : https://sun-beach-house.com
+- [Sun Beach House](https://anthonyprofit.com/projets/sun-beach-house/): agence indépendante de villas de luxe à Saint-Barthélemy depuis 1996. Identité, site éditorial, SEO + GEO en continu. Next.js · Sanity Studio · vidéo Mux. Site : https://www.sun-beach-house.com
 - [Royal Yacht International](https://anthonyprofit.com/projets/royal-yacht-international/): courtier de superyachts basé à Monaco (charter, vente, gestion, construction). Refonte d'identité, site WordPress, SEO. Site : https://royalyachtinternational.com
 - [Eden Rock Yacht Rental](https://anthonyprofit.com/projets/eden-rock-yacht-rental/): extension yachting d'Eden Rock – St Barths (icône de l'hôtellerie depuis 1953). Identité, site WordPress, SEO. Site : https://edenrockyachtrental.com
 - [Movida](https://anthonyprofit.com/projets/movida/): bar-restaurant festif sur la Promenade des Anglais à Nice (brunch, cocktails, DJ sets, privatisations). Site WordPress, maintenance et SEO local. Site : https://movida.today
