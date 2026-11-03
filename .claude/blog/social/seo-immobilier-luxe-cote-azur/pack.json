@@ -1,0 +1,72 @@
+{
+  "card": {
+    "kicker": "Immobilier de prestige · Riviera",
+    "title": "Ton agence devant les *portails* sur Google",
+    "subtitle": "Pages de quartier, fiche Google, site multilingue : ce qui fait sortir une agence à Nice, Cannes ou Monaco."
+  },
+  "slides": [
+    {
+      "type": "cover",
+      "eyebrow": "SEO immobilier · Côte d'Azur",
+      "title": "Les portails passent *devant ton agence* ?",
+      "body": "Comment une agence de prestige reprend la main sur Google et dans ChatGPT."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Le constat",
+      "title": "Même annonce, *même texte* partout.",
+      "body": "Copiée sur ton site et sur les portails, ta fiche de bien crée des doublons. Google en montre souvent la version du portail."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Le terrain",
+      "title": "Gagne sur *le quartier*.",
+      "body": "Mont Boron, Californie, Cap d'Antibes, Larvotto : une vraie page par secteur, avec ce que toi seul sais du terrain."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Les vendeurs",
+      "title": "Ton client, c'est aussi *le propriétaire*.",
+      "body": "Dans les Alpes-Maritimes, un acheteur sur dix seulement est étranger (Chambre des Notaires 06, bilan 2025)."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Les IA",
+      "title": "ChatGPT cite ceux qu'il *retrouve partout*.",
+      "body": "Presse, guides de quartier, avis Google détaillés : plus ton agence revient dans les sources, plus elle a de chances d'être citée."
+    },
+    {
+      "type": "list",
+      "eyebrow": "Par où commencer",
+      "title": "Ta *checklist*",
+      "items": [
+        { "t": "Une fiche Google par agence réelle", "sub": "Jamais d'adresse de domiciliation" },
+        { "t": "3 ou 4 pages de quartier", "sub": "En français, puis en anglais" },
+        { "t": "Des hreflang réciproques", "sub": "Une URL par langue" },
+        { "t": "Des descriptions différentes des portails", "sub": "Et des photos bien nommées" }
+      ]
+    },
+    {
+      "type": "cta",
+      "eyebrow": "Parlons-en",
+      "title": "Visible sur Google *et dans les IA*.",
+      "body": "Le guide complet est en lien dans la bio.",
+      "cta": "DM « PRESTIGE » et on regarde ton site ensemble."
+    }
+  ],
+  "caption": "Ton agence immobilière à Nice, Cannes ou Monaco passe-t-elle derrière les portails sur Google ?\n\nEn immobilier de prestige, la fiche du bien appartient souvent aux portails. Ce qui reste à toi : les pages de quartier (Mont Boron, Californie, Cap d'Antibes, Monte-Carlo), une fiche Google par agence réelle et un site multilingue propre. Ce sont aussi ces contenus que ChatGPT et Gemini reprennent quand un acheteur cherche une agence sur la Côte d'Azur.\n\nEnregistre ce post pour ta prochaine refonte, et envoie-le à un agent immobilier de la Riviera. Le guide complet (SEO immobilier Nice, Cannes, Monaco) est en lien dans la bio.",
+  "hashtags": [
+    "#immobilierdeluxe",
+    "#agenceimmobiliere",
+    "#seolocal",
+    "#referencementnaturel",
+    "#cotedazur"
+  ],
+  "stories": [
+    "Le visuel carré (card.jpg) avec un sticker lien vers https://anthonyprofit.com/blog/seo-immobilier-luxe-cote-azur/ : « Le guide complet est ici ».",
+    "Sondage sur fond uni : « Tes annonces sur ton site et sur les portails, c'est… » Réponses : « Le même texte » / « Deux textes différents ».",
+    "Slide 04 du carrousel (les vendeurs) avec le texte : « Un acheteur sur dix seulement est étranger dans le 06. Ton site parle-t-il aussi aux propriétaires ? »",
+    "Boîte à questions : « Ta question sur le SEO de ton agence immobilière ? » (les réponses donnent les prochains sujets)."
+  ],
+  "reel": "Plan 1, texte à l'écran : « Ton agence vs les portails ». Face caméra sur le sentier du littoral du Cap d'Antibes : « Quand ton annonce est copiée mot pour mot sur ton site et sur les portails, Google n'en garde souvent qu'une, et c'est celle du portail. Alors ne te bats pas sur la fiche du bien. Écris une vraie page sur ton quartier, le Cap d'Antibes, la Californie, le Mont Boron, avec ce que toi seul sais : les rues avec vue, les résidences réputées, le temps réel jusqu'à l'aéroport. Les portails ne savent pas faire ça, et ChatGPT reprend ce genre de détail. » Fin : « Le guide complet est en lien dans ma bio. »"
+}
