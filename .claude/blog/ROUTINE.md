@@ -13,6 +13,7 @@ ligne, donc la véracité et la qualité passent avant la vitesse. En cas de dou
    - `.claude/blog/humanizer.md` : règles d'écriture Humanizer (voir §3).
    - `.claude/blog/BACKLOG.md` : prends le **premier sujet non coché**.
    - `src/lib/facts.ts` : prix et délais réels. N'en cite pas d'autres.
+   - `src/lib/service-pages.ts` (formules de chaque service) : noms des offres et ce qu'elles comprennent. L'audit SEO & GEO est gratuit ; reprends ces offres telles quelles, partout pareil (règle de cohérence du site).
    - 2 articles récents de `src/content/blog/fr/` pour le ton et la structure, par exemple
      `chatgpt-ads-publicite-chatgpt-guide.mdx` et `referencement-cannes-seo-local.mdx`.
 3. `ls src/content/blog/fr src/content/blog/en` + grep des `translationKey` et des tags existants : pas de doublon de
