@@ -93,7 +93,8 @@ export async function onRequestPost({ request, env }: { request: Request; env: E
   const site = clean(data.site, 200);
   const timeline = TIMELINES[clean(data.timeline, 20)];
   // The package arrives by its French name (from the service page's offers).
-  const offerId = clean(data.offer, 80);
+  // Free text now (no fixed list): kept to one line in the subject and body.
+  const offerId = clean(data.offer, 80).replace(/\s+/g, " ");
   const offer = offerId === "advice" ? "Ne sait pas, à conseiller" : offerId;
   const channel = CHANNELS[clean(data.channel, 20)];
 
