@@ -1,6 +1,7 @@
 import type { Lang } from "~/i18n/ui";
 import type { Choice } from "~/lib/home-content";
 import { CONTACT } from "~/lib/facts";
+import { getServicePage, offerPriceText, type ServiceId } from "~/lib/service-pages";
 
 /**
  * Copy of the guided "Démarrer un projet" form (ProjectDialog.astro): one
@@ -8,9 +9,10 @@ import { CONTACT } from "~/lib/facts";
  * sent to /api/lead, which keeps its own French labels for the e-mail
  * (functions/api/lead.ts): change both together.
  *
- * Flow: need, then a detail that depends on it, then timeline and budget,
- * first name, how to reply, and a recap. The free check-up skips timeline
- * and budget.
+ * Flow: need, then a detail that depends on it, then timeline and the
+ * package (the offers of that service, as its page lists them), first name,
+ * how to reply, and a recap. The free check-up skips timeline and package;
+ * "Autre chose" skips the package.
  */
 
 /** A question answered with one of a few choices. */
@@ -43,7 +45,8 @@ export interface ProjectContent {
   site: FieldStep;
   other: FieldStep & { error: string };
   when: ChoiceStep;
-  budget: ChoiceStep;
+  /** "Quelle formule ?", per service. */
+  offer: Record<ServiceId, ChoiceStep>;
   name: FieldStep & { error: string };
   /** Text around the first name, e.g. ["Enchanté, ", "."]. */
   hello: [string, string];
@@ -56,7 +59,7 @@ export interface ProjectContent {
     errorPhone: string;
   };
   recap: [string, string];
-  rows: { need: string; detail: string; site: string; other: string; when: string; budget: string; name: string; contact: string };
+  rows: { need: string; detail: string; site: string; other: string; when: string; offer: string; name: string; contact: string };
   edit: string;
   /** An optional answer left empty. */
   none: string;
@@ -75,6 +78,24 @@ export interface ProjectContent {
   mailSubject: string;
   whatsappMessage: string;
 }
+
+/** The offers of a service, priced as on its page, then "not sure". Values
+ *  are the French names, printed as they are in the lead e-mail; the offer
+ *  buttons of a service page pick theirs by position. */
+const offerSteps = (lang: Lang, q: string, hint: string, advice: string): Record<ServiceId, ChoiceStep> => {
+  const step = (id: ServiceId): ChoiceStep => {
+    const fr = getServicePage(id, "fr")!.content.offers;
+    return {
+      q,
+      hint,
+      choices: [
+        ...getServicePage(id, lang)!.content.offers.map((o, i) => ({ value: fr[i].name, label: `${o.name} · ${offerPriceText(o, lang)}` })),
+        { value: "advice", label: advice },
+      ],
+    };
+  };
+  return { web: step("web"), seo: step("seo"), apps: step("apps"), brand: step("brand") };
+};
 
 export function getProjectContent(lang: Lang): ProjectContent {
   if (lang === "fr") {
@@ -155,17 +176,12 @@ export function getProjectContent(lang: Lang): ProjectContent {
           { value: "open", label: "Pas de date précise" },
         ],
       },
-      budget: {
-        q: "Quel budget avez-vous en tête ?",
-        hint: "Sans engagement : c'est pour vous proposer la bonne formule.",
-        choices: [
-          { value: "lt500", label: "Moins de 500\u00a0€" },
-          { value: "500-1500", label: "500 à 1\u00a0500\u00a0€" },
-          { value: "1500-3000", label: "1\u00a0500 à 3\u00a0000\u00a0€" },
-          { value: "gt3000", label: "Plus de 3\u00a0000\u00a0€" },
-          { value: "advice", label: "Je ne sais pas, conseillez-moi" },
-        ],
-      },
+      offer: offerSteps(
+        "fr",
+        "Quelle formule vous intéresse ?",
+        "Sans engagement : on l'ajuste ensemble au premier échange.",
+        "Je ne sais pas encore, conseillez-moi",
+      ),
       name: {
         q: "Comment vous appelez-vous ?",
         hint: "Votre prénom suffit.",
@@ -191,7 +207,7 @@ export function getProjectContent(lang: Lang): ProjectContent {
         site: "Site",
         other: "En deux mots",
         when: "Délai",
-        budget: "Budget",
+        offer: "Formule",
         name: "Prénom",
         contact: "Contact",
       },
@@ -293,17 +309,12 @@ export function getProjectContent(lang: Lang): ProjectContent {
         { value: "open", label: "No set date" },
       ],
     },
-    budget: {
-      q: "What budget do you have in mind?",
-      hint: "No commitment: it helps me suggest the right package.",
-      choices: [
-        { value: "lt500", label: "Under €500" },
-        { value: "500-1500", label: "€500 to €1,500" },
-        { value: "1500-3000", label: "€1,500 to €3,000" },
-        { value: "gt3000", label: "Over €3,000" },
-        { value: "advice", label: "Not sure, advise me" },
-      ],
-    },
+    offer: offerSteps(
+      "en",
+      "Which package interests you?",
+      "No commitment: we fine-tune it together on our first call.",
+      "Not sure yet, advise me",
+    ),
     name: {
       q: "What's your name?",
       hint: "Your first name is enough.",
@@ -329,7 +340,7 @@ export function getProjectContent(lang: Lang): ProjectContent {
       site: "Site",
       other: "In a few words",
       when: "Timing",
-      budget: "Budget",
+      offer: "Package",
       name: "First name",
       contact: "Contact",
     },

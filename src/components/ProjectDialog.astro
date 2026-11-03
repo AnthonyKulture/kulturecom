@@ -7,7 +7,8 @@ import GoogleRating from "~/components/GoogleRating.astro";
 // "Démarrer un projet": a guided form, one question per screen, in a modal
 // dialog opened by any [data-project-open] link (nav, phone bar, About,
 // service pages, blog). A service id on the attribute answers the first
-// question. Sends a `project` lead to /api/lead (lead-form.ts). The links keep
+// question; an offer's position on [data-project-offer] (its "Choisir cette
+// formule" button) answers the package one. Sends a `project` lead to /api/lead (lead-form.ts). The links keep
 // their href (/contact/ or the page's #contact block): without JS they lead to
 // the classic form (/contact/) or to the contact details at the page's foot.
 interface Props {
@@ -22,7 +23,7 @@ const choiceSteps = [
   { id: "need", name: "need", ...c.need },
   ...(["web", "seo", "apps", "brand"] as const).map((n) => ({ id: `detail-${n}`, name: `detail-${n}`, ...c.detail[n] })),
   { id: "when", name: "when", ...c.when },
-  { id: "budget", name: "budget", ...c.budget },
+  ...(["web", "seo", "apps", "brand"] as const).map((n) => ({ id: `offer-${n}`, name: `offer-${n}`, ...c.offer[n] })),
 ];
 
 // Strings the client script needs (recap, live sheet, errors, fallback).
@@ -41,7 +42,7 @@ const strings = {
     need: labels(c.need.choices),
     detail: Object.assign({}, ...Object.values(c.detail).map((d) => labels(d.choices))),
     when: labels(c.when.choices),
-    budget: labels(c.budget.choices),
+    offer: Object.assign({}, ...Object.values(c.offer).map((o) => labels(o.choices))),
     channel: labels(c.contact.channels),
   },
   mailSubject: c.mailSubject,
@@ -79,7 +80,7 @@ const tick = Array.from({ length: COLS * ROWS }, (_, k) => {
   return { ink, delay: Math.round(delay) };
 });
 
-const sumRows = ["need", "detail", "when", "budget", "name", "contact"] as const;
+const sumRows = ["need", "detail", "when", "offer", "name", "contact"] as const;
 ---
 
 <dialog data-project class="pf" aria-labelledby="pf-title" data-strings={JSON.stringify(strings)}>
@@ -879,11 +880,11 @@ const sumRows = ["need", "detail", "when", "budget", "name", "contact"] as const
     skip: string;
     submit: string;
     sending: string;
-    rows: Record<"need" | "detail" | "site" | "other" | "when" | "budget" | "name" | "contact", string>;
+    rows: Record<"need" | "detail" | "site" | "other" | "when" | "offer" | "name" | "contact", string>;
     edit: string;
     none: string;
     errors: { other: string; name: string; email: string; phone: string };
-    labels: { need: Labels; detail: Labels; when: Labels; budget: Labels; channel: Labels };
+    labels: { need: Labels; detail: Labels; when: Labels; offer: Labels; channel: Labels };
     mailSubject: string;
     email: string;
     whatsapp: string;
@@ -915,13 +916,15 @@ const sumRows = ["need", "detail", "when", "budget", "name", "contact"] as const
     const channel = (): string => val("channel") || "email";
 
     // The questions this visitor goes through: the detail depends on the
-    // need, and the free check-up has no timeline or budget.
+    // need and so do the packages; the free check-up has no timeline or
+    // package, "Autre chose" no package.
     const flow = (): string[] => {
-      const n = need();
+      const n = need() || "web";
       if (n === "checkup") return ["need", "site", "name", "contact", "recap"];
-      return ["need", n === "other" ? "other" : `detail-${n || "web"}`, "when", "budget", "name", "contact", "recap"];
+      if (n === "other") return ["need", "other", "when", "name", "contact", "recap"];
+      return ["need", `detail-${n}`, "when", `offer-${n}`, "name", "contact", "recap"];
     };
-    const isChoice = (id: string): boolean => id === "need" || id === "when" || id === "budget" || id.startsWith("detail-");
+    const isChoice = (id: string): boolean => id === "need" || id === "when" || id.startsWith("detail-") || id.startsWith("offer-");
 
     const answered = (id: string): boolean => {
       if (isChoice(id)) return !!val(id);
@@ -940,7 +943,7 @@ const sumRows = ["need", "detail", "when", "budget", "name", "contact"] as const
       else list.push({ row: "detail", sheet: "detail", step: `detail-${n}`, value: L.detail[val(`detail-${n}`)] ?? "" });
       if (n !== "checkup") {
         list.push({ row: "when", sheet: "when", step: "when", value: L.when[val("when")] ?? "" });
-        list.push({ row: "budget", sheet: "budget", step: "budget", value: L.budget[val("budget")] ?? "" });
+        if (n !== "other") list.push({ row: "offer", sheet: "offer", step: `offer-${n}`, value: L.offer[val(`offer-${n}`)] ?? "" });
       }
       list.push({ row: "name", sheet: "name", step: "name", value: val("name") });
       const reach = channel() === "email" ? val("email") : val("phone");
@@ -1097,7 +1100,7 @@ const sumRows = ["need", "detail", "when", "budget", "name", "contact"] as const
         detail: n === "checkup" || n === "other" ? "" : val(`detail-${n}`),
         site: n === "checkup" ? val("site") : "",
         timeline: n === "checkup" ? "" : val("when"),
-        budget: n === "checkup" ? "" : val("budget"),
+        offer: n === "checkup" || n === "other" ? "" : val(`offer-${n}`),
         name: val("name"),
         channel: channel(),
         email: byEmail ? val("email") : "",
@@ -1130,12 +1133,14 @@ const sumRows = ["need", "detail", "when", "budget", "name", "contact"] as const
       q("[data-pf-field=phone]").hidden = byEmail;
     };
 
-    const open = (preset?: string): void => {
+    const open = (preset?: string, offer?: string): void => {
       if (dialog.dataset.state === "done") reset();
       startedAt ||= Date.now();
       const radio = preset && form.querySelector<HTMLInputElement>(`input[name=need][value="${preset}"]`);
       if (radio) {
         radio.checked = true;
+        const pick = offer && form.querySelectorAll<HTMLInputElement>(`input[name="offer-${preset}"]`)[Number(offer)];
+        if (pick) pick.checked = true;
         history.length = 0;
         history.push("need");
         show(flow()[1], false);
@@ -1150,7 +1155,7 @@ const sumRows = ["need", "detail", "when", "budget", "name", "contact"] as const
       const m = e as MouseEvent;
       if (!link || m.metaKey || m.ctrlKey || m.shiftKey || m.altKey) return;
       e.preventDefault();
-      open(link.dataset.projectOpen || undefined);
+      open(link.dataset.projectOpen || undefined, link.dataset.projectOffer);
     });
     dialog.querySelectorAll("[data-pf-close]").forEach((b) => b.addEventListener("click", () => dialog.close()));
     dialog.addEventListener("click", (e) => {

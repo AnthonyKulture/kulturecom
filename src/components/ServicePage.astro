@@ -242,6 +242,7 @@ const jsonLd = {
           <div class:list={["grid gap-4", row.title && "mt-5", row.offers.length > 2 ? "lg:grid-cols-3" : "md:grid-cols-2"]}>
             {row.offers.map((o) => {
               const price = offerPrice(o);
+              const pick = c.offers.indexOf(o);
               return (
                 <article class:list={["offer marks", o.featured && "offer--featured"]}>
                   {o.badge && <p class="offer-badge">{o.badge}</p>}
@@ -264,7 +265,7 @@ const jsonLd = {
                       </li>
                     ))}
                   </ul>
-                  <a href="#contact" data-project-open={id} class:list={["btn mt-auto self-start", o.featured ? "btn-primary" : "btn-secondary"]}>{o.cta ?? labels.choose}</a>
+                  <a href="#contact" data-project-open={id} data-project-offer={pick} class:list={["btn mt-auto self-start", o.featured ? "btn-primary" : "btn-secondary"]}>{o.cta ?? labels.choose}</a>
                 </article>
               );
             })}
@@ -402,7 +403,7 @@ const jsonLd = {
     </div>
   </section>
 
-  {/* Contact — the form opens on the budget step, need pre-selected. */}
+  {/* Contact — the form opens with the need pre-selected. */}
   <CTA lang={lang} need={id} />
 
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />

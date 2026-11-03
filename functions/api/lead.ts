@@ -24,7 +24,7 @@ interface Env {
 }
 
 const NEEDS: Record<string, string> = {
-  seo: "Être trouvé sur Google et cité par les IA (SEO, GEO, ChatGPT Ads)",
+  seo: "Être trouvé sur Google et cité par les IA (SEO, GEO, Google Ads, ChatGPT Ads)",
   web: "Créer ou refaire un site",
   apps: "Outils, apps & IA",
   brand: "Identité de marque",
@@ -41,8 +41,8 @@ const DETAILS: Record<string, string> = {
   maps: "Sortir sur Google Maps",
   google: "Monter dans Google",
   ai: "Être cité par les IA",
-  ads: "Lancer ChatGPT Ads",
-  audit: "Faire le point (audit)",
+  ads: "Lancer Google Ads ou ChatGPT Ads",
+  audit: "Faire le point (audit gratuit)",
   automate: "Automatiser une tâche répétitive",
   assistant: "Un assistant IA pour ses clients",
   tool: "Un outil métier sur-mesure",
@@ -56,13 +56,6 @@ const TIMELINES: Record<string, string> = {
   month: "Dans le mois",
   quarter: "D'ici 2 à 3 mois",
   open: "Pas de date précise",
-};
-const BUDGETS: Record<string, string> = {
-  lt500: "Moins de 500 €",
-  "500-1500": "500 à 1 500 €",
-  "1500-3000": "1 500 à 3 000 €",
-  gt3000: "Plus de 3 000 €",
-  advice: "Ne sait pas, à conseiller",
 };
 const CHANNELS: Record<string, string> = { email: "E-mail", phone: "Téléphone", whatsapp: "WhatsApp" };
 
@@ -99,7 +92,9 @@ export async function onRequestPost({ request, env }: { request: Request; env: E
   const detail = DETAILS[clean(data.detail, 20)];
   const site = clean(data.site, 200);
   const timeline = TIMELINES[clean(data.timeline, 20)];
-  const budget = BUDGETS[clean(data.budget, 20)];
+  // The package arrives by its French name (from the service page's offers).
+  const offerId = clean(data.offer, 80);
+  const offer = offerId === "advice" ? "Ne sait pas, à conseiller" : offerId;
   const channel = CHANNELS[clean(data.channel, 20)];
 
   // A project needs a first name and a way to reply: an e-mail, or a phone
@@ -144,7 +139,7 @@ export async function onRequestPost({ request, env }: { request: Request; env: E
           ...(detail ? [`Précision : ${detail}`] : []),
           ...(site ? [`Site actuel : ${site}`] : []),
           ...(timeline ? [`Délai : ${timeline}`] : []),
-          ...(budget ? [`Budget : ${budget}`] : []),
+          ...(offer ? [`Formule : ${offer}`] : []),
           `Prénom : ${name}`,
           ...(channel ? [`Répondre par : ${channel}`] : []),
           `E-mail : ${email || "non renseigné"}`,
@@ -159,7 +154,7 @@ export async function onRequestPost({ request, env }: { request: Request; env: E
   const subject =
     type === "callback"
       ? `[RAPPEL] ${phone}${name ? ` · ${name}` : ""}`
-      : `[Contact] ${NEEDS[need] ?? "Projet"}${budget ? ` · ${budget}` : ""} · ${name}`;
+      : `[Contact] ${NEEDS[need] ?? "Projet"}${offer ? ` · ${offer}` : ""} · ${name}`;
 
   const to = env.LEAD_TO || "anthony@anthonyprofit.com";
   const text = lines.join("\n");
