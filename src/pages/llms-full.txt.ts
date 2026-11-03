@@ -43,9 +43,9 @@ export async function GET(context: APIContext) {
   const site = context.site!;
   const abs = (path: string): string => new URL(path, site).toString();
   const out: string[] = [
-    "# Anthony Profit (Kulturecom) — texte intégral / full text",
+    "# Anthony Profit — texte intégral / full text",
     "",
-    "> Designer et développeur web freelance à Nice (Côte d'Azur, France), sous le nom Kulturecom : sites internet sur-mesure, outils / apps & IA, SEO & GEO (dont campagnes ChatGPT Ads), identité de marque. Contact : anthony@anthonyprofit.com · WhatsApp +33 6 60 50 16 82.",
+    "> Designer et développeur web freelance à Nice (Côte d'Azur, France) : sites internet sur-mesure, outils / apps & IA, SEO & GEO (dont campagnes ChatGPT Ads), identité de marque. Contact : anthony@anthonyprofit.com · WhatsApp +33 6 60 50 16 82.",
     "",
     `Index : ${abs("/llms.txt")} · Généré le ${day(new Date())}.`,
   ];
