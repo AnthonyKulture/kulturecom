@@ -182,6 +182,11 @@ export function getHomeContent(lang: Lang): HomeContent {
           link: { href: servicePagePath("web", lang), label: "Voir les formules site internet" },
         },
         {
+          q: "Combien coûte le référencement d'un site à Nice ?",
+          a: `Il n'existe pas de grille officielle : le prix dépend surtout de la concurrence sur vos requêtes, de l'état de votre site et du contenu à produire. En repère, un consultant SEO freelance expérimenté facture autour de 500 € HT la journée en France (baromètre des tarifs Malt, 2026). Chez moi, l'audit de visibilité Google + IA est gratuit, la mise en conformité coûte dès ${formatPrice(PRICE.seoFix, lang)} et le suivi SEO & GEO dès ${formatPrice(PRICE.seoMonthly, lang)} par mois (${COMMITMENT.seo} mois minimum). Prix nets, TVA non applicable.`,
+          link: { href: "/blog/prix-referencement-nice-seo/", label: "Voir la grille des prix du référencement à Nice" },
+        },
+        {
           q: "En combien de temps mon projet est-il livré ?",
           a: `Comptez ${DELAY.webOnePage.fr} pour un site une page, ${DELAY.webShowcase.fr} pour un site vitrine, ${DELAY.seoAudit.fr} pour un audit de visibilité Google + IA et ${DELAY.appsStarter.fr} pour une automatisation ou un assistant IA. Le planning est fixé par écrit dès le départ.`,
           link: { href: "/services/", label: "Comparer les services" },
@@ -262,6 +267,11 @@ export function getHomeContent(lang: Lang): HomeContent {
         q: "How much does a custom website cost in Nice?",
         a: `There is no single price: it depends on the number of pages, the design, the features and the content to produce. With Anthony Profit, a freelance designer-developer in Nice, a custom one-page site costs ${formatPrice(PRICE.webOnePage, lang)} and a 5 to 8-page showcase site starts at ${formatPrice(PRICE.webShowcase, lang)}. Logo and brand identity are included free. Prices are net (no VAT charged) and fixed in writing with the timeline, after a first call.`,
         link: { href: servicePagePath("web", lang), label: "See the website packages" },
+      },
+      {
+        q: "How much does SEO cost in Nice?",
+        a: `There is no official rate card: the price depends mainly on how competitive your searches are, the state of your site and the content to produce. As a benchmark, an experienced freelance SEO consultant charges around €500 a day before VAT in France (Malt rate barometer, 2026). With me, the Google + AI visibility audit is free, the compliance fix starts at ${formatPrice(PRICE.seoFix, lang)} and SEO & GEO follow-up at ${formatPrice(PRICE.seoMonthly, lang)} a month (${COMMITMENT.seo} months minimum). Net prices, no VAT charged.`,
+        link: { href: "/en/blog/seo-cost-nice-pricing/", label: "See the SEO price grid for Nice" },
       },
       {
         q: "How long does a project take?",
