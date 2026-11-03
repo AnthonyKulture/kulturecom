@@ -4,8 +4,8 @@ import type { Lang } from "~/i18n/ui";
 // Phone-only action bar: "Démarrer un projet" + "Être rappelé", a small dock
 // floating over the foot of the screen. It comes only once the reader is
 // into the page (past the first screen, and on the home past the scroll
-// sequences), steps aside while they scroll down and is back as soon as
-// they pause or scroll up. Hidden while the contact block is on screen (no
+// sequences), steps aside when they scroll well down and is back once they
+// have paused a while (2.5 s) or scroll up. Hidden while the contact block is on screen (no
 // duplicate actions), while the cookie banner is up (it sits in the same
 // spot) and while the menu is open.
 interface Props {
@@ -106,21 +106,30 @@ const contactHref = fr ? "/contact/" : "/en/contact/";
     // have scrolled away.
     const theatre = document.querySelector<HTMLElement>("[data-theatre-wrap]");
     const root = document.documentElement;
-    const PAUSE = 450; // ms still before it comes back
+    // Reading goes scroll, read, scroll: it comes back only once the reader
+    // has been still a good while, and once up, a short scroll down (a line
+    // or two) leaves it there; only a real run down puts it away.
+    const PAUSE = 2500; // ms still before it comes back
+    const HIDE = 160; // px scrolled down in one go before it steps aside
     let contactInView = false;
     let lastY = window.scrollY;
-    let down = false; // scrolling down right now
+    let down = false; // scrolling down right now, far enough to hide it
+    let from = -1; // where the current run down started
     let pause = 0;
 
     const update = (): void => {
       const y = window.scrollY;
       if (Math.abs(y - lastY) > 4) {
-        down = y > lastY;
+        const goingDown = y > lastY;
+        if (!goingDown) from = -1;
+        else if (from < 0) from = lastY;
         lastY = y;
         clearTimeout(pause);
-        if (down) {
+        down = goingDown && (bar.dataset.visible !== "true" || y - from > HIDE);
+        if (goingDown) {
           pause = window.setTimeout(() => {
             down = false;
+            from = -1;
             update();
           }, PAUSE);
         }
