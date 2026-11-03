@@ -544,6 +544,16 @@ export function getServicePage(id: ServiceId, lang: Lang): ServicePage | null {
   return { ...meta, content: CONTENT[id][lang], related };
 }
 
+/** An offer's price in words: "dès 490 €/mois", "250 € puis 90 €/mois",
+ *  "gratuit", "sur devis" (llms-full.txt, the project form). */
+export const offerPriceText = (o: ServiceOffer, lang: Lang): string => {
+  const fr = lang === "fr";
+  const eur = (k: keyof typeof PRICE): string => formatPrice(PRICE[k], lang);
+  if (o.free) return fr ? "gratuit" : "free";
+  if (!o.price) return fr ? "sur devis" : "on quote";
+  return `${o.from ? (fr ? "dès " : "from ") : ""}${eur(o.price)}${o.unit ?? ""}${o.then ? `${fr ? " puis " : " then "}${eur(o.then.price)}${o.then.unit}` : ""}`;
+};
+
 /** Compact list of all services for the /services/ hub page. */
 export function getAllServicePages(
   lang: Lang

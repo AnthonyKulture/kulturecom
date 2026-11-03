@@ -4,10 +4,9 @@
 // so it can't drift from the site.
 import type { APIContext } from "astro";
 import { ui, type Lang } from "~/i18n/ui";
-import { SERVICE_PAGES, getServicePage } from "~/lib/service-pages";
+import { SERVICE_PAGES, getServicePage, offerPriceText } from "~/lib/service-pages";
 import { CASE_STUDIES, caseStudyPath, getCaseStudy } from "~/lib/case-studies";
 import { getPosts, postPath } from "~/lib/blog";
-import { PRICE, formatPrice } from "~/lib/facts";
 import type { ServiceOffer } from "~/lib/service-pages";
 
 const day = (d: Date): string => d.toISOString().slice(0, 10);
@@ -15,12 +14,7 @@ const day = (d: Date): string => d.toISOString().slice(0, 10);
 /** One package as a line: name, price, timeline, commitment, then what it includes. */
 const offerLine = (o: ServiceOffer, lang: Lang): string => {
   const fr = lang === "fr";
-  const eur = (k: keyof typeof PRICE): string => formatPrice(PRICE[k], lang);
-  const price = o.free
-    ? fr ? "gratuit" : "free"
-    : o.price
-      ? `${o.from ? (fr ? "dès " : "from ") : ""}${eur(o.price)}${o.unit ?? ""}${o.then ? `${fr ? " puis " : " then "}${eur(o.then.price)}${o.then.unit}` : ""}`
-      : fr ? "sur devis" : "on quote";
+  const price = offerPriceText(o, lang);
   const terms = [
     o.delay && `${fr ? "délai" : "timeline"} ${o.delay}`,
     o.term && `${fr ? "engagement" : "commitment"} ${o.term}`,
