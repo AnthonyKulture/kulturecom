@@ -1,0 +1,84 @@
+{
+  "card": {
+    "kicker": "SEO local · Nice",
+    "title": "Ton restaurant sur *Google Maps* et dans ChatGPT",
+    "subtitle": "Fiche Google, menu en texte, avis récents : ce qui fait sortir un restaurant niçois."
+  },
+  "slides": [
+    {
+      "type": "cover",
+      "eyebrow": "SEO local · Nice",
+      "title": "Ton restaurant est *invisible* sur Google Maps ?",
+      "body": "Ce qui fait sortir un resto niçois sur la carte et dans ChatGPT."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Le constat",
+      "title": "Ton client cherche *sur la carte*.",
+      "body": "« Socca Vieux-Nice », « brunch port de Nice » : Google affiche une carte avec trois restaurants avant le moindre site."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "La fiche Google",
+      "title": "Ton menu, *en texte*.",
+      "body": "Saisis tes plats dans l'éditeur de menu de Google avec les noms que tes clients tapent : socca, pissaladière, daube."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Les avis",
+      "title": "Des avis *récents*, sans cadeau.",
+      "body": "74 % des consommateurs cherchent des avis de moins de 3 mois (BrightLocal 2026). Et Google interdit le dessert offert contre un avis."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Les IA",
+      "title": "ChatGPT cite ceux qu'il *retrouve partout*.",
+      "body": "Presse locale, guides, label Cuisine Nissarde, plateformes d'avis : plus ton nom revient, plus il a de chances d'être recommandé."
+    },
+    {
+      "type": "list",
+      "eyebrow": "Par où commencer",
+      "title": "Ta *checklist*",
+      "items": [
+        {
+          "t": "Une catégorie précise",
+          "sub": "« Pizzeria » plutôt que « Restaurant »"
+        },
+        {
+          "t": "Un menu en HTML sur ton site",
+          "sub": "Une seule URL, des prix à jour"
+        },
+        {
+          "t": "Les données structurées Restaurant",
+          "sub": "Identiques à ce que dit la page"
+        },
+        {
+          "t": "Un QR code d'avis sur l'addition",
+          "sub": "Et une réponse à chaque avis"
+        }
+      ]
+    },
+    {
+      "type": "cta",
+      "eyebrow": "Parlons-en",
+      "title": "Visible sur Maps *et dans les IA*.",
+      "body": "Le guide complet est en lien dans la bio.",
+      "cta": "DM « RESTO » et on regarde ta fiche ensemble."
+    }
+  ],
+  "caption": "Ton restaurant à Nice sort-il sur Google Maps quand on cherche « où manger dans le Vieux-Nice » ?\n\nLe SEO d'un restaurant se joue d'abord sur la fiche Google : une catégorie précise, le menu saisi en texte, des avis récents. Ces mêmes infos nourrissent les réponses de ChatGPT et Gemini quand un touriste leur demande une adresse.\n\nEnregistre ce post pour ta prochaine mise à jour de fiche, et envoie-le à un restaurateur niçois qui en a besoin. Le guide complet (SEO restaurant Nice, Google Maps, IA) est en lien dans la bio.",
+  "hashtags": [
+    "#restaurantnice",
+    "#nice06",
+    "#seolocal",
+    "#googlemaps",
+    "#cotedazur"
+  ],
+  "stories": [
+    "Le visuel carré (card.jpg) avec un sticker lien vers https://anthonyprofit.com/blog/seo-restaurant-nice/ : « Le guide complet est ici ».",
+    "Sondage sur fond uni : « Ton menu sur Google, il est… » Réponses : « En texte » / « En photo ou PDF ».",
+    "Slide 04 du carrousel (les avis) avec le texte : « 74 % cherchent des avis de moins de 3 mois. Et toi, ton dernier avis date de quand ? »",
+    "Boîte à questions : « Ta question sur Google Maps ou ChatGPT pour ton resto ? » (les réponses donnent les prochains sujets)."
+  ],
+  "reel": "Plan 1, texte à l'écran : « Ton resto sur Google Maps ». Face caméra dans le Vieux-Nice : « Quand un touriste tape \"socca Vieux-Nice\", Google lui montre une carte avec trois restaurants. Pour être dedans, commence par ton menu : saisis tes plats en texte dans ta fiche Google, avec les noms que les gens cherchent, socca, pissaladière, daube. Pas une photo floue de l'ardoise. Ces mêmes infos, ChatGPT les lit aussi quand on lui demande où manger. » Fin : « Le guide complet est en lien dans ma bio. »"
+}

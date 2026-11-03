@@ -41,6 +41,7 @@ Références clients : Eden Rock Yacht Rental, Royal Yacht International, Sun Be
 - [Données structurées LocalBusiness](https://anthonyprofit.com/blog/donnees-structurees-localbusiness-schema-org/): quel type Schema.org choisir, quelles propriétés remplir, exemple JSON-LD commenté et cas particuliers de la Côte d'Azur (Monaco, saisonnalité).
 - [Être cité par Perplexity](https://anthonyprofit.com/blog/etre-cite-par-perplexity/): comment Perplexity indexe, découpe et classe les pages, ses robots (PerplexityBot, Perplexity-User), ses sources locales et la checklist pour être cité à Nice, Cannes ou Monaco.
 - [GEO local](https://anthonyprofit.com/blog/geo-local-referencement-ia/): comment une entreprise locale se fait recommander par ChatGPT, Perplexity, Gemini et les réponses IA de Google (fiche Google, avis, citations NAP, LocalBusiness, pages services, mentions tierces) et comment le mesurer avec un panel de prompts.
+- [SEO pour restaurant à Nice](https://anthonyprofit.com/blog/seo-restaurant-nice/): fiche Google d'un restaurant (catégorie, éditeur de menu, réservation), menu en texte, données structurées Restaurant, avis conformes aux règles de Google et visibilité dans les réponses IA à « où manger à Nice ».
 
 ## À propos & contact
 
@@ -69,6 +70,7 @@ Références clients : Eden Rock Yacht Rental, Royal Yacht International, Sun Be
 - [LocalBusiness schema markup (guide)](https://anthonyprofit.com/en/blog/localbusiness-schema-markup-guide/): which Schema.org type to pick, which properties to fill in, annotated JSON-LD and Riviera special cases.
 - [Get cited by Perplexity (guide)](https://anthonyprofit.com/en/blog/get-cited-by-perplexity/): how Perplexity indexes, splits and ranks pages, its crawlers, its local sources and a checklist to get cited.
 - [Local GEO (guide)](https://anthonyprofit.com/en/blog/local-geo-generative-engine-optimization/): how a local business gets recommended by ChatGPT, Perplexity, Gemini and Google's AI answers, the six signals they read and a simple prompt-based way to measure it.
+- [Restaurant SEO in Nice (guide)](https://anthonyprofit.com/en/blog/restaurant-seo-nice/): a restaurant's Google profile (category, menu editor, bookings), a text menu, Restaurant structured data, reviews within Google's rules and visibility in AI answers to "where to eat in Nice".
 - [About](https://anthonyprofit.com/en/about/): background, method, stack.
 - [Contact](https://anthonyprofit.com/en/contact/): e-mail and WhatsApp, reply within 2 business days.
 

@@ -63,6 +63,27 @@ et sur l'EN avant d'écrire les fichiers. Règles dures :
 - Optionnel : si le sujet appelle un dessin spécifique sur l'index, ajoute une entrée à `BY_KEY` dans
   `src/components/blog/PostDrawing.astro` en réutilisant une figure existante (`serp`, `chat`, `ads`, `aiSerp`, `chart`,
   `coast` + `city`, `profile`, `langs`). Ne modifie rien d'autre dans les composants.
+- Pack Instagram (en FR, tutoiement, dans la DA du site). Écris `.claude/blog/social/<slug-fr>/pack.json` en prenant
+  pour modèle `.claude/blog/social/seo-restaurant-nice/pack.json` (le format est documenté en tête du script), puis :
+  ```bash
+  node .claude/blog/social-pack.mjs .claude/blog/social/<slug-fr>/pack.json
+  ```
+  Le script produit `card.jpg` (carré 1080 × 1080), `slide-01.jpg`… (carrousel 1080 × 1350) et `post.txt`.
+  - `card` : `kicker` = thème + ville en 2 à 4 mots ; `title` = accroche de 4 à 9 mots, plus percutante que le H1 ;
+    `subtitle` = une phrase de 10 à 18 mots sur ce que l'article apporte.
+  - `slides` : 5 à 8 slides, peu de mots par slide. 1 `cover` (le hook qui arrête le scroll), des `statement` (une idée
+    de l'article par slide), 1 `list` (la checklist ou les étapes de l'article, 3 ou 4 items), 1 `cta` en dernier
+    (« Le guide complet est en lien dans la bio. » + un appel à écrire un mot-clé en DM). Dans chaque titre, **un
+    seul** passage entre `*astérisques*` (il passe en bleu).
+  - `caption` : 1re ligne = question ou hook avec le mot-clé local ; 2 à 4 lignes de valeur avec les mots que la cible
+    tape (« restaurant Nice », « SEO Cannes »…) ; un appel à enregistrer ou à envoyer à quelqu'un ; « Le guide complet
+    est en lien dans la bio. ». `hashtags` : 5 au maximum (limite Instagram), 1 large, 2 ou 3 de niche, 1 local.
+  - `stories` : 3 ou 4. La 1re = `card.jpg` avec un sticker lien vers l'URL FR de l'article. Puis un sondage et une
+    boîte à questions liés au sujet, ou une slide du carrousel avec une question.
+  - `reel` : script face caméra de 30 à 45 secondes (une seule astuce de l'article, texte à l'écran de moins de 5 mots
+    au début, lieu de tournage réel à Nice, Cannes ou Monaco, fin sur le lien en bio).
+  Mêmes règles que l'article : Humanizer, zéro tiret cadratin ou demi-cadratin (le script refuse), aucun chiffre ni
+  fait qui ne figure pas dans l'article (avec sa source), pas de promesse d'audit gratuit. Ne modifie pas le script.
 - Coche le sujet dans `.claude/blog/BACKLOG.md` (`- [x] … → /blog/<slug-fr>/`). S'il reste moins de 4 sujets non
   cochés, ajoute 6 nouveaux sujets dans le même esprit (local Nice / Cannes / Monaco, SEO, GEO, ChatGPT Ads), sans
   doublon avec les articles existants.
@@ -78,18 +99,27 @@ et sur l'EN avant d'écrire les fichiers. Règles dures :
    for h in $(grep -ohE 'href="/[^"#?]*' dist/blog/*/index.html dist/en/blog/*/index.html | sed 's/href="//' | sort -u); do p="dist${h%/}/index.html"; [ -f "$p" ] || [ -f "dist$h" ] || echo "BROKEN $h"; done
    ```
 4. `grep -c '[—–]'` sur les deux .mdx = 0.
+5. Le script du pack sort `OK` (code 1 = règle non respectée, code 2 = texte qui déborde : corrige et relance).
+   Ouvre `card.jpg`, la cover, la slide `list` et la slide `cta` avec `Read` et vérifie : texte lisible, rien de coupé,
+   accents corrects, un seul passage en bleu par visuel. Un pack raté ne bloque pas l'article : publie l'article sans
+   le pack et signale-le dans le compte-rendu.
 Si une étape échoue et que tu ne peux pas la corriger proprement : ne pousse rien, termine en expliquant pourquoi.
 
 ## 6. Publication
 ```bash
 git pull --rebase origin main
-git add src/content/blog/fr/<slug-fr>.mdx src/content/blog/en/<slug-en>.mdx public/llms.txt .claude/blog/BACKLOG.md
+git add src/content/blog/fr/<slug-fr>.mdx src/content/blog/en/<slug-en>.mdx public/llms.txt .claude/blog/BACKLOG.md \
+  .claude/blog/social/<slug-fr>/
 # + src/components/blog/PostDrawing.astro si modifié
 git commit -m "feat(blog): <titre FR court>" -m "Co-Authored-By: Claude <noreply@anthropic.com>"
 git push origin main
 ```
 N'ajoute que ces fichiers. Ne touche à rien d'autre dans le dépôt.
 
+Après le push, envoie le pack avec `SendUserFile` (`status: "proactive"`) : `card.jpg`, toutes les `slide-NN.jpg` et
+`post.txt` de `.claude/blog/social/<slug-fr>/`, pour qu'Anthony le poste. Il reste aussi dans le dépôt (hors du site
+publié). La routine ne publie rien sur Instagram elle-même.
+
 ## 7. Compte-rendu final
-Sujet, mot-clé principal, URLs FR et EN, nombre de mots FR, liens internes, sources pour chaque chiffre clé, points
+Sujet, mot-clé principal, URLs FR et EN, dossier du pack Instagram et titre de la cover, nombre de mots FR, liens internes, sources pour chaque chiffre clé, points
 incertains, hash du commit et confirmation du push.
