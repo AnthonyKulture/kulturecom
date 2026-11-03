@@ -1,18 +1,18 @@
 # Anthony Profit (Kulturecom)
 
-> Designer et développeur web freelance à Nice (Côte d'Azur, France), sous le nom Kulturecom. Quatre expertises sous une seule main : sites internet sur-mesure, outils / apps & IA, SEO & GEO (dont campagnes ChatGPT Ads), identité de marque. Site bilingue FR/EN. Mis à jour : 2026-10-22.
+> Designer et développeur web freelance à Nice (Côte d'Azur, France), sous le nom Kulturecom. Quatre expertises sous une seule main : sites internet sur-mesure, outils / apps & IA, SEO & GEO (dont campagnes ChatGPT Ads), identité de marque. Site bilingue FR/EN. Mis à jour : 2026-11-03.
 
 Anthony Profit conçoit des sites et des outils pensés pour être trouvés sur Google et cités dans les réponses des IA (ChatGPT, Perplexity, Gemini, Google AI Overviews). Basé à Nice (06000), il travaille avec des PME, des marques B2B et des créateurs partout en France et à l'international. Contact : anthony@anthonyprofit.com · WhatsApp +33 6 60 50 16 82 · réponse sous 48 h ouvrées · formulaire et rappel téléphonique sur le site. Prix nets (TVA non applicable, art. 293 B du CGI). Texte intégral des pages clés : https://anthonyprofit.com/llms-full.txt
 
-Avis Google : 5,0/5 sur 17 avis (https://www.google.com/maps?cid=13963690267531536578).
+Avis Google : 5,0/5 sur 22 avis (https://www.google.com/maps?cid=13963690267531536578).
 
 Références clients : Eden Rock Yacht Rental, Royal Yacht International, Sun Beach House, Surly, AlexAlu, IBD Monaco, Adaly Yacht, Agence Talisman, Movida, Orcal Motor, CK Atelier, Joseph (Cap 3000), Lou Bantry, Cibo Trattoria, Sana Jardins, Les Cordistes.
 
 ## Services
 
-- [Création de site internet](https://anthonyprofit.com/creation-site-internet/): sites vitrines et éditoriaux sur-mesure, design + développement Astro / React / TypeScript, Core Web Vitals au vert, accessibilité WCAG AA, SEO natif, CMS headless. Site une page dès 790 € (1 à 2 semaines), site vitrine 5 à 8 pages dès 1 690 € (3 à 5 semaines), identité de marque offerte.
+- [Création de site internet](https://anthonyprofit.com/creation-site-internet/): sites vitrines et éditoriaux créés sur-mesure à partir de l'entreprise du client : recherche de fond (marché, concurrents, clients), positionnement, direction artistique, design et animations sur-mesure, puis développement Astro / React / TypeScript, Core Web Vitals au vert, accessibilité WCAG AA, SEO natif, CMS headless. Le prix rémunère ce travail de recherche et de création, là où un site généré par IA ou par modèle reste générique. Site une page dès 790 € (1 à 2 semaines), site vitrine 5 à 8 pages dès 1 690 € (3 à 5 semaines), identité de marque offerte.
 - [Outils, apps & IA](https://anthonyprofit.com/outils-applications-ia/): outils métier, back-offices, portails clients, apps web et mobiles (iOS / Android), IA intégrée (API Claude / OpenAI : assistants sur documents, RAG, agents), automatisations n8n / Make / Zapier. Stack : Next.js · React · Node · Supabase / PostgreSQL. Automatisation ou assistant IA dès 690 € (10 jours), outil ou app sur-mesure dès 2 900 €.
-- [SEO & GEO](https://anthonyprofit.com/seo-geo/): référencement Google + visibilité dans les IA (llms.txt, Schema.org, citabilité) + campagnes ChatGPT Ads (annonces sponsorisées sous les réponses de ChatGPT, ouvertes aux annonceurs en France depuis fin août 2026). Audit visibilité Google + IA dès 390 € (5 jours), suivi dès 490 €/mois, lancement ChatGPT Ads dès 490 € (7 jours) hors budget publicitaire.
+- [SEO & GEO](https://anthonyprofit.com/seo-geo/): référencement Google + visibilité dans les IA (llms.txt, Schema.org, citabilité) + campagnes Google Ads et ChatGPT Ads (annonces sponsorisées sous les réponses de ChatGPT, ouvertes aux annonceurs en France depuis fin août 2026). Audit visibilité Google + IA gratuit et sans engagement (5 jours) ; mise en conformité SEO & GEO dès 390 € (1 à 2 semaines) ; suivi & optimisation SEO & GEO dès 490 €/mois, audit approfondi et corrections inclus (3 mois minimum). Publicité, budget publicitaire en plus et engagement 6 mois : Google Ads 250 € puis 90 €/mois, ChatGPT Ads 490 € puis 180 €/mois, pack Google Ads + ChatGPT Ads 590 € puis 220 €/mois (450 € d'économie sur 6 mois).
 - [Identité de marque](https://anthonyprofit.com/identite-de-marque/): direction artistique, logo, brand system, typographie, déclinaisons web / print / social. Logo + mini-charte dès 150 € (1 semaine), identité complète dès 250 € (2 à 3 semaines). Offerte avec la création ou la refonte d'un site.
 - [Tous les services](https://anthonyprofit.com/services/): les quatre expertises et un seul interlocuteur.
 
@@ -51,9 +51,9 @@ Références clients : Eden Rock Yacht Rental, Royal Yacht International, Sun Be
 ## English
 
 - [Home (EN)](https://anthonyprofit.com/en/): freelance designer & developer in Nice — custom websites, tools / apps & AI, SEO & GEO (incl. ChatGPT Ads), brand identity.
-- [Web development](https://anthonyprofit.com/en/web-development/): custom Astro / React builds, performance, native SEO.
+- [Web development](https://anthonyprofit.com/en/web-development/): websites created from the client's business: in-depth research, positioning, art direction, custom design and animation, then fast Astro / React code with native SEO. One-page site €790, showcase site from €1,690, brand identity included free.
 - [Tools, apps & AI](https://anthonyprofit.com/en/apps-ai-tools/): business tools, web and mobile apps, built-in AI (Claude / OpenAI APIs), automations and integrations.
-- [SEO & GEO](https://anthonyprofit.com/en/seo-geo/): Google ranking + visibility in AI engines + ChatGPT Ads campaigns (open to advertisers in France and across Europe since late August 2026).
+- [SEO & GEO](https://anthonyprofit.com/en/seo-geo/): Google ranking + visibility in AI engines + Google Ads and ChatGPT Ads campaigns (ChatGPT Ads open to advertisers in France and across Europe since late August 2026). Free Google + AI visibility audit, compliance fix from €390, monthly follow-up from €490/month; Google Ads €250 then €90/month, ChatGPT Ads €490 then €180/month, both together €590 then €220/month (6-month commitment, ad budget on top).
 - [Brand identity](https://anthonyprofit.com/en/brand-design/): art direction, brand system, applications.
 - [Case studies](https://anthonyprofit.com/en/work/): Surly, Sun Beach House, Royal Yacht International, Eden Rock Yacht Rental, Movida, AlexAlu, CK Atelier.
 - [SEO, GEO & ChatGPT (guide)](https://anthonyprofit.com/en/blog/seo-geo-appear-in-chatgpt/): why your business doesn't show up in ChatGPT, and how to fix it.

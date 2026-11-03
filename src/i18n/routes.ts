@@ -121,7 +121,7 @@ export const routes: Record<string, RouteMeta> = {
     crumb: "Création de site internet",
     title: `Création de site internet sur-mesure à Nice | Anthony Profit`,
     description:
-      `Création de site internet sur-mesure à Nice : design, code Astro/React, rapide et bien référencé. Site une page dès ${fr("web")}, réponse sous 48 h.`,
+      `Création de site internet sur-mesure à Nice : recherche sur votre entreprise, direction artistique, design et animations, code rapide et bien référencé. Site une page dès ${fr("web")}.`,
   },
   "/seo-geo/": {
     lang: "fr",
@@ -129,7 +129,7 @@ export const routes: Record<string, RouteMeta> = {
     crumb: "SEO & GEO",
     title: `Consultant SEO, GEO & ChatGPT Ads à Nice | Anthony Profit`,
     description:
-      `SEO et GEO à Nice : être trouvé sur Google et cité par ChatGPT. Stratégie, plan éditorial, contenus et veille. Audit de visibilité dès ${fr("seo")}, ChatGPT Ads.`,
+      `SEO et GEO à Nice : être trouvé sur Google et cité par ChatGPT. Audit de visibilité gratuit, mise en conformité dès ${fr("seo")}, suivi mensuel, Google Ads et ChatGPT Ads.`,
   },
   "/identite-de-marque/": {
     lang: "fr",
@@ -286,9 +286,9 @@ export const routes: Record<string, RouteMeta> = {
     lang: "en",
     alt: "/creation-site-internet/",
     crumb: "Web development",
-    title: `Custom web development in Nice | Anthony Profit`,
+    title: `Custom web design & development in Nice | Anthony Profit`,
     description:
-      `Custom website design and development near Nice: Astro/React, fast and search-ready. One-page site from ${en("web")}, reply within 2 business days.`,
+      `Custom website design near Nice: research on your business, art direction, design and animation, fast search-ready code. One-page site from ${en("web")}.`,
   },
   "/en/seo-geo/": {
     lang: "en",
@@ -296,7 +296,7 @@ export const routes: Record<string, RouteMeta> = {
     crumb: "SEO & GEO",
     title: `SEO, GEO & ChatGPT Ads consultant in Nice | Anthony Profit`,
     description:
-      `SEO and GEO near Nice: get found on Google and cited by ChatGPT. Strategy, editorial plan, content and market watch. Visibility audit from ${en("seo")}, ChatGPT Ads.`,
+      `SEO and GEO near Nice: get found on Google and cited by ChatGPT. Free visibility audit, compliance fix from ${en("seo")}, monthly follow-up, Google Ads and ChatGPT Ads.`,
   },
   "/en/brand-design/": {
     lang: "en",

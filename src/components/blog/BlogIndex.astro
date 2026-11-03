@@ -7,7 +7,7 @@ import type { Lang } from "~/i18n/ui";
 import PostCard from "~/components/blog/PostCard.astro";
 import Eyebrow from "~/components/Eyebrow.astro";
 import { getPosts, getTags, tagPath } from "~/lib/blog";
-import { PRICE, DELAY, formatPrice } from "~/lib/facts";
+import { DELAY } from "~/lib/facts";
 
 interface Props {
   lang: Lang;
@@ -31,7 +31,7 @@ const c = fr
       empty: "Premiers guides à venir.",
       ctaSheet: "Planche 99 · Audit",
       ctaTitle: "Votre entreprise est-elle citée par ChatGPT ?",
-      ctaBody: `Audit visibilité Google + IA : ce que Google, ChatGPT et Perplexity disent de vous, et les actions à mener en priorité. ${formatPrice(PRICE.seoAudit, lang)}, livré en ${DELAY.seoAudit.fr}.`,
+      ctaBody: `Audit visibilité Google + IA : ce que Google, ChatGPT et Perplexity disent de vous, et les actions à mener en priorité. Gratuit, livré en ${DELAY.seoAudit.fr}.`,
       ctaPrimary: "Voir l'offre SEO & GEO",
       ctaPrimaryHref: "/seo-geo/",
       ctaSecondary: "Me contacter",
@@ -48,7 +48,7 @@ const c = fr
       empty: "First guides coming soon.",
       ctaSheet: "Sheet 99 · Audit",
       ctaTitle: "Does ChatGPT mention your business?",
-      ctaBody: `Google + AI visibility audit: what Google, ChatGPT and Perplexity say about you, and what to fix first. ${formatPrice(PRICE.seoAudit, lang)}, delivered in ${DELAY.seoAudit.en}.`,
+      ctaBody: `Google + AI visibility audit: what Google, ChatGPT and Perplexity say about you, and what to fix first. Free, delivered in ${DELAY.seoAudit.en}.`,
       ctaPrimary: "See the SEO & GEO offer",
       ctaPrimaryHref: "/en/seo-geo/",
       ctaSecondary: "Get in touch",

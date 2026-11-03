@@ -1,10 +1,13 @@
 ---
 import type { Lang } from "~/i18n/ui";
 
-// Phone-only action bar: "Démarrer un projet" + "Être rappelé", pinned to the
-// bottom once the visitor has scrolled past the first screen. Hidden while the
-// contact block is on screen (no duplicate actions) and while the cookie
-// banner is up (it sits in the same spot).
+// Phone-only action bar: "Démarrer un projet" + "Être rappelé", a small dock
+// floating over the foot of the screen. It comes only once the reader is
+// into the page (past the first screen, and on the home past the scroll
+// sequences), steps aside while they scroll down and is back as soon as
+// they pause or scroll up. Hidden while the contact block is on screen (no
+// duplicate actions), while the cookie banner is up (it sits in the same
+// spot) and while the menu is open.
 interface Props {
   lang: Lang;
 }
@@ -16,29 +19,44 @@ const contactHref = fr ? "/contact/" : "/en/contact/";
 
 <div data-mobile-bar class="mobile-bar" data-visible="false">
   <a href={contactHref} data-project-open class="mb-btn mb-btn--primary">{fr ? "Démarrer un projet" : "Start a project"}</a>
-  <button type="button" data-callback-open class="mb-btn">{fr ? "Être rappelé" : "Call me back"}</button>
+  <button type="button" data-callback-open class="mb-btn">
+    <svg aria-hidden="true" viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5.6 1.8 3.4 2.3c-.6.1-1 .7-.9 1.3.7 4.9 4.9 9.1 9.8 9.8.6.1 1.2-.3 1.3-.9l.5-2.2-3-1.4-1.3 1.4C8 9.6 6.4 8 5.7 6.2l1.4-1.3z" /></svg>
+    {fr ? "Être rappelé" : "Call me back"}
+  </button>
 </div>
 
 <style>
   .mobile-bar {
     position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    left: 10px;
+    right: 10px;
+    bottom: calc(10px + env(safe-area-inset-bottom));
     z-index: 80;
     display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 8px;
-    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
-    background: color-mix(in srgb, var(--color-bg) 92%, transparent);
-    border-top: 1px solid var(--color-border);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    transform: translateY(110%);
-    transition: transform 0.4s var(--ease-power3);
+    grid-template-columns: 1.35fr 1fr;
+    gap: 6px;
+    padding: 6px;
+    background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 12px 32px -12px rgba(13, 27, 22, 0.22);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    opacity: 0;
+    transform: translateY(calc(100% + 16px));
+    visibility: hidden;
+    transition:
+      transform 0.45s var(--ease-power3),
+      opacity 0.3s var(--ease-power3),
+      visibility 0s 0.45s;
   }
   .mobile-bar[data-visible="true"] {
+    opacity: 1;
     transform: none;
+    visibility: visible;
+    transition:
+      transform 0.55s var(--ease-power3),
+      opacity 0.4s var(--ease-power3),
+      visibility 0s;
   }
   @media (min-width: 768px) {
     .mobile-bar {
@@ -49,8 +67,9 @@ const contactHref = fr ? "/contact/" : "/en/contact/";
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 48px;
-    padding: 0 14px;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 12px;
     border: 1px solid var(--color-border);
     border-radius: 0;
     background: #ffffff;
@@ -60,6 +79,7 @@ const contactHref = fr ? "/contact/" : "/en/contact/";
     color: var(--color-ink);
     text-decoration: none;
     cursor: pointer;
+    transition: transform 0.2s var(--ease-power3);
   }
   .mb-btn--primary {
     border-color: var(--color-accent);
@@ -67,10 +87,11 @@ const contactHref = fr ? "/contact/" : "/en/contact/";
     color: #ffffff;
   }
   .mb-btn:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
   }
   @media (prefers-reduced-motion: reduce) {
-    .mobile-bar {
+    .mobile-bar,
+    .mobile-bar[data-visible="true"] {
       transition: none;
     }
   }
@@ -81,12 +102,33 @@ const contactHref = fr ? "/contact/" : "/en/contact/";
   if (bar) {
     const contact = document.getElementById("contact");
     const consent = document.querySelector<HTMLElement>("[data-consent-banner]");
+    // The home's scroll sequences (home-seq.ts): the bar waits till they
+    // have scrolled away.
+    const theatre = document.querySelector<HTMLElement>("[data-theatre-wrap]");
+    const root = document.documentElement;
+    const PAUSE = 450; // ms still before it comes back
     let contactInView = false;
+    let lastY = window.scrollY;
+    let down = false; // scrolling down right now
+    let pause = 0;
 
     const update = (): void => {
-      const past = window.scrollY > window.innerHeight * 0.6;
+      const y = window.scrollY;
+      if (Math.abs(y - lastY) > 4) {
+        down = y > lastY;
+        lastY = y;
+        clearTimeout(pause);
+        if (down) {
+          pause = window.setTimeout(() => {
+            down = false;
+            update();
+          }, PAUSE);
+        }
+      }
+      const into = theatre?.dataset.seq === "on" ? theatre.getBoundingClientRect().bottom < window.innerHeight * 0.4 : y > window.innerHeight * 0.6;
       const consentUp = !!consent && !consent.hidden;
-      bar.dataset.visible = String(past && !contactInView && !consentUp);
+      const menuOpen = root.dataset.menuOpen === "true";
+      bar.dataset.visible = String(into && !down && !contactInView && !consentUp && !menuOpen);
     };
 
     if (contact) {
@@ -96,6 +138,10 @@ const contactHref = fr ? "/contact/" : "/en/contact/";
       }).observe(contact);
     }
     if (consent) new MutationObserver(update).observe(consent, { attributes: true, attributeFilter: ["hidden"] });
+    new MutationObserver(update).observe(root, { attributes: true, attributeFilter: ["data-menu-open"] });
+    // The sequences give back room by moving the page up under the reader:
+    // not a scroll down.
+    window.addEventListener("seq:reclaim", () => (lastY = window.scrollY));
     // (Once a frame at most.)
     let queued = 0;
     window.addEventListener(
@@ -130,9 +176,10 @@ const contactHref = fr ? "/contact/" : "/en/contact/";
       const room = window.innerHeight - nav;
       return height <= room ? top - nav - (room - height) / 2 : top - nav - 24;
     };
-    // Scrolling down hides the menu; scrolling up (or without motion) shows it.
+    // Scrolling down hides the menu; scrolling up (or without motion, or on
+    // a phone, where it stays) shows it.
     let y = at(0);
-    if (y < window.scrollY || stillMotion) {
+    if (y < window.scrollY || stillMotion || window.matchMedia("(max-width: 767px)").matches) {
       y = at(document.querySelector("[data-nav-smart]")?.getBoundingClientRect().height ?? 0);
     }
     window.scrollTo({ top: Math.max(0, y), behavior: smooth && !stillMotion ? "smooth" : "auto" });

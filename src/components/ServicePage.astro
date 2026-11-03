@@ -38,13 +38,16 @@ const labels = isFr
       home: "Accueil",
       place: "Nice et à distance",
       callback: "Être rappelé",
-      cta: "Décrire mon projet",
+      seeOffers: "Voir les offres",
       response: "Réponse sous 48 h",
       delivered: "Livré en",
       offers: "Les formules",
       offersNote: "Prix nets (TVA non applicable), confirmés par écrit avec le délai après un premier échange.",
       offersNoteQuote: "Chaque formule est chiffrée sur mesure après un premier échange, avec le délai, par écrit.",
       delay: "Délai",
+      term: "Engagement",
+      then: "puis",
+      free: "Gratuit",
       from: "dès",
       choose: "Choisir cette formule",
       onQuote: "Sur devis",
@@ -56,13 +59,16 @@ const labels = isFr
       home: "Home",
       place: "Nice and remote",
       callback: "Get a call back",
-      cta: "Tell me about your project",
+      seeOffers: "See the packages",
       response: "Reply within 2 business days",
       delivered: "Delivered in",
       offers: "Packages",
       offersNote: "Net prices (no VAT charged), confirmed in writing with the timeline after a first call.",
       offersNoteQuote: "Each package is quoted to measure after a first call, with the timeline, in writing.",
       delay: "Timeline",
+      term: "Commitment",
+      then: "then",
+      free: "Free",
       from: "from",
       choose: "Choose this package",
       onQuote: "On quote",
@@ -72,9 +78,15 @@ const labels = isFr
 
 // Price label of a formula: "390 €", "dès 1 690 €", "dès 490 €/mois".
 const offerPrice = (o: (typeof c.offers)[number]): { from: string; amount: string } =>
-  o.price
-    ? { from: o.from ? labels.from : "", amount: `${formatPrice(PRICE[o.price], lang)}${o.unit ?? ""}` }
-    : { from: "", amount: labels.onQuote };
+  o.free
+    ? { from: "", amount: labels.free }
+    : o.price
+      ? { from: o.from ? labels.from : "", amount: `${formatPrice(PRICE[o.price], lang)}${o.unit ?? ""}` }
+      : { from: "", amount: labels.onQuote };
+// The offers by row (offerGroups), or all in one.
+const offerRows = c.offerGroups
+  ? c.offerGroups.map((g, i) => ({ ...g, offers: c.offers.filter((o) => (o.group ?? 0) === i) }))
+  : [{ title: "", note: undefined, offers: c.offers }];
 const startingPrice = fromPrice(id, lang);
 const sheet = (n: string, fr: string, en: string): string => (isFr ? `Planche ${n} · ${fr}` : `Sheet ${n} · ${en}`);
 const h2 = "font-display text-[clamp(26px,2.8vw,40px)] leading-[1.15] text-[var(--color-ink)]";
@@ -99,6 +111,35 @@ const jsonLd = {
       // service, and lists it back in its hasOfferCatalog.
       "provider": { "@id": `${Astro.site}#service` },
       "areaServed": AREA_SERVED,
+      // The packages with their published prices: what an assistant quotes
+      // when asked what the service costs. A monthly plan or a launch then a
+      // monthly fee is spelt out as unit prices.
+      ...(c.offers.some((o) => o.price || o.free) && {
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": labels.offers,
+          "itemListElement": c.offers
+            .filter((o) => o.price || o.free)
+            .map((o) => {
+              const price = o.free ? 0 : PRICE[o.price!];
+              const monthly = o.then ? PRICE[o.then.price] : o.unit ? price : undefined;
+              return {
+                "@type": "Offer",
+                "name": o.name,
+                ...(o.pitch && { "description": o.pitch }),
+                "price": price,
+                "priceCurrency": "EUR",
+                ...(monthly !== undefined && {
+                  "priceSpecification": [
+                    ...(o.then ? [{ "@type": "UnitPriceSpecification", "price": price, "priceCurrency": "EUR", "name": isFr ? "Lancement" : "Launch" }] : []),
+                    { "@type": "UnitPriceSpecification", "price": monthly, "priceCurrency": "EUR", "unitCode": "MON", "unitText": isFr ? "mois" : "month" },
+                  ],
+                }),
+                "url": `${canonical}#formules`,
+              };
+            }),
+        },
+      }),
       "isPartOf": { "@id": `${Astro.site}#website` },
       "inLanguage": isFr ? "fr-FR" : "en-US",
     },
@@ -149,14 +190,17 @@ const jsonLd = {
       </p>
       <ul class="mt-7 flex flex-wrap gap-2 text-[15px]" aria-label={labels.offers}>
         {startingPrice && <li class="fact fact--accent">{startingPrice}</li>}
-        <li class="fact">{labels.delivered} {c.offers[0].delay}</li>
+        {c.offers[0].delay && <li class="fact">{labels.delivered} {c.offers[0].delay}</li>}
         <li class="fact">{labels.response}</li>
         <li class="fact">{labels.place}</li>
       </ul>
       <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
-        <a href="#contact" data-project-open={id} class="group btn btn-primary">
-          {labels.cta}
-          <span aria-hidden="true" class="transition-transform duration-300 ease-out group-hover:translate-x-1">→</span>
+        {/* On to what's offered, the section right below: the form comes
+            later, and stays a tap away in the nav (and the action bar on
+            phones). */}
+        <a href="#offres" data-glide class="group btn btn-primary">
+          {labels.seeOffers}
+          <span aria-hidden="true" class="transition-transform duration-300 ease-out group-hover:translate-y-1">↓</span>
         </a>
         <button type="button" data-callback-open class="text-[16px] font-medium text-[var(--color-ink)] underline underline-offset-4 hover:text-[var(--color-accent)]">
           {labels.callback}
@@ -170,7 +214,7 @@ const jsonLd = {
   </section>
 
   {/* ========== 2. WHAT YOU GET ========== */}
-  <section class="px-4 py-16 sm:px-6 md:px-12 md:py-24">
+  <section id="offres" class="px-4 py-16 sm:px-6 md:px-12 md:py-24">
     <div class="mx-auto w-full max-w-[var(--container-wide)]">
       <Eyebrow label={sheet("01", "Livrables", "Deliverables")} class="mb-6 md:mb-8" />
       <h2 class={h2}>{c.includesTitle}</h2>
@@ -186,35 +230,48 @@ const jsonLd = {
   </section>
 
   {/* ========== 3. PACKAGES — the decision point ========== */}
-  <section data-surface="tint" class="bg-[var(--color-bg)] px-4 py-16 sm:px-6 md:px-12 md:py-24">
+  <section id="formules" data-surface="tint" class="bg-[var(--color-bg)] px-4 py-16 sm:px-6 md:px-12 md:py-24">
     <div class="mx-auto w-full max-w-[var(--container-wide)]">
       <Eyebrow label={sheet("02", "Formules", "Packages")} class="mb-6 md:mb-8" />
       <h2 class={h2}>{labels.offers}</h2>
+      {c.offersIntro && <p class="mt-4 max-w-[62ch] text-[18px] leading-[1.5] text-[var(--color-ink)]">{c.offersIntro}</p>}
       <p class="mt-3 max-w-[60ch] text-[16px] text-[var(--color-ink-muted)]">{c.offers.some((o) => o.price) ? labels.offersNote : labels.offersNoteQuote}</p>
-      <div class:list={["mt-8 grid gap-4 md:mt-10", c.offers.length > 2 ? "lg:grid-cols-3" : "md:grid-cols-2"]}>
-        {c.offers.map((o) => {
-          const price = offerPrice(o);
-          return (
-            <article class="offer marks">
-              <h3 class="text-[20px] font-medium leading-snug md:text-[22px]">{o.name}</h3>
-              <p class="mt-3 flex items-baseline gap-2">
-                {price.from && <span class="text-[16px] text-[var(--color-ink-muted)]">{price.from}</span>}
-                <span class="font-display text-[clamp(32px,3vw,40px)] leading-none text-[var(--color-accent)]">{price.amount}</span>
-              </p>
-              <p class="mt-2 text-[15px] text-[var(--color-ink-muted)]">{labels.delay} : {o.delay}</p>
-              <ul class="mt-5 flex flex-col gap-2.5 border-t border-[var(--color-border)] pt-5">
-                {o.items.map((it) => (
-                  <li class="flex items-start gap-3 text-[16px] leading-[1.45]">
-                    <span aria-hidden="true" class="check"></span>
-                    <span>{it}</span>
-                  </li>
-                ))}
-              </ul>
-              <a href="#contact" data-project-open={id} class="btn btn-secondary mt-6 self-start">{labels.choose}</a>
-            </article>
-          );
-        })}
-      </div>
+      {offerRows.map((row) => (
+        <div class="mt-8 md:mt-10">
+          {row.title && <h3 class="offer-row-title">{row.title}</h3>}
+          <div class:list={["grid gap-4", row.title && "mt-5", row.offers.length > 2 ? "lg:grid-cols-3" : "md:grid-cols-2"]}>
+            {row.offers.map((o) => {
+              const price = offerPrice(o);
+              return (
+                <article class:list={["offer marks", o.featured && "offer--featured"]}>
+                  {o.badge && <p class="offer-badge">{o.badge}</p>}
+                  <h4 class="text-[20px] font-medium leading-snug md:text-[22px]">{o.name}</h4>
+                  {o.pitch && <p class="mt-2 text-[16px] leading-[1.45] text-[var(--color-ink-muted)]">{o.pitch}</p>}
+                  <p class="mt-4 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                    {price.from && <span class="text-[16px] text-[var(--color-ink-muted)]">{price.from}</span>}
+                    <span class="font-display text-[clamp(32px,3vw,40px)] leading-none text-[var(--color-accent)]">{price.amount}</span>
+                    {o.then && <span class="text-[16px] text-[var(--color-ink)]">{labels.then} {formatPrice(PRICE[o.then.price], lang)}{o.then.unit}</span>}
+                  </p>
+                  {o.saving && <p class="offer-saving">{o.saving}</p>}
+                  <p class="mt-2 text-[15px] text-[var(--color-ink-muted)]">
+                    {[o.delay && `${labels.delay} : ${o.delay}`, o.term && `${labels.term} : ${o.term}`].filter(Boolean).join(" · ")}
+                  </p>
+                  <ul class="mt-5 flex flex-col gap-2.5 border-t border-[var(--color-border)] pt-5">
+                    {o.items.map((it) => (
+                      <li class="flex items-start gap-3 text-[16px] leading-[1.45]">
+                        <span aria-hidden="true" class="check"></span>
+                        <span>{it}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <a href="#contact" data-project-open={id} class:list={["btn mt-auto self-start", o.featured ? "btn-primary" : "btn-secondary"]}>{o.cta ?? labels.choose}</a>
+                </article>
+              );
+            })}
+          </div>
+          {row.note && <p class="mt-4 max-w-[70ch] text-[15px] leading-[1.5] text-[var(--color-ink-muted)]">{row.note}</p>}
+        </div>
+      ))}
       {c.offersPerk && (
         <p class="offers-perk">
           <span aria-hidden="true" class="sheet-diamond"></span>
@@ -342,6 +399,45 @@ const jsonLd = {
   <CTA lang={lang} need={id} />
 
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+
+<script>
+  // The hero's button glides down to the section below: slower and softer
+  // than the browser's own smooth scroll, easing in and out. Any touch or
+  // wheel on the way hands the scroll back to the reader.
+  const link = document.querySelector<HTMLAnchorElement>("a[data-glide]");
+  const target = link && document.querySelector<HTMLElement>(link.hash);
+  if (link && target && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const ease = (t: number): number => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      const from = window.scrollY;
+      const to = target.getBoundingClientRect().top + from - (parseFloat(getComputedStyle(target).scrollMarginTop) || 0);
+      const time = Math.min(1400, 700 + Math.abs(to - from) * 0.4);
+      const html = document.documentElement;
+      const start = performance.now();
+      let raf = 0;
+      const stop = (): void => {
+        cancelAnimationFrame(raf);
+        html.style.scrollBehavior = "";
+        window.removeEventListener("wheel", stop);
+        window.removeEventListener("touchstart", stop);
+      };
+      window.addEventListener("wheel", stop, { passive: true });
+      window.addEventListener("touchstart", stop, { passive: true });
+      html.style.scrollBehavior = "auto"; // (each step lands at once)
+      const step = (now: number): void => {
+        const t = Math.min(1, (now - start) / time);
+        window.scrollTo(0, from + (to - from) * ease(t));
+        if (t < 1) raf = requestAnimationFrame(step);
+        else {
+          stop();
+          history.replaceState(null, "", link.hash);
+        }
+      };
+      raf = requestAnimationFrame(step);
+    });
+  }
+</script>
 </main>
 
 <style>
@@ -379,6 +475,10 @@ const jsonLd = {
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
   }
+  /* Reached from the hero's button: clear of the fixed nav. */
+  #offres {
+    scroll-margin-top: 64px;
+  }
   .offer {
     display: flex;
     flex-direction: column;
@@ -391,6 +491,48 @@ const jsonLd = {
     .offer {
       padding: 28px;
     }
+  }
+  /* The button sits at the foot of every card, whatever its list. */
+  .offer > ul {
+    margin-bottom: 24px;
+  }
+  /* The offer to look at first: accent frame. */
+  .offer--featured {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 1px var(--color-accent);
+  }
+  .offer-badge {
+    align-self: flex-start;
+    margin-bottom: 14px;
+    padding: 4px 10px;
+    background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+    font-family: var(--font-label);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+  .offer--featured .offer-badge {
+    background: var(--color-accent);
+    color: #ffffff;
+  }
+  .offer-saving {
+    margin-top: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-accent);
+  }
+  /* A row of offers: its title on a hairline. */
+  .offer-row-title {
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--color-border);
+    font-family: var(--font-label);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-ink);
   }
   /* "Offert avec votre site": a ruled note under the packages, accent diamond. */
   .offers-perk {

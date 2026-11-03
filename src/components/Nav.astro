@@ -61,7 +61,7 @@ const letters = (word: string, from: number) => [...word].map((ch, k) => ({ ch, 
 {/* Smart nav. At the top: transparent, the name in full. Once scrolled: a
     floating bar between the page's side guides, with crop marks, and the
     name folds into its initials (A•P), unfolding again under the pointer.
-    Hides on scroll-down, comes back on scroll-up. */}
+    Hides on scroll-down, comes back on scroll-up (phones: always there). */}
 <header
   data-nav-smart
   data-hidden="false"
@@ -128,9 +128,10 @@ const letters = (word: string, from: number) => [...word].map((ch, k) => ({ ch, 
         aria-expanded="false"
         aria-controls="mobile-menu"
         aria-label={menuLabel}
-        class="burger nav-item -mr-1 grid h-10 w-7 place-items-center text-[var(--color-ink)] lg:hidden"
+        class="burger nav-item -mr-1 inline-flex h-10 items-center gap-2 text-[var(--color-ink)] lg:hidden"
         style="--n:5"
       >
+        <span class="font-label text-[13px] font-medium uppercase tracking-[0.06em]" aria-hidden="true">Menu</span>
         <span class="burger-box" aria-hidden="true">
           <span class="burger-line"></span>
           <span class="burger-line"></span>
@@ -695,7 +696,9 @@ const letters = (word: string, from: number) => [...word].map((ch, k) => ({ ch, 
     // while they hold the screen, and has its background over any of their
     // scenes but the hero's (one played back at the very top).
     const root = document.documentElement;
-    const pinned = () => root.dataset.seqHold === "on";
+    // Phones keep it all the time: the menu is always a thumb away.
+    const phone = window.matchMedia("(max-width: 767px)");
+    const pinned = () => root.dataset.seqHold === "on" || phone.matches;
 
     const update = () => {
       const y = window.scrollY;

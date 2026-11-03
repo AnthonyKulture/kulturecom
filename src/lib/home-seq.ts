@@ -137,8 +137,9 @@ const RECLAIM = 300; // ms without scrolling before the slack is given back
 // or not moved for this long (ms), and at the latest after the other.
 const LANDED = { still: 150, max: 2000 };
 // The hint to scroll on shows once the reader has been still this long (ms)
-// where the sequences wait on the scroll to go on.
-const HINT = 1500;
+// where the sequences wait on the scroll to go on: soon, so a reader who
+// stops on the hero sees at once that the page goes on.
+const HINT = 500;
 
 /** Take the home's sequences over, once every component script has run. */
 export function startHome(): void {

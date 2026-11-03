@@ -45,9 +45,14 @@ export const CALLBACK = {
  * complete project.
  */
 export const PRICE = {
-  seoAudit: 390, // Audit visibilité Google + IA, 5 days
-  seoMonthly: 490, // Suivi mensuel SEO/GEO, per month
-  adsLaunch: 490, // Lancement ChatGPT Ads (ad budget excluded)
+  seoFix: 390, // Mise en conformité SEO & GEO, one shot (the audit itself is free)
+  seoMonthly: 490, // Suivi & optimisation SEO/GEO, per month, audit + fixes included
+  googleAdsLaunch: 250, // Lancement Google Ads (ad budget excluded)
+  googleAdsMonthly: 90, // Suivi Google Ads, per month, required
+  chatgptAdsLaunch: 490, // Lancement ChatGPT Ads (ad budget excluded)
+  chatgptAdsMonthly: 180, // Suivi ChatGPT Ads, per month, required
+  adsComboLaunch: 590, // Google Ads + ChatGPT Ads together (740 € apart)
+  adsComboMonthly: 220, // Their follow-up together (270 €/month apart)
   webOnePage: 790, // Site une page sur-mesure, 2-3 weeks
   webShowcase: 1690, // Site vitrine 5-8 pages + CMS
   appsStarter: 690, // Automatisation ou assistant IA, 2 weeks
@@ -62,19 +67,26 @@ export const PRICE = {
  * promise different timelines.
  */
 export const DELAY = {
-  seoAudit: { fr: "5 jours", en: "5 days" },
-  adsLaunch: { fr: "7 jours", en: "7 days" },
+  seoAudit: { fr: "5 jours", en: "5 days" }, // free
+  seoFix: { fr: "1 à 2 semaines", en: "1 to 2 weeks" },
+  googleAdsLaunch: { fr: "7 jours", en: "7 days" },
+  chatgptAdsLaunch: { fr: "7 jours", en: "7 days" },
+  adsComboLaunch: { fr: "10 jours", en: "10 days" },
   webOnePage: { fr: "1 à 2 semaines", en: "1 to 2 weeks" },
   webShowcase: { fr: "3 à 5 semaines", en: "3 to 5 weeks" },
   appsStarter: { fr: "10 jours", en: "10 days" },
   brandLogo: { fr: "1 semaine", en: "1 week" },
   brandIdentity: { fr: "2 à 3 semaines", en: "2 to 3 weeks" },
-} as const satisfies Partial<Record<keyof typeof PRICE, Record<Lang, string>>>;
+} as const satisfies Partial<Record<keyof typeof PRICE | "seoAudit", Record<Lang, string>>>;
+
+/** Minimum commitments, in months: SEO & GEO follow-up, ad management. */
+export const COMMITMENT = { seo: 3, ads: 6 } as const;
 
 /** The lowest price a visitor can pay per service (its entry offer). Brand
- *  identity is offered free with a website build or redesign. */
+ *  identity is offered free with a website build or redesign. SEO opens on a
+ *  free audit (FREE_ENTRY); its first paid offer is the one-shot fix. */
 export const STARTING_PRICE: Partial<Record<ServiceId, number>> = {
-  seo: PRICE.seoAudit,
+  seo: PRICE.seoFix,
   web: PRICE.webOnePage,
   apps: PRICE.appsStarter,
   brand: PRICE.brandLogo,
@@ -83,7 +95,12 @@ export const STARTING_PRICE: Partial<Record<ServiceId, number>> = {
 /** Lowest entry price of the services named in the home description (sites,
  *  tools & AI, SEO & GEO): "Dès 390 €". Brand is left out: offered with a
  *  site, its 150 € would read as the price of a website. */
-export const LOWEST_PRICE = Math.min(PRICE.seoAudit, PRICE.webOnePage, PRICE.appsStarter);
+export const LOWEST_PRICE = Math.min(PRICE.seoFix, PRICE.webOnePage, PRICE.appsStarter);
+
+/** Services that open on a free offer: shown in place of their "dès" price. */
+export const FREE_ENTRY: Partial<Record<ServiceId, Record<Lang, string>>> = {
+  seo: { fr: "audit gratuit", en: "free audit" },
+};
 
 /** "1 490 €" / "€1,490", no decimals. Intl's narrow no-break space (U+202F)
  *  is swapped for a regular one: the site fonts have no U+202F glyph. */
@@ -96,8 +113,11 @@ export const formatPrice = (amount: number, lang: Lang): string =>
     .format(amount)
     .replace(/\u202f/g, "\u00a0");
 
-/** "dès 390 €" / "from €390"; null for a service quoted on request. */
+/** "dès 390 €" / "from €390", "audit gratuit" for a free entry; null for a
+ *  service quoted on request. */
 export const fromPrice = (id: ServiceId, lang: Lang): string | null => {
+  const free = FREE_ENTRY[id];
+  if (free) return free[lang];
   const amount = STARTING_PRICE[id];
   return amount === undefined ? null : `${lang === "fr" ? "dès" : "from"} ${formatPrice(amount, lang)}`;
 };

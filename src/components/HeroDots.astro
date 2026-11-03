@@ -63,6 +63,16 @@
         // The camera goes into the pack, faster and faster, filling the screen
         // only at the very end: the cut to section 2 is a flash.
         const dive = clamp01((q - 0.24) / 0.76) ** 1.6;
+        // Phones and tablets: the drawing sits small under the text, and
+        // reframing it to the whole screen first would sweep the scene up the
+        // screen like a scroll. There the camera stays on the drawing's place
+        // and dives into the pack from the first move, the frame only opening
+        // around it.
+        if (!wide) {
+          const fit = (b: Box): number => Math.max(b.w / VIEW.w, b.h / VIEW.h);
+          const go = clamp01(q / 0.98) ** 1.6;
+          film(tone, VIEW, rest, ((fit(screen) / fit(rest)) * PACK.dive) ** go, focus, smooth(0.08, 0.7, q), screen, px);
+        } else film(tone, VIEW, box, PACK.dive ** dive, focus, smooth(0.24, 0.7, q), screen, px);
 
         // He stops walking as the camera comes up to him; the world stops with
         // him, his steps slowing with it.
@@ -71,7 +81,6 @@
         hiker.phase += (dt * pace) / 1.1;
         hiker.amp = still ? 0 : 1 - smooth(0.16, 0.42, q);
 
-        film(tone, VIEW, box, PACK.dive ** dive, focus, smooth(0.24, 0.7, q), screen, px);
         drawHeroTone(tone, scene, hiker, cols, rows);
         // At rest the drawing melts into the page on its edges (left on wide
         // screens), as its frame did; the edges go as the frame opens.
