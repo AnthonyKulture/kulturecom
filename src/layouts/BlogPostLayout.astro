@@ -343,13 +343,13 @@ const updatedStr = d.updatedDate ? formatDate(d.updatedDate, lang) : null;
      embedded components, which forced the dark <ServiceCTA> button's label to
      the ink color → black text on its black background. Restricting the rule to
      p/li/blockquote leaves component buttons to their own utility colors. */
-  .prose-blog :is(p, li, blockquote) a {
+  .prose-blog :is(p, li, blockquote, td) a {
     color: var(--color-ink);
     text-decoration: underline;
     text-underline-offset: 3px;
     text-decoration-color: var(--color-accent);
   }
-  .prose-blog :is(p, li, blockquote) a:hover {
+  .prose-blog :is(p, li, blockquote, td) a:hover {
     color: var(--color-accent);
   }
   .prose-blog strong {
@@ -389,6 +389,58 @@ const updatedStr = d.updatedDate ? formatDate(d.updatedDate, lang) : null;
   }
   .prose-blog blockquote p {
     margin-bottom: 0;
+  }
+  /* Markdown tables, in the language of the home comparison: mono labels on
+     top over an ink rule, thin rules between rows, the first column as the
+     row label. On phones a wide table scrolls sideways instead of crushing
+     its columns. */
+  .prose-blog table {
+    width: 100%;
+    margin: 2rem 0 2.5rem;
+    border-collapse: collapse;
+    font-size: 0.88em;
+    line-height: 1.5;
+  }
+  .prose-blog thead th {
+    padding: 0 1rem 0.75rem 0;
+    text-align: left;
+    vertical-align: bottom;
+    font-family: var(--font-label);
+    font-size: 0.78em;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-ink-subtle);
+    border-bottom: 1px solid var(--color-ink);
+  }
+  .prose-blog tbody tr {
+    border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+  }
+  .prose-blog td {
+    padding: 0.85rem 1rem 0.85rem 0;
+    vertical-align: top;
+    color: var(--color-ink-muted);
+  }
+  .prose-blog td:first-child {
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+  .prose-blog :is(th, td):last-child {
+    padding-right: 0;
+  }
+  @media (max-width: 640px) {
+    .prose-blog table {
+      display: block;
+      overflow-x: auto;
+    }
+    .prose-blog :is(th, td) {
+      min-width: 10rem;
+    }
+    /* The last column usually holds the longest text (details, what's
+       included): wider, so its rows don't stretch into tall columns. */
+    .prose-blog :is(th, td):last-child {
+      min-width: 13rem;
+    }
   }
   .prose-blog hr {
     margin: 3rem 0;
