@@ -1,6 +1,6 @@
 import type { Lang } from "~/i18n/ui";
 import { servicePagePath, type ServiceId } from "~/lib/service-pages";
-import { CALLBACK, CONTACT, DELAY, PRICE, formatPrice } from "~/lib/facts";
+import { CALLBACK, COMMITMENT, CONTACT, DELAY, PRICE, formatPrice } from "~/lib/facts";
 
 /**
  * Copy for the home page (hero + 4 doors, proof, "Conçu. Codé. Cité.",
@@ -135,7 +135,7 @@ export function getHomeContent(lang: Lang): HomeContent {
       doorsLabel: "Vous voulez…",
       doors: [
         { id: "seo", title: "Être trouvé sur Google et cité par les IA", desc: "Stratégie, contenus, SEO & GEO" },
-        { id: "web", title: "Créer ou refaire mon site", desc: "Design et code sur-mesure" },
+        { id: "web", title: "Créer ou refaire mon site", desc: "Recherche, direction artistique, design" },
         { id: "apps", title: "Gagner du temps avec l'IA", desc: "Outils métier, apps et automatisations" },
         { id: "brand", title: "Lancer ou moderniser ma marque", desc: "Logo et charte graphique" },
       ],
@@ -178,7 +178,7 @@ export function getHomeContent(lang: Lang): HomeContent {
       faq: [
         {
           q: "Combien coûte un site internet sur-mesure à Nice ?",
-          a: `Chez Anthony Profit, designer-développeur freelance à Nice, un site une page sur-mesure coûte ${formatPrice(PRICE.webOnePage, lang)} et un site vitrine de 5 à 8 pages démarre à ${formatPrice(PRICE.webShowcase, lang)}. Le logo et l'identité de marque sont offerts. Les prix sont nets (TVA non applicable) et fixés par écrit avec le délai, après un premier échange.`,
+          a: `Il n'y a pas de prix unique : il dépend du nombre de pages, du design, des fonctionnalités et des contenus à produire. Chez Anthony Profit, designer-développeur freelance à Nice, un site une page sur-mesure coûte ${formatPrice(PRICE.webOnePage, lang)} et un site vitrine de 5 à 8 pages démarre à ${formatPrice(PRICE.webShowcase, lang)}. Le logo et l'identité de marque sont offerts. Les prix sont nets (TVA non applicable) et fixés par écrit avec le délai, après un premier échange.`,
           link: { href: servicePagePath("web", lang), label: "Voir les formules site internet" },
         },
         {
@@ -202,9 +202,9 @@ export function getHomeContent(lang: Lang): HomeContent {
           link: { href: "/blog/referencement-nice-dominer-google-et-ia/", label: "Guide : se faire trouver à Nice, sur Google et dans les IA" },
         },
         {
-          q: "Pouvez-vous gérer mes campagnes ChatGPT Ads ?",
-          a: `Oui. Je configure le ciblage, les annonces, la page d'arrivée et un suivi des conversions conforme au RGPD, puis j'optimise pendant le premier mois. Le lancement coûte ${formatPrice(PRICE.adsLaunch, lang)} et se fait en ${DELAY.adsLaunch.fr}, budget publicitaire en plus.`,
-          link: { href: servicePagePath("seo", lang), label: "Voir l'offre SEO, GEO & ChatGPT Ads" },
+          q: "Pouvez-vous gérer mes campagnes Google Ads et ChatGPT Ads ?",
+          a: `Oui. Je configure le ciblage, les annonces, la page d'arrivée et un suivi des conversions conforme au RGPD, puis j'optimise chaque mois. Google Ads : ${formatPrice(PRICE.googleAdsLaunch, lang)} puis ${formatPrice(PRICE.googleAdsMonthly, lang)} par mois. ChatGPT Ads : ${formatPrice(PRICE.chatgptAdsLaunch, lang)} puis ${formatPrice(PRICE.chatgptAdsMonthly, lang)} par mois. Les deux ensemble : ${formatPrice(PRICE.adsComboLaunch, lang)} puis ${formatPrice(PRICE.adsComboMonthly, lang)} par mois. Engagement ${COMMITMENT.ads} mois, budget publicitaire en plus.`,
+          link: { href: servicePagePath("seo", lang), label: "Voir les offres SEO, GEO & Ads" },
         },
       ],
     };
@@ -216,7 +216,7 @@ export function getHomeContent(lang: Lang): HomeContent {
     doorsLabel: "You want to…",
     doors: [
       { id: "seo", title: "Get found on Google and cited by AI", desc: "Strategy, content, SEO & GEO" },
-      { id: "web", title: "Build or rebuild my website", desc: "Custom design and code" },
+      { id: "web", title: "Build or rebuild my website", desc: "Research, art direction, design" },
       { id: "apps", title: "Save time with AI", desc: "Business tools, apps and automations" },
       { id: "brand", title: "Launch or refresh my brand", desc: "Logo and style guide" },
     ],
@@ -260,7 +260,7 @@ export function getHomeContent(lang: Lang): HomeContent {
     faq: [
       {
         q: "How much does a custom website cost in Nice?",
-        a: `With Anthony Profit, a freelance designer-developer in Nice, a custom one-page site costs ${formatPrice(PRICE.webOnePage, lang)} and a 5 to 8-page showcase site starts at ${formatPrice(PRICE.webShowcase, lang)}. Logo and brand identity are included free. Prices are net (no VAT charged) and fixed in writing with the timeline, after a first call.`,
+        a: `There is no single price: it depends on the number of pages, the design, the features and the content to produce. With Anthony Profit, a freelance designer-developer in Nice, a custom one-page site costs ${formatPrice(PRICE.webOnePage, lang)} and a 5 to 8-page showcase site starts at ${formatPrice(PRICE.webShowcase, lang)}. Logo and brand identity are included free. Prices are net (no VAT charged) and fixed in writing with the timeline, after a first call.`,
         link: { href: servicePagePath("web", lang), label: "See the website packages" },
       },
       {
@@ -284,9 +284,9 @@ export function getHomeContent(lang: Lang): HomeContent {
         link: { href: "/en/blog/rank-on-google-in-nice-local-seo/", label: "Guide: getting found in Nice, on Google and in AI" },
       },
       {
-        q: "Can you run my ChatGPT Ads campaigns?",
-        a: `Yes. I set up targeting, ads, the landing page and GDPR-compliant conversion tracking, then optimize during the first month. Launch costs ${formatPrice(PRICE.adsLaunch, lang)} and takes ${DELAY.adsLaunch.en}, ad budget on top.`,
-        link: { href: servicePagePath("seo", lang), label: "See the SEO, GEO & ChatGPT Ads offer" },
+        q: "Can you run my Google Ads and ChatGPT Ads campaigns?",
+        a: `Yes. I set up targeting, ads, the landing page and GDPR-compliant conversion tracking, then optimize every month. Google Ads: ${formatPrice(PRICE.googleAdsLaunch, lang)} then ${formatPrice(PRICE.googleAdsMonthly, lang)} a month. ChatGPT Ads: ${formatPrice(PRICE.chatgptAdsLaunch, lang)} then ${formatPrice(PRICE.chatgptAdsMonthly, lang)} a month. Both together: ${formatPrice(PRICE.adsComboLaunch, lang)} then ${formatPrice(PRICE.adsComboMonthly, lang)} a month. ${COMMITMENT.ads}-month commitment, ad budget on top.`,
+        link: { href: servicePagePath("seo", lang), label: "See the SEO, GEO & Ads offers" },
       },
     ],
   };

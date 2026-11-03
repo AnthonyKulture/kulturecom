@@ -5,6 +5,10 @@
 // Consent Mode v2 update → audience and ad measurement granted (GA4 and the
 // Google Ads click cookie), ad personalization stays denied; "Decline" keeps
 // it all denied (GA4 stays cookieless). Pairs with Analytics.astro.
+// On the home it waits for the first scroll (or a few seconds): the first
+// screen, its client logos included, is seen clear, and the banner comes as
+// the hero clears away. Nothing is measured with cookies before a choice
+// either way, and refusing stays as easy as accepting (CNIL).
 import type { Lang } from "~/i18n/ui";
 
 interface Props {
@@ -37,11 +41,11 @@ const t =
   hidden
   role="region"
   aria-label={t.aria}
-  class="fixed bottom-0 left-0 right-0 z-[90] mx-auto max-w-[var(--container-wide)] border-t border-[var(--color-ink)]/15 bg-[var(--color-bg)] px-4 py-3 text-[var(--color-ink)] shadow-[0_-8px_30px_rgba(0,0,0,0.08)] sm:bottom-5 sm:left-auto sm:right-5 sm:max-w-[420px] sm:border sm:px-5 sm:py-5 sm:shadow-[0_8px_40px_rgba(0,0,0,0.12)]"
+  class="consent fixed bottom-[calc(10px+env(safe-area-inset-bottom))] left-[10px] right-[10px] z-[90] mx-auto max-w-[var(--container-wide)] border border-[var(--color-ink)]/15 bg-[var(--color-bg)] px-4 py-3 text-[var(--color-ink)] shadow-[0_12px_32px_-12px_rgba(13,27,22,0.22)] sm:bottom-5 sm:left-auto sm:right-5 sm:max-w-[420px] sm:px-5 sm:py-5 sm:shadow-[0_8px_40px_rgba(0,0,0,0.12)]"
 >
-  {/* Mobile: a compact bar flush with the bottom edge (~105 px, was ~145 px
-      as a floating card) so it doesn't cover the service pages' above-the-fold
-      CTA. ≥ 640px keeps the floating card. */}
+  {/* Mobile: a compact card floating just above the bottom edge (~105 px),
+      like the action bar it stands in for, so it doesn't cover the service
+      pages' above-the-fold CTA. ≥ 640px keeps the corner card. */}
   <p class="text-[13px] leading-[1.45] text-[var(--color-ink)]/85 sm:text-[14px] sm:leading-[1.5]">
     {t.text}{" "}
     <a
@@ -75,7 +79,22 @@ const t =
     try {
       stored = localStorage.getItem(KEY);
     } catch (e) {}
-    if (stored !== "granted" && stored !== "denied") el.hidden = false;
+    if (stored !== "granted" && stored !== "denied") {
+      if (document.querySelector("[data-home-hero]") && window.scrollY < 40) {
+        var timer = 0;
+        var show = function () {
+          if (window.scrollY < 40 && timer) return;
+          clearTimeout(timer);
+          window.removeEventListener("scroll", show);
+          el.hidden = false;
+        };
+        window.addEventListener("scroll", show, { passive: true });
+        timer = setTimeout(function () {
+          timer = 0;
+          show();
+        }, 8000);
+      } else el.hidden = false;
+    }
 
     function choose(value) {
       try {
@@ -93,3 +112,20 @@ const t =
     if (decline) decline.addEventListener("click", function () { choose("denied"); });
   })();
 </script>
+
+<style>
+  .consent:not([hidden]) {
+    animation: consent-in 0.5s var(--ease-power3) both;
+  }
+  @keyframes consent-in {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .consent:not([hidden]) {
+      animation: none;
+    }
+  }
+</style>

@@ -115,8 +115,8 @@ export function getProjectContent(lang: Lang): ProjectContent {
             { value: "maps", label: "Sortir sur Google Maps près de chez moi" },
             { value: "google", label: "Monter dans les résultats Google" },
             { value: "ai", label: "Être cité par ChatGPT, Perplexity, Gemini" },
-            { value: "ads", label: "Lancer ChatGPT Ads" },
-            { value: "audit", label: "Faire le point (audit)" },
+            { value: "ads", label: "Lancer Google Ads ou ChatGPT Ads" },
+            { value: "audit", label: "Faire le point (audit gratuit)" },
           ],
         },
         apps: {
@@ -253,8 +253,8 @@ export function getProjectContent(lang: Lang): ProjectContent {
           { value: "maps", label: "Show up on Google Maps near me" },
           { value: "google", label: "Climb Google's results" },
           { value: "ai", label: "Get cited by ChatGPT, Perplexity, Gemini" },
-          { value: "ads", label: "Launch ChatGPT Ads" },
-          { value: "audit", label: "Take stock (audit)" },
+          { value: "ads", label: "Launch Google Ads or ChatGPT Ads" },
+          { value: "audit", label: "Take stock (free audit)" },
         ],
       },
       apps: {
