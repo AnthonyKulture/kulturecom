@@ -42,6 +42,11 @@ ligne, donc la véracité et la qualité passent avant la vitesse. En cas de dou
   en question quand c'est naturel.
 - 1 300 à 2 000 mots en FR ; l'EN est une adaptation idiomatique (mêmes faits, même structure).
 - 1 à 2 `<ServiceCTA … />` vers la page service la plus pertinente. `pillar` selon le sujet (en général `seo`).
+- En plus des `ServiceCTA`, **au moins un lien dans le texte** vers la page service qui vend ce dont parle l'article
+  (FR `/seo-geo/`, EN `/en/seo-geo/` pour le SEO, le GEO, la fiche Google et les Ads, ChatGPT Ads compris :
+  ces offres sont vendues sur `/seo-geo/`, pas sur `/outils-applications-ia/`). Placé dans une phrase utile, en
+  général le paragraphe qui présente l'offre (« Tout est détaillé sur la page [SEO & GEO](/seo-geo/) »). Le blog porte
+  l'essentiel de la visibilité du site : ce lien transmet ce trafic vers les pages qui convertissent.
 - Tags FR : `SEO`, `GEO`, `IA`, `Référencement local`, `ChatGPT Ads` · EN : `SEO`, `GEO`, `AI`, `Local SEO`,
   `ChatGPT Ads` (2 à 4 par article ; n'en crée un nouveau que si aucun ne convient).
 
@@ -100,7 +105,11 @@ et sur l'EN avant d'écrire les fichiers. Règles dures :
    for h in $(grep -ohE 'href="/[^"#?]*' dist/blog/*/index.html dist/en/blog/*/index.html | sed 's/href="//' | sort -u); do p="dist${h%/}/index.html"; [ -f "$p" ] || [ -f "dist$h" ] || echo "BROKEN $h"; done
    ```
 4. `grep -c '[—–]'` sur les deux .mdx = 0.
-5. Le script du pack sort `OK` (code 1 = règle non respectée, code 2 = texte qui déborde : corrige et relance).
+5. Lien dans le texte vers la page service, hors composants (doit afficher au moins 1 pour chaque fichier) :
+   ```bash
+   grep -cE '\]\(/(en/)?(seo-geo|creation-site-internet|web-development|identite-de-marque|brand-design|outils-applications-ia|apps-ai-tools)/\)' src/content/blog/fr/<slug-fr>.mdx src/content/blog/en/<slug-en>.mdx
+   ```
+6. Le script du pack sort `OK` (code 1 = règle non respectée, code 2 = texte qui déborde : corrige et relance).
    Ouvre `card.jpg`, la cover, la slide `list` et la slide `cta` avec `Read` et vérifie : texte lisible, rien de coupé,
    accents corrects, un seul passage en bleu par visuel. Un pack raté ne bloque pas l'article : publie l'article sans
    le pack et signale-le dans le compte-rendu.
