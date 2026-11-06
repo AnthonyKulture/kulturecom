@@ -115,6 +115,11 @@ const graph: Record<string, any>[] = [
     "jobTitle": lang === "fr"
       ? "Freelance développeur web, apps & IA, SEO & brand designer"
       : "Freelance web developer, apps & AI, SEO & brand designer",
+    // Tells this Anthony Profit apart from his namesakes (one works in asset
+    // management in Switzerland) for the Knowledge Graph and LLMs.
+    "disambiguatingDescription": lang === "fr"
+      ? "Développeur web et consultant SEO & GEO freelance basé à Nice (France), CTO de la marketplace Surly."
+      : "Freelance web developer and SEO & GEO consultant based in Nice, France; CTO of the Surly marketplace.",
     "description": dict.meta.description,
     "knowsLanguage": ["fr", "en"],
     "knowsAbout": [

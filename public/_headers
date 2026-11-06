@@ -11,6 +11,15 @@
   # their own immutable 1-year rule (more specific paths below win).
   Cache-Control: public, max-age=300, stale-while-revalidate=86400
 
+# The pages.dev hosts (production alias and preview builds) serve the same pages
+# as anthonyprofit.com: keep them out of search indexes so the domain stays the
+# only entity search engines and LLMs see.
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex
+
+https://:version.:project.pages.dev/*
+  X-Robots-Tag: noindex
+
 /*.webp
   Cache-Control: public, max-age=31536000, immutable
 
