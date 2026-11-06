@@ -131,6 +131,14 @@ export const routes: Record<string, RouteMeta> = {
     description:
       `SEO et GEO à Nice : être trouvé sur Google et cité par ChatGPT. Audit de visibilité gratuit, mise en conformité dès ${fr("seo")}, suivi mensuel, Google Ads et ChatGPT Ads.`,
   },
+  "/consultant-geo-nice/": {
+    lang: "fr",
+    alt: "/en/geo-consultant-nice/",
+    crumb: "Consultant GEO à Nice",
+    title: `Consultant GEO à Nice : être cité par ChatGPT | Anthony Profit`,
+    description:
+      `Consultant GEO à Nice : je fais citer votre entreprise par ChatGPT, Perplexity, Gemini, Copilot et les réponses IA de Google. Audit gratuit en ${DELAY.seoAudit.fr}.`,
+  },
   "/identite-de-marque/": {
     lang: "fr",
     alt: "/en/brand-design/",
@@ -297,6 +305,14 @@ export const routes: Record<string, RouteMeta> = {
     title: `SEO, GEO & ChatGPT Ads consultant in Nice | Anthony Profit`,
     description:
       `SEO and GEO near Nice: get found on Google and cited by ChatGPT. Free visibility audit, compliance fix from ${en("seo")}, monthly follow-up, Google Ads and ChatGPT Ads.`,
+  },
+  "/en/geo-consultant-nice/": {
+    lang: "en",
+    alt: "/consultant-geo-nice/",
+    crumb: "GEO consultant in Nice",
+    title: `GEO consultant in Nice: get cited by ChatGPT | Anthony Profit`,
+    description:
+      `GEO consultant in Nice: I get your business cited by ChatGPT, Perplexity, Gemini, Copilot and Google's AI answers. Free audit in ${DELAY.seoAudit.en}.`,
   },
   "/en/brand-design/": {
     lang: "en",

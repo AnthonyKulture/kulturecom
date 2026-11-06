@@ -1,0 +1,423 @@
+---
+// "Consultant GEO à Nice" landing page (FR + EN). The service itself, its
+// packages and prices live on the SEO & GEO page: this page answers the local
+// GEO query and reuses those packages (same source), so the two never differ.
+import type { Lang } from "~/i18n/ui";
+import CTA from "~/components/CTA.astro";
+import Eyebrow from "~/components/Eyebrow.astro";
+import { AREA_SERVED } from "~/lib/schema";
+import { getPosts, postPath } from "~/lib/blog";
+import { getServicePage, offerPriceText } from "~/lib/service-pages";
+import { caseStudyPath } from "~/lib/case-studies";
+import { COMMITMENT, DELAY, PRICE, formatPrice } from "~/lib/facts";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const isFr = lang === "fr";
+const seo = getServicePage("seo", lang)!;
+const pathname = isFr ? "/consultant-geo-nice/" : "/en/geo-consultant-nice/";
+const canonical = new URL(pathname, Astro.site).toString();
+const homeUrl = new URL(isFr ? "/" : "/en/", Astro.site).toString();
+const seoUrl = new URL(seo.path[lang], Astro.site).toString();
+const eur = (k: keyof typeof PRICE): string => formatPrice(PRICE[k], lang);
+
+// The SEO & GEO packages a GEO client starts with: the free audit, the fix,
+// the monthly follow-up and ChatGPT Ads.
+const offers = seo.content.offers.filter(
+  (o) => o.free || o.price === "seoFix" || o.price === "seoMonthly" || o.price === "chatgptAdsLaunch"
+);
+
+// Guides that go deeper, by translationKey (the same articles in both languages).
+const GUIDE_KEYS = ["geo-local", "perplexity-citations", "mesurer-visibilite-ia", "google-ai-mode", "seo-geo-chatgpt"];
+const guides = (await getPosts(lang))
+  .filter((p) => GUIDE_KEYS.includes(p.data.translationKey))
+  .sort((a, b) => GUIDE_KEYS.indexOf(a.data.translationKey) - GUIDE_KEYS.indexOf(b.data.translationKey));
+
+const GEO_PAPER = "https://arxiv.org/abs/2311.09735";
+
+const c = isFr
+  ? {
+      name: "Consultant GEO à Nice",
+      h1: ["Consultant GEO", "à Nice."],
+      lead: "Je fais citer les entreprises de Nice et de la Côte d'Azur dans les réponses de ChatGPT, Perplexity, Gemini, Copilot et Google. Tout commence par un audit gratuit : qui l'IA recommande à votre place, et sur quelles sources elle s'appuie.",
+      facts: ["Audit gratuit", `Résultat en ${DELAY.seoAudit.fr}`, "Réponse sous 48 h", "Nice et à distance"],
+      ctaAudit: "Demander l'audit gratuit",
+      callback: "Être rappelé",
+      whatTitle: "Qu'est-ce que le GEO ?",
+      what: [
+        "Le GEO (Generative Engine Optimization) regroupe ce qui rend une entreprise citable par les moteurs qui rédigent une réponse au lieu d'afficher une liste de liens : ChatGPT, Perplexity, Gemini, Copilot, les AI Overviews et l'AI Mode de Google.",
+        "Le terme vient d'une étude publiée en novembre 2023 par des chercheurs de Princeton et de l'IIT Delhi, entre autres. Sur leur banc d'essai, citer ses sources et ajouter des statistiques ou des citations d'experts augmentait jusqu'à 40 % la visibilité d'une page dans les réponses générées.",
+        "Pour une entreprise locale, la question posée à l'IA ressemble à « quel plombier à Nice ? » ou « un bon restaurant italien à Cannes ». L'IA cherche alors des sources qui se recoupent : votre site, votre fiche Google, Bing Places, les annuaires, les avis, les articles qui parlent de vous. Le GEO consiste à rendre ces sources claires, cohérentes et faciles à citer.",
+      ],
+      paperLabel: "Lire l'étude GEO (arXiv, 2023)",
+      doTitle: "Ce que je fais, concrètement",
+      do: [
+        { title: "Le test de départ", body: "Les questions que vos clients posent vraiment, testées dans ChatGPT, Perplexity, Gemini, Copilot et Google : qui est cité, à quelle fréquence, sur quelles sources." },
+        { title: "Des pages qui répondent", body: "Chaque service répond en quelques lignes à la question qu'on lui pose : ce que vous faites, où, à quel prix, en combien de temps. Une réponse courte et datée, qu'une IA peut reprendre telle quelle." },
+        { title: "Le balisage pour les machines", body: "Données structurées Schema.org (LocalBusiness, Service, FAQ) et fichier llms.txt, fidèles à ce que dit la page." },
+        { title: "Les mêmes informations partout", body: "Fiche Google, Bing Places, Apple Business Connect et annuaires alignés : même nom, même adresse, même téléphone, mêmes horaires. Un horaire différent sur deux sources suffit à faire hésiter un moteur." },
+        { title: "Les mentions tierces", body: "Annuaires de votre métier, classements locaux, presse, avis : les sources extérieures que les IA recoupent avant de recommander une entreprise. Je vous dis lesquelles comptent dans votre secteur et j'en prépare les textes." },
+        { title: "La mesure, chaque mois", body: "Le même panel de questions rejoué, le trafic venu des IA dans GA4 et les citations relevées par le rapport AI Performance de Bing Webmaster Tools." },
+      ],
+      bingTitle: "Pourquoi je travaille Bing autant que Google",
+      bing: "Bing alimente Copilot, et Microsoft a confirmé que le balisage Schema aide ses modèles à comprendre les pages. ChatGPT fait une recherche web quand la question le demande : OpenAI ne publie pas la liste de ses fournisseurs, mais les analyses du secteur citent l'index Bing parmi ses sources. Une entreprise mal indexée dans Bing part donc avec un handicap dans Copilot, et probablement dans ChatGPT. Je vérifie l'indexation dans Bing Webmaster Tools, je soumets les nouvelles pages par IndexNow et je tiens la fiche Bing Places à jour.",
+      localTitle: "Un GEO local, et souvent multilingue",
+      local: "Sur la Côte d'Azur, une partie de vos clients pose ses questions en anglais ou en italien, depuis l'étranger, avant même d'arriver. Les IA citent plus volontiers une source rédigée dans la langue de la question : selon une étude de Weglot mise à jour en août 2026, les sites sans version anglaise sont beaucoup moins cités sur les requêtes en anglais. Un site bilingue bien relié (hreflang) et une fiche Google complète comptent autant que les mots-clés. Basé à Nice, je travaille avec des entreprises de toute la Côte d'Azur, de Cannes à Monaco, et à distance partout en France.",
+      offersTitle: "Les formules",
+      offersNote: "Prix nets (TVA non applicable), confirmés par écrit avec le délai après un premier échange.",
+      offersLink: "Le détail de chaque formule",
+      delay: "Délai",
+      term: "Engagement",
+      proofTitle: "Sur le terrain",
+      proof: "Sun Beach House, agence de villas de luxe à Saint-Barthélemy depuis 1996 : identité, site éditorial, puis SEO et GEO en continu.",
+      proofLink: "Voir l'étude de cas",
+      proofSelf: "Ce site applique la même méthode : données structurées, fichier llms.txt, pages rapides, réponses courtes et datées.",
+      faqTitle: "Questions fréquentes",
+      faq: [
+        { q: "Qu'est-ce qu'un consultant GEO ?", a: "Un consultant GEO aide une entreprise à être citée dans les réponses des IA génératives : ChatGPT, Perplexity, Gemini, Copilot et les réponses IA de Google. Il teste ce que ces IA répondent aux questions des clients, corrige le site (contenus, données structurées, llms.txt), aligne les informations publiées ailleurs (fiche Google, Bing Places, annuaires) et mesure l'évolution des citations. Le métier est récent : le terme GEO date d'une étude de 2023, et la plupart des consultants GEO viennent du SEO, dont le GEO reprend les fondations." },
+        { q: "Combien coûte un consultant GEO à Nice ?", a: `Il n'existe pas encore de grille de prix propre au GEO, qui est le plus souvent vendu avec le SEO. En repère, un consultant SEO freelance expérimenté facture autour de 500 € HT la journée en France (baromètre des tarifs Malt, 2026). Chez moi, l'audit de visibilité Google + IA est gratuit, la mise en conformité SEO & GEO coûte dès ${eur("seoFix")} et le suivi SEO & GEO dès ${eur("seoMonthly")} par mois (${COMMITMENT.seo} mois minimum). Prix nets, TVA non applicable.`, link: { href: "/blog/prix-referencement-nice-seo/", label: "Voir la grille des prix du référencement à Nice" } },
+        { q: "En combien de temps une entreprise est-elle citée par ChatGPT ?", a: "Dans les IA qui consultent le web, comme ChatGPT Search ou Perplexity, une page bien structurée peut être citée dès qu'elle est indexée. Les mentions sur des sites tiers et les avis demandent plus de temps, souvent plusieurs mois. On suit l'évolution sur le même panel de questions, mois après mois." },
+        { q: "Peut-on garantir d'être cité par ChatGPT ?", a: "Non, et méfiez-vous de qui le promet. Personne ne contrôle les réponses d'une IA, qui changent d'une question à l'autre et d'un jour à l'autre. Le travail consiste à augmenter vos chances d'être cité, puis à le mesurer. La seule place qui s'achète est celle d'une annonce ChatGPT Ads, affichée sous la réponse et marquée « sponsorisé »." },
+        { q: "Le GEO remplace-t-il le SEO ?", a: "Non. Les deux partagent les mêmes fondations : un site rapide, des contenus utiles, des données structurées. Une page absente de Google et de Bing a peu de chances d'être citée par une IA qui s'appuie sur leurs index. Le GEO y ajoute des réponses courtes et citables, un fichier llms.txt et des mentions sur des sources de confiance." },
+        { q: "Travaillez-vous en dehors de Nice ?", a: "Oui. Je suis basé à Nice et je travaille avec des entreprises de toute la Côte d'Azur, de Cannes à Monaco, ainsi qu'à distance partout en France et à l'étranger, en français ou en anglais." },
+      ],
+      guidesTitle: "Guides pour aller plus loin",
+      seoLink: "Tout le service SEO & GEO",
+    }
+  : {
+      name: "GEO consultant in Nice",
+      h1: ["GEO consultant", "in Nice."],
+      lead: "I get businesses in Nice and on the French Riviera cited in the answers of ChatGPT, Perplexity, Gemini, Copilot and Google. It starts with a free audit: who the AI recommends instead of you, and which sources it relies on.",
+      facts: ["Free audit", `Results in ${DELAY.seoAudit.en}`, "Reply within 2 business days", "Nice and remote"],
+      ctaAudit: "Request the free audit",
+      callback: "Get a call back",
+      whatTitle: "What is GEO?",
+      what: [
+        "GEO (Generative Engine Optimization) covers what makes a business citable by the engines that write an answer instead of showing a list of links: ChatGPT, Perplexity, Gemini, Copilot, Google's AI Overviews and AI Mode.",
+        "The term comes from a study published in November 2023 by researchers from Princeton and IIT Delhi, among others. On their benchmark, citing sources and adding statistics or expert quotes raised a page's visibility in generated answers by up to 40%.",
+        "For a local business, the question put to the AI looks like \"which plumber in Nice?\" or \"a good Italian restaurant in Cannes\". The AI then looks for sources that agree: your website, your Google profile, Bing Places, directories, reviews, articles about you. GEO is about making those sources clear, consistent and easy to cite.",
+      ],
+      paperLabel: "Read the GEO study (arXiv, 2023)",
+      doTitle: "What I do, in practice",
+      do: [
+        { title: "The starting test", body: "The questions your customers actually ask, tested in ChatGPT, Perplexity, Gemini, Copilot and Google: who gets cited, how often, from which sources." },
+        { title: "Pages that answer", body: "Each service answers the question it gets in a few lines: what you do, where, at what price, how fast. A short, dated answer an AI can quote as it stands." },
+        { title: "Markup for machines", body: "Schema.org structured data (LocalBusiness, Service, FAQ) and an llms.txt file, true to what the page says." },
+        { title: "The same details everywhere", body: "Google profile, Bing Places, Apple Business Connect and directories aligned: same name, address, phone and opening hours. Two sources with different hours are enough to make an engine hesitate." },
+        { title: "Third-party mentions", body: "Trade directories, local rankings, press, reviews: the outside sources AI cross-checks before recommending a business. I tell you which ones count in your sector and draft the texts." },
+        { title: "Monthly measurement", body: "The same question panel run again, AI-referred traffic in GA4, and the citations reported by Bing Webmaster Tools' AI Performance report." },
+      ],
+      bingTitle: "Why I work on Bing as much as Google",
+      bing: "Bing powers Copilot, and Microsoft has confirmed that Schema markup helps its models understand pages. ChatGPT runs a web search when the question calls for it: OpenAI doesn't publish its list of providers, but industry analyses cite the Bing index among its sources. A business poorly indexed in Bing starts with a handicap in Copilot, and probably in ChatGPT. I check indexing in Bing Webmaster Tools, submit new pages through IndexNow and keep the Bing Places listing up to date.",
+      localTitle: "Local GEO, often multilingual",
+      local: "On the French Riviera, part of your customers ask their questions in English or Italian, from abroad, before they even arrive. AI engines more readily cite a source written in the language of the question: according to a Weglot study updated in August 2026, sites without an English version are cited far less on English queries. A well-linked bilingual site (hreflang) and a complete Google profile matter as much as keywords. Based in Nice, I work with businesses across the Riviera, from Cannes to Monaco, and remotely across France.",
+      offersTitle: "Packages",
+      offersNote: "Net prices (no VAT charged), confirmed in writing with the timeline after a first call.",
+      offersLink: "Each package in detail",
+      delay: "Timeline",
+      term: "Commitment",
+      proofTitle: "In the field",
+      proof: "Sun Beach House, a luxury villa agency in Saint-Barthélemy since 1996: identity, editorial website, then ongoing SEO and GEO.",
+      proofLink: "See the case study",
+      proofSelf: "This site applies the same method: structured data, an llms.txt file, fast pages, short dated answers.",
+      faqTitle: "Frequently asked questions",
+      faq: [
+        { q: "What is a GEO consultant?", a: "A GEO consultant helps a business get cited in the answers of generative AI: ChatGPT, Perplexity, Gemini, Copilot and Google's AI answers. They test what these AI engines answer to customers' questions, fix the website (content, structured data, llms.txt), align the details published elsewhere (Google profile, Bing Places, directories) and track how citations evolve. The job is new: the term GEO dates from a 2023 study, and most GEO consultants come from SEO, whose foundations GEO builds on." },
+        { q: "How much does a GEO consultant cost in Nice?", a: `There is no GEO-specific rate card yet: GEO is usually sold together with SEO. As a benchmark, an experienced freelance SEO consultant charges around €500 a day before VAT in France (Malt rate barometer, 2026). With me, the Google + AI visibility audit is free, the SEO & GEO compliance fix starts at ${eur("seoFix")} and SEO & GEO follow-up at ${eur("seoMonthly")} a month (${COMMITMENT.seo} months minimum). Net prices, no VAT charged.`, link: { href: "/en/blog/seo-cost-nice-pricing/", label: "See the SEO price grid for Nice" } },
+        { q: "How long does it take to get cited by ChatGPT?", a: "In AI engines that search the web, such as ChatGPT Search or Perplexity, a well-structured page can be cited as soon as it is indexed. Mentions on third-party sites and reviews take longer, often several months. Progress is tracked on the same question panel, month after month." },
+        { q: "Can anyone guarantee a citation in ChatGPT?", a: "No, and beware of anyone who promises it. Nobody controls an AI's answers, which change from one question to the next and from one day to the next. The work is to raise your chances of being cited, then to measure it. The only spot you can buy is a ChatGPT Ads ad, shown below the answer and labelled \"sponsored\"." },
+        { q: "Does GEO replace SEO?", a: "No. Both share the same foundations: a fast site, useful content, structured data. A page missing from Google and Bing has little chance of being cited by an AI that relies on their indexes. GEO adds short, quotable answers, an llms.txt file and mentions on trusted sources." },
+        { q: "Do you work outside Nice?", a: "Yes. I'm based in Nice and work with businesses across the French Riviera, from Cannes to Monaco, and remotely across France and abroad, in French or English." },
+      ],
+      guidesTitle: "Guides to go further",
+      seoLink: "The full SEO & GEO service",
+    };
+
+const h2 = "font-display text-[clamp(26px,2.8vw,40px)] leading-[1.15] text-[var(--color-ink)]";
+const sheet = (n: string, fr: string, en: string): string => (isFr ? `Planche ${n} · ${fr}` : `Sheet ${n} · ${en}`);
+
+// Structured data — Service + FAQPage + 3-level breadcrumb, joined to the
+// global graph (BaseLayout) by @id.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Service",
+      "@id": `${canonical}#service`,
+      "name": c.name,
+      "serviceType": "Generative Engine Optimization (GEO)",
+      "url": canonical,
+      "description": c.lead,
+      "provider": { "@id": `${Astro.site}#service` },
+      "areaServed": AREA_SERVED,
+      "isRelatedTo": { "@id": `${seoUrl}#service` },
+      "isPartOf": { "@id": `${Astro.site}#website` },
+      "inLanguage": isFr ? "fr-FR" : "en-US",
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${canonical}#faq`,
+      "inLanguage": isFr ? "fr-FR" : "en-US",
+      "mainEntity": c.faq.map((f) => ({
+        "@type": "Question",
+        "name": f.q,
+        "acceptedAnswer": { "@type": "Answer", "text": f.a },
+      })),
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${canonical}#breadcrumb`,
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": isFr ? "Accueil" : "Home", "item": homeUrl },
+        { "@type": "ListItem", "position": 2, "name": seo.content.name, "item": seoUrl },
+        { "@type": "ListItem", "position": 3, "name": c.name, "item": canonical },
+      ],
+    },
+  ],
+};
+---
+
+<main id="main-content" class="bg-[var(--color-bg)] text-[var(--color-ink)]">
+
+  {/* ========== HERO ========== */}
+  <section class="px-4 pb-14 pt-24 sm:px-6 md:px-12 md:pb-20 md:pt-32">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <nav aria-label={isFr ? "Fil d'Ariane" : "Breadcrumb"} class="text-[15px] text-[var(--color-ink-muted)]">
+        <a href={isFr ? "/" : "/en/"} class="underline-offset-4 hover:underline">{isFr ? "Accueil" : "Home"}</a>
+        <span aria-hidden="true"> / </span>
+        <a href={seo.path[lang]} class="underline-offset-4 hover:underline">{seo.content.name}</a>
+        <span aria-hidden="true"> / </span>
+        <span aria-current="page" class="text-[var(--color-ink)]">{c.name}</span>
+      </nav>
+      <h1 data-vapor class="mt-5 max-w-[20ch] font-display text-[clamp(34px,4.4vw,60px)] leading-[1.08] text-balance">
+        <span>{c.h1[0]} </span><span class="text-[var(--color-ink-muted)]">{c.h1[1]}</span>
+      </h1>
+      <p class="mt-5 max-w-[60ch] text-[clamp(18px,1.5vw,21px)] leading-[1.5] text-[var(--color-ink-muted)]">{c.lead}</p>
+      <ul class="mt-7 flex flex-wrap gap-2 text-[15px]">
+        {c.facts.map((f, i) => <li class:list={["fact", i === 0 && "fact--accent"]}>{f}</li>)}
+      </ul>
+      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+        <a href="#contact" data-project-open="seo" data-project-offer="0" class="btn btn-primary">{c.ctaAudit} <span aria-hidden="true">→</span></a>
+        <button type="button" data-callback-open class="text-[16px] font-medium text-[var(--color-ink)] underline underline-offset-4 hover:text-[var(--color-accent)]">
+          {c.callback}
+        </button>
+      </div>
+    </div>
+  </section>
+
+  {/* ========== WHAT GEO IS ========== */}
+  <section data-surface="tint" class="bg-[var(--color-bg)] px-4 py-16 sm:px-6 md:px-12 md:py-24">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <Eyebrow label={sheet("01", "Définition", "Definition")} class="mb-6 md:mb-8" />
+      <h2 class={h2}>{c.whatTitle}</h2>
+      <div class="mt-8 max-w-[68ch] space-y-5 text-[17px] leading-[1.65] md:text-[18px]">
+        {c.what.map((p) => <p>{p}</p>)}
+      </div>
+      <a href={GEO_PAPER} rel="noopener" class="mt-5 inline-flex items-center gap-2 text-[17px] text-[var(--color-accent)] underline underline-offset-4 hover:text-[var(--color-accent-strong)]">
+        {c.paperLabel} <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+  {/* ========== WHAT I DO ========== */}
+  <section class="px-4 py-16 sm:px-6 md:px-12 md:py-24">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <Eyebrow label={sheet("02", "Méthode", "Method")} class="mb-6 md:mb-8" />
+      <h2 class={h2}>{c.doTitle}</h2>
+      <ol class="mt-8 grid gap-8 sm:grid-cols-2 md:mt-10 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-10">
+        {c.do.map((step, i) => (
+          <li class="border-t-2 border-[var(--color-accent)] pt-5">
+            <span class="font-display text-[18px] text-[var(--color-accent)]">{String(i + 1).padStart(2, "0")}</span>
+            <h3 class="mt-2 text-[19px] font-medium leading-snug md:text-[20px]">{step.title}</h3>
+            <p class="mt-2 text-[16px] leading-[1.55] text-[var(--color-ink-muted)]">{step.body}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  {/* ========== BING + LOCAL ========== */}
+  <section data-surface="tint" class="bg-[var(--color-bg)] px-4 py-16 sm:px-6 md:px-12 md:py-24">
+    <div class="mx-auto grid w-full max-w-[var(--container-wide)] gap-12 md:grid-cols-2 md:gap-16">
+      <div>
+        <Eyebrow label={sheet("03", "Bing", "Bing")} class="mb-6 md:mb-8" />
+        <h2 class={h2}>{c.bingTitle}</h2>
+        <p class="mt-6 text-[17px] leading-[1.65] md:text-[18px]">{c.bing}</p>
+      </div>
+      <div>
+        <Eyebrow label={sheet("04", "Côte d'Azur", "French Riviera")} class="mb-6 md:mb-8" />
+        <h2 class={h2}>{c.localTitle}</h2>
+        <p class="mt-6 text-[17px] leading-[1.65] md:text-[18px]">{c.local}</p>
+      </div>
+    </div>
+  </section>
+
+  {/* ========== PACKAGES (same source as the SEO & GEO page) ========== */}
+  <section id="formules" class="px-4 py-16 sm:px-6 md:px-12 md:py-24">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <Eyebrow label={sheet("05", "Formules", "Packages")} class="mb-6 md:mb-8" />
+      <h2 class={h2}>{c.offersTitle}</h2>
+      <p class="mt-3 max-w-[60ch] text-[16px] text-[var(--color-ink-muted)]">{c.offersNote}</p>
+      <ul class="mt-8 flex flex-col md:mt-10">
+        {offers.map((o) => (
+          <li class="grid gap-2 border-t border-[var(--color-border)] py-5 md:grid-cols-12 md:items-baseline md:gap-8">
+            <span class="text-[19px] font-medium md:col-span-5">{o.name}</span>
+            <span class="font-display text-[22px] text-[var(--color-accent)] md:col-span-3">{offerPriceText(o, lang)}</span>
+            <span class="text-[15px] text-[var(--color-ink-muted)] md:col-span-4">
+              {[o.delay && `${c.delay} : ${o.delay}`, o.term && `${c.term} : ${o.term}`].filter(Boolean).join(" · ")}
+            </span>
+          </li>
+        ))}
+      </ul>
+      <a href={`${seo.path[lang]}#formules`} class="mt-6 inline-flex items-center gap-2 text-[17px] text-[var(--color-accent)] underline underline-offset-4 hover:text-[var(--color-accent-strong)]">
+        {c.offersLink} <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+  {/* ========== PROOF ========== */}
+  <section class="px-4 pb-16 sm:px-6 md:px-12 md:pb-24">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <Eyebrow label={sheet("06", "Références", "References")} class="mb-6 md:mb-8" />
+      <h2 class={h2}>{c.proofTitle}</h2>
+      <div class="mt-6 max-w-[68ch] space-y-4 text-[17px] leading-[1.65] md:text-[18px]">
+        <p>
+          {c.proof}{" "}
+          <a href={caseStudyPath("sun-beach-house", lang)} class="text-[var(--color-accent)] underline underline-offset-4 hover:text-[var(--color-accent-strong)]">{c.proofLink}</a>
+        </p>
+        <p>{c.proofSelf}</p>
+      </div>
+    </div>
+  </section>
+
+  {/* ========== FAQ ========== */}
+  <section data-surface="tint" class="bg-[var(--color-bg)] px-4 py-16 sm:px-6 md:px-12 md:py-24">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <Eyebrow label={sheet("07", "Questions", "Questions")} class="mb-6 md:mb-8" />
+    </div>
+    <div class="mx-auto grid w-full max-w-[var(--container-wide)] gap-8 md:grid-cols-12 md:gap-10">
+      <h2 class:list={[h2, "md:col-span-4"]}>{c.faqTitle}</h2>
+      <div class="md:col-span-8">
+        {c.faq.map((f) => (
+          <details class="qa">
+            <summary>
+              <h3 class="text-[18px] font-medium leading-snug md:text-[19px]">{f.q}</h3>
+              <span class="qa-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="pb-6">
+              <p class="max-w-[65ch] text-[17px] leading-[1.6] text-[var(--color-ink-muted)]">{f.a}</p>
+              {f.link && (
+                <a href={f.link.href} class="mt-3 inline-flex items-center gap-2 text-[17px] text-[var(--color-accent)] underline underline-offset-4 hover:text-[var(--color-accent-strong)]">
+                  {f.link.label} <span aria-hidden="true">→</span>
+                </a>
+              )}
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* ========== GUIDES + SERVICE ========== */}
+  <section class="px-4 pt-16 sm:px-6 md:px-12 md:pt-20">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <h2 class="text-[22px] font-medium">{c.guidesTitle}</h2>
+      <ul class="mt-4 grid gap-3 sm:grid-cols-2">
+        {guides.map((g) => (
+          <li>
+            <a href={postPath(g)} class="link-card group">
+              <span class="text-[17px] font-medium leading-snug">{g.data.title}</span>
+              <span aria-hidden="true" class="text-[var(--color-accent)] transition-transform duration-300 group-hover:translate-x-1">→</span>
+            </a>
+          </li>
+        ))}
+        <li>
+          <a href={seo.path[lang]} class="link-card group">
+            <span class="text-[17px] font-medium leading-snug">{c.seoLink}</span>
+            <span aria-hidden="true" class="text-[var(--color-accent)] transition-transform duration-300 group-hover:translate-x-1">→</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <CTA lang={lang} need="seo" />
+
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+</main>
+
+<style>
+  /* Same chips, FAQ rows and link cards as the service pages (ServicePage). */
+  .fact {
+    padding: 7px 14px;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+    color: var(--color-ink);
+  }
+  .fact--accent {
+    border-color: transparent;
+    background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+    color: var(--color-accent);
+    font-weight: 500;
+  }
+  #formules {
+    scroll-margin-top: 64px;
+  }
+  .qa {
+    border-bottom: 1px solid var(--color-border);
+  }
+  .qa summary {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 20px 0;
+    list-style: none;
+    cursor: pointer;
+  }
+  .qa summary::-webkit-details-marker {
+    display: none;
+  }
+  .qa-icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    margin-top: 6px;
+  }
+  .qa-icon::before,
+  .qa-icon::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: currentColor;
+    transition: transform 0.3s var(--ease-power3);
+  }
+  .qa-icon::after {
+    transform: rotate(90deg);
+  }
+  details[open] > summary .qa-icon::after {
+    transform: rotate(0deg);
+  }
+  .link-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    height: 100%;
+    padding: 18px 20px;
+    border: 1px solid var(--color-border);
+    color: var(--color-ink);
+    text-decoration: none;
+    transition: border-color 0.2s var(--ease-power3);
+  }
+  .link-card:hover {
+    border-color: color-mix(in srgb, var(--color-accent) 45%, transparent);
+  }
+</style>
