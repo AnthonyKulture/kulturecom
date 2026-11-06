@@ -1,0 +1,12 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import Nav from "~/components/Nav.astro";
+import GeoNicePage from "~/components/GeoNicePage.astro";
+
+const lang = "en" as const;
+---
+
+<BaseLayout lang={lang} pathname="/en/geo-consultant-nice/" altPath="/consultant-geo-nice/">
+  <Nav lang={lang} altLang="fr" altLangPath="/consultant-geo-nice/" />
+  <GeoNicePage lang={lang} />
+</BaseLayout>

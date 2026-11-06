@@ -4,8 +4,20 @@ import Nav from "~/components/Nav.astro";
 import CTA from "~/components/CTA.astro";
 import AboutHero from "~/components/AboutHero.astro";
 import IntroBlueprint from "~/components/IntroBlueprint.astro";
+import { CLIENT_LOGOS } from "~/lib/clients";
+import { GOOGLE_PROFILE } from "~/lib/facts";
 
 const lang = "en" as const;
+
+// Dated, checkable facts (registry, case studies, Google profile): search
+// engines and LLMs trust a career they can date and cross-check.
+const milestones = [
+  { when: "2018", datetime: "2018", body: "After starting out in a digital agency, I bring design, code and SEO under one pair of hands." },
+  { when: "May 2019", datetime: "2019-05-12", body: "I register my sole-trader business in Nice on 12 May 2019 (SIREN 850 723 552)." },
+  { when: "2022", datetime: "2022", body: "I become CTO of Surly, the banking & insurance marketplace I co-founded: 1,600 consultants listed, 8 enterprise clients." },
+  { when: "Aug 2026", datetime: "2026-08", body: "Advertising in ChatGPT opens to advertisers in France: I add ChatGPT Ads campaigns to my SEO & GEO offer, alongside Google Ads." },
+  { when: "Today", datetime: undefined, body: `${CLIENT_LOGOS.length} client references, including Sun Beach House, Royal Yacht International and Eden Rock Yacht Rental. Google rating ${GOOGLE_PROFILE.rating.toFixed(1)}/5 from ${GOOGLE_PROFILE.reviewCount} reviews.` },
+];
 
 const stack = [
   {
@@ -122,6 +134,24 @@ const refuse = [
             I work with <strong class="font-medium text-[var(--color-ink)]">growing SMBs, technical B2B brands, and founders who take image seriously</strong>. I don't take « cosmetic redesign » jobs without rethinking SEO structure. I have never used a Webflow template and I don't plan to start.
           </p>
         </div>
+
+        <p class="font-label mt-16 mb-6 sheet-label text-[13px] uppercase tracking-[0.06em] text-[var(--color-ink-muted)]">
+          <span class="sheet-diamond" aria-hidden="true"></span>
+          <span>Milestones</span>
+          <span class="sheet-leader" aria-hidden="true"></span>
+        </p>
+        <ol class="flex flex-col">
+          {
+            milestones.map((m) => (
+              <li class="grid grid-cols-1 gap-1 border-t border-[var(--color-border)] py-5 sm:grid-cols-[130px_1fr] sm:gap-8">
+                {m.datetime
+                  ? <time datetime={m.datetime} class="font-label pt-1 text-[13px] uppercase tracking-[0.06em] text-[var(--color-accent)]">{m.when}</time>
+                  : <span class="font-label pt-1 text-[13px] uppercase tracking-[0.06em] text-[var(--color-accent)]">{m.when}</span>}
+                <p class="text-[clamp(17px,1.2vw,18px)] leading-[1.65] text-[var(--color-ink-muted)]">{m.body}</p>
+              </li>
+            ))
+          }
+        </ol>
       </div>
     </section>
 

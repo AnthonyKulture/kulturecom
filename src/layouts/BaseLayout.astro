@@ -115,6 +115,11 @@ const graph: Record<string, any>[] = [
     "jobTitle": lang === "fr"
       ? "Freelance développeur web, apps & IA, SEO & brand designer"
       : "Freelance web developer, apps & AI, SEO & brand designer",
+    // Tells this Anthony Profit apart from his namesakes (one works in asset
+    // management in Switzerland) for the Knowledge Graph and LLMs.
+    "disambiguatingDescription": lang === "fr"
+      ? "Développeur web et consultant SEO & GEO freelance basé à Nice (France), CTO de la marketplace Surly."
+      : "Freelance web developer and SEO & GEO consultant based in Nice, France; CTO of the Surly marketplace.",
     "description": dict.meta.description,
     "knowsLanguage": ["fr", "en"],
     "knowsAbout": [
@@ -288,6 +293,7 @@ const jsonLd = { "@context": "https://schema.org", "@graph": graph };
     {noindex && <meta name="robots" content="noindex" />}
 
     <meta name="author" content="Anthony Profit" />
+    <meta name="msvalidate.01" content="45F415BDA001EA33835BB6C768B726AF" />
 
     <link rel="canonical" href={canonical} />
     {/* hreflang: self + other lang + x-default. Google accepts just other+default,
