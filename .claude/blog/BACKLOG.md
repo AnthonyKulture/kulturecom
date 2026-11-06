@@ -18,9 +18,9 @@ librement : l'ordre de la liste est l'ordre de parution.
 - [x] Être cité par Perplexity → /blog/etre-cite-par-perplexity/
 - [x] SEO pour restaurants à Nice → /blog/seo-restaurant-nice/
 - [x] SEO immobilier de prestige sur la Côte d'Azur → /blog/seo-immobilier-luxe-cote-azur/
+- [x] ChatGPT Ads pas à pas → /blog/campagne-chatgpt-ads-pas-a-pas/
 
 ## À écrire
-- [ ] ChatGPT Ads pas à pas : créer et suivre sa première campagne depuis la France (Ads Manager, contextes, Negative Phrases, mesure)
 - [ ] Bing et Copilot : pourquoi Bing Webmaster Tools compte pour être visible dans ChatGPT et Copilot
 - [ ] Hôtels et locations saisonnières de la Côte d'Azur : récupérer des réservations directes face à Booking et Airbnb (SEO + GEO)
 - [ ] Refonte de site sans perdre son référencement : redirections, migration, suivi (checklist)

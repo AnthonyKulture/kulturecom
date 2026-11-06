@@ -1,0 +1,167 @@
+---
+lang: en
+slug: chatgpt-ads-first-campaign-step-by-step
+translationKey: chatgpt-ads-premiere-campagne
+title: "How to set up a ChatGPT Ads campaign step by step: account, context hints, Negative Phrases and measurement from Nice, Cannes or Monaco"
+metaTitle: "ChatGPT Ads campaign setup, step by step"
+description: "Set up a ChatGPT Ads campaign from France: Ads Manager account, objective, context hints, ads, Negative Phrases, a consent-aware pixel and how to read results."
+keywords:
+  - ChatGPT Ads campaign setup
+  - ChatGPT Ads Manager
+  - ChatGPT Ads context hints
+  - ChatGPT Negative Phrases
+  - OpenAI pixel
+tags:
+  - ChatGPT Ads
+  - GEO
+  - AI
+pillar: seo
+pubDate: 2026-11-06
+draft: false
+---
+
+import ServiceCTA from "~/components/blog/ServiceCTA.astro";
+import Callout from "~/components/blog/Callout.astro";
+
+To set up a ChatGPT Ads campaign from France, you need a verified account in OpenAI's Ads Manager, a campaign (objective, budget, location), at least one ad group described by conversation contexts, and short ads that go through review before they serve. The hard parts come before and after: picking an objective you can't change later, and wiring up measurement that respects the consent rules of France's data protection authority, the CNIL. Here is the process as I run it for businesses in Nice, Cannes and Monaco.
+
+If the topic is new to you, start with my [guide to how ChatGPT Ads works](/en/blog/chatgpt-ads-advertising-guide/) (audience, contextual targeting in Europe, which businesses should test it). This one is the hands-on part.
+
+## Before you open Ads Manager: what to have ready
+
+Self-serve Ads Manager has been open in France since 31 August 2026, still in beta. You sign up at ads.openai.com with your company's exact legal name, its website and a payment method. OpenAI verifies the business before anything serves.
+
+Three account settings deserve real attention, because they are hard or impossible to change afterwards: the billing entity's country, the currency and the time zone. For a business in Nice, that means France, euros and Paris time. A Monaco company should check which country the sign-up form offers.
+
+Have three more things ready before the first campaign:
+
+1. **A dedicated landing page** for the offer you're promoting. It must be reachable by OpenAI's ad crawlers, which read it to match the ad with conversations.
+2. **A defined conversion**: a quote request, a booking, an appointment, a purchase. That's what will tell you whether the campaign pays.
+3. **A cookie banner that can control OpenAI's pixel.** More on this below: it's the step I most often see skipped.
+
+## How is a ChatGPT Ads campaign structured?
+
+A ChatGPT Ads campaign has three levels, described in [OpenAI's developer documentation](https://developers.openai.com/ads/campaign-management):
+
+| Level | What you set there |
+|---|---|
+| Campaign | Objective, budget, schedule, locations and platforms |
+| Ad group | Bid, billing event, conversation contexts (*context hints*) |
+| Ad | Title, body, optional image, destination URL |
+
+If you know Google Ads, the logic will feel familiar, except that an ad group carries natural-language descriptions where you'd expect keywords.
+
+## Step 1: choose the objective, budget and location
+
+The objective is one of three options: impressions, clicks or conversions. The choice is final. According to [OpenAI's "Bidding & Budgets" page](https://developers.openai.com/ads/bidding-and-budgets), a campaign keeps its objective, and its conversion event for a conversion campaign. To change either, you create a new campaign.
+
+My advice for a first campaign: go for clicks until conversion tracking has proven itself, then open a conversion campaign once events come through cleanly. A conversion campaign optimizes toward a single standard event (`lead_created`, `appointment_scheduled`, `order_created` and so on), custom events can't be the goal, and billing stays per valid click. Your account also has to be eligible for that bid type.
+
+The budget is daily or lifetime, never both, with minimums that depend on the account currency. "Maximize Results", where the platform adjusts bids itself, requires a daily budget. You can switch from a lifetime budget to a daily one, not the other way round.
+
+For location, the documentation talks about countries, regions and "markets", picked from a catalog of available places. It mentions neither city targeting nor a radius around an address. So a restaurant on the Cours Saleya can't, as far as the documentation goes, limit itself to conversations happening in Nice. Check what the catalog offers, and let the contexts and the landing page carry the local angle.
+
+Platforms are set separately: iOS app, Android app, desktop web, iOS web, Android web. Leave them unset and all are included.
+
+## Step 2: write conversation contexts that target well
+
+Context hints are the core of targeting. [OpenAI's "Targeting" page](https://developers.openai.com/ads/campaign-targeting) defines them as additional information about the ads in a group, describing products, use cases or needs that the ad and the landing page may not fully cover. OpenAI is explicit that they are not exact-match keywords. An ad group can hold up to 2,000 of them, and there's no need to get anywhere near that.
+
+What works is describing a specific situation instead of a single word. A few Riviera examples:
+
+| Business | Too vague | Useful |
+|---|---|---|
+| Hotel in Cannes | "hotel Cannes" | "Professional looking for a hotel within walking distance of the Palais des Festivals for a conference" |
+| Estate agency in Monaco | "Monaco real estate" | "Family relocating to Monaco and comparing districts to buy a sea-view apartment" |
+| Wedding planner in Nice | "wedding" | "Couple from abroad planning a wedding on the French Riviera and looking for a French and English-speaking planner" |
+| Boat rental in Cannes | "boat rental" | "Group of friends who want to hire a boat with a skipper for a day at the Lérins Islands" |
+
+Build one ad group per intent. The Cannes hotel would split conference guests from weekend couples, for instance: the contexts, the ads and the landing page all differ. One technical detail: when you edit the list of contexts, the new list replaces the old one. Keep the full list in a document on the side.
+
+## Step 3: write the ads and get through review
+
+A standard ad is short. According to OpenAI's documentation, the title runs 3 to 50 characters and the body 100 characters at most. If you add an image, it must be at least 640 × 640 pixels, in JPEG, PNG or WebP.
+
+With so little room, I write an answer to the conversation rather than a slogan. For the boat rental: a title that names the offer and the place ("Skippered boat to the Lérins Islands"), a body that gives the departure point, the duration and what's included. Plan two or three variants per group.
+
+Creating an ad submits it for review: check its status and any serving issues before concluding that "it doesn't work". Any change to the text or image goes back through review, and the preview doesn't guarantee the ad is eligible.
+
+<ServiceCTA service="seo-geo" lang="en" text="Want to launch your first ChatGPT Ads campaign without getting lost in the settings? I handle it end to end." />
+
+## What are Negative Phrases, and should you use them?
+
+Negative Phrases are expressions that stop your ad from showing when the user's message contains them. They work like negative keywords in Google Ads, only blunter: contexts steer delivery, a Negative Phrase blocks it.
+
+[Adthena](https://www.adthena.com/resources/blog/chatgpt-ads-negative-phrases/) spotted the feature in August 2026 in a UK account, under Ads Manager settings: up to 100 phrases of up to 100 characters each, according to that observation. In early October 2026, OpenAI presented it as limited to qualifying advertisers, with wider availability on the way. It may not show up in your account straight away.
+
+If you have access, I use it for two things:
+
+- **Protecting positioning.** A Cannes palace hotel would exclude "cheap", "budget deal", "youth hostel".
+- **Avoiding wasted clicks.** A Monaco agency that only sells property would exclude "holiday rental".
+
+## Step 4: install the pixel with consent in place
+
+This is where I see the most mistakes. [OpenAI's pixel documentation](https://developers.openai.com/ads/measurement-pixel) says consent is treated as granted by default, unless the site marks it as denied or the pixel finds a stored denial. Pasting the snippet as is into your `<head>` therefore tracks visitors before they agree.
+
+In France, the [CNIL](https://www.cnil.fr/fr/cookies-et-autres-traceurs/regles/cookies/lignes-directrices-modificatives-et-recommandation) requires prior consent for trackers that aren't strictly necessary, and an advertising pixel is one of them. The pixel has a setting for this: call `oaiq("consent", false)` before initialization, then `oaiq("consent", true)` when the visitor accepts in the banner. Events blocked before consent aren't replayed afterwards, which is expected.
+
+OpenAI describes the server-side Conversions API as more reliable than the pixel alone. If a conversion is sent from both, give it the same `event_id`: OpenAI keeps the first one it receives and ignores duplicates. Add tagged links (`utm_source=chatgpt`) to find this channel in GA4.
+
+## How do you read ChatGPT Ads results?
+
+The basic metrics are standard: impressions, clicks, spend, click-through rate, CPC, CPM, then conversions and cost per conversion. The trap is attribution. According to [OpenAI's "Reporting" page](https://developers.openai.com/ads/reporting):
+
+| Setting | Options | Default |
+|---|---|---|
+| Click window | 7, 14 or 30 days | 30 days |
+| View window | 0 or 1 day | 1 day |
+| Date used | Date of the ad interaction or date of the conversion | Ad interaction |
+
+View-through conversions count by default. If you compare with Google Ads or your CRM, align the windows, or set the view window to 0 to judge on clicks alone. OpenAI also asks you to allow at least a day before reading conversions, and current-day figures are partial.
+
+I always set a review date before launch, with a capped test budget, and change one setting at a time. Alongside that, I check whether the business is cited in the answers themselves: ads put you below the answer, GEO puts you in it. The method is in [how to measure your visibility in ChatGPT](/en/blog/measure-ai-visibility-chatgpt/).
+
+## First campaign checklist
+
+1. Account verified, with country, currency and time zone checked before confirming.
+2. One landing page per offer, reachable by OpenAI's crawlers.
+3. Objective chosen knowing it's final (clicks first if measurement isn't ready).
+4. Daily or lifetime budget, locations and platforms set.
+5. One ad group per intent, with contexts that describe situations.
+6. Two or three ads per group, review status checked.
+7. Negative Phrases added if the account has them.
+8. Pixel gated by consent, Conversions API if possible, tagged links.
+9. Attribution windows noted, review date set.
+
+## What I offer to launch your campaign
+
+I launch ChatGPT Ads campaigns from Nice, for businesses on the Riviera and anywhere in France, remotely when needed. The ChatGPT Ads package costs €490 for the launch, delivered in 7 days, then €180 a month for follow-up, with a 6-month commitment and the ad budget on top, paid directly to OpenAI. It covers contexts, ads, the landing page, GDPR-compliant conversion tracking and monthly optimization. The Google Ads + ChatGPT Ads pack costs €590, then €220 a month. Everything is on the [SEO & GEO](/en/seo-geo/) page. I don't promise a cost per click or a sales volume: the platform is too young for anyone to do that honestly.
+
+<ServiceCTA service="seo-geo" lang="en" />
+
+## Frequently asked questions
+
+### Can you set up a ChatGPT Ads campaign yourself in France?
+
+Yes, self-serve Ads Manager has been open to eligible advertisers in France since 31 August 2026, still in beta. You need to get your business verified and add a payment method before your first ad serves.
+
+### Can you target only Nice, Cannes or Monaco?
+
+Not according to the current documentation, which covers countries, regions and markets, with no city or radius targeting. The local angle comes from the conversation contexts, the ad copy and the landing page.
+
+### Can you change a ChatGPT Ads campaign's objective later?
+
+No. The objective and, for a conversion campaign, the chosen event are fixed at creation. To change them, you create a new campaign.
+
+### Is OpenAI's pixel GDPR-compliant out of the box?
+
+No, it treats consent as granted until told otherwise. You need to call `oaiq("consent", false)` before initialization and only switch it on once the visitor accepts in your cookie banner.
+
+<Callout title="Key takeaways">
+
+- A ChatGPT Ads campaign has three levels: campaign, ad group with its contexts, and ads with a 50-character title and a 100-character body at most.
+- The objective is final: start with clicks if your conversion tracking isn't reliable yet.
+- Contexts describe situations; Negative Phrases block expressions, when your account has them.
+- The pixel tracks by default without consent: wire it to your cookie banner before launch.
+
+</Callout>

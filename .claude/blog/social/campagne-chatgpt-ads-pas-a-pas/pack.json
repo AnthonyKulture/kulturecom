@@ -1,0 +1,66 @@
+{
+  "card": {
+    "kicker": "ChatGPT Ads · Nice",
+    "title": "Ta première campagne *ChatGPT Ads*, sans faux pas",
+    "subtitle": "Compte, objectif, contextes, annonces, pixel : les réglages à faire dans le bon ordre."
+  },
+  "slides": [
+    {
+      "type": "cover",
+      "eyebrow": "ChatGPT Ads · Côte d'Azur",
+      "title": "Ta pub dans ChatGPT, *pas à pas*",
+      "body": "Les réglages de ta première campagne, et les pièges qu'on ne rattrape pas."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "L'objectif",
+      "title": "Un choix *définitif*.",
+      "body": "Impressions, clics ou conversions : impossible de changer après coup. Commence par les clics si ta mesure n'est pas prête."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Le ciblage",
+      "title": "Des situations, *pas des mots-clés*.",
+      "body": "« Couple étranger qui prépare un mariage sur la Côte d'Azur » cible mieux que « mariage »."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Les annonces",
+      "title": "50 caractères pour *convaincre*.",
+      "body": "Un titre de 50 caractères, un texte de 100. Nomme l'offre et le lieu, puis passe la revue d'OpenAI."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Le pixel",
+      "title": "Il suit *sans consentement*.",
+      "body": "Par défaut, le pixel d'OpenAI considère l'accord comme donné. Branche-le sur ton bandeau cookies avant de lancer."
+    },
+    {
+      "type": "list",
+      "eyebrow": "Avant de lancer",
+      "title": "Ta *checklist*",
+      "items": [
+        { "t": "Pays, devise, fuseau vérifiés", "sub": "Difficiles à changer ensuite" },
+        { "t": "Un groupe par intention", "sub": "Contextes, annonces, page dédiée" },
+        { "t": "Negative Phrases si dispo", "sub": "« pas cher », « bon plan »…" },
+        { "t": "Pixel soumis au consentement", "sub": "Et une date de bilan fixée" }
+      ]
+    },
+    {
+      "type": "cta",
+      "eyebrow": "Parlons-en",
+      "title": "Ta campagne, *bien réglée*.",
+      "body": "Le guide complet est en lien dans la bio.",
+      "cta": "DM « ADS » et on regarde ton projet ensemble."
+    }
+  ],
+  "caption": "Tu veux lancer ta première pub dans ChatGPT depuis Nice, Cannes ou Monaco ?\n\nL'Ads Manager d'OpenAI est ouvert en France depuis le 31 août 2026. Deux réglages ne pardonnent pas : l'objectif de campagne, qu'on ne peut plus changer, et le pixel, qui suit les visiteurs par défaut si tu ne le branches pas sur ton bandeau cookies. Le ciblage se fait par situations de conversation, pas par mots-clés.\n\nEnregistre ce post avant de créer ta campagne ChatGPT Ads, et envoie-le à un commerçant de la Côte d'Azur qui y pense. Le guide complet est en lien dans la bio.",
+  "hashtags": ["#marketingdigital", "#chatgptads", "#publiciteenligne", "#chatgpt", "#nice06"],
+  "stories": [
+    "Le visuel carré (card.jpg) avec un sticker lien vers https://anthonyprofit.com/blog/campagne-chatgpt-ads-pas-a-pas/ : « Le guide pas à pas est ici ».",
+    "Sondage sur fond uni : « La pub dans ChatGPT, pour ton activité ? » Réponses : « Je teste » / « J'attends de voir ».",
+    "Slide 05 du carrousel (le pixel) avec le texte : « Ton bandeau cookies bloque-t-il vraiment les pixels publicitaires ? »",
+    "Boîte à questions : « Ta question sur ChatGPT Ads ? » (les réponses donnent les prochains sujets)."
+  ],
+  "reel": "Plan 1, texte à l'écran : « Pub ChatGPT : piège n°1 ». Face caméra sur la Promenade des Anglais à Nice : « Tu lances ta première campagne ChatGPT Ads ? Fais très attention au moment où tu choisis l'objectif : impressions, clics ou conversions. Une fois la campagne créée, tu ne peux plus le changer, il faut tout recréer. Mon conseil : commence par les clics tant que ton suivi des conversions n'est pas fiable, et passe aux conversions quand les données remontent proprement. » Fin : « Le guide pas à pas est en lien dans ma bio. »"
+}
