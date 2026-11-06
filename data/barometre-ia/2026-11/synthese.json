@@ -438,7 +438,7 @@
           "passages": 1
         },
         {
-          "nom": "Anantara Plaza Nice – Riviera Sunday Brunch",
+          "nom": "Anantara Plaza Nice · Riviera Sunday Brunch",
           "site": "https://www.anantara.com/uploads/minor/anantara/documents/anantara-plaza-nice/menus-restaurants/brunch/riviera_sunday_brunch_menu_2026.pdf?utm_source=openai",
           "passages": 1
         },
@@ -453,7 +453,7 @@
           "passages": 1
         },
         {
-          "nom": "Les Cocottes du Dimanche – Taulissa, Maison Albar Le Victoria",
+          "nom": "Les Cocottes du Dimanche · Taulissa, Maison Albar Le Victoria",
           "site": "https://maison-albar-hotels-le-victoria.com/fr/pagex/brunch-nice-buffet-dominical-vue-mer-au-rooftop-taulissa.6550.html?utm_source=openai",
           "passages": 1
         },
@@ -468,7 +468,7 @@
           "passages": 1
         },
         {
-          "nom": "Restaurant Angelo – Boscolo Nice Hôtel & Spa",
+          "nom": "Restaurant Angelo · Boscolo Nice Hôtel & Spa",
           "site": "https://www.boscolocollection.com/nice/restaurant-angelo?utm_source=openai",
           "passages": 1
         }
@@ -892,7 +892,7 @@
           "passages": 3
         },
         {
-          "nom": "Maison Albar – Le Victoria",
+          "nom": "Maison Albar · Le Victoria",
           "site": null,
           "passages": 3
         },
@@ -1149,12 +1149,12 @@
       "passages": 3,
       "entreprises": [
         {
-          "nom": "Spa 27 – Westminster Hôtel",
+          "nom": "Spa 27 · Westminster Hôtel",
           "site": "https://westminster-nice.com/fr/page/spa-27-hotel-spa-nice.21436.html",
           "passages": 3
         },
         {
-          "nom": "Oria – Maison Albar",
+          "nom": "Oria · Maison Albar",
           "site": null,
           "passages": 3
         },
@@ -1174,7 +1174,7 @@
           "passages": 3
         },
         {
-          "nom": "N Le Spa – Le Negresco",
+          "nom": "N Le Spa · Le Negresco",
           "site": null,
           "passages": 2
         },
@@ -1189,7 +1189,7 @@
           "passages": 1
         },
         {
-          "nom": "Boscolo Nice – Spa & Fitness",
+          "nom": "Boscolo Nice · Spa & Fitness",
           "site": "https://www.boscolocollection.com/nice",
           "passages": 1
         },
@@ -1328,7 +1328,7 @@
           "passages": 3
         },
         {
-          "nom": "Plombier Nice – KGS Plomberie",
+          "nom": "Plombier Nice · KGS Plomberie",
           "site": null,
           "passages": 2
         },
@@ -1653,7 +1653,7 @@
           "passages": 3
         },
         {
-          "nom": "Les Compagnons de France – Déménagement",
+          "nom": "Les Compagnons de France · Déménagement",
           "site": "https://mon-service-france.fr/demenageur/nice/?utm_source=openai",
           "passages": 3
         },
@@ -1683,7 +1683,7 @@
           "passages": 1
         },
         {
-          "nom": "Tintillier Olivier – Project Delivery (T.O. Project Delivery)",
+          "nom": "Tintillier Olivier · Project Delivery (T.O. Project Delivery)",
           "site": null,
           "passages": 1
         },
@@ -1829,7 +1829,7 @@
           "passages": 1
         },
         {
-          "nom": "WeFix – Fnac Nice",
+          "nom": "WeFix · Fnac Nice",
           "site": "https://boutique.wefix.net/78-wefix-fnac-nice?utm_source=openai",
           "passages": 1
         },
@@ -2053,7 +2053,7 @@
           "passages": 3
         },
         {
-          "nom": "Vétérinaires 2 Toute Urgence – Nice",
+          "nom": "Vétérinaires 2 Toute Urgence · Nice",
           "site": "https://www.veterinaire-monveto.com/cliniques/veterinaires-2-toute-urgence-nice/?utm_source=openai",
           "passages": 2
         },
@@ -2068,7 +2068,7 @@
           "passages": 1
         },
         {
-          "nom": "Vétérinaires 2 Toute Urgence – Villeneuve-Loubet",
+          "nom": "Vétérinaires 2 Toute Urgence · Villeneuve-Loubet",
           "site": "https://www.veterinaire-monveto.com/cliniques/veterinaires-2-toute-urgence-nice/",
           "passages": 1
         },
@@ -2179,7 +2179,7 @@
           "passages": 2
         },
         {
-          "nom": "Ensō – Centre de Yoga Nice",
+          "nom": "Ensō · Centre de Yoga Nice",
           "site": "https://enso.fr/horaires-et-tarifs-yoga-nice/?utm_source=openai",
           "passages": 2
         },
@@ -2219,7 +2219,7 @@
           "passages": 1
         },
         {
-          "nom": "Jh Yoga – Yoga Iyengar",
+          "nom": "Jh Yoga · Yoga Iyengar",
           "site": "https://jfyoga.fr/?utm_source=openai",
           "passages": 1
         },
@@ -2229,12 +2229,12 @@
           "passages": 1
         },
         {
-          "nom": "La Parenthèse – Yoga & Pilates & Wellness",
+          "nom": "La Parenthèse · Yoga & Pilates & Wellness",
           "site": "https://laparenthesenice.com/",
           "passages": 1
         },
         {
-          "nom": "Prana Motion Yoga – Mathilde Torrez",
+          "nom": "Prana Motion Yoga · Mathilde Torrez",
           "site": null,
           "passages": 1
         },
@@ -2372,7 +2372,7 @@
           "passages": 1
         },
         {
-          "nom": "Helena – “La Maison d’Elisa”",
+          "nom": "Helena · “La Maison d’Elisa”",
           "site": null,
           "passages": 1
         }
@@ -2977,7 +2977,7 @@
       "passages": 3,
       "entreprises": [
         {
-          "nom": "alpha.b – Institut linguistique",
+          "nom": "alpha.b · Institut linguistique",
           "site": "https://www.ialc.org/fr/trouver-une-ecole/alpha-b-institut-linguistique/?utm_source=openai",
           "passages": 3
         },
@@ -3012,7 +3012,7 @@
           "passages": 1
         },
         {
-          "nom": "CUEFLE – Université Côte d’Azur",
+          "nom": "CUEFLE · Université Côte d’Azur",
           "site": null,
           "passages": 1
         },
@@ -3085,7 +3085,7 @@
           "passages": 1
         },
         {
-          "nom": "Les Beaux Joueurs – Boutique & Bar",
+          "nom": "Les Beaux Joueurs · Boutique & Bar",
           "site": "https://bestin-nice.fr/meilleures-fromageries-de-nice/?utm_source=openai",
           "passages": 1
         },
@@ -3181,7 +3181,7 @@
       "passages": 3,
       "entreprises": [
         {
-          "nom": "Pistache – Pâtisserie",
+          "nom": "Pistache · Pâtisserie",
           "site": null,
           "passages": 3
         },
@@ -3211,12 +3211,12 @@
           "passages": 1
         },
         {
-          "nom": "Macaron de Nice – Pâtisserie Le Vanillier",
+          "nom": "Macaron de Nice · Pâtisserie Le Vanillier",
           "site": null,
           "passages": 1
         },
         {
-          "nom": "Canet — Pâtissier Chocolatier",
+          "nom": "Canet · Pâtissier Chocolatier",
           "site": null,
           "passages": 1
         },
@@ -3506,7 +3506,7 @@
           "passages": 1
         },
         {
-          "nom": "Atol – Rue François Guisol",
+          "nom": "Atol · Rue François Guisol",
           "site": "https://magasins.atol.fr/provence-alpes-cote-d-azur/alpes-maritimes/nice",
           "passages": 1
         },
