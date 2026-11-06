@@ -158,7 +158,9 @@ const host = (u) => { try { return new URL(u).hostname.replace(/^www\./, ""); } 
 const count = (list) => Object.entries(list.reduce((m, k) => ((m[k] = (m[k] ?? 0) + 1), m), {})).sort((a, b) => b[1] - a[1]);
 const aliasFile = new URL("alias.json", dir);
 const alias = new Map(existsSync(aliasFile) ? Object.entries(JSON.parse(readFileSync(aliasFile, "utf8"))).map(([k, v]) => [norm(k), v]) : []);
-const canon = (nom) => alias.get(norm(nom)) ?? nom;
+// Dashes inside a name ("Spa 27 – Westminster Hôtel") become a middle dot: the
+// blog's house style allows no em or en dash.
+const canon = (nom) => (alias.get(norm(nom)) ?? nom).replace(/\s*[–—]\s*/g, " · ");
 
 const parRequete = queries.map((q) => {
   const rs = out.reponses.filter((r) => r.id === q.id);

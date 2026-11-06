@@ -3,44 +3,44 @@
   "modele": "gpt-5-search-api",
   "passages": 150,
   "requetes": 50,
-  "entreprisesDistinctes": 621,
+  "entreprisesDistinctes": 579,
   "citationsParReponse": 6.6066666666666665,
   "stabilite": {
     "total": {
-      "1": 393,
-      "2": 110,
-      "3": 124
+      "1": 333,
+      "2": 109,
+      "3": 143
     },
     "parSecteur": {
       "Restauration": {
-        "1": 55,
-        "2": 19,
-        "3": 30
+        "1": 50,
+        "2": 18,
+        "3": 32
       },
       "Tourisme et loisirs": {
-        "1": 58,
-        "2": 13,
-        "3": 26
+        "1": 48,
+        "2": 15,
+        "3": 28
       },
       "Artisans et dépannage": {
-        "1": 63,
+        "1": 57,
         "2": 18,
-        "3": 17
+        "3": 19
       },
       "Santé et bien-être": {
-        "1": 79,
-        "2": 18,
-        "3": 8
+        "1": 68,
+        "2": 16,
+        "3": 13
       },
       "Services": {
-        "1": 87,
-        "2": 26,
-        "3": 17
+        "1": 68,
+        "2": 23,
+        "3": 24
       },
       "Commerces": {
-        "1": 51,
-        "2": 16,
-        "3": 26
+        "1": 42,
+        "2": 19,
+        "3": 27
       }
     }
   },
@@ -365,11 +365,6 @@
           "passages": 1
         },
         {
-          "nom": "JAN",
-          "site": "https://janonline.com/fr/restaurantjan/?utm_source=openai",
-          "passages": 1
-        },
-        {
           "nom": "Jan Hendrik",
           "site": "https://janonline.com/fr/restaurantjan/?utm_source=openai",
           "passages": 1
@@ -443,7 +438,7 @@
           "passages": 1
         },
         {
-          "nom": "Anantara Plaza Nice – Riviera Sunday Brunch",
+          "nom": "Anantara Plaza Nice · Riviera Sunday Brunch",
           "site": "https://www.anantara.com/uploads/minor/anantara/documents/anantara-plaza-nice/menus-restaurants/brunch/riviera_sunday_brunch_menu_2026.pdf?utm_source=openai",
           "passages": 1
         },
@@ -458,7 +453,7 @@
           "passages": 1
         },
         {
-          "nom": "Les Cocottes du Dimanche – Taulissa, Maison Albar Le Victoria",
+          "nom": "Les Cocottes du Dimanche · Taulissa, Maison Albar Le Victoria",
           "site": "https://maison-albar-hotels-le-victoria.com/fr/pagex/brunch-nice-buffet-dominical-vue-mer-au-rooftop-taulissa.6550.html?utm_source=openai",
           "passages": 1
         },
@@ -473,7 +468,7 @@
           "passages": 1
         },
         {
-          "nom": "Restaurant Angelo – Boscolo Nice Hôtel & Spa",
+          "nom": "Restaurant Angelo · Boscolo Nice Hôtel & Spa",
           "site": "https://www.boscolocollection.com/nice/restaurant-angelo?utm_source=openai",
           "passages": 1
         }
@@ -612,6 +607,11 @@
           "passages": 3
         },
         {
+          "nom": "Acqua & Farina",
+          "site": null,
+          "passages": 2
+        },
+        {
           "nom": "Doma Pizza",
           "site": null,
           "passages": 2
@@ -622,22 +622,12 @@
           "passages": 1
         },
         {
-          "nom": "Acqua & Farina",
-          "site": null,
-          "passages": 1
-        },
-        {
           "nom": "Pizzeria chez Toto",
           "site": null,
           "passages": 1
         },
         {
           "nom": "CRUST",
-          "site": null,
-          "passages": 1
-        },
-        {
-          "nom": "Acqua e Farina",
           "site": null,
           "passages": 1
         },
@@ -670,17 +660,17 @@
           "passages": 3
         },
         {
+          "nom": "Maison Jean-Marc Bordonnat",
+          "site": null,
+          "passages": 3
+        },
+        {
           "nom": "La Base Bakery",
           "site": null,
           "passages": 2
         },
         {
           "nom": "Boulangerie Degioanni",
-          "site": null,
-          "passages": 2
-        },
-        {
-          "nom": "Maison Jean-Marc Bordonnat",
           "site": null,
           "passages": 2
         },
@@ -696,11 +686,6 @@
         },
         {
           "nom": "Pompon",
-          "site": null,
-          "passages": 1
-        },
-        {
-          "nom": "Boulangerie Jean Marc Bordonnat",
           "site": null,
           "passages": 1
         },
@@ -738,6 +723,11 @@
           "passages": 3
         },
         {
+          "nom": "Azzurro Artisan Glacier",
+          "site": null,
+          "passages": 3
+        },
+        {
           "nom": "Glacier du Pin",
           "site": null,
           "passages": 3
@@ -746,16 +736,6 @@
           "nom": "César Milano",
           "site": null,
           "passages": 3
-        },
-        {
-          "nom": "Azzurro Artisan Glacier",
-          "site": null,
-          "passages": 2
-        },
-        {
-          "nom": "Gelateria Azzurro",
-          "site": null,
-          "passages": 1
         },
         {
           "nom": "Peccati di Gola",
@@ -907,7 +887,12 @@
           "passages": 3
         },
         {
-          "nom": "Maison Albar – Le Victoria",
+          "nom": "Hôtel Palais de la Méditerranée",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Maison Albar · Le Victoria",
           "site": null,
           "passages": 3
         },
@@ -922,6 +907,11 @@
           "passages": 3
         },
         {
+          "nom": "Hôtel Albert 1er",
+          "site": null,
+          "passages": 3
+        },
+        {
           "nom": "Ibis budget Nice Californie Lenval",
           "site": null,
           "passages": 2
@@ -932,27 +922,12 @@
           "passages": 2
         },
         {
-          "nom": "Hôtel Albert 1er",
-          "site": null,
-          "passages": 2
-        },
-        {
           "nom": "Nice Azur Riviera",
           "site": null,
           "passages": 2
         },
         {
-          "nom": "Hôtel Palais de la Méditerranée (Hyatt Regency Nice Palais de la Méditerranée)",
-          "site": null,
-          "passages": 1
-        },
-        {
           "nom": "Hotel Beau Rivage",
-          "site": null,
-          "passages": 1
-        },
-        {
-          "nom": "Albert 1er Hotel",
           "site": null,
           "passages": 1
         },
@@ -967,22 +942,12 @@
           "passages": 1
         },
         {
-          "nom": "Hyatt Regency Palais de la Méditerranée",
-          "site": null,
-          "passages": 1
-        },
-        {
           "nom": "Westminster Hotel & Spa Nice",
           "site": null,
           "passages": 1
         },
         {
           "nom": "Chantecler",
-          "site": null,
-          "passages": 1
-        },
-        {
-          "nom": "Hôtel Palais de la Méditerranée – The Unbound Collection by Hyatt",
           "site": null,
           "passages": 1
         }
@@ -1007,16 +972,11 @@
         {
           "nom": "Vogue Marine",
           "site": "https://voguemarine.fr/location-bateau-sans-permis-nice/",
-          "passages": 1
+          "passages": 2
         },
         {
           "nom": "Yacht Charter French Riviera",
           "site": "https://yachtcharterfrenchriviera.com/fr/charter/karel-v160/?utm_source=openai",
-          "passages": 1
-        },
-        {
-          "nom": "voguemarine.fr",
-          "site": "https://voguemarine.fr/location-bateau-sans-permis-nice/?utm_source=openai",
           "passages": 1
         },
         {
@@ -1189,12 +1149,12 @@
       "passages": 3,
       "entreprises": [
         {
-          "nom": "Spa 27 – Westminster Hôtel",
+          "nom": "Spa 27 · Westminster Hôtel",
           "site": "https://westminster-nice.com/fr/page/spa-27-hotel-spa-nice.21436.html",
           "passages": 3
         },
         {
-          "nom": "Oria – Maison Albar",
+          "nom": "Oria · Maison Albar",
           "site": null,
           "passages": 3
         },
@@ -1214,14 +1174,14 @@
           "passages": 3
         },
         {
-          "nom": "Spa By Elle et Lui",
+          "nom": "N Le Spa · Le Negresco",
           "site": null,
           "passages": 2
         },
         {
-          "nom": "N Le Spa – Le Negresco",
+          "nom": "Spa By Elle et Lui",
           "site": null,
-          "passages": 1
+          "passages": 2
         },
         {
           "nom": "Ozea Beauty Spa",
@@ -1229,7 +1189,7 @@
           "passages": 1
         },
         {
-          "nom": "Boscolo Nice – Spa & Fitness",
+          "nom": "Boscolo Nice · Spa & Fitness",
           "site": "https://www.boscolocollection.com/nice",
           "passages": 1
         },
@@ -1240,11 +1200,6 @@
         },
         {
           "nom": "Green Beauty Center",
-          "site": null,
-          "passages": 1
-        },
-        {
-          "nom": "N Le Spa – Hôtel Le Negresco",
           "site": null,
           "passages": 1
         }
@@ -1267,17 +1222,17 @@
           "passages": 2
         },
         {
+          "nom": "marché Saleya",
+          "site": null,
+          "passages": 2
+        },
+        {
           "nom": "Musée Matisse",
           "site": null,
           "passages": 1
         },
         {
           "nom": "marché de la Libération",
-          "site": null,
-          "passages": 1
-        },
-        {
-          "nom": "Cours Saleya",
           "site": null,
           "passages": 1
         },
@@ -1298,11 +1253,6 @@
         },
         {
           "nom": "Château de Bellet",
-          "site": null,
-          "passages": 1
-        },
-        {
-          "nom": "marché Saleya",
           "site": null,
           "passages": 1
         },
@@ -1378,7 +1328,7 @@
           "passages": 3
         },
         {
-          "nom": "Plombier Nice – KGS Plomberie",
+          "nom": "Plombier Nice · KGS Plomberie",
           "site": null,
           "passages": 2
         },
@@ -1441,13 +1391,13 @@
           "passages": 2
         },
         {
-          "nom": "La Clé de Nice",
-          "site": "https://lacledenice.fr/urgence?utm_source=openai",
-          "passages": 1
+          "nom": "SRI Urgence Nice",
+          "site": "https://www.serrurier-intervention.fr/serrurier-urgence-nice/?utm_source=openai",
+          "passages": 2
         },
         {
-          "nom": "SRI Nice (Serrurier d’Intervention Urgence)",
-          "site": "https://www.serrurier-intervention.fr/serrurier-urgence-nice/?utm_source=openai",
+          "nom": "La Clé de Nice",
+          "site": "https://lacledenice.fr/urgence?utm_source=openai",
           "passages": 1
         },
         {
@@ -1488,11 +1438,6 @@
         {
           "nom": "Serrurier 06",
           "site": "https://depannage-serrurier06.fr/",
-          "passages": 1
-        },
-        {
-          "nom": "SRI Urgence Nice",
-          "site": "https://www.serrurier-intervention.fr/serrurier-urgence-nice/",
           "passages": 1
         }
       ]
@@ -1640,6 +1585,11 @@
           "passages": 3
         },
         {
+          "nom": "Speedy Nice Californie",
+          "site": "https://centres-auto.speedy.fr/garage/nice-06200/93?utm_source=openai",
+          "passages": 3
+        },
+        {
           "nom": "Garage Defabri",
           "site": "https://annuaire-garagiste.fr/f/garage-defabri-6884277/?utm_source=openai",
           "passages": 3
@@ -1665,11 +1615,6 @@
           "passages": 2
         },
         {
-          "nom": "Centre Auto Speedy - Californie",
-          "site": "https://centres-auto.speedy.fr/garage/nice-06200/93?utm_source=openai",
-          "passages": 1
-        },
-        {
           "nom": "Garage Marafioti Mario",
           "site": "https://bocaross.fr/pro/marafioti-mario?utm_source=openai",
           "passages": 1
@@ -1680,11 +1625,6 @@
           "passages": 1
         },
         {
-          "nom": "Speedy Nice (80, Av de la Californie, 06200 Nice)",
-          "site": "https://centres-auto.speedy.fr/garage/nice-06200/93",
-          "passages": 1
-        },
-        {
           "nom": "Ateliers Carrosserie Moni",
           "site": null,
           "passages": 1
@@ -1692,11 +1632,6 @@
         {
           "nom": "Carrosserie Benvenuto",
           "site": null,
-          "passages": 1
-        },
-        {
-          "nom": "Speedy Nice Californie",
-          "site": "https://centres-auto.speedy.fr/garage/nice-06200/93?utm_source=openai",
           "passages": 1
         },
         {
@@ -1718,18 +1653,18 @@
           "passages": 3
         },
         {
-          "nom": "Les Compagnons de France – Déménagement",
+          "nom": "Les Compagnons de France · Déménagement",
           "site": "https://mon-service-france.fr/demenageur/nice/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Déménagements Ravarino",
+          "site": "https://agences.demeco.fr/provence-alpes-cote-dazur/alpes-maritimes/nice",
           "passages": 3
         },
         {
           "nom": "Baie des Anges Transport",
           "site": null,
-          "passages": 2
-        },
-        {
-          "nom": "Déménagements Ravarino",
-          "site": "https://agences.demeco.fr/provence-alpes-cote-dazur/alpes-maritimes/nice?utm_source=openai",
           "passages": 2
         },
         {
@@ -1748,13 +1683,8 @@
           "passages": 1
         },
         {
-          "nom": "Tintillier Olivier – Project Delivery (T.O. Project Delivery)",
+          "nom": "Tintillier Olivier · Project Delivery (T.O. Project Delivery)",
           "site": null,
-          "passages": 1
-        },
-        {
-          "nom": "Demeco Nice / Ravarino",
-          "site": "https://agences.demeco.fr/provence-alpes-cote-dazur/alpes-maritimes/nice",
           "passages": 1
         },
         {
@@ -1899,7 +1829,7 @@
           "passages": 1
         },
         {
-          "nom": "WeFix – Fnac Nice",
+          "nom": "WeFix · Fnac Nice",
           "site": "https://boutique.wefix.net/78-wefix-fnac-nice?utm_source=openai",
           "passages": 1
         },
@@ -2108,7 +2038,22 @@
           "passages": 3
         },
         {
-          "nom": "Vétérinaires 2 Toute Urgence – Nice",
+          "nom": "Urgences Vétérinaires Nice",
+          "site": "https://www.urgences-veterinaires-nice.fr/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Clinique Vétérinaire des Pignes",
+          "site": "https://vetoproche.fr/veterinaires/nice/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Clinique vétérinaire Lingostière",
+          "site": "https://lingostiereveterinaires.fr/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Vétérinaires 2 Toute Urgence · Nice",
           "site": "https://www.veterinaire-monveto.com/cliniques/veterinaires-2-toute-urgence-nice/?utm_source=openai",
           "passages": 2
         },
@@ -2118,58 +2063,18 @@
           "passages": 2
         },
         {
-          "nom": "Clinique Vétérinaire des Pignes",
-          "site": "https://niceshopping.fr/commerce/clinique-veterinaire-des-pignes/",
-          "passages": 2
-        },
-        {
-          "nom": "Urgences Vétérinaires Nice",
-          "site": "https://www.urgences-veterinaires-nice.fr/?utm_source=openai",
-          "passages": 1
-        },
-        {
-          "nom": "Cabinet Vétérinaire des Pignes",
-          "site": "https://vetoproche.fr/veterinaires/nice/?utm_source=openai",
-          "passages": 1
-        },
-        {
-          "nom": "Clinique Vétérinaire Indépendante de Lingostière",
-          "site": "https://lingostiereveterinaires.fr/?utm_source=openai",
-          "passages": 1
-        },
-        {
           "nom": "Cabinet Vétérinaire Cap Sud",
           "site": "https://www.cliniqueveterinairelacoste.fr/pages/horaires_acces_clinique_cap_sud.html?utm_source=openai",
           "passages": 1
         },
         {
-          "nom": "Urgence Vétérinaire Nice",
-          "site": "https://www.urgences-veterinaires-nice.fr/",
-          "passages": 1
-        },
-        {
-          "nom": "Vétérinaires 2 Toute Urgence – Villeneuve-Loubet",
+          "nom": "Vétérinaires 2 Toute Urgence · Villeneuve-Loubet",
           "site": "https://www.veterinaire-monveto.com/cliniques/veterinaires-2-toute-urgence-nice/",
-          "passages": 1
-        },
-        {
-          "nom": "Clinique Lingostière – NAC & Reptiles",
-          "site": "https://www.sauria.fr/veterinaires/clinique-lingostiere-nice-nac",
           "passages": 1
         },
         {
           "nom": "Clinique Chahuahua",
           "site": "https://www.chahuahua.fr/urgences/",
-          "passages": 1
-        },
-        {
-          "nom": "Clinique vétérinaire Lingostière",
-          "site": "https://lingostiereveterinaires.fr/",
-          "passages": 1
-        },
-        {
-          "nom": "Urgences Vétérinaire Nice",
-          "site": "https://www.urgences-veterinaires-nice.fr/",
           "passages": 1
         },
         {
@@ -2196,13 +2101,13 @@
           "passages": 3
         },
         {
-          "nom": "Fitness Arena Riviera",
-          "site": "https://fitnessarena.fr/salle-de-sport-nice",
-          "passages": 2
+          "nom": "Orange Bleue Nice Masséna",
+          "site": "https://musculation.guide/annuaire/ville/nice/?utm_source=openai",
+          "passages": 3
         },
         {
-          "nom": "L’Orange Bleue Nice Masséna",
-          "site": "https://musculation.guide/annuaire/ville/nice/?utm_source=openai",
+          "nom": "Fitness Arena Riviera",
+          "site": "https://fitnessarena.fr/salle-de-sport-nice",
           "passages": 2
         },
         {
@@ -2228,11 +2133,6 @@
         {
           "nom": "L’Appart Fitness",
           "site": "https://clubs.lappartfitness.com/115-l-appart-fitness-nice",
-          "passages": 1
-        },
-        {
-          "nom": "Orange Bleue Nice Masséna",
-          "site": null,
           "passages": 1
         },
         {
@@ -2266,7 +2166,7 @@
         {
           "nom": "Yoga Shelter Nice",
           "site": "https://yoga-shelter.com/yoga-shelter-studio-nice/",
-          "passages": 2
+          "passages": 3
         },
         {
           "nom": "SuperStudio Yoga",
@@ -2279,7 +2179,7 @@
           "passages": 2
         },
         {
-          "nom": "Ensō – Centre de Yoga Nice",
+          "nom": "Ensō · Centre de Yoga Nice",
           "site": "https://enso.fr/horaires-et-tarifs-yoga-nice/?utm_source=openai",
           "passages": 2
         },
@@ -2319,7 +2219,7 @@
           "passages": 1
         },
         {
-          "nom": "Jh Yoga – Yoga Iyengar",
+          "nom": "Jh Yoga · Yoga Iyengar",
           "site": "https://jfyoga.fr/?utm_source=openai",
           "passages": 1
         },
@@ -2329,17 +2229,12 @@
           "passages": 1
         },
         {
-          "nom": "La Parenthèse – Yoga & Pilates & Wellness",
+          "nom": "La Parenthèse · Yoga & Pilates & Wellness",
           "site": "https://laparenthesenice.com/",
           "passages": 1
         },
         {
-          "nom": "Yoga Shelter Studio",
-          "site": "https://yoga-shelter.com/yoga-shelter-studio-nice/",
-          "passages": 1
-        },
-        {
-          "nom": "Prana Motion Yoga – Mathilde Torrez",
+          "nom": "Prana Motion Yoga · Mathilde Torrez",
           "site": null,
           "passages": 1
         },
@@ -2392,17 +2287,17 @@
           "passages": 2
         },
         {
+          "nom": "Biocoiff’ Nice",
+          "site": "https://www.biocoiff.com/nice/",
+          "passages": 2
+        },
+        {
           "nom": "Le Salon Michel Barbera Coiffure",
           "site": null,
           "passages": 2
         },
         {
           "nom": "MT Beauty Hair",
-          "site": null,
-          "passages": 1
-        },
-        {
-          "nom": "Biocoiff’ – Coiffure Bio / Colorations végétales",
           "site": null,
           "passages": 1
         },
@@ -2414,11 +2309,6 @@
         {
           "nom": "L’Atelier de Marie",
           "site": null,
-          "passages": 1
-        },
-        {
-          "nom": "Biocoiff’ Nice",
-          "site": "https://www.biocoiff.com/nice/",
           "passages": 1
         },
         {
@@ -2482,7 +2372,7 @@
           "passages": 1
         },
         {
-          "nom": "Helena – “La Maison d’Elisa”",
+          "nom": "Helena · “La Maison d’Elisa”",
           "site": null,
           "passages": 1
         }
@@ -2548,43 +2438,33 @@
       "passages": 3,
       "entreprises": [
         {
+          "nom": "Maître Albertin-Roby",
+          "site": "https://albertinroby-avocat.fr/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Maître Fabienne Marouani",
+          "site": "https://www.cabinet-avocat-marouani.fr/droit-famille?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Maître Béatrice Gagne",
+          "site": "https://www.maitre-gagnebeatrice.com/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Maître Laura Duvois",
+          "site": "https://www.duvois-avocat.fr/domaines-activite?utm_source=openai",
+          "passages": 2
+        },
+        {
           "nom": "Maître Hanan HMAD",
           "site": "https://www.hmad-avocats.fr/expertises/droit-de-la-famille.htm?utm_source=openai",
           "passages": 2
         },
         {
-          "nom": "Maître Béatrice Gagne",
-          "site": "https://www.maitre-gagnebeatrice.com/?utm_source=openai",
-          "passages": 2
-        },
-        {
-          "nom": "Maître Fabienne Marouani",
-          "site": "https://www.cabinet-avocat-marouani.fr/droit-famille?utm_source=openai",
-          "passages": 2
-        },
-        {
-          "nom": "Mme Mary ALBERTIN-ROBY",
-          "site": "https://albertinroby-avocat.fr/?utm_source=openai",
-          "passages": 1
-        },
-        {
-          "nom": "Me Laura Duvois",
-          "site": "https://www.duvois-avocat.fr/domaines-activite?utm_source=openai",
-          "passages": 1
-        },
-        {
-          "nom": "Me Fabienne Marouani",
-          "site": "https://www.cabinet-avocat-marouani.fr/droit-famille?utm_source=openai",
-          "passages": 1
-        },
-        {
           "nom": "Me Luisella Ramoino",
           "site": "https://www.ramoinoavocat.com/divorce-et-droit-de-la-famille-w1?utm_source=openai",
-          "passages": 1
-        },
-        {
-          "nom": "Me Béatrice Gagne",
-          "site": "https://www.maitre-gagnebeatrice.com/?utm_source=openai",
           "passages": 1
         },
         {
@@ -2593,23 +2473,8 @@
           "passages": 1
         },
         {
-          "nom": "Maître Albertin-Roby",
-          "site": "https://albertinroby-avocat.fr/?utm_source=openai",
-          "passages": 1
-        },
-        {
           "nom": "Maître Nathalie Pasquier",
           "site": "https://www.pasquier-avocat.fr/?utm_source=openai",
-          "passages": 1
-        },
-        {
-          "nom": "Maître Laura Duvois",
-          "site": "https://www.duvois-avocat.fr/domaines-activite?utm_source=openai",
-          "passages": 1
-        },
-        {
-          "nom": "Cabinet HMAD",
-          "site": "https://www.hmad-avocats.fr/expertises/droit-de-la-famille.htm",
           "passages": 1
         },
         {
@@ -2618,28 +2483,8 @@
           "passages": 1
         },
         {
-          "nom": "Maître Mary Albertin-Roby",
-          "site": "https://albertinroby-avocat.fr/",
-          "passages": 1
-        },
-        {
-          "nom": "Cabinet Albertin-Roby",
-          "site": "https://albertinroby-avocat.fr/",
-          "passages": 1
-        },
-        {
           "nom": "Maître Kaïs Helali",
           "site": "https://www.kais-helali.fr/",
-          "passages": 1
-        },
-        {
-          "nom": "Cabinet Helali",
-          "site": "https://www.kais-helali.fr/",
-          "passages": 1
-        },
-        {
-          "nom": "Cabinet Marouani",
-          "site": "https://www.cabinet-avocat-marouani.fr/droit-famille",
           "passages": 1
         }
       ]
@@ -2651,6 +2496,11 @@
       "passages": 3,
       "entreprises": [
         {
+          "nom": "Jean-Michel Renucci (Cabinet Actance)",
+          "site": "https://www.actanceavocats.com/equipe/jean-michel-renucci?utm_source=openai",
+          "passages": 3
+        },
+        {
           "nom": "SCHWAL & Associés",
           "site": "https://www.schwal-avocats.fr/?utm_source=openai",
           "passages": 3
@@ -2661,9 +2511,14 @@
           "passages": 3
         },
         {
-          "nom": "Jean-Michel Renucci (Cabinet Actance)",
-          "site": "https://www.actanceavocats.com/equipe/jean-michel-renucci?utm_source=openai",
-          "passages": 2
+          "nom": "Maître Rebecca De La Torre",
+          "site": "https://delatorre-avocat.fr/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Cabinet SJ (Stéphanie Jourquin)",
+          "site": "https://www.cabinet-sj.com/?utm_source=openai",
+          "passages": 3
         },
         {
           "nom": "Alexia Oliver",
@@ -2671,38 +2526,8 @@
           "passages": 2
         },
         {
-          "nom": "Maître Rebecca De La Torre",
-          "site": "https://delatorre-avocat.fr/",
-          "passages": 2
-        },
-        {
-          "nom": "Maître De La Torre",
-          "site": "https://delatorre-avocat.fr/?utm_source=openai",
-          "passages": 1
-        },
-        {
-          "nom": "Cabinet SJ (Stéphanie Jourquin)",
-          "site": "https://www.cabinet-sj.com/?utm_source=openai",
-          "passages": 1
-        },
-        {
-          "nom": "Maître Stéphanie Jourquin (Cabinet SJ)",
-          "site": "https://www.cabinet-sj.com/contact/",
-          "passages": 1
-        },
-        {
           "nom": "Maître Livia Lanfranchi",
           "site": "https://lanfranchi-avocat.fr/contact/",
-          "passages": 1
-        },
-        {
-          "nom": "Cabinet Stéphanie Jourquin (CABINET SJ)",
-          "site": "https://www.cabinet-sj.com/",
-          "passages": 1
-        },
-        {
-          "nom": "Cabinet Actance – Jean-Michel Renucci",
-          "site": "https://www.actanceavocats.com/",
           "passages": 1
         }
       ]
@@ -2719,14 +2544,14 @@
           "passages": 3
         },
         {
-          "nom": "ACTA",
+          "nom": "SELAS Paillard Wajnberg et de Tourniel",
           "site": null,
           "passages": 3
         },
         {
-          "nom": "SELAS PAILLARD, WAJNBERG et de TOURNIEL",
+          "nom": "ACTA",
           "site": null,
-          "passages": 2
+          "passages": 3
         },
         {
           "nom": "Karen Aussourd-Funaro",
@@ -2745,11 +2570,6 @@
         },
         {
           "nom": "Jean Charles March, Emmanuel Lions, Karine Millo, SCP",
-          "site": null,
-          "passages": 1
-        },
-        {
-          "nom": "SELAS PAILLARD, WAJNBERG & de Tourniel",
           "site": null,
           "passages": 1
         },
@@ -2963,14 +2783,14 @@
           "passages": 2
         },
         {
-          "nom": "Frédéric Kabouche",
-          "site": "https://redback-optimisation.fr/meilleurs-consultants-seo-a-nice/?utm_source=openai",
+          "nom": "Web'up / Michel Belhacel",
+          "site": "https://agencewebup.fr/consulting-seo-nice/",
           "passages": 2
         },
         {
-          "nom": "Web'up / Michel Belhacel",
-          "site": "https://agencewebup.fr/consulting-seo-nice/",
-          "passages": 1
+          "nom": "Frédéric Kabouche",
+          "site": "https://redback-optimisation.fr/meilleurs-consultants-seo-a-nice/?utm_source=openai",
+          "passages": 2
         },
         {
           "nom": "Alban Febrer Sanmartí",
@@ -3005,11 +2825,6 @@
         {
           "nom": "7 Gold Agency",
           "site": null,
-          "passages": 1
-        },
-        {
-          "nom": "Michel Belhacel – Web’up",
-          "site": "https://agencewebup.fr/consulting-seo-nice/?utm_source=openai",
           "passages": 1
         },
         {
@@ -3162,7 +2977,7 @@
       "passages": 3,
       "entreprises": [
         {
-          "nom": "alpha.b – Institut linguistique",
+          "nom": "alpha.b · Institut linguistique",
           "site": "https://www.ialc.org/fr/trouver-une-ecole/alpha-b-institut-linguistique/?utm_source=openai",
           "passages": 3
         },
@@ -3197,7 +3012,7 @@
           "passages": 1
         },
         {
-          "nom": "CUEFLE – Université Côte d’Azur",
+          "nom": "CUEFLE · Université Côte d’Azur",
           "site": null,
           "passages": 1
         },
@@ -3270,12 +3085,12 @@
           "passages": 1
         },
         {
-          "nom": "Les Beaux Joueurs – Boutique & Bar",
+          "nom": "Les Beaux Joueurs · Boutique & Bar",
           "site": "https://bestin-nice.fr/meilleures-fromageries-de-nice/?utm_source=openai",
           "passages": 1
         },
         {
-          "nom": "Cours Saleya",
+          "nom": "marché Saleya",
           "site": null,
           "passages": 1
         },
@@ -3366,7 +3181,7 @@
       "passages": 3,
       "entreprises": [
         {
-          "nom": "Pistache – Pâtisserie",
+          "nom": "Pistache · Pâtisserie",
           "site": null,
           "passages": 3
         },
@@ -3381,6 +3196,11 @@
           "passages": 3
         },
         {
+          "nom": "Pâtisserie Lac",
+          "site": null,
+          "passages": 2
+        },
+        {
           "nom": "Pâtisserie Moutet",
           "site": null,
           "passages": 1
@@ -3391,27 +3211,17 @@
           "passages": 1
         },
         {
-          "nom": "Macaron de Nice – Pâtisserie Le Vanillier",
+          "nom": "Macaron de Nice · Pâtisserie Le Vanillier",
           "site": null,
           "passages": 1
         },
         {
-          "nom": "Lac – Pâtissier-Chocolatier",
-          "site": null,
-          "passages": 1
-        },
-        {
-          "nom": "Canet — Pâtissier Chocolatier",
+          "nom": "Canet · Pâtissier Chocolatier",
           "site": null,
           "passages": 1
         },
         {
           "nom": "Maison Auer",
-          "site": null,
-          "passages": 1
-        },
-        {
-          "nom": "Pâtisserie Lac",
           "site": null,
           "passages": 1
         },
@@ -3527,7 +3337,7 @@
           "passages": 1
         },
         {
-          "nom": "Cours Saleya",
+          "nom": "marché Saleya",
           "site": null,
           "passages": 1
         },
@@ -3565,13 +3375,13 @@
           "passages": 3
         },
         {
-          "nom": "Culture Vélo Nice",
-          "site": "https://www.isicycles-nice.com/",
-          "passages": 2
-        },
-        {
           "nom": "Ovelo Nice",
           "site": "https://www.ovelo.fr/magasin/nice",
+          "passages": 3
+        },
+        {
+          "nom": "Culture Vélo Nice",
+          "site": "https://www.isicycles-nice.com/",
           "passages": 2
         },
         {
@@ -3582,11 +3392,6 @@
         {
           "nom": "Bicycle Store / Triathlon Store Nice",
           "site": "https://www.bicyclestore.fr/pages/nice-promenade?utm_source=openai",
-          "passages": 1
-        },
-        {
-          "nom": "Ovelo - magasin de Nice",
-          "site": "https://www.ovelo.fr/magasin/nice",
           "passages": 1
         }
       ]
@@ -3623,6 +3428,11 @@
           "passages": 2
         },
         {
+          "nom": "Au Brouillon de Culture",
+          "site": "https://biblioscan.ai/ou-acheter-livres-occasion/nice",
+          "passages": 2
+        },
+        {
           "nom": "Les Journées Suspendues",
           "site": "https://www.nice24.fr/culture/les-journees-suspendues-la-parole-aux-clients/",
           "passages": 2
@@ -3638,18 +3448,8 @@
           "passages": 1
         },
         {
-          "nom": "Au Brouillon de Culture / À la Sorbonne",
-          "site": "https://biblioscan.ai/ou-acheter-livres-occasion/nice",
-          "passages": 1
-        },
-        {
           "nom": "Masséna Around The World",
           "site": "https://www.livre-provencealpescotedazur.fr/ressources/annuaire/etablissements/librairie-massena-around-the-world-2196",
-          "passages": 1
-        },
-        {
-          "nom": "Au Brouillon de Culture",
-          "site": null,
           "passages": 1
         },
         {
@@ -3693,7 +3493,12 @@
         {
           "nom": "Alain Afflelou, TNL",
           "site": "https://www.afflelou.com/opticien/nice/afflelou-c-c-nice-tnl-06300?utm_source=openai",
-          "passages": 1
+          "passages": 2
+        },
+        {
+          "nom": "Écouter Voir Mutualiste",
+          "site": "https://magasins.ecoutervoir.fr/provence-alpes-cote-d-azur/alpes-maritimes/nice/ecouter-voir-optique-mutualiste-842",
+          "passages": 2
         },
         {
           "nom": "Krys, Av. Malaussena",
@@ -3701,18 +3506,8 @@
           "passages": 1
         },
         {
-          "nom": "Atol – Rue François Guisol",
+          "nom": "Atol · Rue François Guisol",
           "site": "https://magasins.atol.fr/provence-alpes-cote-d-azur/alpes-maritimes/nice",
-          "passages": 1
-        },
-        {
-          "nom": "Afflelou – CC TNL",
-          "site": "https://www.afflelou.com/opticien/nice/afflelou-c-c-nice-tnl-06300",
-          "passages": 1
-        },
-        {
-          "nom": "Écouter Voir – 54 rue Trachel",
-          "site": "https://magasins.ecoutervoir.fr/provence-alpes-cote-d-azur/alpes-maritimes/nice/ecouter-voir-optique-mutualiste-842",
           "passages": 1
         },
         {
@@ -3737,11 +3532,6 @@
         },
         {
           "nom": "Opticien NICE Lingostière (Générale d’Optique)",
-          "site": null,
-          "passages": 1
-        },
-        {
-          "nom": "Écouter Voir Mutualiste",
           "site": null,
           "passages": 1
         }

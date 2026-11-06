@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<!-- Reel et story du baromètre IA de Nice (1080 × 1920), dans la DA "Riviera" des packs
+     Instagram (.claude/blog/social-pack.mjs). Tout est calculé à partir du temps :
+     render(t) dessine l'image à l'instant t, render-video.mjs l'appelle 30 fois par seconde.
+     Les sources des @font-face sont remplacées par les polices du site au rendu. -->
+<style>
+@font-face { font-family: Urbanist; font-weight: 400 700; src: url("__URBANIST__") format("woff2"); }
+@font-face { font-family: Geist; font-weight: 400 500; src: url("__GEIST__") format("woff2"); }
+:root { --bg:#fff; --shade:#f3f6fa; --ink:#10151d; --muted:#556070; --subtle:#8a93a1; --line:rgb(16 21 29 / .14); --accent:#24508c; }
+.blue { --bg:#24508c; --shade:#1b3f70; --ink:#fff; --muted:rgb(255 255 255 / .74); --subtle:rgb(255 255 255 / .55); --line:rgb(255 255 255 / .35); --accent:#fff; }
+* { margin:0; box-sizing:border-box; }
+html, body { width:1080px; height:1920px; overflow:hidden; }
+body { background:#fff; font-family:Geist, sans-serif; -webkit-font-smoothing:antialiased; }
+.layer { position:absolute; inset:0; background:var(--bg); color:var(--ink); }
+.guides { position:absolute; inset:0;
+  background:
+    repeating-linear-gradient(to bottom, var(--line) 0 3px, transparent 3px 7px) 80px 0 / 1px 100% no-repeat,
+    repeating-linear-gradient(to bottom, var(--line) 0 3px, transparent 3px 7px) calc(100% - 80px) 0 / 1px 100% no-repeat; }
+.rule { position:absolute; left:0; right:0; height:1px; background:repeating-linear-gradient(to right, var(--line) 0 3px, transparent 3px 7px); }
+.progress { position:absolute; left:0; top:329px; height:3px; background:var(--accent); }
+.top, .bottom { position:absolute; left:136px; right:136px; display:flex; align-items:center; justify-content:space-between; }
+.top { top:210px; height:120px; }
+.bottom { top:1400px; height:120px; }
+.label, .site, .count { font-size:26px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+.label { display:flex; align-items:center; gap:14px; }
+.label::before { content:""; width:13px; height:13px; border-radius:50%; background:var(--accent); }
+.count { color:var(--accent); font-variant-numeric:tabular-nums; }
+.logo { font-family:Urbanist, sans-serif; font-size:44px; letter-spacing:-.02em; }
+.logo i { width:10px; height:10px; border-radius:50%; background:var(--accent); margin:0 3px 0 4px; display:inline-block; }
+
+.scene { position:absolute; left:136px; right:136px; top:330px; height:1070px; display:none; flex-direction:column; justify-content:center; gap:44px; }
+.scene.start { justify-content:flex-start; padding-top:90px; }
+h1 { font-family:Urbanist, sans-serif; font-weight:600; font-size:96px; line-height:1.04; letter-spacing:-.025em; }
+h1.m { font-size:80px; }
+h1 em { font-style:normal; color:var(--accent); }
+.blue h1 em { text-decoration:underline; text-decoration-thickness:5px; text-underline-offset:12px; }
+p { font-size:42px; line-height:1.35; color:var(--muted); }
+p em { font-style:normal; color:var(--ink); font-weight:500; }
+.kicker { font-size:28px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+.big { font-family:Urbanist, sans-serif; font-weight:600; font-size:380px; line-height:.86; letter-spacing:-.05em; color:var(--accent); font-variant-numeric:tabular-nums; }
+.big small { font-size:.45em; letter-spacing:-.02em; margin-left:10px; }
+.bubble { align-self:flex-start; background:var(--shade); border-radius:40px 40px 40px 8px; padding:34px 42px; font-size:46px; line-height:1.3; min-height:130px; }
+.caret { display:inline-block; width:4px; height:1.05em; background:var(--accent); vertical-align:-.15em; margin-left:6px; }
+.cards { display:flex; flex-direction:column; gap:22px; }
+.card { border-top:1px solid var(--ink); padding-top:18px; display:grid; grid-template-columns:190px 1fr; gap:16px; }
+.card .h { font-size:24px; letter-spacing:.08em; text-transform:uppercase; color:var(--subtle); padding-top:8px; }
+.card ul { list-style:none; padding:0; display:flex; flex-direction:column; gap:4px; font-size:33px; line-height:1.28; }
+.card li.hl { font-weight:500; }
+.split { display:flex; gap:8px; height:96px; }
+.split > div { height:100%; }
+.legend { display:flex; justify-content:space-between; font-size:32px; color:var(--muted); }
+.legend b { display:block; font-family:Urbanist, sans-serif; font-weight:600; font-size:56px; color:var(--ink); }
+.bars { display:flex; flex-direction:column; gap:30px; }
+.bar .row { display:flex; justify-content:space-between; align-items:baseline; font-size:36px; margin-bottom:12px; }
+.bar .row b { font-family:Urbanist, sans-serif; font-weight:600; font-size:44px; color:var(--accent); font-variant-numeric:tabular-nums; }
+.bar .track { height:18px; background:var(--shade); }
+.bar .fill { height:100%; background:var(--accent); }
+.rows { display:flex; flex-direction:column; }
+.rows .r { display:flex; justify-content:space-between; align-items:center; gap:30px; border-top:1px solid var(--line); padding:26px 0; font-size:38px; line-height:1.25; }
+.rows .r:first-child { border-top-color:var(--ink); }
+.rows .r span small { display:block; font-size:28px; color:var(--muted); margin-top:4px; }
+.rows .r b { font-family:Urbanist, sans-serif; font-weight:600; font-size:76px; color:var(--accent); white-space:nowrap; font-variant-numeric:tabular-nums; }
+.cta { font-size:44px; font-weight:500; }
+</style></head>
+<body>
+
+<div class="layer" id="base">
+  <div class="guides"></div><div class="rule" style="top:330px"></div><div class="rule" style="top:1400px"></div>
+  <div class="progress"></div>
+  <div class="top"><span class="label">Baromètre IA · Nice</span><span class="count"></span></div>
+  <div class="bottom"><span class="logo">Anthony<i></i>Profit</span><span class="site">Novembre 2026</span></div>
+
+  <section class="scene" id="hook">
+    <div class="bubble" data-in="0.15"><span data-type="0.35" data-d="1.05" data-text="Quel coiffeur choisir à Nice ?"></span><span class="caret"></span></div>
+    <h1 data-in="1.55">J'ai posé 50 questions comme celle-ci à <em>ChatGPT</em>.</h1>
+    <p data-in="2.05">3 fois chacune. Voici qui il recommande à Nice.</p>
+  </section>
+
+  <section class="scene" id="total">
+    <div class="kicker" data-in="0.1">Entreprises niçoises citées</div>
+    <div class="big" data-in="0.15"><span data-count="579" data-from="0.2" data-d="1.4"></span></div>
+    <p data-in="0.9">dans <em>150 réponses</em> de ChatGPT, en novembre 2026.</p>
+  </section>
+
+  <section class="scene" id="answers">
+    <h1 class="m" data-in="0.1">Même question, <em>3 réponses</em>.</h1>
+    <div class="cards">
+      <div class="card" data-in="0.45" data-hl="2.2"><span class="h">Réponse 1</span>
+        <ul><li class="hl">GM Coiffure by Pauline</li><li>MT Beauty Hair</li><li>Hair du Temps</li><li>L’Atelier de Marie</li></ul></div>
+      <div class="card" data-in="0.75" data-hl="2.2"><span class="h">Réponse 2</span>
+        <ul><li>MB Coiffure</li><li class="hl">GM Coiffure by Pauline</li><li>Best Barber</li><li>La Loge Coiffeur</li></ul></div>
+      <div class="card" data-in="1.05" data-hl="2.2"><span class="h">Réponse 3</span>
+        <ul><li>Unik</li><li class="hl">GM Coiffure by Pauline</li><li>Robin Laugier</li><li>Côté Salon</li></ul></div>
+    </div>
+    <p data-in="2.6">20 coiffeurs cités. <em>Un seul</em> revient à chaque fois.</p>
+  </section>
+
+  <section class="scene" id="once">
+    <div class="big" data-in="0.1"><span data-count="57" data-from="0.15" data-d="1.2"></span><small>%</small></div>
+    <p data-in="0.6">des entreprises citées ne le sont qu'<em>une fois sur trois</em>.</p>
+    <div class="split" data-in="1.1">
+      <div data-grow="57" data-from="1.2" style="background:var(--accent)"></div>
+      <div data-grow="19" data-from="1.45" style="background:#8fa6c6"></div>
+      <div data-grow="24" data-from="1.7" style="background:var(--ink)"></div>
+    </div>
+    <div class="legend" data-in="1.6">
+      <span><b>57 %</b>1 fois</span><span><b>19 %</b>2 fois</span><span><b>24 %</b>3 fois</span>
+    </div>
+  </section>
+
+  <section class="scene" id="sectors">
+    <h1 class="m" data-in="0.1">Les plus stables : les <em>restaurants</em>.</h1>
+    <div class="kicker" data-in="0.35">Entreprises citées dans les 3 réponses</div>
+    <div class="bars">
+      <div class="bar" data-in="0.5"><div class="row"><span>Restauration</span><b data-count="32" data-from="0.6" data-d="1" data-suffix=" %"></b></div><div class="track"><div class="fill" data-bar="32" data-from="0.6"></div></div></div>
+      <div class="bar" data-in="0.65"><div class="row"><span>Tourisme et loisirs</span><b data-count="31" data-from="0.75" data-d="1" data-suffix=" %"></b></div><div class="track"><div class="fill" data-bar="31" data-from="0.75"></div></div></div>
+      <div class="bar" data-in="0.8"><div class="row"><span>Commerces</span><b data-count="31" data-from="0.9" data-d="1" data-suffix=" %"></b></div><div class="track"><div class="fill" data-bar="31" data-from="0.9"></div></div></div>
+      <div class="bar" data-in="0.95"><div class="row"><span>Services</span><b data-count="21" data-from="1.05" data-d="1" data-suffix=" %"></b></div><div class="track"><div class="fill" data-bar="21" data-from="1.05"></div></div></div>
+      <div class="bar" data-in="1.1"><div class="row"><span>Artisans</span><b data-count="20" data-from="1.2" data-d="1" data-suffix=" %"></b></div><div class="track"><div class="fill" data-bar="20" data-from="1.2"></div></div></div>
+      <div class="bar" data-in="1.25"><div class="row"><span>Santé et bien-être</span><b data-count="13" data-from="1.35" data-d="1" data-suffix=" %"></b></div><div class="track"><div class="fill" data-bar="13" data-from="1.35"></div></div></div>
+    </div>
+  </section>
+
+  <section class="scene" id="sources">
+    <h1 class="m" data-in="0.1">Ce que ChatGPT <em>lit</em> vraiment.</h1>
+    <div class="rows">
+      <div class="r" data-in="0.45"><span>Le site de l'entreprise<small>part des sites cités</small></span><b data-count="52" data-from="0.55" data-d="0.9" data-suffix=" %"></b></div>
+      <div class="r" data-in="0.75"><span>TripAdvisor<small>réponses qui le citent</small></span><b>12/150</b></div>
+      <div class="r" data-in="1.05"><span>Ta fiche Google<small>réponses qui la citent</small></span><b>0</b></div>
+      <div class="r" data-in="1.35"><span>Instagram et Facebook<small>réponses qui les citent</small></span><b>0</b></div>
+    </div>
+    <p data-in="1.8">Le reste ? Des <em>guides locaux</em>, comme 10bestnice ou le Petit Futé.</p>
+  </section>
+</div>
+
+<div class="layer blue" id="end">
+  <div class="guides"></div><div class="rule" style="top:330px"></div><div class="rule" style="top:1400px"></div>
+  <div class="progress"></div>
+  <div class="top"><span class="label">Baromètre IA · Nice</span><span class="count"></span></div>
+  <div class="bottom"><span class="logo">Anthony<i></i>Profit</span><span class="site">anthonyprofit.com</span></div>
+  <section class="scene" id="cta">
+    <h1 data-in="0.4">Et ton commerce, ChatGPT le <em>recommande</em> ?</h1>
+    <p data-in="0.75">L'étude complète, les 50 questions et toutes les données sont sur mon site.</p>
+    <div class="cta" data-in="1.05"></div>
+  </section>
+</div>
+
+<script>
+// Each variant lists its scenes and how long each one lasts, in seconds.
+const VARIANTS = {
+  reel:  { scenes: [["hook", 3.8], ["total", 3.4], ["answers", 5.6], ["once", 4.2], ["sectors", 4.4], ["sources", 4.2], ["cta", 4.0]], cta: "Lien en bio · anthonyprofit.com" },
+  story: { scenes: [["hook", 3.2], ["total", 2.7], ["once", 3.2], ["sources", 3.0], ["cta", 2.9]], cta: "Lis l'étude ↓", ctaTop: true },
+};
+let V, timeline, total;
+const clamp = (x) => Math.min(1, Math.max(0, x));
+const outExpo = (x) => (x >= 1 ? 1 : 1 - Math.pow(2, -10 * x));
+const outCubic = (x) => 1 - Math.pow(1 - x, 3);
+const inOutCubic = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+const EXIT = 0.35;
+
+// Scenes start hidden, so the browser would only fetch the fonts on first paint: load them up front.
+window.setup = async (name) => {
+  await Promise.all(["600 96px Urbanist", "400 40px Urbanist", "400 40px Geist", "500 40px Geist"].map((f) => document.fonts.load(f)));
+  V = VARIANTS[name];
+  let t = 0;
+  timeline = V.scenes.map(([id, d]) => { const s = { id, start: t, end: t + d }; t += d; return s; });
+  total = t;
+  document.querySelector("#cta .cta").textContent = V.cta;
+  if (V.ctaTop) document.getElementById("cta").classList.add("start");
+  return { duration: total };
+};
+
+window.render = (t) => {
+  const idx = Math.max(0, timeline.findIndex((s) => t >= s.start && t < s.end));
+  const count = `${String(idx + 1).padStart(2, "0")} / ${String(timeline.length).padStart(2, "0")}`;
+  document.querySelectorAll(".count").forEach((c) => (c.textContent = count));
+  document.querySelectorAll(".progress").forEach((p) => (p.style.width = `${(t / total) * 1080}px`));
+
+  // The blue end layer wipes up from the bottom at the start of the CTA scene.
+  const cta = timeline.find((s) => s.id === "cta");
+  const wipe = inOutCubic(clamp((t - cta.start) / 0.55));
+  document.getElementById("end").style.clipPath = `inset(${(1 - wipe) * 100}% 0 0 0)`;
+
+  for (const s of timeline) {
+    const el = document.getElementById(s.id);
+    const visible = t >= s.start && t < s.end;
+    el.style.display = visible ? "flex" : "none";
+    if (!visible) continue;
+    const lt = t - s.start;
+    const last = s === timeline.at(-1);
+    const out = last ? 0 : outCubic(clamp((lt - (s.end - s.start - EXIT)) / EXIT));
+    el.style.opacity = 1 - out;
+    el.style.transform = `translateY(${-40 * out}px)`;
+
+    el.querySelectorAll("[data-in]").forEach((n) => {
+      const p = outExpo(clamp((lt - +n.dataset.in) / 0.75));
+      n.style.opacity = p;
+      n.style.transform = `translateY(${(1 - p) * 56}px)`;
+    });
+    el.querySelectorAll("[data-type]").forEach((n) => {
+      const p = clamp((lt - +n.dataset.type) / +n.dataset.d);
+      n.textContent = n.dataset.text.slice(0, Math.round(n.dataset.text.length * p));
+      const caret = n.nextElementSibling;
+      caret.style.opacity = p < 1 || Math.floor(lt * 2.4) % 2 === 0 ? 1 : 0;
+    });
+    el.querySelectorAll("[data-count]").forEach((n) => {
+      const p = outCubic(clamp((lt - +n.dataset.from) / +n.dataset.d));
+      n.textContent = Math.round(+n.dataset.count * p) + (n.dataset.suffix ?? "");
+    });
+    el.querySelectorAll("[data-bar]").forEach((n) => {
+      const p = outExpo(clamp((lt - +n.dataset.from) / 1.1));
+      n.style.width = `${(+n.dataset.bar / 32) * 100 * p}%`;
+    });
+    el.querySelectorAll("[data-grow]").forEach((n) => {
+      const p = outExpo(clamp((lt - +n.dataset.from) / 0.9));
+      n.style.flex = `0 0 calc(${+n.dataset.grow * p}% - ${8 * p}px)`;
+    });
+    el.querySelectorAll("[data-hl]").forEach((card) => {
+      const p = inOutCubic(clamp((lt - +card.dataset.hl) / 0.5));
+      card.querySelectorAll("li").forEach((li) => {
+        if (li.classList.contains("hl")) li.style.color = `color-mix(in srgb, var(--accent) ${p * 100}%, var(--ink))`;
+        else li.style.opacity = 1 - 0.7 * p;
+      });
+    });
+  }
+};
+</script>
+</body></html>
