@@ -1,0 +1,3751 @@
+{
+  "edition": "2026-11",
+  "modele": "gpt-5-search-api",
+  "passages": 150,
+  "requetes": 50,
+  "entreprisesDistinctes": 621,
+  "citationsParReponse": 6.6066666666666665,
+  "stabilite": {
+    "total": {
+      "1": 393,
+      "2": 110,
+      "3": 124
+    },
+    "parSecteur": {
+      "Restauration": {
+        "1": 55,
+        "2": 19,
+        "3": 30
+      },
+      "Tourisme et loisirs": {
+        "1": 58,
+        "2": 13,
+        "3": 26
+      },
+      "Artisans et dépannage": {
+        "1": 63,
+        "2": 18,
+        "3": 17
+      },
+      "Santé et bien-être": {
+        "1": 79,
+        "2": 18,
+        "3": 8
+      },
+      "Services": {
+        "1": 87,
+        "2": 26,
+        "3": 17
+      },
+      "Commerces": {
+        "1": 51,
+        "2": 16,
+        "3": 26
+      }
+    }
+  },
+  "sitesEntreprises": {
+    "domainesCites": 919,
+    "dontSiteDUneEntrepriseCitee": 477,
+    "reponsesCitantUnSiteDEntreprise": 111
+  },
+  "domainesCites": [
+    [
+      "10bestnice.com",
+      17
+    ],
+    [
+      "cotedazurfrance.fr",
+      14
+    ],
+    [
+      "explorenicecotedazur.com",
+      14
+    ],
+    [
+      "niceshopping.fr",
+      13
+    ],
+    [
+      "nicetrotter.fr",
+      13
+    ],
+    [
+      "petitfute.com",
+      12
+    ],
+    [
+      "tripadvisor.fr",
+      11
+    ],
+    [
+      "pagesjaunes.fr",
+      9
+    ],
+    [
+      "tourismnice.com",
+      7
+    ],
+    [
+      "nissactu.fr",
+      6
+    ],
+    [
+      "lemonde.fr",
+      6
+    ],
+    [
+      "provence-alpes-cotedazur.com",
+      6
+    ],
+    [
+      "le-mag-nice.fr",
+      5
+    ],
+    [
+      "nice.fr",
+      5
+    ],
+    [
+      "fr.localitybiz.com",
+      5
+    ],
+    [
+      "lesavises.fr",
+      5
+    ],
+    [
+      "lesmeilleursrestaurants.fr",
+      4
+    ],
+    [
+      "visiter-nice.fr",
+      4
+    ],
+    [
+      "studiomaps.app",
+      4
+    ],
+    [
+      "monguideideal.fr",
+      3
+    ],
+    [
+      "cote-azur.net",
+      3
+    ],
+    [
+      "citybreakgeek.com",
+      3
+    ],
+    [
+      "nice-pamelas-bar.com",
+      3
+    ],
+    [
+      "le-montalbano.fr",
+      3
+    ],
+    [
+      "lenegresco.com",
+      3
+    ],
+    [
+      "kombivent.com",
+      3
+    ],
+    [
+      "fr.restaurantguru.com",
+      3
+    ],
+    [
+      "nicemag.fr",
+      3
+    ],
+    [
+      "pizzeria.ouvert.tel",
+      3
+    ],
+    [
+      "up-review.co",
+      3
+    ],
+    [
+      "lesfoliesdedmonde.com",
+      3
+    ],
+    [
+      "nicepresse.com",
+      3
+    ],
+    [
+      "hotelierschoice.com",
+      3
+    ],
+    [
+      "skyscanner.fr",
+      3
+    ],
+    [
+      "rent-my-boat-nice.fr",
+      3
+    ],
+    [
+      "bateau-sans-permis-nice.fr",
+      3
+    ],
+    [
+      "locboat.fr",
+      3
+    ],
+    [
+      "batoboat.fr",
+      3
+    ],
+    [
+      "operaprestige.fr",
+      3
+    ],
+    [
+      "nlsfrance.com",
+      3
+    ]
+  ],
+  "parRequete": [
+    {
+      "id": "resto-nicois",
+      "secteur": "Restauration",
+      "requete": "Quel est le meilleur restaurant de cuisine niçoise traditionnelle à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "La Merenda",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Chez Acchiardo",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Chez Pipo",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Chez Davia",
+          "site": "https://www.chezdavia.com/",
+          "passages": 2
+        },
+        {
+          "nom": "L'Ecurie",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "La Table Alziari",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "La Ratapignata",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "La Socca d’Or",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "A Buteghinn’a",
+          "site": null,
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "socca",
+      "secteur": "Restauration",
+      "requete": "Où manger la meilleure socca à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Chez Pipo",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Chez Thérésa",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "René Socca",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Lou Pilha Leva",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "La Socca d’Or",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Socca’Tram",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Socca (Avenue de la Californie)",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "La Socca",
+          "site": null,
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "gastronomique",
+      "secteur": "Restauration",
+      "requete": "Recommande-moi un restaurant gastronomique à Nice pour une occasion spéciale.",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Le Chantecler",
+          "site": "https://www.lenegresco.com/restaurants/le-chantecler",
+          "passages": 3
+        },
+        {
+          "nom": "L’Aromate",
+          "site": "https://kombivent.com/activite/l-aromate?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Flaveur",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "ONICE",
+          "site": "https://www.restaurantonice.com/onice",
+          "passages": 2
+        },
+        {
+          "nom": "La Réserve de Nice",
+          "site": "https://www.lareservedenice.fr/fr/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Les Agitateurs",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Restaurant Simon",
+          "site": "https://www.restaurant-simon.com/fr/restaurant.html",
+          "passages": 1
+        },
+        {
+          "nom": "Le Negresco",
+          "site": "https://www.lenegresco.com/restaurants/le-chantecler?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Virginie Basselot",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "JAN",
+          "site": "https://janonline.com/fr/restaurantjan/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Jan Hendrik",
+          "site": "https://janonline.com/fr/restaurantjan/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Épicentre",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Kōyō",
+          "site": "https://www.koyonice.com/",
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "brunch",
+      "secteur": "Restauration",
+      "requete": "Où bruncher à Nice le dimanche ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Le Montalbano",
+          "site": "https://le-montalbano.fr/",
+          "passages": 3
+        },
+        {
+          "nom": "Pamela’s Bar",
+          "site": "https://www.nice-pamelas-bar.com/brunch/",
+          "passages": 2
+        },
+        {
+          "nom": "Flav’s Café",
+          "site": "https://niceshopping.fr/commerce/flav-cafe/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Cagnard",
+          "site": "https://lesagitateurs.com/cagnard",
+          "passages": 1
+        },
+        {
+          "nom": "Olive & Artichaut Restaurant",
+          "site": "https://nice.city-life.fr/Sortir/Nice/Restaurants/489/Olive-et-Artichaut-Restaurant?lang=fr",
+          "passages": 1
+        },
+        {
+          "nom": "Kililies Resto Brunch",
+          "site": "https://kililies-resto-brunch-nice.eatbu.com/?lang=fr",
+          "passages": 1
+        },
+        {
+          "nom": "HYDE Street",
+          "site": "https://hydebistronice-restaurant.fr/",
+          "passages": 1
+        },
+        {
+          "nom": "Zeni Coffee",
+          "site": "https://zeni-coffee.fr/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Soho Nice",
+          "site": "https://soho-nice.fr/brunch-nice?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Pamela’s Californian Kitchen",
+          "site": "https://www.nice-pamelas-bar.com/brunch/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Anantara Plaza Nice – Riviera Sunday Brunch",
+          "site": "https://www.anantara.com/uploads/minor/anantara/documents/anantara-plaza-nice/menus-restaurants/brunch/riviera_sunday_brunch_menu_2026.pdf?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "The Drunky Stork Social Club",
+          "site": "https://www.thedrunkystorksocialclub.com/les-dimanches-brunch-du-stork/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Brunch Napa",
+          "site": "https://www.napa-restaurant.com/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Les Cocottes du Dimanche – Taulissa, Maison Albar Le Victoria",
+          "site": "https://maison-albar-hotels-le-victoria.com/fr/pagex/brunch-nice-buffet-dominical-vue-mer-au-rooftop-taulissa.6550.html?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Restaurant Beau Rivage, Plage Beau Rivage",
+          "site": "https://www.cote.azur.fr/bruncher-le-dimanche-sur-la-plage-beau-rivage/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "L’Oiseau d’Été",
+          "site": "https://www.explorenicecotedazur.com/commerce/loiseau-dete/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Restaurant Angelo – Boscolo Nice Hôtel & Spa",
+          "site": "https://www.boscolocollection.com/nice/restaurant-angelo?utm_source=openai",
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "poisson-port",
+      "secteur": "Restauration",
+      "requete": "Quel restaurant de poisson me conseilles-tu sur le port de Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "La Barque Bleue",
+          "site": "https://www.petitfute.com/v33027-nice-06000/c1165-restaurants/c1248-specialites/c116-restaurant-fruits-de-mer-poissons/564057-la-barque-bleue.html?page=2&utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Les Pêcheurs",
+          "site": "https://www.tripadvisor.fr/Restaurant_Review-g187234-d1105048-Reviews-Les_Pecheurs-Nice_French_Riviera_Cote_d_Azur_Provence_Alpes_Cote_d_Azur.html?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Le Bistrot du Port",
+          "site": "https://le-bistrot-du-port-nice.eatbu.com/",
+          "passages": 2
+        },
+        {
+          "nom": "La Table Marine",
+          "site": "https://restaurant-de-poisson.restaurants-de-france.fr/f/la-table-marine-restaurant-de-poissons-fruits-de-mer-a-nice-6273513/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Coquillages Bouchet",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Marechiaro",
+          "site": "https://10bestnice.com/restaurants-de-plage/marechiaro/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Les Arcades",
+          "site": "https://les-arcades-nice.fr/",
+          "passages": 1
+        },
+        {
+          "nom": "Peixes",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Ô Cap",
+          "site": null,
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "vegetarien",
+      "secteur": "Restauration",
+      "requete": "Un bon restaurant végétarien à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Racines",
+          "site": "https://www.hotel-florence-nice.com/blog/articles/les-meilleurs-restaurants-vegetariens-a-nice-5-adresses-a-decouvrir-absolument-66991?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "SAJ by Milla",
+          "site": "https://www.hotel-florence-nice.com/blog/articles/les-meilleurs-restaurants-vegetariens-a-nice-5-adresses-a-decouvrir-absolument-66991?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Paper Plane",
+          "site": "https://www.nicetrotter.fr/art-vegetarien-vegan-a-nice-1059.html?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Utopia",
+          "site": "https://www.tripadvisor.fr/Restaurant_Review-g187234-d15697031-Reviews-Utopia-Nice_French_Riviera_Cote_d_Azur_Provence_Alpes_Cote_d_Azur.html?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Le Cèdre",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "La Dame au Cerf",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Vêjé Viver Bem",
+          "site": "https://restaurant-vegetarien.restaurants-de-france.fr/f/veje-viver-bem-25012648/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "EATSA",
+          "site": "https://eatsa.fr/menu?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Bruno Cirino",
+          "site": null,
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "pizzeria",
+      "secteur": "Restauration",
+      "requete": "Quelle est la meilleure pizzeria de Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Les Amoureux",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Pizza Nono",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Prima Volta",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "That’s Amore",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Doma Pizza",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Io e Te Pizzeria Napoletana",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Acqua & Farina",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Pizzeria chez Toto",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "CRUST",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Acqua e Farina",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Bella Ciao Pizza",
+          "site": null,
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "boulangerie",
+      "secteur": "Restauration",
+      "requete": "Quelle est la meilleure boulangerie de Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "La Boulangerie Par Michel Fiori",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Boulangerie Roy Le Capitole",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Mama Baker",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "La Base Bakery",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Boulangerie Degioanni",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Maison Jean-Marc Bordonnat",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Boulangerie Lagache",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "L’Épi d’Argent",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Pompon",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Boulangerie Jean Marc Bordonnat",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Aux Délices de la Buffa",
+          "site": null,
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "glacier",
+      "secteur": "Restauration",
+      "requete": "Quel glacier ne pas manquer à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Fenocchio",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Papilla",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Néron Glacier Pâtissier",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Arlequin Gelati",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Glacier du Pin",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "César Milano",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Azzurro Artisan Glacier",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Gelateria Azzurro",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Peccati di Gola",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Amorino",
+          "site": null,
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "bar-cocktails",
+      "secteur": "Restauration",
+      "requete": "Un bar à cocktails sympa dans le Vieux-Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Les Folies d’Edmonde",
+          "site": "https://www.lesfoliesdedmonde.com/about/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Barbacane Bar",
+          "site": "https://nicepresse.com/deguster-des-cocktails-haut-de-gamme-dans-une-ambiance-decontractee-un-nouveau-bar-branche-se-devoile-dans-le-vieux-nice/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Trafalbar",
+          "site": "https://nice.enfrance.biz/trafalbar/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "El Merkado",
+          "site": "https://10bestnice.com/bars/el-merkado/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Dai!Dai! Cocktails Bar & Food",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Saint Cocktail Bar",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Le Bateleur",
+          "site": "https://lebateleur.com/fr/?utm_source=openai",
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "plage-privee",
+      "secteur": "Tourisme et loisirs",
+      "requete": "Quelle plage privée choisir à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Régence Plage by Radisson Blu",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Cocoon Beach",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "N la Plage (Negresco)",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Ruhl",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Le Galet",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Beau Rivage",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Castel Plage",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Les Canailles",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Le Temps d’un Été",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "La Véla",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Hôtel Amour",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Blue Beach",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Bocca Mar",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Opéra Plage",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Miami Beach",
+          "site": null,
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "hotel-promenade",
+      "secteur": "Tourisme et loisirs",
+      "requete": "Quel hôtel me recommandes-tu à Nice près de la Promenade des Anglais ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Le Negresco",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Maison Albar – Le Victoria",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Le Méridien Nice",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Radisson Blu Hotel Nice",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Ibis budget Nice Californie Lenval",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Anantara Plaza Nice Hotel",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Hôtel Albert 1er",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Nice Azur Riviera",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Hôtel Palais de la Méditerranée (Hyatt Regency Nice Palais de la Méditerranée)",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Hotel Beau Rivage",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Albert 1er Hotel",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Hôtel Le Royal",
+          "site": "https://www.hotel-leroyal-nice.com/fr",
+          "passages": 1
+        },
+        {
+          "nom": "Villa Rivoli",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Hyatt Regency Palais de la Méditerranée",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Westminster Hotel & Spa Nice",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Chantecler",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Hôtel Palais de la Méditerranée – The Unbound Collection by Hyatt",
+          "site": null,
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "location-bateau",
+      "secteur": "Tourisme et loisirs",
+      "requete": "Où louer un bateau à Nice pour la journée ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Rent My Boat",
+          "site": "https://rent-my-boat-nice.fr/",
+          "passages": 3
+        },
+        {
+          "nom": "LOCBOAT",
+          "site": "https://www.locboat.fr/bateau-sans-permis",
+          "passages": 3
+        },
+        {
+          "nom": "Vogue Marine",
+          "site": "https://voguemarine.fr/location-bateau-sans-permis-nice/",
+          "passages": 1
+        },
+        {
+          "nom": "Yacht Charter French Riviera",
+          "site": "https://yachtcharterfrenchriviera.com/fr/charter/karel-v160/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "voguemarine.fr",
+          "site": "https://voguemarine.fr/location-bateau-sans-permis-nice/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Batoboat",
+          "site": "https://batoboat.fr/location-bateau/nice/",
+          "passages": 1
+        },
+        {
+          "nom": "French Riviera Boat Charters",
+          "site": "https://frenchrivieraboatcharters.com/fr/boat-charter/nice",
+          "passages": 1
+        },
+        {
+          "nom": "Nautic Evasion",
+          "site": "https://www.nauticevasionnice.com/",
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "yacht-equipage",
+      "secteur": "Tourisme et loisirs",
+      "requete": "Quelle agence choisir pour louer un yacht avec équipage au départ de Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Opera Prestige",
+          "site": "https://www.operaprestige.fr/location-yacht-nice/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "NLS France",
+          "site": "https://www.nlsfrance.com/fr/yachting/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Azur Yachting",
+          "site": "https://location-yacht-nice.fr/",
+          "passages": 3
+        },
+        {
+          "nom": "Martin Yachting",
+          "site": "https://www.yachting-martin.com/location-yacht/cote-d-azur?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Navélia Charters",
+          "site": "https://naveliacharters.com/about-us?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Jaupart Yachts",
+          "site": "https://jaupartyachts.fr/",
+          "passages": 1
+        },
+        {
+          "nom": "ATI Yachts",
+          "site": "atiyachts.com",
+          "passages": 1
+        },
+        {
+          "nom": "Ride Limousine",
+          "site": "ride-limousine.com",
+          "passages": 1
+        },
+        {
+          "nom": "DLB Yachting",
+          "site": "dlb-yachting.com",
+          "passages": 1
+        },
+        {
+          "nom": "Princess",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Sunseeker",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Ferretti",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Noctis Concierge",
+          "site": "https://www.noctis-concierge.com/location-yacht-cote-d-azur?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Excellence Riviera",
+          "site": "https://excellenceriviera.com/fr/location-yacht/pershing-70?utm_source=openai",
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "location-scooter",
+      "secteur": "Tourisme et loisirs",
+      "requete": "Où louer un scooter à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Rentascoot",
+          "site": "https://rentascoot.fr/fr-FR?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "MatMonScoot",
+          "site": "https://www.matmonscoot.com/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "LocaScoot",
+          "site": "https://locascoot.fr",
+          "passages": 3
+        },
+        {
+          "nom": "06 Motors / Easy Renter",
+          "site": "https://www.easyrenter.fr/fr/concessionnaires/06-motors.html?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Ride-Loc",
+          "site": "https://www.ride-loc.com/type/scooter/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Easyscoot",
+          "site": "https://www.explorenicecotedazur.com/commerce/easyscoot/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Scooter Rental",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Yamaha Rent",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Saint Laurent Moto",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Riderly",
+          "site": "https://riderly.com",
+          "passages": 1
+        },
+        {
+          "nom": "Frison Scooter",
+          "site": "https://frisonscooter.com",
+          "passages": 1
+        },
+        {
+          "nom": "Envie2rouler",
+          "site": "https://www.envie2rouler-moto.com/location-moto-nice?utm_source=openai",
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "spa",
+      "secteur": "Tourisme et loisirs",
+      "requete": "Quel spa me conseilles-tu à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Spa 27 – Westminster Hôtel",
+          "site": "https://westminster-nice.com/fr/page/spa-27-hotel-spa-nice.21436.html",
+          "passages": 3
+        },
+        {
+          "nom": "Oria – Maison Albar",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Hammam Sultana",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Nice & Spa",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "L’Instant Spa",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Spa By Elle et Lui",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "N Le Spa – Le Negresco",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Ozea Beauty Spa",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Boscolo Nice – Spa & Fitness",
+          "site": "https://www.boscolocollection.com/nice",
+          "passages": 1
+        },
+        {
+          "nom": "Centre Rinascita Ayurveda Nice",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Green Beauty Center",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "N Le Spa – Hôtel Le Negresco",
+          "site": null,
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "visite-guidee",
+      "secteur": "Tourisme et loisirs",
+      "requete": "Quelle visite guidée faire à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Centre du Patrimoine",
+          "site": "https://provence-alpes-cotedazur.com/que-faire/activites/vieux-nice-visite-guidee-nice-fr-5262464/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Musée archéologique",
+          "site": "https://www.musee-archeologie-nice.org/mediation/visites-commentees/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Musée Matisse",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "marché de la Libération",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Cours Saleya",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "nicefrancetours.com",
+          "site": "https://www.nicefrancetours.com/walking-tours/",
+          "passages": 1
+        },
+        {
+          "nom": "Nice Creative Tours",
+          "site": "https://www.nice-creative-tours.com/our-guided-tours/walking-tours/",
+          "passages": 1
+        },
+        {
+          "nom": "Exotiktours",
+          "site": "https://exotiktours.com/wp-content/uploads/2025/12/EN-France-Nice-Ammi-Aparthotel-2026-121225v2.pdf?ver=1765559421",
+          "passages": 1
+        },
+        {
+          "nom": "Château de Bellet",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "marché Saleya",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Opéra de Nice",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "église Saint-Roch",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Diacosmie",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "musée de Cimiez",
+          "site": null,
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "plongee",
+      "secteur": "Tourisme et loisirs",
+      "requete": "Où faire de la plongée près de Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "CIP Nice",
+          "site": "https://www.explorenicecotedazur.com/prestataire/nice-diving/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Le Poséidon",
+          "site": "https://www.explorenicecotedazur.com/prestataire/centre-ecole-de-plongee-snorkeling-le-poseidon/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Nice Diving",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Chango Diving",
+          "site": "https://cotedazurfrance.fr/offres/chango-diving-nice-fr-3041471/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Rand'eau Évasion",
+          "site": "https://www.randeauevasion.com/",
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "plombier-urgence",
+      "secteur": "Artisans et dépannage",
+      "requete": "Je cherche un plombier à Nice pour une fuite urgente, qui me conseilles-tu ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Azur Service 06",
+          "site": "https://www.azur-service-06.fr/agences/nice/",
+          "passages": 3
+        },
+        {
+          "nom": "Bellomo Plomberie",
+          "site": "https://assistancecanalisation.fr/plombier-urgence-nice-06000?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Plombier Nice – KGS Plomberie",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Chrono Plomberie",
+          "site": "https://www.chronoplomberie.fr/",
+          "passages": 2
+        },
+        {
+          "nom": "FT Plomberie",
+          "site": "https://www.ft-plomberie.fr/",
+          "passages": 2
+        },
+        {
+          "nom": "Azul Dépannages Services",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Kaïs Bouabda (MAY.H)",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Nissart Plomberie",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Future Plumbing",
+          "site": "https://future-plumbing.fr/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Expert Plombier",
+          "site": "https://expertplombier.fr/?utm_source=openai",
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "serrurier-dimanche",
+      "secteur": "Artisans et dépannage",
+      "requete": "Quel serrurier appeler à Nice un dimanche soir ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Express Protect",
+          "site": "https://expressprotect.fr/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "TOP Serrurier Nice",
+          "site": "https://serrurier-nice-urgence-porte.fr/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "MGB Lock Security",
+          "site": "https://mgbserruriernice.fr/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "La Clé de Nice",
+          "site": "https://lacledenice.fr/urgence?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "SRI Nice (Serrurier d’Intervention Urgence)",
+          "site": "https://www.serrurier-intervention.fr/serrurier-urgence-nice/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "MYSERRURIER 06",
+          "site": "https://myserrurier06.fr/presse-serrurier-nice/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "EmSam Serrurerie",
+          "site": "https://www.118712.fr/professionnels/WkRYV1RcGgg",
+          "passages": 1
+        },
+        {
+          "nom": "Eugène Serre-Vis",
+          "site": "https://www.cylex-locale.fr/entreprises/eug%C3%A8ne-serre-vis-14288861.html",
+          "passages": 1
+        },
+        {
+          "nom": "Votre Artisan Français",
+          "site": "https://mes-serruriers.com/provence-alpes-cote-d-azur/alpes-maritimes/serrurier-nice/serrurier-nice-votre-artisan-francais-B9MPu/",
+          "passages": 1
+        },
+        {
+          "nom": "France Clef (Picard Serrures)",
+          "site": "https://www.franceclef.com/",
+          "passages": 1
+        },
+        {
+          "nom": "ETS Deschamps",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "SCOCA",
+          "site": "https://www.scoca.fr/",
+          "passages": 1
+        },
+        {
+          "nom": "Serrurier 06",
+          "site": "https://depannage-serrurier06.fr/",
+          "passages": 1
+        },
+        {
+          "nom": "SRI Urgence Nice",
+          "site": "https://www.serrurier-intervention.fr/serrurier-urgence-nice/",
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "electricien",
+      "secteur": "Artisans et dépannage",
+      "requete": "Un électricien fiable à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Light Elec",
+          "site": "https://artisansreunis.fr/artisan/light-elec-nice-d0cuk8?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Perselec Électricité",
+          "site": "https://mes-electriciens.com/provence-alpes-cote-d-azur/alpes-maritimes/electricien-nice/perselec-electricite-Km6vb/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "ASUD Valette",
+          "site": "https://www.pagesjaunes.fr/annuaire/nice-06/electricien?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "SOS Électricien Nice",
+          "site": "https://aviis-certifies.com/avis/sos-electricien-nice?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "NGN Elec",
+          "site": "https://www.allovoisins.com/v/installation-electrique/nice?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "D.S Électricité",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "CLP Electricité",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "AurElec",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Éclair Service",
+          "site": null,
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "renovation",
+      "secteur": "Artisans et dépannage",
+      "requete": "Quelle entreprise choisir pour rénover un appartement à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "AGAPE Rénovation",
+          "site": "https://www.agaperenovation.fr/renovation-appartement-nice.html?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "ACR Provence",
+          "site": "https://acr-provence.com/secteurs/entreprise-renovation-nice.html?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Espace Multi Com Services Plus",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "GRANICRUZ",
+          "site": "https://www.granicruz.com/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "LAB Rénovation",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Nice Rénovation",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Bat’Man Rénovation",
+          "site": "https://www.entreprise-renovation-nice.fr/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Lazaro Constructions",
+          "site": "https://www.lazaroconstructions.fr/renovation/",
+          "passages": 1
+        },
+        {
+          "nom": "SNEGB",
+          "site": "https://www.snegb-renovation.fr/",
+          "passages": 1
+        },
+        {
+          "nom": "Batiglobal Côte d’Azur",
+          "site": "https://batiglobal.com/agences/nice",
+          "passages": 1
+        },
+        {
+          "nom": "MRCB",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "AJB Rénov",
+          "site": "https://ajbrenov.fr/renovation-nice/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "AKM RENOV",
+          "site": "https://akmrenov.com/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "QualiSur Bâtiment",
+          "site": "https://fr.localitybiz.com/provence-alpes-c%C3%B4te-d%27azur/r%C3%A9novation-construction-%C3%A0-nice?utm_source=openai",
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "garage",
+      "secteur": "Artisans et dépannage",
+      "requete": "Un bon garage automobile à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Midas Nice Gambetta",
+          "site": "https://www.midas.fr/centres-auto-midas/provence-alpes-cote-d-azur/alpes-maritimes/nice/nice-gambetta_1312?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Garage Defabri",
+          "site": "https://annuaire-garagiste.fr/f/garage-defabri-6884277/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Garage DAVER",
+          "site": "https://garage-automobile.autour-de-moi.com/ville/nice/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Garage Casula Auto 06",
+          "site": "https://garage-automobile.autour-de-moi.com/ville/nice/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Unique Motors Luxury",
+          "site": "https://garage-automobile.autour-de-moi.com/ville/nice/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Garage by motors 06",
+          "site": "https://bocaross.fr/garages/nice/mecanique-auto?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Centre Auto Speedy - Californie",
+          "site": "https://centres-auto.speedy.fr/garage/nice-06200/93?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Garage Marafioti Mario",
+          "site": "https://bocaross.fr/pro/marafioti-mario?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Garage SAM Auto",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Speedy Nice (80, Av de la Californie, 06200 Nice)",
+          "site": "https://centres-auto.speedy.fr/garage/nice-06200/93",
+          "passages": 1
+        },
+        {
+          "nom": "Ateliers Carrosserie Moni",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Carrosserie Benvenuto",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Speedy Nice Californie",
+          "site": "https://centres-auto.speedy.fr/garage/nice-06200/93?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "L’Artisan Débosseleur",
+          "site": "https://bocaross.fr/garages/nice/carrosserie?utm_source=openai",
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "demenageur",
+      "secteur": "Artisans et dépannage",
+      "requete": "Quel déménageur choisir à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Movazur",
+          "site": "https://mon-service-france.fr/demenageur/nice/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Les Compagnons de France – Déménagement",
+          "site": "https://mon-service-france.fr/demenageur/nice/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Baie des Anges Transport",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Déménagements Ravarino",
+          "site": "https://agences.demeco.fr/provence-alpes-cote-dazur/alpes-maritimes/nice?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Transdem",
+          "site": "https://mon-service-france.fr/demenageur/nice/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "AS Déménagement Transport Nice Cannes Monaco",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Les Déménageurs Bretons (Nice, SARL LASCER)",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Tintillier Olivier – Project Delivery (T.O. Project Delivery)",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Demeco Nice / Ravarino",
+          "site": "https://agences.demeco.fr/provence-alpes-cote-dazur/alpes-maritimes/nice",
+          "passages": 1
+        },
+        {
+          "nom": "J&D Déménagement - Monte Meuble",
+          "site": "https://mon-service-france.fr/demenageur/nice/?utm_source=openai",
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "climatisation",
+      "secteur": "Artisans et dépannage",
+      "requete": "Qui installe la climatisation à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Clim’Elit",
+          "site": "https://www.clim-elit-nice.fr/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "IMPEC",
+          "site": "https://impec-climatisation.com/installation-climatisation-nice/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "NPS 06 (Nicolas Poinsaint)",
+          "site": "https://www.nps06.fr/climatisation?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "AB Clim Sud",
+          "site": "https://www.ab-climatisation-nice.fr/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "NPI Clim",
+          "site": "https://www.npi-climatisation.fr/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "EGN2P",
+          "site": "https://egn2p.net/climatisation/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "NICER",
+          "site": "https://www.nicer.fr/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Performance Action Climatique (PAC)",
+          "site": "https://app.cee.fr/annuaire/entreprise/performance-action-climatique-p-a-c-06300-421835",
+          "passages": 1
+        },
+        {
+          "nom": "TAIRMIC",
+          "site": "https://www.tairmic.fr/",
+          "passages": 1
+        },
+        {
+          "nom": "Les Climaticiens du Comté",
+          "site": "https://confort.mitsubishielectric.fr/installateur/les-climaticiens-du-comte",
+          "passages": 1
+        },
+        {
+          "nom": "L-Froid",
+          "site": "https://www.l-froid.com/installateur-clim-nice-06000",
+          "passages": 1
+        },
+        {
+          "nom": "Plomberie Bonaparte",
+          "site": "https://www.plomberiebonaparte.fr/climatisation/",
+          "passages": 1
+        },
+        {
+          "nom": "Smart-CVC",
+          "site": "https://smart-cvc.fr/",
+          "passages": 1
+        },
+        {
+          "nom": "ACLIMEO Climatisation Nice",
+          "site": "https://www.ads-climatisations.fr/alpes-maritimes/nice/",
+          "passages": 1
+        },
+        {
+          "nom": "Zitouni Ayoub",
+          "site": "https://www.devis-climatisation-appartement.fr/provence-alpes-cote-d-azur/06-alpes-maritimes/nice/artisans/zitouni-ayoub",
+          "passages": 1
+        },
+        {
+          "nom": "Riviera Climatisation Nice",
+          "site": "https://pose-clim.fr/alpes-maritimes/nice",
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "reparation-telephone",
+      "secteur": "Artisans et dépannage",
+      "requete": "Où faire réparer mon téléphone à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "STUFF",
+          "site": "https://stuffnice.fr/contact/",
+          "passages": 3
+        },
+        {
+          "nom": "Repare Mon Phone",
+          "site": "https://reparemonphone06.com/contact-us/",
+          "passages": 3
+        },
+        {
+          "nom": "LS Réparation",
+          "site": "https://ls-reparation-iphone.fr/",
+          "passages": 3
+        },
+        {
+          "nom": "SOS Phone",
+          "site": "https://www.sos-phone.com/",
+          "passages": 3
+        },
+        {
+          "nom": "Phone Shop",
+          "site": "https://www.phoneshopnice.fr/",
+          "passages": 2
+        },
+        {
+          "nom": "BUMPER Store",
+          "site": "https://www.bumperstore.fr/store/nice-3",
+          "passages": 2
+        },
+        {
+          "nom": "Techstore",
+          "site": "https://www.techstore06.com/contact/",
+          "passages": 2
+        },
+        {
+          "nom": "Mediatech",
+          "site": "https://mediatech-nice.fr/",
+          "passages": 1
+        },
+        {
+          "nom": "WeFix – Fnac Nice",
+          "site": "https://boutique.wefix.net/78-wefix-fnac-nice?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Save Nice",
+          "site": "https://magasin.save.co/provence-alpes-cote-dazur/alpes-maritimes/nice/save-nice-32?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Pixou",
+          "site": null,
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "dentiste",
+      "secteur": "Santé et bien-être",
+      "requete": "Quel dentiste me conseilles-tu à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Cabinet Azur Dentaire",
+          "site": "https://dentiste.autour-de-moi.com/ville/nice/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Cabinet Dentaire Longchamp",
+          "site": "https://www.top-rated.online/countries/France/cities/Nice/%40dental_clinic/our-rank?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Centre Dentaire Nice Garibaldi (Dentego)",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Dr Pegah Gandjizadeh",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Dr Guy-Marcel Wiligou",
+          "site": "https://nice.dentiste.biz/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Dr Nicolas Allouche",
+          "site": "https://dentiste.autour-de-moi.com/ville/nice/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Dr Matthieu Jensen",
+          "site": "https://www.centre-dentaire-saint-mande.fr/ville/nice/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Dr Robin Venissac",
+          "site": "https://www.top-rated.online/countries/France/cities/Nice/%40dental_clinic/our-rank?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Dr Thomas Vaiarelli",
+          "site": "https://dentiste.autour-de-moi.com/ville/nice/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Dr Rossi Robin",
+          "site": "https://www.bon-dentiste.fr/meilleur-orthodontiste-nice-06000-v.html?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Dr Laura Lombardi",
+          "site": "https://fr.localitybiz.com/provence-alpes-c%C3%B4te-d%27azur/dentiste-%C3%A0-nice?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Dr Sedze Jean-Philippe",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Dr Lisa Nicollet",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Dr Guillaume Ponsonnet",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Centre Médical et Dentaire Avident",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Dr Nathan Touret",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Dr Philippe Borel",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Dr Hedy Ben Grid",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Centre dentaire Nice France - Dentego",
+          "site": null,
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "osteopathe",
+      "secteur": "Santé et bien-être",
+      "requete": "Un bon ostéopathe à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Diane Tirouvanziam",
+          "site": "https://www.medoucine.com/consultations/se-soigner/osteopathie/nice/tous-publics/a-domicile-ou-cabinet?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Allard Clément, Ostéopathe D.O.",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Florian Coutaud",
+          "site": "https://floriancoutaud-osteopathe.fr/",
+          "passages": 2
+        },
+        {
+          "nom": "Fabrice Degus",
+          "site": "https://www.nice-osteopathe.com/",
+          "passages": 2
+        },
+        {
+          "nom": "Christophe Chambon",
+          "site": "https://osteopathe-06nice.com/",
+          "passages": 1
+        },
+        {
+          "nom": "Benjamin Pradas",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Marie Blanquart",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Nice Santé",
+          "site": "https://nicesante.fr/osteopathie",
+          "passages": 1
+        },
+        {
+          "nom": "Aurélien Filippi",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Thibaut Descamps",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "REFLEX OSTEO",
+          "site": "https://www.reflexosteo.com/osteopathe-nice",
+          "passages": 1
+        },
+        {
+          "nom": "Marie Virlouvet",
+          "site": "https://trouver-medecin.fr/osteopathe/nice/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Laura Ancillotti",
+          "site": "https://trouver-medecin.fr/osteopathe/nice/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Benjamin Clement",
+          "site": "https://www.osteopathe.do/nice?utm_source=openai",
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "veterinaire-weekend",
+      "secteur": "Santé et bien-être",
+      "requete": "Quel vétérinaire ouvert le week-end à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Clinique vétérinaire Vet Riviera",
+          "site": "https://cotedazurfrance.fr/offres/clinique-veterinaire-vet-riviera-24-24-nice-fr-3033038/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Vétérinaires 2 Toute Urgence – Nice",
+          "site": "https://www.veterinaire-monveto.com/cliniques/veterinaires-2-toute-urgence-nice/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Clinique Vétérinaire Nicea",
+          "site": "https://veterinairenicea.com/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Clinique Vétérinaire des Pignes",
+          "site": "https://niceshopping.fr/commerce/clinique-veterinaire-des-pignes/",
+          "passages": 2
+        },
+        {
+          "nom": "Urgences Vétérinaires Nice",
+          "site": "https://www.urgences-veterinaires-nice.fr/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Cabinet Vétérinaire des Pignes",
+          "site": "https://vetoproche.fr/veterinaires/nice/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Clinique Vétérinaire Indépendante de Lingostière",
+          "site": "https://lingostiereveterinaires.fr/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Cabinet Vétérinaire Cap Sud",
+          "site": "https://www.cliniqueveterinairelacoste.fr/pages/horaires_acces_clinique_cap_sud.html?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Urgence Vétérinaire Nice",
+          "site": "https://www.urgences-veterinaires-nice.fr/",
+          "passages": 1
+        },
+        {
+          "nom": "Vétérinaires 2 Toute Urgence – Villeneuve-Loubet",
+          "site": "https://www.veterinaire-monveto.com/cliniques/veterinaires-2-toute-urgence-nice/",
+          "passages": 1
+        },
+        {
+          "nom": "Clinique Lingostière – NAC & Reptiles",
+          "site": "https://www.sauria.fr/veterinaires/clinique-lingostiere-nice-nac",
+          "passages": 1
+        },
+        {
+          "nom": "Clinique Chahuahua",
+          "site": "https://www.chahuahua.fr/urgences/",
+          "passages": 1
+        },
+        {
+          "nom": "Clinique vétérinaire Lingostière",
+          "site": "https://lingostiereveterinaires.fr/",
+          "passages": 1
+        },
+        {
+          "nom": "Urgences Vétérinaire Nice",
+          "site": "https://www.urgences-veterinaires-nice.fr/",
+          "passages": 1
+        },
+        {
+          "nom": "Urgences Vétérinaires Delta",
+          "site": null,
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "salle-sport",
+      "secteur": "Santé et bien-être",
+      "requete": "Quelle salle de sport choisir à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Fitness Park",
+          "site": "https://sportslife.fr/guides/salles-de-sport/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Keepcool",
+          "site": "https://sportslife.fr/guides/salles-de-sport/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Fitness Arena Riviera",
+          "site": "https://fitnessarena.fr/salle-de-sport-nice",
+          "passages": 2
+        },
+        {
+          "nom": "L’Orange Bleue Nice Masséna",
+          "site": "https://musculation.guide/annuaire/ville/nice/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Basic-Fit",
+          "site": "https://sportslife.fr/guides/salles-de-sport/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Jjz Coaching",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "L’Atelier Full Body",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Le Flexx Club",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "L’Appart Fitness",
+          "site": "https://clubs.lappartfitness.com/115-l-appart-fitness-nice",
+          "passages": 1
+        },
+        {
+          "nom": "Orange Bleue Nice Masséna",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Metropolitan Sport Club & Spa ICONIC",
+          "site": "https://mon-club.tel/f/metropolitan-sport-club-spa-iconic-10534328/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Complexe Jean Bouin",
+          "site": "https://www.nice.fr/lieux/complexe-jean-bouin/?utm_source=openai",
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "yoga",
+      "secteur": "Santé et bien-être",
+      "requete": "Où prendre des cours de yoga à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Centre Nataraja",
+          "site": "https://yoganice.com/",
+          "passages": 3
+        },
+        {
+          "nom": "NiceAmYoga (Amrita Lahlou)",
+          "site": "https://niceamyoga.com/",
+          "passages": 3
+        },
+        {
+          "nom": "Yoga Shelter Nice",
+          "site": "https://yoga-shelter.com/yoga-shelter-studio-nice/",
+          "passages": 2
+        },
+        {
+          "nom": "SuperStudio Yoga",
+          "site": "https://centre.contact/f/superstudio-yoga-8003623/",
+          "passages": 2
+        },
+        {
+          "nom": "Yoga Nice (Isabelle / Yoga Doux)",
+          "site": "https://www.yoganice.fr/",
+          "passages": 2
+        },
+        {
+          "nom": "Ensō – Centre de Yoga Nice",
+          "site": "https://enso.fr/horaires-et-tarifs-yoga-nice/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "JF Yoga",
+          "site": "https://jfyoga.fr/",
+          "passages": 1
+        },
+        {
+          "nom": "Daya Deepa Yoga Nice",
+          "site": "https://dayadeepayoga.com/reservations",
+          "passages": 1
+        },
+        {
+          "nom": "Yoga Nice",
+          "site": "https://www.yoganice.fr/",
+          "passages": 1
+        },
+        {
+          "nom": "So’ Kalm",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Villa La Luna",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Yoga Bikram Nice",
+          "site": "https://yogabikramnice.com/",
+          "passages": 1
+        },
+        {
+          "nom": "Pepita Yoga",
+          "site": "https://www.pepitayoga.com/planning-tarifs?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Jh Yoga – Yoga Iyengar",
+          "site": "https://jfyoga.fr/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Origine Studio",
+          "site": "https://www.originestudionice.fr/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "La Parenthèse – Yoga & Pilates & Wellness",
+          "site": "https://laparenthesenice.com/",
+          "passages": 1
+        },
+        {
+          "nom": "Yoga Shelter Studio",
+          "site": "https://yoga-shelter.com/yoga-shelter-studio-nice/",
+          "passages": 1
+        },
+        {
+          "nom": "Prana Motion Yoga – Mathilde Torrez",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Yoga & Pilates Olesya",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Yoga Nice le Port",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Yogalogy Yoga",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Univers Yoga",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Antonella Yoga Nice",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Nissa Yoga",
+          "site": null,
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "coiffeur",
+      "secteur": "Santé et bien-être",
+      "requete": "Quel coiffeur choisir à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "GM Coiffure by Pauline",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Xena Coiffure",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Le Salon Michel Barbera Coiffure",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "MT Beauty Hair",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Biocoiff’ – Coiffure Bio / Colorations végétales",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Hair du Temps",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "L’Atelier de Marie",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Biocoiff’ Nice",
+          "site": "https://www.biocoiff.com/nice/",
+          "passages": 1
+        },
+        {
+          "nom": "MB Coiffure",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Best Barber",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Le Fil de l’Âme",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "La Loge Coiffeur",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "AkS Salon de Coiffure",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Unik",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "La Coiffure by Harmonie",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Robin Laugier",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Monique Hélène Albèrté",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Côté Salon",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Laurent Micas",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Hair Nath’urel",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Helena – “La Maison d’Elisa”",
+          "site": null,
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "agence-immobiliere",
+      "secteur": "Services",
+      "requete": "Quelle agence immobilière choisir pour vendre un appartement à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Laforêt Nice",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Imkiz",
+          "site": "https://www.imkiz.com",
+          "passages": 3
+        },
+        {
+          "nom": "Agence Istra",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Winter Immobilier",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Milor Immobilier",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Agence Gounod",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Orpi Nice",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Immobilière Nicoise",
+          "site": "https://www.immobiliere-nicoise.com",
+          "passages": 1
+        },
+        {
+          "nom": "Abado Immobilier",
+          "site": "https://www.abadoimmobilier.com",
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "avocat-famille",
+      "secteur": "Services",
+      "requete": "Un avocat en droit de la famille à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Maître Hanan HMAD",
+          "site": "https://www.hmad-avocats.fr/expertises/droit-de-la-famille.htm?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Maître Béatrice Gagne",
+          "site": "https://www.maitre-gagnebeatrice.com/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Maître Fabienne Marouani",
+          "site": "https://www.cabinet-avocat-marouani.fr/droit-famille?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Mme Mary ALBERTIN-ROBY",
+          "site": "https://albertinroby-avocat.fr/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Me Laura Duvois",
+          "site": "https://www.duvois-avocat.fr/domaines-activite?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Me Fabienne Marouani",
+          "site": "https://www.cabinet-avocat-marouani.fr/droit-famille?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Me Luisella Ramoino",
+          "site": "https://www.ramoinoavocat.com/divorce-et-droit-de-la-famille-w1?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Me Béatrice Gagne",
+          "site": "https://www.maitre-gagnebeatrice.com/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Me Emilie Bender",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Maître Albertin-Roby",
+          "site": "https://albertinroby-avocat.fr/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Maître Nathalie Pasquier",
+          "site": "https://www.pasquier-avocat.fr/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Maître Laura Duvois",
+          "site": "https://www.duvois-avocat.fr/domaines-activite?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Cabinet HMAD",
+          "site": "https://www.hmad-avocats.fr/expertises/droit-de-la-famille.htm",
+          "passages": 1
+        },
+        {
+          "nom": "Maître Sophiko SAKASHVILI",
+          "site": "https://www.sophikosakashvili-avocat.fr/",
+          "passages": 1
+        },
+        {
+          "nom": "Maître Mary Albertin-Roby",
+          "site": "https://albertinroby-avocat.fr/",
+          "passages": 1
+        },
+        {
+          "nom": "Cabinet Albertin-Roby",
+          "site": "https://albertinroby-avocat.fr/",
+          "passages": 1
+        },
+        {
+          "nom": "Maître Kaïs Helali",
+          "site": "https://www.kais-helali.fr/",
+          "passages": 1
+        },
+        {
+          "nom": "Cabinet Helali",
+          "site": "https://www.kais-helali.fr/",
+          "passages": 1
+        },
+        {
+          "nom": "Cabinet Marouani",
+          "site": "https://www.cabinet-avocat-marouani.fr/droit-famille",
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "avocat-travail",
+      "secteur": "Services",
+      "requete": "Un avocat en droit du travail à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "SCHWAL & Associés",
+          "site": "https://www.schwal-avocats.fr/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Maître Mathieu Michelon",
+          "site": "https://www.michelonavocat.fr/contact/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Jean-Michel Renucci (Cabinet Actance)",
+          "site": "https://www.actanceavocats.com/equipe/jean-michel-renucci?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Alexia Oliver",
+          "site": "https://oliver-avocats-nice.com/droit-social-et-droit-du-travail/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Maître Rebecca De La Torre",
+          "site": "https://delatorre-avocat.fr/",
+          "passages": 2
+        },
+        {
+          "nom": "Maître De La Torre",
+          "site": "https://delatorre-avocat.fr/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Cabinet SJ (Stéphanie Jourquin)",
+          "site": "https://www.cabinet-sj.com/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Maître Stéphanie Jourquin (Cabinet SJ)",
+          "site": "https://www.cabinet-sj.com/contact/",
+          "passages": 1
+        },
+        {
+          "nom": "Maître Livia Lanfranchi",
+          "site": "https://lanfranchi-avocat.fr/contact/",
+          "passages": 1
+        },
+        {
+          "nom": "Cabinet Stéphanie Jourquin (CABINET SJ)",
+          "site": "https://www.cabinet-sj.com/",
+          "passages": 1
+        },
+        {
+          "nom": "Cabinet Actance – Jean-Michel Renucci",
+          "site": "https://www.actanceavocats.com/",
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "notaire",
+      "secteur": "Services",
+      "requete": "Quel notaire choisir à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "SCP Jean-Noël CHAMPAGNE & Laurent ROSE",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "ACTA",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "SELAS PAILLARD, WAJNBERG et de TOURNIEL",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Karen Aussourd-Funaro",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Me Chloé Senequier & Me Mathieu Larere",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Étude de Pou l piquet et associés (Maître Daphné de Boysson-Ferre)",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Jean Charles March, Emmanuel Lions, Karine Millo, SCP",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "SELAS PAILLARD, WAJNBERG & de Tourniel",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Étude MORANI (Jean-René et Jody Marbac)",
+          "site": "https://morani-nice.notaires.fr/tarifs/?utm_source=openai",
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "expert-comptable",
+      "secteur": "Services",
+      "requete": "Quel expert-comptable pour une petite entreprise à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "FIDUCIAL Expertise Nice",
+          "site": "https://agences.fiducial.fr/provence-alpes-cote-d-azur/alpes-maritimes/nice/fiducial-expertise-nice-307",
+          "passages": 3
+        },
+        {
+          "nom": "AFEC",
+          "site": "https://www.afec.eu/",
+          "passages": 3
+        },
+        {
+          "nom": "Numbr Nice",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Azur Proactif",
+          "site": "https://www.cabinet-expert-comptable-nice.fr/",
+          "passages": 2
+        },
+        {
+          "nom": "Nerios Conseils",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Moriano Expertise",
+          "site": "https://www.morianoexpertise.com/",
+          "passages": 1
+        },
+        {
+          "nom": "Aulique Expertise",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "ANSEMBLE DUO DECIMAL",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Audit Conseil",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Ruff & Associés",
+          "site": null,
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "site-internet",
+      "secteur": "Services",
+      "requete": "Qui peut créer le site internet de mon entreprise à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Linkeo",
+          "site": "https://linkeo-nice.com",
+          "passages": 2
+        },
+        {
+          "nom": "Facili-Web",
+          "site": "https://facili-web.fr",
+          "passages": 2
+        },
+        {
+          "nom": "Digital Unicorn",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Easyweb",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "devmiweb",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Thémis Créa",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "LINX",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Sacha Création",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "BelowPalms-Design Studio",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "eMaginance",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Capitaine Site",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "ORESO",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Moreletto",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Web IT Consulting",
+          "site": "https://sitewebnice.fr",
+          "passages": 1
+        },
+        {
+          "nom": "Agence Web Nice06",
+          "site": "https://agence-web-nice06.fr",
+          "passages": 1
+        },
+        {
+          "nom": "NiceClick",
+          "site": "https://www.niceclick.fr",
+          "passages": 1
+        },
+        {
+          "nom": "N12A",
+          "site": "https://www.n12a.fr",
+          "passages": 1
+        },
+        {
+          "nom": "Rivage",
+          "site": "https://rivage-nice.com",
+          "passages": 1
+        },
+        {
+          "nom": "Inleven",
+          "site": "https://inleven.studio",
+          "passages": 1
+        },
+        {
+          "nom": "Maxdev (Maxance Cristofari)",
+          "site": "https://maxdev.fr/",
+          "passages": 1
+        },
+        {
+          "nom": "Alexis Decreux",
+          "site": "https://alexisdecreux.com/",
+          "passages": 1
+        },
+        {
+          "nom": "Anthony Profit",
+          "site": "https://anthonyprofit.com/",
+          "passages": 1
+        },
+        {
+          "nom": "ERA Digital Consulting (Maxime Duvinage)",
+          "site": "https://era-digital-consulting.com/",
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "consultant-seo",
+      "secteur": "Services",
+      "requete": "Quel consultant SEO choisir à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Florian Zorgnotti",
+          "site": "https://redback-optimisation.fr/",
+          "passages": 3
+        },
+        {
+          "nom": "Nathan Fenina (Décupler)",
+          "site": "https://decupler.com/consultant-seo-nice/",
+          "passages": 3
+        },
+        {
+          "nom": "Florian Roger",
+          "site": "https://www.florian-roger.com/consultant-seo/nice/",
+          "passages": 2
+        },
+        {
+          "nom": "Frédéric Kabouche",
+          "site": "https://redback-optimisation.fr/meilleurs-consultants-seo-a-nice/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Web'up / Michel Belhacel",
+          "site": "https://agencewebup.fr/consulting-seo-nice/",
+          "passages": 1
+        },
+        {
+          "nom": "Alban Febrer Sanmartí",
+          "site": "https://albanfebrer.com/consultant-seo-nice/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Quiboost",
+          "site": "https://quiboost.com/zones/nice/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Olivier Berthe",
+          "site": "https://quiboost.com/zones/nice/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Yannick Ansquer",
+          "site": "https://www.yannick-ansquer-seo-sea.com/consultant-seo-nice?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Lucas Vincent",
+          "site": "https://www.yannick-ansquer-seo-sea.com/consultant-seo-nice?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Easyweb",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "7 Gold Agency",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Michel Belhacel – Web’up",
+          "site": "https://agencewebup.fr/consulting-seo-nice/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Jean SEO & L’Anthracite",
+          "site": "https://redback-optimisation.fr/meilleurs-consultants-seo-a-nice/?utm_source=openai",
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "photographe-mariage",
+      "secteur": "Services",
+      "requete": "Un photographe de mariage à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Marco Le Photographe",
+          "site": "https://www.marcolephotographe.com/",
+          "passages": 2
+        },
+        {
+          "nom": "Romero Photography",
+          "site": "https://romerophotography.fr/",
+          "passages": 2
+        },
+        {
+          "nom": "Mariage à votre image",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Diego Rodriguez",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Sandra Malbéqui",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Number 31 Photography (Julien Jovanovski)",
+          "site": "https://www.number31photography.com/",
+          "passages": 1
+        },
+        {
+          "nom": "Lawrence Banahan",
+          "site": "https://www.banahan.fr/fr/portfolio",
+          "passages": 1
+        },
+        {
+          "nom": "Mili Photography",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Filipe Faustino",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Gaetana Valastro",
+          "site": "https://www.gaetanavalastro.fr/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Nina Camillano (NinaCam.fr)",
+          "site": "https://ninacam.fr/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Anita Tissier Photography",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Steph Riviera Photo",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Studio Léo",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Fred Gaffori",
+          "site": "https://fredgaffori.com",
+          "passages": 1
+        },
+        {
+          "nom": "Photographe/vidéaste Gilles Ehrentrant",
+          "site": "https://nice-photographe.com",
+          "passages": 1
+        },
+        {
+          "nom": "Studio Paul & Virginie",
+          "site": "https://www.studio-pauletvirginie.com",
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "auto-ecole",
+      "secteur": "Services",
+      "requete": "Quelle auto-école choisir à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Auto École La Lanterne",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "SOA Auto-école",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Le Local",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Auto-École Adrenaline",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "Auto-École Beausite",
+          "site": "https://autoecolebeausite.fr/formations-tarifs/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Auto-Motro-École Midi12",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "MCJS",
+          "site": null,
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "ecole-francais",
+      "secteur": "Services",
+      "requete": "Quelle école de français pour étrangers à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "alpha.b – Institut linguistique",
+          "site": "https://www.ialc.org/fr/trouver-une-ecole/alpha-b-institut-linguistique/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Alliance Française Nice Côte d’Azur",
+          "site": "https://www.fle.fr/Alliance-Francaise-Nice-Cote-d-Azur?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Idiom",
+          "site": "https://www.projeunes-paca.fr/wp-content/uploads/sites/4/2022/05/5.576-Les-cours-de-francais-pour-etrangers-Decembre-2021.pdf?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "International House Nice (IH Nice)",
+          "site": "https://www.ihnice.com/fr?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Azurlingua",
+          "site": "https://cotedazurfrance.fr/a-faire/toutes-les-ecoles-de-langues/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Actilangue",
+          "site": "https://www.actilangue.com/",
+          "passages": 2
+        },
+        {
+          "nom": "France Langue Nice",
+          "site": "https://www.projeunes-paca.fr/wp-content/uploads/sites/4/2022/05/5.576-Les-cours-de-francais-pour-etrangers-Decembre-2021.pdf?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "CUEFLE – Université Côte d’Azur",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Polylangues (agence de Nice)",
+          "site": "https://polylangues.fr/agence-de-nice/",
+          "passages": 1
+        },
+        {
+          "nom": "CRFP Nice",
+          "site": "https://www.crfp.eu/nos-centres/alpes-maritimes/crfp-nice/",
+          "passages": 1
+        },
+        {
+          "nom": "ACOPAD",
+          "site": null,
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "fromager",
+      "secteur": "Commerces",
+      "requete": "Où acheter du bon fromage à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "LA FROM.",
+          "site": "https://epicu.fr/shop/la-from/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "La Ferme Fromagère",
+          "site": "https://www.lafermefromagere.fr/",
+          "passages": 3
+        },
+        {
+          "nom": "Fromagerie Métin",
+          "site": "https://10bestnice.com/fromagerie-nice/fromagerie-metin/?lang=fr&utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Fromagerie du Carré d’Or",
+          "site": "https://www.fromagerie-carre-dor.fr/",
+          "passages": 2
+        },
+        {
+          "nom": "Fromagerie Cap de Croix",
+          "site": "https://fromagerie-cap-de-croix-nice.fr/fromager-nice-alpes-maritimes/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Laiterie Gilbert",
+          "site": "https://www.laiterie-gilbert.fr/boutique/laiterie-gilbert-nice/",
+          "passages": 2
+        },
+        {
+          "nom": "Lou Froumaï",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Une gorgée de fromage, une tranche de whisky",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Fromagerie Blanche",
+          "site": "https://niceshopping.fr/en/commerce/fromagerie-blanche/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Les Beaux Joueurs – Boutique & Bar",
+          "site": "https://bestin-nice.fr/meilleures-fromageries-de-nice/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Cours Saleya",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "La Libération (“la Libé”)",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "La Chèvre Blanche",
+          "site": null,
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "caviste",
+      "secteur": "Commerces",
+      "requete": "Un bon caviste à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "La Part des Anges",
+          "site": "https://lapartdesanges-nice.com/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Pinot & Chardo",
+          "site": "https://www.pinot-chardo.com/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Les Caves Caprioglio",
+          "site": "https://cotedazurfrance.fr/offres/les-caves-caprioglio-nice-fr-3032165/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Nicolas",
+          "site": "https://www.nicolas.com/fr/fr/nos-boutiques/nice_nice_06000/312.html?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Cave Rivoli",
+          "site": "https://trouver-boulangerie.fr/fiche/cave-rivoli-nice/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Au Coeur des Terroirs",
+          "site": null,
+          "passages": 2
+        },
+        {
+          "nom": "La Route des Vins",
+          "site": "https://fr.gaultmillau.com/fr/artisans/la-route-des-vins?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "CAVAVIN Nice-Est",
+          "site": "https://nice-est.cavavin.co/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Cave Bianchi 1860",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Côté Vin",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "A l’AnqueVin",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Bocca Rossa",
+          "site": "https://boccarossa.fr/",
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "patisserie",
+      "secteur": "Commerces",
+      "requete": "Quelle est la meilleure pâtisserie de Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Pistache – Pâtisserie",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Julien Dugourd",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Philippe Tayac",
+          "site": null,
+          "passages": 3
+        },
+        {
+          "nom": "Pâtisserie Moutet",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Maison Armand",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Macaron de Nice – Pâtisserie Le Vanillier",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Lac – Pâtissier-Chocolatier",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Canet — Pâtissier Chocolatier",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Maison Auer",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Pâtisserie Lac",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Maison De Céline Pâtisserie",
+          "site": null,
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "fleuriste",
+      "secteur": "Commerces",
+      "requete": "Un fleuriste à Nice qui livre ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Your Flowers Nice",
+          "site": "https://yourflowers.fr/pages/fleuriste-nice?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Jardin d’Alice",
+          "site": "https://www.jardin-alice.com/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Cédric Fleurs",
+          "site": "https://cedric-fleurs.fr/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Maison Fiori",
+          "site": "https://maison-fiori.com/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Maison Flora",
+          "site": "https://www.maisonfloranice.com/",
+          "passages": 2
+        },
+        {
+          "nom": "Maison Florae",
+          "site": "https://www.maisonflorae.fr/livraison-fleurs-nice?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Azur Fleurs",
+          "site": "https://mafleuriste.net/06/nice/azur-fleurs-fleuriste-nice-22b?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Interflora Nice",
+          "site": "https://www.interflora.fr/fleuristes/alpes-maritimes-06/06088-nice/",
+          "passages": 1
+        },
+        {
+          "nom": "Odete Fleurs",
+          "site": null,
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "huile-olive",
+      "secteur": "Commerces",
+      "requete": "Où acheter de l'huile d'olive de qualité à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Nicolas Alziari",
+          "site": "https://www.nicolas-alziari.com/la-boutique?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Domaine de la Source",
+          "site": "https://domainedelasource.fr/categorie-produit/epicerie/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Olio Donato",
+          "site": "https://www.oliodonato.com/?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Domaine de Vinceline",
+          "site": "https://www.olivedenice-aop.com/domaine-de-vinceline?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Château de Crémat",
+          "site": "https://chateaucremat.com/tous-nos-vins/huile-dolive/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Fatti Cosi",
+          "site": "https://www.fatticosi.fr/epicerie-italienne.html?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "A L’Olivier",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "La Bassecour des Granges",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "La Clémandine",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Cours Saleya",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Libération",
+          "site": null,
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "velo",
+      "secteur": "Commerces",
+      "requete": "Un magasin de vélos à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Bouticycle Nice",
+          "site": "https://bouticycle.com/nice",
+          "passages": 3
+        },
+        {
+          "nom": "Decathlon Nice",
+          "site": "https://www.decathlon.fr/vc/magasin-velo-nice",
+          "passages": 3
+        },
+        {
+          "nom": "La Roue Libre",
+          "site": "https://www.larouelibre.fr/magasins-velo-nice",
+          "passages": 3
+        },
+        {
+          "nom": "Two For Bike Nice",
+          "site": "https://cotedazurfrance.fr/offres/two-for-bike-nice-ex-neway-nice-fr-3042669/",
+          "passages": 3
+        },
+        {
+          "nom": "Culture Vélo Nice",
+          "site": "https://www.isicycles-nice.com/",
+          "passages": 2
+        },
+        {
+          "nom": "Ovelo Nice",
+          "site": "https://www.ovelo.fr/magasin/nice",
+          "passages": 2
+        },
+        {
+          "nom": "Ebike Riviera Tour",
+          "site": "https://niceshopping.fr/commerce/ebike-riviera-tour/",
+          "passages": 1
+        },
+        {
+          "nom": "Bicycle Store / Triathlon Store Nice",
+          "site": "https://www.bicyclestore.fr/pages/nice-promenade?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Ovelo - magasin de Nice",
+          "site": "https://www.ovelo.fr/magasin/nice",
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "librairie",
+      "secteur": "Commerces",
+      "requete": "Une librairie indépendante à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Le Vestiaire à Mot",
+          "site": "https://www.le-vam.fr/",
+          "passages": 3
+        },
+        {
+          "nom": "Les Indociles",
+          "site": "https://trouver-boulangerie.fr/fiche/les-indociles-nice/",
+          "passages": 3
+        },
+        {
+          "nom": "La Sorbonne",
+          "site": "https://ann-rose.com/librairies?departement=06",
+          "passages": 3
+        },
+        {
+          "nom": "L’Envolée",
+          "site": "https://niceshopping.fr/commerce/lenvolee/",
+          "passages": 3
+        },
+        {
+          "nom": "Librairie Masséna",
+          "site": "https://aroundus.com/p/174858137-librairie-massena",
+          "passages": 2
+        },
+        {
+          "nom": "Les Journées Suspendues",
+          "site": "https://www.nice24.fr/culture/les-journees-suspendues-la-parole-aux-clients/",
+          "passages": 2
+        },
+        {
+          "nom": "Librairie Vigna",
+          "site": "https://riviera-buzz.com/librairie-vigna-nice/",
+          "passages": 1
+        },
+        {
+          "nom": "Read The Room Bookstore & Coffeeshop",
+          "site": "https://librairie.tel/f/read-the-room-bookstore-coffeeshop-7371715/",
+          "passages": 1
+        },
+        {
+          "nom": "Au Brouillon de Culture / À la Sorbonne",
+          "site": "https://biblioscan.ai/ou-acheter-livres-occasion/nice",
+          "passages": 1
+        },
+        {
+          "nom": "Masséna Around The World",
+          "site": "https://www.livre-provencealpescotedazur.fr/ressources/annuaire/etablissements/librairie-massena-around-the-world-2196",
+          "passages": 1
+        },
+        {
+          "nom": "Au Brouillon de Culture",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Meyer & Bernini",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Bang Dessinée",
+          "site": null,
+          "passages": 1
+        }
+      ]
+    },
+    {
+      "id": "opticien",
+      "secteur": "Commerces",
+      "requete": "Quel opticien choisir à Nice ?",
+      "passages": 3,
+      "entreprises": [
+        {
+          "nom": "Optic 2000",
+          "site": "https://opticien.optic2000.com/provence-alpes-cote-d-azur/alpes-maritimes/nice?utm_source=openai",
+          "passages": 3
+        },
+        {
+          "nom": "Lympia Lunetier",
+          "site": "https://www.lympialunetier.com/",
+          "passages": 3
+        },
+        {
+          "nom": "Optique Riquier",
+          "site": "https://www.opticonex.fr/opticiens/ville/nice?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Lissac l’Opticien",
+          "site": "https://opticien.autour-de-moi.com/ville/nice/?utm_source=openai",
+          "passages": 2
+        },
+        {
+          "nom": "Alain Afflelou, TNL",
+          "site": "https://www.afflelou.com/opticien/nice/afflelou-c-c-nice-tnl-06300?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Krys, Av. Malaussena",
+          "site": "https://opticien.autour-de-moi.com/f/opticien-nice-malaussena-krys-8996068/?utm_source=openai",
+          "passages": 1
+        },
+        {
+          "nom": "Atol – Rue François Guisol",
+          "site": "https://magasins.atol.fr/provence-alpes-cote-d-azur/alpes-maritimes/nice",
+          "passages": 1
+        },
+        {
+          "nom": "Afflelou – CC TNL",
+          "site": "https://www.afflelou.com/opticien/nice/afflelou-c-c-nice-tnl-06300",
+          "passages": 1
+        },
+        {
+          "nom": "Écouter Voir – 54 rue Trachel",
+          "site": "https://magasins.ecoutervoir.fr/provence-alpes-cote-d-azur/alpes-maritimes/nice/ecouter-voir-optique-mutualiste-842",
+          "passages": 1
+        },
+        {
+          "nom": "Gambetta Optique",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Optique Joanny",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Optique Grimaldi",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Maison Maxime et Lucien",
+          "site": "https://www.maisonmaximelucien.com/votre-opticien",
+          "passages": 1
+        },
+        {
+          "nom": "Opticien NICE Lingostière (Générale d’Optique)",
+          "site": null,
+          "passages": 1
+        },
+        {
+          "nom": "Écouter Voir Mutualiste",
+          "site": null,
+          "passages": 1
+        }
+      ]
+    }
+  ]
+}

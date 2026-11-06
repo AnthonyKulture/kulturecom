@@ -1,0 +1,264 @@
+---
+lang: fr
+slug: barometre-chatgpt-commerces-nice
+translationKey: barometre-ia-nice
+title: "Quels commerces niçois ChatGPT recommande-t-il ? Le baromètre IA de Nice, novembre 2026"
+metaTitle: "Baromètre : les commerces niçois que recommande ChatGPT"
+description: "50 questions locales posées 3 fois à ChatGPT : 621 entreprises niçoises citées, 63 % une seule fois. Qui est recommandé, et sur quelles sources."
+keywords:
+  - baromètre ChatGPT Nice
+  - commerces recommandés par ChatGPT
+  - visibilité IA Nice
+  - étude GEO locale
+  - recommandations ChatGPT entreprises locales
+tags:
+  - GEO
+  - IA
+  - Référencement local
+pillar: seo
+pubDate: 2026-11-06
+draft: false
+---
+
+import ServiceCTA from "~/components/blog/ServiceCTA.astro";
+import Callout from "~/components/blog/Callout.astro";
+
+Le 6 novembre 2026, j'ai posé à ChatGPT 50 questions qu'un habitant ou un touriste pose pour trouver un restaurant, un plombier ou un notaire à Nice, trois fois chacune. Les 150 réponses citent 621 entreprises niçoises différentes. La liste change pourtant d'une fois sur l'autre : pour une même question, 63 % des entreprises recommandées n'apparaissent que dans une réponse sur trois, et une sur cinq seulement revient à chaque fois. Les restaurants, les plages et les commerces de bouche sont les plus stables. Pour un dentiste, un avocat ou un ostéopathe, être recommandé tient presque du tirage au sort.
+
+À ma connaissance, c'est le premier baromètre de ce type mené à Nice. Je le referai chaque mois avec les mêmes questions, et les données complètes sont téléchargeables en fin d'article.
+
+## Les chiffres clés du baromètre
+
+| Indicateur | Résultat |
+|---|---|
+| Questions posées | 50, dans 6 secteurs |
+| Réponses analysées | 150 (chaque question posée 3 fois) |
+| Entreprises différentes citées | 621 |
+| Entreprises citées par réponse | 6,6 en moyenne |
+| Entreprises citées dans les 3 réponses à une même question | 20 % |
+| Entreprises citées dans une seule des 3 réponses | 63 % |
+| Sites cités qui sont celui d'une entreprise recommandée | 52 % |
+| Réponses avec un lien TripAdvisor | 12 sur 150 |
+| Réponses avec un lien vers une fiche Google ou Google Maps | 0 |
+| Liens cités qui ne mènent plus nulle part | 11 sur 610 |
+
+Les 50 questions couvrent la restauration, le tourisme et les loisirs, les artisans, la santé et le bien-être, les services et les commerces. Elles sont écrites comme on parle à un assistant (« Je cherche un plombier à Nice pour une fuite urgente, qui me conseilles-tu ? »), sans nom d'entreprise. Je les ai posées à l'API d'OpenAI, recherche web activée et localisée à Nice. La méthode complète et ses limites sont détaillées plus bas.
+
+## ChatGPT change de recommandations d'une réponse à l'autre
+
+Posez deux fois la même question à ChatGPT : vous n'aurez pas la même liste. Pour chaque question, j'ai compté dans combien des trois réponses chaque entreprise apparaît :
+
+- 63 % des entreprises n'apparaissent qu'une fois ;
+- 18 % apparaissent deux fois ;
+- 20 % apparaissent les trois fois.
+
+Pour 5 questions sur 50, aucune entreprise ne revient dans les trois réponses : la visite guidée, l'installation de climatisation, l'avocat en droit de la famille, la création de site internet et le photographe de mariage. Sur « Qui peut créer le site internet de mon entreprise à Nice ? », les trois réponses citent 23 noms différents.
+
+Ce n'est pas propre à Nice. En janvier 2026, SparkToro et Gumshoe ont fait tourner 12 prompts près de 3 000 fois dans ChatGPT, Claude et les surfaces IA de Google : la même liste de marques revenait [moins d'une fois sur cent](https://searchengineland.com/ai-recommendation-lists-rarely-repeat-study-468076). Pour un commerce, être cité une fois par ChatGPT ne dit donc pas grand-chose. Ce qui compte, c'est la fréquence à laquelle il revient.
+
+## Restaurants et plages tiennent, santé et services varient
+
+La stabilité dépend beaucoup du secteur :
+
+| Secteur | Questions | Noms cités | Cités dans les 3 réponses | Cités dans une seule |
+|---|---|---|---|---|
+| Restauration | 10 | 104 | 29 % | 53 % |
+| Commerces | 8 | 93 | 28 % | 55 % |
+| Tourisme et loisirs | 8 | 97 | 27 % | 60 % |
+| Artisans et dépannage | 8 | 98 | 17 % | 64 % |
+| Services | 10 | 130 | 13 % | 67 % |
+| Santé et bien-être | 6 | 105 | 8 % | 75 % |
+
+*Noms cités : total des entreprises citées pour chaque question du secteur (une entreprise citée pour deux questions compte deux fois).*
+
+Les adresses les plus stables sont celles dont tout le monde parle déjà : La Merenda, Chez Pipo, Fenocchio, le Negresco, les plages du Ruhl ou de Castel. Elles figurent dans la plupart des guides en ligne, et ce sont justement ces guides que ChatGPT lit (voir plus bas).
+
+À l'inverse, Nice compte des centaines de dentistes, d'ostéopathes et de coiffeurs, et aucun ne domine les sources. Sur « Où prendre des cours de yoga à Nice ? », les trois réponses citent 24 noms, et 2 seulement reviennent à chaque fois. Pour le coiffeur, c'est 21 noms et 1 seul stable ; pour le dentiste, 19 noms et 1 seul stable.
+
+## Sur quoi s'appuie ChatGPT pour recommander une adresse à Nice ?
+
+Les 150 réponses contiennent 1 527 liens vers 475 sites différents. Deux familles de sources dominent.
+
+**Les sites des entreprises elles-mêmes.** 52 % des sites cités dans une réponse sont celui d'une entreprise qu'elle recommande, et 74 % des réponses renvoient au site d'au moins une entreprise. C'est un minimum : je n'ai compté que les sites dont l'adresse apparaît dans la réponse. ChatGPT va lire ces pages pour décrire l'entreprise, ses spécialités, ses horaires ou ses prix. Sur la question de la création de site internet, il reprend par exemple les tarifs affichés par les freelances qu'il cite.
+
+**Les guides et classements locaux.** Les sites tiers les plus cités sont des guides de la ville :
+
+| Site | Réponses qui le citent (sur 150) |
+|---|---|
+| 10bestnice.com | 17 |
+| cotedazurfrance.fr | 14 |
+| explorenicecotedazur.com | 14 |
+| niceshopping.fr | 13 |
+| nicetrotter.fr | 13 |
+| petitfute.com | 12 |
+| TripAdvisor | 12 |
+| pagesjaunes.fr | 9 |
+| tourismnice.com | 7 |
+| nissactu.fr | 6 |
+
+Les sources changent avec le secteur. Pour les loisirs, ce sont des guides touristiques (explorenicecotedazur.com, nicetrotter.fr). Pour les artisans, des annuaires et des comparateurs (allovoisins.com, autour-de-moi.com) et les sites des artisans. Pour les avocats, presque uniquement les sites des cabinets (35 liens sur 38). Pour les notaires, au contraire, des annuaires comme notaires.fr ou le Guide des notaires, et des sites publics.
+
+Ce qui pèse peu, ou pas du tout :
+
+- **Google** : aucune réponse ne cite une fiche Google ou Google Maps comme source. ChatGPT conseille parfois de « vérifier les avis », sans lien vers Google.
+- **Les réseaux sociaux** : aucun lien vers Facebook ou Instagram.
+- **La presse** : Nice-Matin n'apparaît que dans une réponse, Le Monde dans 6.
+- **Les plateformes spécialisées** : TheFork et le Guide Michelin dans 2 réponses chacun, Doctolib dans aucune.
+
+## Des recommandations vers des sites qui n'existent plus
+
+Le 6 novembre 2026, j'ai ouvert les 610 liens différents cités par ChatGPT. 11 ne mènent plus nulle part : page introuvable, nom de domaine sans site ou site suspendu. Six d'entre eux sont les sites d'entreprises recommandées : un studio de yoga, une photographe de mariage, un caviste, un installateur de climatisation, une entreprise de rénovation et un serrurier. L'une de ces entreprises est même citée dans les trois réponses à sa question, alors que son site affiche « Le site est bloqué ».
+
+Un site disparu ne veut pas dire que l'entreprise a fermé. Mais rien dans les réponses ne le signale : ChatGPT recommande ce que ses sources lui donnent. Je n'ai pas compté comme morts les 56 liens qui refusent les visites automatiques, ni les articles payants.
+
+## Les adresses que ChatGPT cite à chaque fois, question par question
+
+Voici, pour chacune des 50 questions, les entreprises citées dans les trois réponses. Ce n'est pas un classement de qualité : c'est ce que ChatGPT recommande le plus régulièrement, en novembre 2026.
+
+### Restauration
+
+| Question posée | Noms cités | Cités dans les 3 réponses |
+|---|---|---|
+| Quel est le meilleur restaurant de cuisine niçoise traditionnelle à Nice ? | 9 | La Merenda, Chez Acchiardo, Chez Pipo |
+| Où manger la meilleure socca à Nice ? | 8 | Chez Pipo, Chez Thérésa, René Socca, Lou Pilha Leva, La Socca d’Or |
+| Recommande-moi un restaurant gastronomique à Nice pour une occasion spéciale. | 13 | Le Chantecler, L’Aromate |
+| Où bruncher à Nice le dimanche ? | 17 | Le Montalbano |
+| Quel restaurant de poisson me conseilles-tu sur le port de Nice ? | 9 | La Barque Bleue |
+| Un bon restaurant végétarien à Nice ? | 9 | Racines, SAJ by Milla, Paper Plane |
+| Quelle est la meilleure pizzeria de Nice ? | 11 | Les Amoureux, Pizza Nono, Prima Volta, That’s Amore |
+| Quelle est la meilleure boulangerie de Nice ? | 11 | La Boulangerie Par Michel Fiori, Boulangerie Roy Le Capitole, Mama Baker |
+| Quel glacier ne pas manquer à Nice ? | 10 | Fenocchio, Papilla, Néron Glacier Pâtissier, Arlequin Gelati, Glacier du Pin, César Milano |
+| Un bar à cocktails sympa dans le Vieux-Nice ? | 7 | Les Folies d’Edmonde, Barbacane Bar |
+
+### Tourisme et loisirs
+
+| Question posée | Noms cités | Cités dans les 3 réponses |
+|---|---|---|
+| Quelle plage privée choisir à Nice ? | 15 | Régence Plage by Radisson Blu, Cocoon Beach, N la Plage (Negresco), Ruhl, Le Galet, Beau Rivage, Castel Plage |
+| Quel hôtel me recommandes-tu à Nice près de la Promenade des Anglais ? | 17 | Le Negresco, Maison Albar – Le Victoria, Le Méridien Nice, Radisson Blu Hotel Nice |
+| Où louer un bateau à Nice pour la journée ? | 8 | Rent My Boat, LOCBOAT |
+| Quelle agence choisir pour louer un yacht avec équipage au départ de Nice ? | 14 | Opera Prestige, NLS France, Azur Yachting |
+| Où louer un scooter à Nice ? | 12 | Rentascoot, MatMonScoot, LocaScoot |
+| Quel spa me conseilles-tu à Nice ? | 12 | Spa 27 – Westminster Hôtel, Oria – Maison Albar, Hammam Sultana, Nice & Spa, L’Instant Spa |
+| Quelle visite guidée faire à Nice ? | 14 | aucun |
+| Où faire de la plongée près de Nice ? | 5 | CIP Nice, Le Poséidon |
+
+### Artisans et dépannage
+
+| Question posée | Noms cités | Cités dans les 3 réponses |
+|---|---|---|
+| Je cherche un plombier à Nice pour une fuite urgente, qui me conseilles-tu ? | 10 | Azur Service 06, Bellomo Plomberie |
+| Quel serrurier appeler à Nice un dimanche soir ? | 14 | Express Protect, TOP Serrurier Nice |
+| Un électricien fiable à Nice ? | 9 | Light Elec, Perselec Électricité, ASUD Valette |
+| Quelle entreprise choisir pour rénover un appartement à Nice ? | 14 | AGAPE Rénovation, ACR Provence |
+| Un bon garage automobile à Nice ? | 14 | Midas Nice Gambetta, Garage Defabri |
+| Quel déménageur choisir à Nice ? | 10 | Movazur, Les Compagnons de France – Déménagement |
+| Qui installe la climatisation à Nice ? | 16 | aucun |
+| Où faire réparer mon téléphone à Nice ? | 11 | STUFF, Repare Mon Phone, LS Réparation, SOS Phone |
+
+### Santé et bien-être
+
+| Question posée | Noms cités | Cités dans les 3 réponses |
+|---|---|---|
+| Quel dentiste me conseilles-tu à Nice ? | 19 | Cabinet Azur Dentaire |
+| Un bon ostéopathe à Nice ? | 14 | Diane Tirouvanziam |
+| Quel vétérinaire ouvert le week-end à Nice ? | 15 | Clinique vétérinaire Vet Riviera |
+| Quelle salle de sport choisir à Nice ? | 12 | Fitness Park, Keepcool |
+| Où prendre des cours de yoga à Nice ? | 24 | Centre Nataraja, NiceAmYoga (Amrita Lahlou) |
+| Quel coiffeur choisir à Nice ? | 21 | GM Coiffure by Pauline |
+
+### Services
+
+| Question posée | Noms cités | Cités dans les 3 réponses |
+|---|---|---|
+| Quelle agence immobilière choisir pour vendre un appartement à Nice ? | 9 | Laforêt Nice, Imkiz |
+| Un avocat en droit de la famille à Nice ? | 19 | aucun |
+| Un avocat en droit du travail à Nice ? | 11 | SCHWAL & Associés, Maître Mathieu Michelon |
+| Quel notaire choisir à Nice ? | 9 | SCP Jean-Noël CHAMPAGNE & Laurent ROSE, ACTA |
+| Quel expert-comptable pour une petite entreprise à Nice ? | 10 | FIDUCIAL Expertise Nice, AFEC, Numbr Nice |
+| Qui peut créer le site internet de mon entreprise à Nice ? | 23 | aucun |
+| Quel consultant SEO choisir à Nice ? | 14 | Florian Zorgnotti, Nathan Fenina (Décupler) |
+| Un photographe de mariage à Nice ? | 17 | aucun |
+| Quelle auto-école choisir à Nice ? | 7 | Auto École La Lanterne, SOA Auto-école, Le Local |
+| Quelle école de français pour étrangers à Nice ? | 11 | alpha.b – Institut linguistique, Alliance Française Nice Côte d’Azur, Idiom |
+
+### Commerces
+
+| Question posée | Noms cités | Cités dans les 3 réponses |
+|---|---|---|
+| Où acheter du bon fromage à Nice ? | 13 | LA FROM., La Ferme Fromagère, Fromagerie Métin |
+| Un bon caviste à Nice ? | 12 | La Part des Anges, Pinot & Chardo, Les Caves Caprioglio, Nicolas |
+| Quelle est la meilleure pâtisserie de Nice ? | 11 | Pistache – Pâtisserie, Julien Dugourd, Philippe Tayac |
+| Un fleuriste à Nice qui livre ? | 9 | Your Flowers Nice, Jardin d’Alice, Cédric Fleurs |
+| Où acheter de l'huile d'olive de qualité à Nice ? | 11 | Nicolas Alziari, Domaine de la Source, Olio Donato |
+| Un magasin de vélos à Nice ? | 9 | Bouticycle Nice, Decathlon Nice, La Roue Libre, Two For Bike Nice |
+| Une librairie indépendante à Nice ? | 13 | Le Vestiaire à Mot, Les Indociles, La Sorbonne, L’Envolée |
+| Quel opticien choisir à Nice ? | 15 | Optic 2000, Lympia Lunetier |
+
+## Ce que ça change pour un commerce niçois
+
+Ces résultats donnent quatre pistes concrètes à une entreprise qui veut être recommandée par ChatGPT.
+
+1. **Un site qui dit clairement qui vous êtes.** C'est la source que ChatGPT cite le plus. Votre activité, votre quartier, vos horaires et vos prix doivent y figurer en toutes lettres, sur une page que les robots peuvent lire. Mon guide pour [apparaître dans ChatGPT](/blog/seo-geo-apparaitre-dans-chatgpt/) détaille les points techniques.
+2. **Être présent dans les guides locaux.** 10bestnice.com, cotedazurfrance.fr, nicetrotter.fr ou le Petit Futé pèsent plus que TripAdvisor dans ces réponses. Vérifiez si vous y figurez, et avec les bonnes informations.
+3. **Suivre une fréquence, pas une position.** Une seule réponse ne prouve rien. Posez les questions de vos clients plusieurs fois, chaque mois, comme je l'explique dans le guide pour [mesurer sa visibilité IA](/blog/mesurer-visibilite-ia-chatgpt/).
+4. **Garder une fiche Google à jour.** ChatGPT ne la cite pas, mais elle reste votre vitrine sur Google, Maps et les réponses IA de Google. Le [guide de la fiche Google Business Profile à Nice](/blog/google-business-profile-nice-guide/) donne la marche à suivre.
+
+Pour les restaurants, le guide du [référencement d'un restaurant à Nice](/blog/seo-restaurant-nice/) reprend ces points avec les plateformes du secteur.
+
+<ServiceCTA service="seo-geo" lang="fr" text="Vous voulez savoir si ChatGPT vous recommande, et sur quelles sources ? Mon audit visibilité Google + IA est gratuit et rendu en 5 jours." />
+
+## Méthode et limites du baromètre
+
+**Les questions.** 50 questions en français, réparties en six secteurs, formulées comme un particulier les pose à un assistant, sans nom d'entreprise. La liste est la même d'une édition à l'autre, pour que les mois restent comparables.
+
+**La collecte.** Le 6 novembre 2026, chaque question a été posée trois fois, dans trois conversations séparées, à l'API d'OpenAI : modèle `gpt-5-search-api`, recherche web activée, localisation approximative à Nice, sans consigne ni historique.
+
+**Le relevé.** Un second modèle (`gpt-6-luna`) a listé les établissements nommés dans chaque réponse, sans les catégories ni les plateformes. J'ai ensuite fusionné à la main les variantes d'un même nom, comme « Le Chantecler » et « Le Chantecler (Hôtel Negresco) ». Le même jour, j'ai ouvert chaque lien cité pour vérifier qu'il fonctionne.
+
+**Les limites.**
+
+- L'API n'est pas l'application ChatGPT. Le modèle peut différer, et l'application tient compte de votre compte, de votre historique et de votre position exacte. Le baromètre montre une tendance, pas la réponse exacte que verra chacun.
+- 50 questions ne couvrent pas tous les métiers, et trois passages donnent une fréquence, pas une probabilité précise.
+- Le relevé automatique peut oublier un nom ou en mal découper un, par exemple quand deux commerces sont cités ensemble.
+- Être cité n'est pas un gage de qualité, et ne pas l'être ne dit rien de l'entreprise.
+
+**Transparence.** Je suis consultant SEO et GEO à Nice : aider les entreprises à être citées par les IA, c'est mon métier. Aucune entreprise n'a payé ni n'a été prévenue. Deux questions portent sur mon secteur. Sur « Qui peut créer le site internet de mon entreprise à Nice ? », ChatGPT me cite dans une réponse sur trois ; sur « Quel consultant SEO choisir à Nice ? », dans aucune. Aucun de mes clients n'apparaît dans les réponses.
+
+**Les données.** Elles sont libres de réutilisation, avec un lien vers cette page :
+
+- [la liste des entreprises citées, réponse par réponse (CSV)](/donnees/barometre-ia-nice-2026-11.csv) ;
+- [les 150 réponses complètes, avec leurs liens (JSON)](/donnees/barometre-ia-nice-2026-11-reponses.json).
+
+Journaliste ou chercheur, vous voulez le détail d'un secteur ? Écrivez-moi depuis la [page contact](/contact/). La prochaine édition paraîtra début décembre 2026.
+
+## Questions fréquentes
+
+### Comment ChatGPT choisit-il les commerces qu'il recommande à Nice ?
+
+Dans ce baromètre, ChatGPT s'appuie surtout sur deux sources : le site des entreprises elles-mêmes, qui représente 52 % des sites cités, et les guides locaux comme 10bestnice.com, cotedazurfrance.fr ou le Petit Futé. Les adresses présentes dans plusieurs guides sont celles qui reviennent le plus souvent.
+
+### Pourquoi ChatGPT ne recommande-t-il pas toujours les mêmes adresses ?
+
+Chaque réponse est rédigée à nouveau, à partir d'une recherche web qui peut remonter des pages différentes. Sur 50 questions posées trois fois, 63 % des entreprises citées pour une question ne l'étaient que dans une réponse sur trois.
+
+### Les avis Google comptent-ils pour être recommandé par ChatGPT ?
+
+Aucune des 150 réponses ne cite une fiche Google ou Google Maps comme source. ChatGPT s'appuie plutôt sur les sites des entreprises et sur les guides locaux. La fiche Google reste en revanche essentielle pour être visible sur Google et dans ses réponses IA.
+
+### Comment être recommandé par ChatGPT quand on est un commerce à Nice ?
+
+Commencez par un site qui dit clairement ce que vous faites, où et à quel prix, puis assurez-vous d'être présent dans les guides locaux que ChatGPT cite. Ensuite, mesurez chaque mois à quelle fréquence vous apparaissez sur les questions de vos clients.
+
+### À quelle fréquence paraît le baromètre ?
+
+Chaque mois, avec les mêmes 50 questions. La prochaine édition est prévue début décembre 2026.
+
+<Callout title="À retenir">
+
+- Sur 150 réponses, ChatGPT cite 621 entreprises niçoises, mais 63 % ne reviennent qu'une fois sur trois : sa liste change à chaque question.
+- Restaurants, plages et commerces de bouche sont les plus stables ; santé et services varient presque à chaque réponse.
+- Les sources citées sont d'abord les sites des entreprises (52 %), puis les guides locaux. Google, les réseaux sociaux et la presse pèsent très peu.
+- Six entreprises recommandées renvoient vers un site qui n'existe plus.
+
+</Callout>
