@@ -19,9 +19,9 @@ librement : l'ordre de la liste est l'ordre de parution.
 - [x] SEO pour restaurants à Nice → /blog/seo-restaurant-nice/
 - [x] SEO immobilier de prestige sur la Côte d'Azur → /blog/seo-immobilier-luxe-cote-azur/
 - [x] ChatGPT Ads pas à pas → /blog/campagne-chatgpt-ads-pas-a-pas/
+- [x] Bing Webmaster Tools, Copilot et ChatGPT → /blog/bing-webmaster-tools-copilot-chatgpt/
 
 ## À écrire
-- [ ] Bing et Copilot : pourquoi Bing Webmaster Tools compte pour être visible dans ChatGPT et Copilot
 - [ ] Hôtels et locations saisonnières de la Côte d'Azur : récupérer des réservations directes face à Booking et Airbnb (SEO + GEO)
 - [ ] Refonte de site sans perdre son référencement : redirections, migration, suivi (checklist)
 - [ ] Antibes, Juan-les-Pins et Sophia Antipolis : SEO local et B2B tech (deux marchés voisins, deux stratégies)

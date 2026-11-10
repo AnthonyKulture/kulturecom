@@ -1,0 +1,60 @@
+{
+  "card": {
+    "kicker": "GEO · Côte d'Azur",
+    "title": "Copilot te cite ? *Bing* le sait",
+    "subtitle": "Bing Webmaster Tools, IndexNow, Bing Places : ce qui te rend visible dans Copilot et ChatGPT."
+  },
+  "slides": [
+    {
+      "type": "cover",
+      "eyebrow": "GEO · Nice",
+      "title": "Tu as oublié *Bing* ?",
+      "body": "Copilot, l'IA de Microsoft, cherche ses sources dans Bing."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Le chiffre",
+      "title": "5 % des recherches, *mais pas que*.",
+      "body": "Bing pèse 5,18 % des recherches en France (StatCounter, octobre 2026). Son index nourrit pourtant Copilot."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Le rapport",
+      "title": "Tes citations Copilot, *en chiffres*.",
+      "body": "Depuis février 2026, Bing Webmaster Tools montre combien de fois Copilot cite tes pages. Gratuit."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Et ChatGPT ?",
+      "title": "Bing aide, *OpenAI aussi a son robot*.",
+      "body": "Bing a longtemps compté pour la recherche de ChatGPT. Autorise aussi OAI-SearchBot dans ton robots.txt."
+    },
+    {
+      "type": "list",
+      "eyebrow": "Par où commencer",
+      "title": "Ta *checklist* Bing",
+      "items": [
+        { "t": "Importer la Search Console", "sub": "Le compte Bing est créé en quelques minutes" },
+        { "t": "Envoyer le sitemap", "sub": "Et contrôler tes pages services" },
+        { "t": "Activer IndexNow", "sub": "Pour signaler chaque vraie mise à jour" },
+        { "t": "Importer ta fiche dans Bing Places", "sub": "Catégorie, horaires et zone à vérifier" }
+      ]
+    },
+    {
+      "type": "cta",
+      "eyebrow": "Parlons-en",
+      "title": "Visible dans *Copilot et ChatGPT*.",
+      "body": "Le guide complet est en lien dans la bio.",
+      "cta": "DM « BING » et on regarde ton site ensemble."
+    }
+  ],
+  "caption": "Ton entreprise à Nice est-elle citée par Copilot quand on lui demande une adresse ?\n\nCopilot, l'IA de Microsoft, va chercher ses sources dans Bing. Bing Webmaster Tools est gratuit et montre depuis février 2026 combien de fois Copilot cite tes pages. Ajoute IndexNow et une fiche Bing Places à jour : c'est la partie du SEO à Nice, Cannes ou Monaco qu'on oublie souvent.\n\nEnregistre ce post pour ta prochaine session SEO, et envoie-le à un commerçant azuréen qui n'a jamais ouvert Bing. Le guide complet est en lien dans la bio.",
+  "hashtags": ["#seo", "#geo", "#bingwebmastertools", "#copilot", "#nice06"],
+  "stories": [
+    "Le visuel carré (card.jpg) avec un sticker lien vers https://anthonyprofit.com/blog/bing-webmaster-tools-copilot-chatgpt/ : « Le guide complet est ici ».",
+    "Sondage sur fond uni : « Ton site est inscrit sur Bing Webmaster Tools ? » Réponses : « Oui » / « C'est quoi ? ».",
+    "Slide 03 du carrousel (le rapport) avec le texte : « Copilot cite peut-être déjà ton site. Tu veux savoir combien de fois ? »",
+    "Boîte à questions : « Ta question sur Copilot, Bing ou ChatGPT ? » (les réponses donnent les prochains sujets)."
+  ],
+  "reel": "Plan 1, texte à l'écran : « Et Bing ? ». Face caméra sur la Promenade des Anglais, à Nice : « Tout le monde regarde Google. Mais Copilot, l'IA de Microsoft, cherche ses sources dans Bing. Et depuis février 2026, Bing Webmaster Tools te montre gratuitement combien de fois Copilot cite tes pages. Tu as déjà la Search Console de Google ? Tu l'importes dans Bing, ton site est vérifié en quelques minutes. » Fin : « Le guide complet est en lien dans ma bio. »"
+}

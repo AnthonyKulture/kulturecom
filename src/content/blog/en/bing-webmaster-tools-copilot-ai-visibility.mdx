@@ -1,0 +1,156 @@
+---
+lang: en
+slug: bing-webmaster-tools-copilot-ai-visibility
+translationKey: bing-copilot
+title: "Bing Webmaster Tools: why Bing matters for visibility in Copilot and ChatGPT, and how to set it up for a business in Nice, Cannes or Monaco"
+metaTitle: "Bing Webmaster Tools, Copilot and ChatGPT"
+description: "Bing Webmaster Tools for visibility in Copilot and ChatGPT: what Bing really feeds, the AI Performance report, IndexNow and Bing Places, step by step."
+keywords:
+  - Bing Webmaster Tools
+  - Bing SEO
+  - Copilot visibility
+  - ChatGPT Bing
+  - IndexNow
+  - Bing Places
+tags:
+  - SEO
+  - GEO
+  - AI
+  - Local SEO
+pillar: seo
+pubDate: 2026-11-10
+draft: false
+---
+
+import ServiceCTA from "~/components/blog/ServiceCTA.astro";
+import Callout from "~/components/blog/Callout.astro";
+
+Bing Webmaster Tools is Microsoft's version of Google Search Console, and today it is the only free, official tool that shows how often your pages are cited in Copilot's answers. Bing handles only about 5% of searches in France, but its index feeds Copilot and was long a major source for ChatGPT's search: a site that Bing indexes poorly gives up part of its visibility in AI answers.
+
+Plenty of businesses on the French Riviera look after their Search Console and have never opened Bing Webmaster Tools. Setting it up is quick and free, and it gives you data you can't get anywhere else.
+
+## How many searches does Bing get in France?
+
+Not many, if you only look at the search engine itself. According to [StatCounter](https://gs.statcounter.com/search-engine-market-share/all/france), Google had 89.24% of searches in France in October 2026 and Bing 5.18%. For a restaurant on the Cours Saleya or a law firm in Monaco, Google is still the priority by a wide margin.
+
+Stopping at that number is the mistake. Bing doesn't only serve people typing into bing.com. Other products read its index, starting with Microsoft's own AI assistants. For a Riviera business, what matters is less Bing's direct traffic than the answers it feeds elsewhere.
+
+## How are Bing and Copilot connected?
+
+Copilot, Microsoft's AI assistant (built into Windows, Edge and Bing), relies on Bing search to find pages and cite them. Microsoft is open enough about it to have built a report around it: on February 10, 2026, Bing launched an **AI Performance** report in Bing Webmaster Tools, in public preview, showing how your pages appear in Copilot, in Bing's AI-generated summaries and in some partner integrations ([Bing's announcement](https://blogs.bing.com/webmaster/February-2026/Introducing-AI-Performance-in-Bing-Webmaster-Tools-Public-Preview)).
+
+The report gives you four things:
+
+| Metric | What it measures |
+|---|---|
+| Total citations | How many times your pages were shown as a source in an AI answer over the period |
+| Average cited pages | The average number of distinct pages from your site cited per day |
+| Grounding queries | The phrases the AI used to retrieve your content (a sample, Bing notes) |
+| Page-level citations | How many times each URL was cited |
+
+A **grounding query** is the short search the AI runs in the background to find sources, which differs from the long question the user typed. If someone asks Copilot "I'm looking for an osteopath in Cannes who sees patients on Saturdays, near the Croisette", the grounding query will look more like "osteopath Cannes Saturday". That tells you which words the AI actually searches with.
+
+The report has limits. Bing shows no clicks or traffic, and doesn't say where your link sits in the answer. For a small business, it is still the only official place to see AI citations page by page.
+
+## Does ChatGPT really use Bing?
+
+Partly, and less clearly than it used to. Here is what has been established, in order:
+
+- **November 2024.** When ChatGPT search launched, an OpenAI vice president said in a Reddit AMA: "we use a set of services and Bing is an important one", [as reported by Search Engine Roundtable](https://www.seroundtable.com/bing-powers-chatgpt-search-38345.html).
+- **February 2025.** Seer Interactive compared more than 500 ChatGPT citations with Bing and Google results for the same questions: 87% of citations matched Bing's top results, against 56% for Google ([Seer's study](https://www.seerinteractive.com/insights/87-percent-of-searchgpt-citations-match-bings-top-results)). The sample is small (about a hundred questions) and the authors themselves call the findings directional.
+- **April 2025.** At the US antitrust trial against Google, Nick Turley, head of ChatGPT, said OpenAI was building its own search index, a project that would still take years, according to Courthouse News.
+- **September 2026.** GEO tool vendor Peec AI claims, based on an analysis of ChatGPT's network data, that OpenAI now relies mostly on its own index. OpenAI has confirmed nothing of the kind, and Peec AI sells a tracking tool, so read it with some distance.
+
+My reading, in November 2026: Bing is still a way into ChatGPT, but no longer the only one. OpenAI's search crawler, **OAI-SearchBot**, also needs to be able to read your site. OpenAI says so plainly in its [crawler documentation](https://developers.openai.com/api/docs/bots): to appear in ChatGPT's search answers, allow OAI-SearchBot in your robots.txt. The sensible move is to look after both, Bing and OAI-SearchBot, instead of betting on one.
+
+## How do you sign up for Bing Webmaster Tools?
+
+If you already use Google Search Console, it takes a few minutes.
+
+1. Sign in to Bing Webmaster Tools.
+2. Choose **Import from Google Search Console**. Bing pulls in your verified sites and their sitemaps, with no tag to add ([the process, as Bing describes it](https://blogs.bing.com/webmaster/september-2019/Import-sites-from-Search-Console-to-Bing-Webmaster-Tools)). Bing rechecks ownership through that connection from time to time: if you revoke access, you'll need another method (meta tag or DNS).
+3. Check that your sitemap shows up under Sitemaps, or add its URL.
+4. Run the **URL Inspection** tool on your home page and your service pages: they should be indexed.
+5. Come back three or four weeks later to **AI Performance** and to the regular search performance report.
+
+## IndexNow: telling Bing as soon as a page changes
+
+**IndexNow** is an open protocol that lets you notify search engines that a URL has been added, updated or deleted, instead of waiting for their next crawl. According to the [official IndexNow FAQ](https://www.indexnow.org/faq), it is supported by Bing, Yandex, Seznam, Naver, Yep and Amazon, a notification sent to one is shared with all of them, and you can send up to 10,000 URLs per request. Google is not part of it.
+
+Bing recommends it explicitly in its AI Performance announcement, so that AI systems cite the current version of your pages. For a Cannes hotel changing its rates ahead of the Film Festival, or a Nice caterer publishing a holiday menu, that is useful: the old version is less likely to linger in a Copilot answer.
+
+Two limits: IndexNow doesn't guarantee indexing (the FAQ says so), and I found no public measurement of its effect on Copilot citations. On WordPress, several SEO plugins offer it as an option; on a custom site, it is a request sent at publication time. Use it only for real changes.
+
+<ServiceCTA service="seo-geo" lang="en" text="I add your site to Bing Webmaster Tools, set up IndexNow and check that Copilot and ChatGPT can read it." />
+
+## Bing Places: the local listing people forget
+
+**Bing Places for Business** is Microsoft's business listing, the counterpart of a Google Business Profile. Microsoft rebuilt it in October 2025: the service moved to bing.com/forbusiness and the import from Google was improved to carry over name, hours and contact details more reliably ([Bing's announcement](https://blogs.bing.com/search/October-2025/Introducing-the-New-Bing-Places-for-Business-Built-for-Business-Owners,-Powered-by-Research)). Listings show up in Bing and Bing Maps, and Microsoft mentions deeper Copilot integrations to come.
+
+In its AI Performance announcement, Bing also advises local businesses to keep their Bing Places listing up to date. If your Google profile is clean, the import handles most of it. Then check what the import gets wrong: the category, the summer hours of a seafront business, the service area of a tradesperson in Saint-Laurent-du-Var. The [Google Business Profile guide for Nice](/en/blog/nice-google-business-profile-guide/) is a good base, since the same details need to match everywhere, character for character.
+
+## What Bing's guidelines say about GEO
+
+In late February 2026, Bing updated its webmaster guidelines and now names **GEO** (Generative Engine Optimization), defined as work on a page's eligibility to be used as a source in AI answers, with no guarantee of citation, [according to Search Engine Journal](https://www.searchenginejournal.com/bing-adds-geo-to-official-guidelines-expands-ai-abuse-definitions/568442/). Three practical points stand out:
+
+- the **NOARCHIVE** tag stops a page from being used in Copilot's answers;
+- the **NOCACHE** tag limits Copilot to the URL, title and snippet, which Bing advises against if you want full citations;
+- text written to trigger AI citations (keyword stuffing "for AI") and prompt injection attempts are listed as abuse.
+
+So check that no plugin or hosting option has added NOARCHIVE to your pages: the tag takes one line and rarely gets noticed.
+
+## Which queries should you test in Copilot in Nice, Cannes and Monaco?
+
+Before and after signing up, ask Copilot your customers' questions and note which sources it cites.
+
+| Business | French query | English query |
+|---|---|---|
+| Restaurant, Old Town Nice | « restaurant de cuisine niçoise ouvert le lundi soir Vieux-Nice » | "Niçoise restaurant open Monday night Old Town Nice" |
+| Hotel, Cannes | « hôtel avec parking près du Palais des Festivals » | "hotel with parking near Palais des Festivals Cannes" |
+| Accountant, Monaco | « expert-comptable anglophone Monaco création de société » | "English speaking accountant Monaco company setup" |
+| Tradesperson, Cagnes-sur-Mer | « électricien dépannage Cagnes-sur-Mer dimanche » | "emergency electrician Cagnes-sur-Mer" |
+
+Then compare with the grounding queries in the AI Performance report. If Copilot cites a directory or a competitor on a query that should be yours, look at what that page has and yours doesn't: an answer in the first sentence, a price table, an address in plain text. The full tracking method is in the article on [measuring AI visibility](/en/blog/measure-ai-visibility-chatgpt/).
+
+## The Bing checklist for Copilot and ChatGPT
+
+1. Create the Bing Webmaster Tools account by importing from Search Console.
+2. Submit the sitemap and check that service pages are indexed.
+3. Allow Bingbot and OAI-SearchBot in robots.txt and in the firewall.
+4. Make sure the pages you want cited carry no NOARCHIVE or NOCACHE tag.
+5. Turn on IndexNow to flag new pages and real updates.
+6. Import the Google profile into Bing Places, then fix category, hours and area.
+7. Check AI Performance every month and note the grounding queries that keep coming back.
+
+## Who can handle it for you?
+
+I'm an SEO and GEO consultant based in Nice, and I also work remotely with businesses across France and abroad. The Google + AI visibility audit is free and delivered in 5 days: it tests your presence in ChatGPT, Perplexity, Gemini and AI Overviews, checks crawler access and lists the priority actions. The SEO & GEO compliance fix, which covers this kind of technical setup, starts at €390, and monthly follow-up at €490 a month. Everything is on the [SEO & GEO](/en/seo-geo/) page. For the bigger picture, the article on [why your business doesn't show up in ChatGPT](/en/blog/seo-geo-appear-in-chatgpt/) covers the basics.
+
+<ServiceCTA service="seo-geo" lang="en" />
+
+## Frequently asked questions
+
+### Do you need to optimize your site specifically for Bing?
+
+No, a site built well for Google almost always works for Bing. The Bing-specific work comes down to signing up for Bing Webmaster Tools, the sitemap, IndexNow and the Bing Places listing. The content stays the same.
+
+### Is Bing Webmaster Tools free?
+
+Yes, Bing Webmaster Tools is free, AI Performance report included. All you need is a verified site, and importing from Google Search Console handles verification for you.
+
+### Is ranking well on Bing enough to appear in ChatGPT?
+
+No, it isn't enough. Bing was a major source for ChatGPT search, but OpenAI is building its own index and its OAI-SearchBot crawler has to be able to read your pages. Being indexed by Bing helps without guaranteeing anything.
+
+### How long before data shows up in AI Performance?
+
+Allow a few weeks after signing up, while Bing crawls and indexes the site. A small local site may show few citations: that's normal, and the trend over several months matters more than any single month.
+
+<Callout title="Key takeaways">
+
+- Bing handles only about 5% of searches in France, but its index feeds Copilot and long mattered for ChatGPT search.
+- The AI Performance report in Bing Webmaster Tools is the only free, official tool that shows your citations in Copilot.
+- Import from Search Console, sitemap, IndexNow and Bing Places: little work for data you can't get elsewhere.
+- For ChatGPT, also allow OAI-SearchBot: OpenAI relies more and more on its own index.
+
+</Callout>
