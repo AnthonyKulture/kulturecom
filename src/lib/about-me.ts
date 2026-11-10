@@ -7,15 +7,41 @@ import type { Lang } from "~/i18n/ui";
  * `y` in % of the board, `r` the tilt in degrees.
  */
 export interface Polaroid {
-  slide: string;
+  slide?: string;
+  /** Any other image (the portrait), in place of a slide. */
+  src?: string;
   height: number;
   caption: Record<Lang, string>;
+  /** Defaults to the caption. */
+  alt?: Record<Lang, string>;
   x: number;
   y: number;
   r: number;
 }
 
+/** Anthony's photo: About page, Person schema, About share image. The same
+ *  photo as LinkedIn and the freelance profiles, so search engines and LLMs
+ *  see one face for the name. */
+export const PORTRAIT = {
+  src: "/about/anthony-profit.webp",
+  og: "/about/anthony-profit-og.png",
+  alt: {
+    fr: "Anthony Profit, développeur web et consultant SEO & GEO à Nice",
+    en: "Anthony Profit, web developer and SEO & GEO consultant in Nice",
+  },
+} as const;
+
 export const POLAROIDS: Polaroid[] = [
+  // First, so it opens the phone strip.
+  {
+    src: PORTRAIT.src,
+    height: 500,
+    caption: { fr: "Anthony Profit, à Nice", en: "Anthony Profit, in Nice" },
+    alt: PORTRAIT.alt,
+    x: 79,
+    y: 72,
+    r: 2,
+  },
   { slide: "12", height: 627, caption: { fr: "Paris, sans se presser", en: "Paris, no rush" }, x: 1, y: 0, r: -3 },
   { slide: "01", height: 594, caption: { fr: "Les routes à vélo", en: "Roads by bike" }, x: 11, y: 35, r: 3.5 },
   { slide: "17", height: 621, caption: { fr: "Un court au bord de l'eau", en: "Court by the sea" }, x: 1, y: 64, r: -2 },

@@ -15,6 +15,7 @@ import { SERVICE_PAGES } from "~/lib/service-pages";
 import { GOOGLE_PROFILE, PRICE, STARTING_PRICE, formatPrice } from "~/lib/facts";
 import { caseStudyPath } from "~/lib/case-studies";
 import { AREA_SERVED } from "~/lib/schema";
+import { PORTRAIT } from "~/lib/about-me";
 
 interface Props {
   lang: Lang;
@@ -31,6 +32,8 @@ interface Props {
   // Per-page social image (og:image / twitter:image). Defaults to /og.png.
   // Blog posts pass their cover here so shares use the article image.
   ogImage?: string;
+  // Alt text of that image. Defaults to the site banner's.
+  ogImageAlt?: string;
   // Emit <meta name="robots" content="noindex"> (used by the 404 pages).
   noindex?: boolean;
 }
@@ -42,6 +45,7 @@ const {
   description,
   altPath: altPathProp,
   ogImage: ogImageProp,
+  ogImageAlt = ui[lang].meta.ogImageAlt,
   noindex = false,
 } = Astro.props;
 const dict = ui[lang];
@@ -111,7 +115,7 @@ const graph: Record<string, any>[] = [
     "@id": personId,
     "name": "Anthony Profit",
     "url": Astro.site?.toString(),
-    "image": new URL("/about/anthony-portrait.webp", Astro.site).toString(),
+    "image": new URL(PORTRAIT.src, Astro.site).toString(),
     "jobTitle": lang === "fr"
       ? "Freelance développeur web, apps & IA, SEO & brand designer"
       : "Freelance web developer, apps & AI, SEO & brand designer",
@@ -326,14 +330,14 @@ const jsonLd = { "@context": "https://schema.org", "@graph": graph };
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={dict.meta.ogImageAlt} />
+    <meta property="og:image:alt" content={ogImageAlt} />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={pageDescription} />
     <meta name="twitter:image" content={socialImage} />
-    <meta name="twitter:image:alt" content={dict.meta.ogImageAlt} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
 
     <!-- Structured data (JSON-LD) — Person + ProfessionalService + WebSite -->
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
