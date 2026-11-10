@@ -44,8 +44,8 @@ const c = getAboutMe(lang);
             <figure class="polaroid" style={`--r:${ph.r}deg`} data-intro-box={`PHOTO 0${i + 1}`} data-intro-rotate={ph.r}>
               <img
                 data-intro-plate
-                src={`/hero-slides/slide-${ph.slide}.webp`}
-                alt={ph.caption[lang]}
+                src={ph.src ?? `/hero-slides/slide-${ph.slide}.webp`}
+                alt={(ph.alt ?? ph.caption)[lang]}
                 width="500"
                 height={ph.height}
                 decoding="async"

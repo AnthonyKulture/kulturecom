@@ -6,6 +6,7 @@ import AboutHero from "~/components/AboutHero.astro";
 import IntroBlueprint from "~/components/IntroBlueprint.astro";
 import { CLIENT_LOGOS } from "~/lib/clients";
 import { GOOGLE_PROFILE } from "~/lib/facts";
+import { PORTRAIT } from "~/lib/about-me";
 
 const lang = "en" as const;
 
@@ -108,7 +109,7 @@ const refuse = [
 ];
 ---
 
-<BaseLayout lang={lang} pathname="/en/about/">
+<BaseLayout lang={lang} pathname="/en/about/" ogImage={PORTRAIT.og} ogImageAlt={PORTRAIT.alt[lang]}>
   <IntroBlueprint />
   <Nav lang={lang} altLang="fr" altLangPath="/a-propos/" />
   <main id="main-content" class="bg-[var(--color-bg)] text-[var(--color-ink)]">
