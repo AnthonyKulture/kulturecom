@@ -34,7 +34,7 @@ Références clients : Eden Rock Yacht Rental, Royal Yacht International, Sun Be
 - [ChatGPT Ads](https://anthonyprofit.com/blog/chatgpt-ads-publicite-chatgpt-guide/): la publicité dans ChatGPT, ouverte en France depuis août 2026 (fonctionnement, ciblage contextuel, accès annonceur, commerces azuréens concernés).
 - [AI Overviews et AI Mode](https://anthonyprofit.com/blog/ai-overviews-ai-mode-google-entreprises-locales/): ce que les réponses IA de Google changent pour les entreprises locales de Nice, Cannes et Monaco, et comment y être cité.
 - [Mesurer sa visibilité IA](https://anthonyprofit.com/blog/mesurer-visibilite-ia-chatgpt/): méthode pas à pas (panel de prompts, GA4, Search Console, Bing, logs) pour suivre sa présence dans ChatGPT, Perplexity, Gemini et les aperçus IA.
-- [Référencement à Cannes](https://anthonyprofit.com/blog/referencement-cannes-seo-local/): SEO local et GEO calés sur les grands événements et la clientèle internationale cannoise.
+- [Consultant SEO local à Cannes](https://anthonyprofit.com/blog/referencement-cannes-seo-local/): SEO local et GEO calés sur les grands événements et la clientèle internationale cannoise.
 - [Référencement à Monaco](https://anthonyprofit.com/blog/referencement-monaco-seo-geo/): SEO et GEO pour une clientèle internationale (.mc, hreflang, fiche Google, sources de prestige).
 - [Fiche Google Business Profile à Nice](https://anthonyprofit.com/blog/google-business-profile-nice-guide/): guide opérationnel de la fiche Google (catégories, adresse, avis, horaires spéciaux) et checklist en 15 points.
 - [Site multilingue sur la Côte d'Azur](https://anthonyprofit.com/blog/site-multilingue-cote-azur-hreflang/): structure d'URL, hreflang, adaptation des mots-clés et visibilité IA pour la clientèle étrangère.
