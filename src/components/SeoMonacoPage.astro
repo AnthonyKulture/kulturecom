@@ -1,0 +1,431 @@
+---
+// "Consultant SEO & GEO à Monaco" landing page (FR + EN). Same build as the
+// GEO Nice page: the packages and prices come from the SEO & GEO page (same
+// source), and the Monaco facts match the Monaco guide.
+import type { Lang } from "~/i18n/ui";
+import CTA from "~/components/CTA.astro";
+import Eyebrow from "~/components/Eyebrow.astro";
+import { getPosts, postPath } from "~/lib/blog";
+import { getServicePage, offerPriceText } from "~/lib/service-pages";
+import { caseStudyPath } from "~/lib/case-studies";
+import { COMMITMENT, DELAY, PRICE, formatPrice } from "~/lib/facts";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const isFr = lang === "fr";
+const seo = getServicePage("seo", lang)!;
+const pathname = isFr ? "/consultant-seo-monaco/" : "/en/seo-consultant-monaco/";
+const canonical = new URL(pathname, Astro.site).toString();
+const homeUrl = new URL(isFr ? "/" : "/en/", Astro.site).toString();
+const seoUrl = new URL(seo.path[lang], Astro.site).toString();
+const eur = (k: keyof typeof PRICE): string => formatPrice(PRICE[k], lang);
+
+// The SEO & GEO packages a Monaco client starts with: the free audit, the fix,
+// the monthly follow-up and Google Ads.
+const offers = seo.content.offers.filter(
+  (o) => o.free || o.price === "seoFix" || o.price === "seoMonthly" || o.price === "googleAdsLaunch"
+);
+
+// Guides that go deeper, by translationKey (the same articles in both languages).
+const GUIDE_KEYS = ["seo-monaco", "multilingue-riviera", "seo-immobilier-prestige", "mesurer-visibilite-ia", "seo-geo-chatgpt"];
+const guides = (await getPosts(lang))
+  .filter((p) => GUIDE_KEYS.includes(p.data.translationKey))
+  .sort((a, b) => GUIDE_KEYS.indexOf(a.data.translationKey) - GUIDE_KEYS.indexOf(b.data.translationKey));
+
+const MONACO_TRIBUNE = "https://www.monaco-tribune.com/2026/04/monaco-compte-desormais-pres-de-150-nationalites-parmi-ses-residents/";
+
+const c = isFr
+  ? {
+      name: "Consultant SEO & GEO à Monaco",
+      h1: ["Consultant SEO & GEO", "à Monaco."],
+      lead: "Je fais trouver les entreprises de Monaco sur Google et citer dans les réponses de ChatGPT, Perplexity et Gemini, en français comme en anglais. Tout commence par un audit gratuit : ce que voient vos clients, de Monte-Carlo à Londres, quand ils vous cherchent.",
+      facts: ["Audit gratuit", `Résultat en ${DELAY.seoAudit.fr}`, "Français et anglais", "Rendez-vous à Monaco ou en visio"],
+      ctaAudit: "Demander l'audit gratuit",
+      callback: "Être rappelé",
+      whyTitle: "Pourquoi Monaco ne se référence pas comme une ville française",
+      why: [
+        "Monaco est un État souverain : il a son code pays (MC), son extension de domaine (.mc) et son institut statistique, l'IMSEE. Google le traite comme un pays à part entière, avec ses propres signaux de ciblage.",
+        "La clientèle est internationale. Selon l'IMSEE, la Principauté comptait 38 857 résidents fin 2025, de 144 nationalités, et trois résidents sur quatre ne sont pas monégasques. Neuf salariés du privé sur dix y travaillent sans y habiter (Observatoire de l'emploi 2025).",
+        "Une bonne part des recherches « Monaco » part donc de Nice, d'Italie, de Londres ou de Dubaï, souvent en anglais. Un site en français seul, ou une version anglaise traduite à la machine, passe à côté de la plupart de ces clients, sur Google comme dans les IA.",
+      ],
+      sourceLabel: "Les chiffres de l'IMSEE (Monaco Tribune, avril 2026)",
+      doTitle: "Ce que je fais, concrètement",
+      do: [
+        { title: "Le test de départ", body: "Vos requêtes en français et en anglais (« Monaco », « Monte-Carlo », votre métier) testées sur Google, puis dans ChatGPT, Perplexity et Gemini : qui sort, qui est cité, sur quelles sources." },
+        { title: "Domaine et langues", body: "Le .mc, réservé aux entreprises établies à Monaco, oriente le site vers la Principauté ; un .com laisse le ciblage à la langue. Je règle la structure fr, en et x-default et je contrôle les balises hreflang." },
+        { title: "La fiche Google à la bonne adresse", body: "Monaco, Beausoleil ou Cap-d'Ail : la fiche suit l'adresse réelle et le nom réel, sans « Monaco » ajouté. Catégories, services, photos et avis en français et en anglais." },
+        { title: "Des pages en anglais qui répondent", body: "Des pages rédigées pour un lecteur anglophone, calées sur votre calendrier : un pic de recherche autour du Grand Prix ou du Monaco Yacht Show se prépare des semaines avant." },
+        { title: "Une marque cohérente partout", body: "Même nom, même adresse, même activité sur le site, la fiche Google, LinkedIn et les annuaires, avec les données structurées qui le disent aux machines. Puis les mentions dans la presse et les sources de votre secteur, que les IA recoupent avant de recommander." },
+        { title: "La mesure, chaque mois", body: "Positions sur les requêtes « Monaco » dans Search Console, visites et demandes venues de Monaco dans GA4, et le même panel de questions rejoué dans les IA." },
+      ],
+      sectorsTitle: "Les secteurs que je connais à Monaco",
+      sectorsIntro: "L'économie monégasque concentre des métiers où un seul client vaut beaucoup. Les requêtes y sont peu nombreuses, souvent en anglais, et liées au calendrier.",
+      sectors: [
+        { title: "Yachting", body: "Charter, vente, gestion : des clients qui cherchent en anglais depuis plusieurs continents, et un temps fort, le Monaco Yacht Show.", query: "yacht charter Monaco" },
+        { title: "Immobilier de prestige", body: "Pages de quartier face aux portails, site multilingue, fiche Google d'agence conforme aux règles sur les adresses.", query: "luxury real estate Monaco" },
+        { title: "Hôtellerie et restauration", body: "Fiche Google soignée, avis en plusieurs langues, pages prêtes avant le Grand Prix et la saison d'été.", query: "best restaurant Monte Carlo" },
+        { title: "Événementiel", body: "Hospitalités, soirées privées, terrasses : des recherches datées, à publier bien avant la date.", query: "Monaco Grand Prix hospitality" },
+        { title: "Banque et gestion de patrimoine", body: "Contenus factuels, sans promesse de rendement, validés par votre conformité : la commercialisation de services financiers est réservée aux sociétés agréées par la CCAF.", query: "family office Monaco" },
+      ],
+      queryLabel: "Exemple de requête",
+      offersTitle: "Les formules",
+      offersNote: "Prix nets (TVA non applicable), confirmés par écrit avec le délai après un premier échange.",
+      offersLink: "Le détail de chaque formule",
+      delay: "Délai",
+      term: "Engagement",
+      proofTitle: "Des clients à Monaco",
+      proof: "Royal Yacht International, courtier en superyachts basé à Monaco, avec des relais de Londres à Dubaï et Miami : identité visuelle, site WordPress et socle SEO pensé pour une audience internationale.",
+      proofLink: "Voir l'étude de cas",
+      proofOthers: "IBD Monaco compte aussi parmi mes clients.",
+      faqTitle: "Questions fréquentes",
+      faq: [
+        { q: "Combien coûte un consultant SEO à Monaco ?", a: `Il n'existe pas de grille officielle : le prix dépend surtout du nombre de langues et de la concurrence sur vos requêtes, souvent en anglais. En repère, un consultant SEO freelance expérimenté facture autour de 500 € HT la journée en France (baromètre des tarifs Malt, 2026). Chez moi, l'audit de visibilité Google + IA est gratuit, la mise en conformité SEO & GEO coûte dès ${eur("seoFix")} et le suivi SEO & GEO dès ${eur("seoMonthly")} par mois (${COMMITMENT.seo} mois minimum). Prix nets, TVA non applicable.` },
+        { q: "Faut-il un nom de domaine en .mc pour être visible à Monaco ?", a: "Non. Le .mc est un signal fort que le site vise Monaco, utile pour un commerce ou un cabinet dont les clients sont surtout résidents. Il est réservé aux entreprises qui ont leur siège ou un établissement à Monaco et aux titulaires d'une marque protégée à Monaco. Pour une clientèle internationale (yachting, immobilier, hôtellerie), un .com avec des versions française et anglaise reste le choix le plus simple." },
+        { q: "Une entreprise de Beausoleil ou de Cap-d'Ail peut-elle apparaître sur les recherches « Monaco » ?", a: "Oui, pour les recherches faites à proximité, puisque Google tient compte de la position de l'internaute. La fiche Google doit en revanche garder son adresse réelle et son nom réel : ajouter « Monaco » au nom, ou déclarer une simple domiciliation, enfreint les règles de Google Business Profile." },
+        { q: "Mon site doit-il être en anglais ?", a: "Pour la plupart des entreprises monégasques, oui : trois résidents sur quatre ne sont pas monégasques, et une grande partie de la clientèle cherche depuis l'étranger. Une version anglaise rédigée pour un lecteur anglophone, reliée par hreflang, compte plus que n'importe quel mot-clé. L'italien ou le russe se justifient si une part réelle de vos demandes vient de ces marchés." },
+        { q: "Travaillez-vous avec les banques et les sociétés de gestion ?", a: "Oui, avec une règle : à Monaco, la commercialisation et le démarchage de services financiers sont réservés aux sociétés agréées par la CCAF (loi n° 1.338, article 29). J'écris des contenus factuels, sans promesse de rendement, et je les fais valider par votre conformité avant publication, comme les campagnes." },
+        { q: "Êtes-vous installé à Monaco ?", a: "Non, je suis basé à Nice, à une vingtaine de minutes en train, et je viens volontiers vous rencontrer à Monaco. Ce qui compte est de connaître le marché et ses règles : je travaille avec des entreprises monégasques, dans le yachting notamment, et aussi à distance, en français ou en anglais." },
+      ],
+      guidesTitle: "Guides pour aller plus loin",
+      seoLink: "Tout le service SEO & GEO",
+    }
+  : {
+      name: "SEO & GEO consultant in Monaco",
+      h1: ["SEO & GEO consultant", "in Monaco."],
+      lead: "I get Monaco businesses found on Google and cited in the answers of ChatGPT, Perplexity and Gemini, in English as well as French. It starts with a free audit: what your clients see, from Monte Carlo to London, when they look for you.",
+      facts: ["Free audit", `Results in ${DELAY.seoAudit.en}`, "English and French", "Meetings in Monaco or by video"],
+      ctaAudit: "Request the free audit",
+      callback: "Get a call back",
+      whyTitle: "Why SEO in Monaco is not SEO for a French town",
+      why: [
+        "Monaco is a sovereign state: it has its own country code (MC), its own domain extension (.mc) and its own statistics office, IMSEE. Google treats it as a country in its own right, with its own targeting signals.",
+        "The clientele is international. According to IMSEE, the Principality had 38,857 residents at the end of 2025, from 144 nationalities, and three residents in four are not Monegasque. Nine in ten private-sector employees work there without living there (2025 employment report).",
+        "Many \"Monaco\" searches therefore start in Nice, Italy, London or Dubai, often in English. A French-only site, or a machine-translated English version, misses most of those clients, on Google and in AI answers alike.",
+      ],
+      sourceLabel: "The IMSEE figures (Monaco Tribune, April 2026)",
+      doTitle: "What I do, in practice",
+      do: [
+        { title: "The starting test", body: "Your searches in English and French (\"Monaco\", \"Monte Carlo\", your trade) tested on Google, then in ChatGPT, Perplexity and Gemini: who shows up, who gets cited, from which sources." },
+        { title: "Domain and languages", body: "A .mc, reserved for businesses established in Monaco, points the site at the Principality; a .com leaves targeting to language. I set up the fr, en and x-default structure and check the hreflang tags." },
+        { title: "The Google profile at the right address", body: "Monaco, Beausoleil or Cap-d'Ail: the profile follows your real address and real name, with no \"Monaco\" bolted on. Categories, services, photos and reviews in English and French." },
+        { title: "English pages that answer", body: "Pages written for an English-speaking reader, timed to your calendar: a search peak around the Grand Prix or the Monaco Yacht Show is prepared weeks ahead." },
+        { title: "A consistent brand everywhere", body: "Same name, address and activity on the site, the Google profile, LinkedIn and directories, with structured data that tells machines the same. Then mentions in the press and sources of your sector, which AI engines cross-check before recommending anyone." },
+        { title: "Monthly measurement", body: "Rankings on \"Monaco\" searches in Search Console, visits and leads from Monaco in GA4, and the same question panel run again in AI engines." },
+      ],
+      sectorsTitle: "The Monaco sectors I know",
+      sectorsIntro: "Monaco's economy is built on trades where a single client is worth a lot. Searches are few, often in English, and tied to the calendar.",
+      sectors: [
+        { title: "Yachting", body: "Charter, sales, management: clients who search in English from several continents, and one key date, the Monaco Yacht Show.", query: "yacht charter Monaco" },
+        { title: "Luxury real estate", body: "Neighbourhood pages against the portals, a multilingual site, an agency Google profile that follows the address rules.", query: "luxury real estate Monaco" },
+        { title: "Hotels and restaurants", body: "A polished Google profile, reviews in several languages, pages ready before the Grand Prix and the summer season.", query: "best restaurant Monte Carlo" },
+        { title: "Events", body: "Hospitality, private parties, terraces: dated searches, to publish well before the date.", query: "Monaco Grand Prix hospitality" },
+        { title: "Banking and wealth management", body: "Factual content, with no promise of returns, approved by your compliance team: marketing financial services is reserved for companies authorised by the CCAF.", query: "family office Monaco" },
+      ],
+      queryLabel: "Example search",
+      offersTitle: "Packages",
+      offersNote: "Net prices (no VAT charged), confirmed in writing with the timeline after a first call.",
+      offersLink: "Each package in detail",
+      delay: "Timeline",
+      term: "Commitment",
+      proofTitle: "Clients in Monaco",
+      proof: "Royal Yacht International, a superyacht broker based in Monaco with offices from London to Dubai and Miami: visual identity, WordPress website and an SEO foundation built for an international audience.",
+      proofLink: "See the case study",
+      proofOthers: "IBD Monaco is another of my clients.",
+      faqTitle: "Frequently asked questions",
+      faq: [
+        { q: "How much does an SEO consultant in Monaco cost?", a: `There is no official rate card: the price depends mainly on the number of languages and the competition on your searches, often in English. As a benchmark, an experienced freelance SEO consultant charges around €500 a day before VAT in France (Malt rate barometer, 2026). With me, the Google + AI visibility audit is free, the SEO & GEO compliance fix starts at ${eur("seoFix")} and SEO & GEO follow-up at ${eur("seoMonthly")} a month (${COMMITMENT.seo} months minimum). Net prices, no VAT charged.` },
+        { q: "Do I need a .mc domain to be visible in Monaco?", a: "No. A .mc is a strong signal that the site targets Monaco, useful for a shop or practice whose clients are mostly residents. It is reserved for businesses with their head office or an establishment in Monaco and for holders of a trademark protected in Monaco. For an international clientele (yachting, real estate, hospitality), a .com with English and French versions remains the simplest choice." },
+        { q: "Can a business in Beausoleil or Cap-d'Ail show up in \"Monaco\" searches?", a: "Yes, for searches made nearby, since Google takes the searcher's location into account. The Google profile must keep its real address and real name, though: adding \"Monaco\" to the name, or listing a mail-only address, breaks Google Business Profile rules." },
+        { q: "Does my site need to be in English?", a: "For most Monaco businesses, yes: three residents in four are not Monegasque, and much of the clientele searches from abroad. An English version written for an English-speaking reader, linked with hreflang, matters more than any keyword. Italian or Russian are worth it if a real share of your enquiries comes from those markets." },
+        { q: "Do you work with banks and asset managers?", a: "Yes, with one rule: in Monaco, marketing and canvassing financial services is reserved for companies authorised by the CCAF (Law No. 1.338, article 29). I write factual content, with no promise of returns, and have it approved by your compliance team before publication, campaigns included." },
+        { q: "Are you based in Monaco?", a: "No, I'm based in Nice, about twenty minutes away by train, and happy to meet you in Monaco. What counts is knowing the market and its rules: I work with Monaco businesses, in yachting in particular, and remotely too, in English or French." },
+      ],
+      guidesTitle: "Guides to go further",
+      seoLink: "The full SEO & GEO service",
+    };
+
+const h2 = "font-display text-[clamp(26px,2.8vw,40px)] leading-[1.15] text-[var(--color-ink)]";
+const sheet = (n: string, fr: string, en: string): string => (isFr ? `Planche ${n} · ${fr}` : `Sheet ${n} · ${en}`);
+
+// Structured data — Service + FAQPage + 3-level breadcrumb, joined to the
+// global graph (BaseLayout) by @id.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Service",
+      "@id": `${canonical}#service`,
+      "name": c.name,
+      "serviceType": "SEO & Generative Engine Optimization (GEO)",
+      "url": canonical,
+      "description": c.lead,
+      "provider": { "@id": `${Astro.site}#service` },
+      "areaServed": { "@type": "Country", "name": "Monaco", "sameAs": "https://www.wikidata.org/wiki/Q235" },
+      "isRelatedTo": { "@id": `${seoUrl}#service` },
+      "isPartOf": { "@id": `${Astro.site}#website` },
+      "inLanguage": isFr ? "fr-FR" : "en-US",
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${canonical}#faq`,
+      "inLanguage": isFr ? "fr-FR" : "en-US",
+      "mainEntity": c.faq.map((f) => ({
+        "@type": "Question",
+        "name": f.q,
+        "acceptedAnswer": { "@type": "Answer", "text": f.a },
+      })),
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${canonical}#breadcrumb`,
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": isFr ? "Accueil" : "Home", "item": homeUrl },
+        { "@type": "ListItem", "position": 2, "name": seo.content.name, "item": seoUrl },
+        { "@type": "ListItem", "position": 3, "name": c.name, "item": canonical },
+      ],
+    },
+  ],
+};
+---
+
+<main id="main-content" class="bg-[var(--color-bg)] text-[var(--color-ink)]">
+
+  {/* ========== HERO ========== */}
+  <section class="px-4 pb-14 pt-24 sm:px-6 md:px-12 md:pb-20 md:pt-32">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <nav aria-label={isFr ? "Fil d'Ariane" : "Breadcrumb"} class="text-[15px] text-[var(--color-ink-muted)]">
+        <a href={isFr ? "/" : "/en/"} class="underline-offset-4 hover:underline">{isFr ? "Accueil" : "Home"}</a>
+        <span aria-hidden="true"> / </span>
+        <a href={seo.path[lang]} class="underline-offset-4 hover:underline">{seo.content.name}</a>
+        <span aria-hidden="true"> / </span>
+        <span aria-current="page" class="text-[var(--color-ink)]">{c.name}</span>
+      </nav>
+      <h1 data-vapor class="mt-5 max-w-[20ch] font-display text-[clamp(34px,4.4vw,60px)] leading-[1.08] text-balance">
+        <span>{c.h1[0]} </span><span class="text-[var(--color-ink-muted)]">{c.h1[1]}</span>
+      </h1>
+      <p class="mt-5 max-w-[60ch] text-[clamp(18px,1.5vw,21px)] leading-[1.5] text-[var(--color-ink-muted)]">{c.lead}</p>
+      <ul class="mt-7 flex flex-wrap gap-2 text-[15px]">
+        {c.facts.map((f, i) => <li class:list={["fact", i === 0 && "fact--accent"]}>{f}</li>)}
+      </ul>
+      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+        <a href="#contact" data-project-open="seo" data-project-offer="0" class="btn btn-primary">{c.ctaAudit} <span aria-hidden="true">→</span></a>
+        <button type="button" data-callback-open class="text-[16px] font-medium text-[var(--color-ink)] underline underline-offset-4 hover:text-[var(--color-accent)]">
+          {c.callback}
+        </button>
+      </div>
+    </div>
+  </section>
+
+  {/* ========== WHY MONACO IS DIFFERENT ========== */}
+  <section data-surface="tint" class="bg-[var(--color-bg)] px-4 py-16 sm:px-6 md:px-12 md:py-24">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <Eyebrow label={sheet("01", "Monaco", "Monaco")} class="mb-6 md:mb-8" />
+      <h2 class={h2}>{c.whyTitle}</h2>
+      <div class="mt-8 max-w-[68ch] space-y-5 text-[17px] leading-[1.65] md:text-[18px]">
+        {c.why.map((p) => <p>{p}</p>)}
+      </div>
+      <a href={MONACO_TRIBUNE} rel="noopener" class="mt-5 inline-flex items-center gap-2 text-[17px] text-[var(--color-accent)] underline underline-offset-4 hover:text-[var(--color-accent-strong)]">
+        {c.sourceLabel} <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+  {/* ========== WHAT I DO ========== */}
+  <section class="px-4 py-16 sm:px-6 md:px-12 md:py-24">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <Eyebrow label={sheet("02", "Méthode", "Method")} class="mb-6 md:mb-8" />
+      <h2 class={h2}>{c.doTitle}</h2>
+      <ol class="mt-8 grid gap-8 sm:grid-cols-2 md:mt-10 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-10">
+        {c.do.map((step, i) => (
+          <li class="border-t-2 border-[var(--color-accent)] pt-5">
+            <span class="font-display text-[18px] text-[var(--color-accent)]">{String(i + 1).padStart(2, "0")}</span>
+            <h3 class="mt-2 text-[19px] font-medium leading-snug md:text-[20px]">{step.title}</h3>
+            <p class="mt-2 text-[16px] leading-[1.55] text-[var(--color-ink-muted)]">{step.body}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  {/* ========== SECTORS ========== */}
+  <section data-surface="tint" class="bg-[var(--color-bg)] px-4 py-16 sm:px-6 md:px-12 md:py-24">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <Eyebrow label={sheet("03", "Secteurs", "Sectors")} class="mb-6 md:mb-8" />
+      <h2 class={h2}>{c.sectorsTitle}</h2>
+      <p class="mt-6 max-w-[64ch] text-[17px] leading-[1.65] md:text-[18px]">{c.sectorsIntro}</p>
+      <ul class="mt-8 grid gap-x-8 gap-y-6 sm:grid-cols-2 md:mt-10 lg:grid-cols-3">
+        {c.sectors.map((s) => (
+          <li class="border-t border-[var(--color-border)] pt-5">
+            <h3 class="text-[19px] font-medium leading-snug md:text-[20px]">{s.title}</h3>
+            <p class="mt-2 text-[16px] leading-[1.55] text-[var(--color-ink-muted)]">{s.body}</p>
+            <p class="mt-3 text-[14px] text-[var(--color-ink-subtle)]">{c.queryLabel}{isFr ? " : " : ": "}<span class="text-[var(--color-ink)]">{isFr ? `« ${s.query} »` : `"${s.query}"`}</span></p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  {/* ========== PACKAGES (same source as the SEO & GEO page) ========== */}
+  <section id="formules" class="px-4 py-16 sm:px-6 md:px-12 md:py-24">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <Eyebrow label={sheet("04", "Formules", "Packages")} class="mb-6 md:mb-8" />
+      <h2 class={h2}>{c.offersTitle}</h2>
+      <p class="mt-3 max-w-[60ch] text-[16px] text-[var(--color-ink-muted)]">{c.offersNote}</p>
+      <ul class="mt-8 flex flex-col md:mt-10">
+        {offers.map((o) => (
+          <li class="grid gap-2 border-t border-[var(--color-border)] py-5 md:grid-cols-12 md:items-baseline md:gap-8">
+            <span class="text-[19px] font-medium md:col-span-5">{o.name}</span>
+            <span class="font-display text-[22px] text-[var(--color-accent)] md:col-span-3">{offerPriceText(o, lang)}</span>
+            <span class="text-[15px] text-[var(--color-ink-muted)] md:col-span-4">
+              {[o.delay && `${c.delay} : ${o.delay}`, o.term && `${c.term} : ${o.term}`].filter(Boolean).join(" · ")}
+            </span>
+          </li>
+        ))}
+      </ul>
+      <a href={`${seo.path[lang]}#formules`} class="mt-6 inline-flex items-center gap-2 text-[17px] text-[var(--color-accent)] underline underline-offset-4 hover:text-[var(--color-accent-strong)]">
+        {c.offersLink} <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+  {/* ========== PROOF ========== */}
+  <section class="px-4 pb-16 sm:px-6 md:px-12 md:pb-24">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <Eyebrow label={sheet("05", "Références", "References")} class="mb-6 md:mb-8" />
+      <h2 class={h2}>{c.proofTitle}</h2>
+      <div class="mt-6 max-w-[68ch] space-y-4 text-[17px] leading-[1.65] md:text-[18px]">
+        <p>
+          {c.proof}{" "}
+          <a href={caseStudyPath("royal-yacht-international", lang)} class="text-[var(--color-accent)] underline underline-offset-4 hover:text-[var(--color-accent-strong)]">{c.proofLink}</a>
+        </p>
+        <p>{c.proofOthers}</p>
+      </div>
+    </div>
+  </section>
+
+  {/* ========== FAQ ========== */}
+  <section data-surface="tint" class="bg-[var(--color-bg)] px-4 py-16 sm:px-6 md:px-12 md:py-24">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <Eyebrow label={sheet("06", "Questions", "Questions")} class="mb-6 md:mb-8" />
+    </div>
+    <div class="mx-auto grid w-full max-w-[var(--container-wide)] gap-8 md:grid-cols-12 md:gap-10">
+      <h2 class:list={[h2, "md:col-span-4"]}>{c.faqTitle}</h2>
+      <div class="md:col-span-8">
+        {c.faq.map((f) => (
+          <details class="qa">
+            <summary>
+              <h3 class="text-[18px] font-medium leading-snug md:text-[19px]">{f.q}</h3>
+              <span class="qa-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="pb-6">
+              <p class="max-w-[65ch] text-[17px] leading-[1.6] text-[var(--color-ink-muted)]">{f.a}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* ========== GUIDES + SERVICE ========== */}
+  <section class="px-4 pt-16 sm:px-6 md:px-12 md:pt-20">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <h2 class="text-[22px] font-medium">{c.guidesTitle}</h2>
+      <ul class="mt-4 grid gap-3 sm:grid-cols-2">
+        {guides.map((g) => (
+          <li>
+            <a href={postPath(g)} class="link-card group">
+              <span class="text-[17px] font-medium leading-snug">{g.data.title}</span>
+              <span aria-hidden="true" class="text-[var(--color-accent)] transition-transform duration-300 group-hover:translate-x-1">→</span>
+            </a>
+          </li>
+        ))}
+        <li>
+          <a href={seo.path[lang]} class="link-card group">
+            <span class="text-[17px] font-medium leading-snug">{c.seoLink}</span>
+            <span aria-hidden="true" class="text-[var(--color-accent)] transition-transform duration-300 group-hover:translate-x-1">→</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <CTA lang={lang} need="seo" />
+
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+</main>
+
+<style>
+  /* Same chips, FAQ rows and link cards as the service pages (ServicePage). */
+  .fact {
+    padding: 7px 14px;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+    color: var(--color-ink);
+  }
+  .fact--accent {
+    border-color: transparent;
+    background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+    color: var(--color-accent);
+    font-weight: 500;
+  }
+  #formules {
+    scroll-margin-top: 64px;
+  }
+  .qa {
+    border-bottom: 1px solid var(--color-border);
+  }
+  .qa summary {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 20px 0;
+    list-style: none;
+    cursor: pointer;
+  }
+  .qa summary::-webkit-details-marker {
+    display: none;
+  }
+  .qa-icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    margin-top: 6px;
+  }
+  .qa-icon::before,
+  .qa-icon::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: currentColor;
+    transition: transform 0.3s var(--ease-power3);
+  }
+  .qa-icon::after {
+    transform: rotate(90deg);
+  }
+  details[open] > summary .qa-icon::after {
+    transform: rotate(0deg);
+  }
+  .link-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    height: 100%;
+    padding: 18px 20px;
+    border: 1px solid var(--color-border);
+    color: var(--color-ink);
+    text-decoration: none;
+    transition: border-color 0.2s var(--ease-power3);
+  }
+  .link-card:hover {
+    border-color: color-mix(in srgb, var(--color-accent) 45%, transparent);
+  }
+</style>

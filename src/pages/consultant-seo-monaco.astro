@@ -1,0 +1,12 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import Nav from "~/components/Nav.astro";
+import SeoMonacoPage from "~/components/SeoMonacoPage.astro";
+
+const lang = "fr" as const;
+---
+
+<BaseLayout lang={lang} pathname="/consultant-seo-monaco/" altPath="/en/seo-consultant-monaco/">
+  <Nav lang={lang} altLang="en" altLangPath="/en/seo-consultant-monaco/" />
+  <SeoMonacoPage lang={lang} />
+</BaseLayout>
