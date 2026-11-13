@@ -1,0 +1,12 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import Nav from "~/components/Nav.astro";
+import WebMonacoPage from "~/components/WebMonacoPage.astro";
+
+const lang = "en" as const;
+---
+
+<BaseLayout lang={lang} pathname="/en/web-design-monaco/" altPath="/creation-site-internet-monaco/">
+  <Nav lang={lang} altLang="fr" altLangPath="/creation-site-internet-monaco/" />
+  <WebMonacoPage lang={lang} />
+</BaseLayout>

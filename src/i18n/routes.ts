@@ -12,7 +12,7 @@
 // the 404 pages) falls back to the site-wide i18n defaults.
 
 import type { Lang } from "./ui";
-import { DELAY, LOWEST_PRICE, STARTING_PRICE, formatPrice } from "~/lib/facts";
+import { DELAY, LOWEST_PRICE, PRICE, STARTING_PRICE, formatPrice } from "~/lib/facts";
 import type { ServiceId } from "~/lib/service-pages";
 
 export interface RouteMeta {
@@ -146,6 +146,14 @@ export const routes: Record<string, RouteMeta> = {
     title: `Consultant SEO & GEO à Monaco : Google et IA | Anthony Profit`,
     description:
       `Consultant SEO & GEO à Monaco : votre entreprise trouvée sur Google et citée par ChatGPT, en français et en anglais. Audit gratuit en ${DELAY.seoAudit.fr}.`,
+  },
+  "/creation-site-internet-monaco/": {
+    lang: "fr",
+    alt: "/en/web-design-monaco/",
+    crumb: "Création de site sur-mesure à Monaco",
+    title: `Création de site internet sur-mesure à Monaco | Anthony Profit`,
+    description:
+      `Création de site internet sur-mesure à Monaco : direction artistique, design et animations, site bilingue français et anglais, code rapide. Dès ${formatPrice(PRICE.webOnePage, "fr")}, identité de marque offerte.`,
   },
   "/identite-de-marque/": {
     lang: "fr",
@@ -329,6 +337,14 @@ export const routes: Record<string, RouteMeta> = {
     title: `SEO & GEO consultant in Monaco: Google and AI | Anthony Profit`,
     description:
       `SEO & GEO consultant in Monaco: get your business found on Google and cited by ChatGPT, in English and French. Free audit in ${DELAY.seoAudit.en}.`,
+  },
+  "/en/web-design-monaco/": {
+    lang: "en",
+    alt: "/creation-site-internet-monaco/",
+    crumb: "Custom web design in Monaco",
+    title: `Custom web design in Monaco | Anthony Profit`,
+    description:
+      `Custom web design in Monaco: art direction, design and animation, a bilingual English and French site, fast code. From ${formatPrice(PRICE.webOnePage, "en")}, brand identity included.`,
   },
   "/en/brand-design/": {
     lang: "en",

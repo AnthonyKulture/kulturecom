@@ -90,6 +90,7 @@ const c = isFr
         { q: "Êtes-vous installé à Monaco ?", a: "Non, je suis basé à Nice, à une vingtaine de minutes en train, et je viens volontiers vous rencontrer à Monaco. Ce qui compte est de connaître le marché et ses règles : je travaille avec des entreprises monégasques, dans le yachting notamment, et aussi à distance, en français ou en anglais." },
       ],
       guidesTitle: "Guides pour aller plus loin",
+      webMonacoLink: "Création de site sur-mesure à Monaco",
       seoLink: "Tout le service SEO & GEO",
     }
   : {
@@ -144,6 +145,7 @@ const c = isFr
         { q: "Are you based in Monaco?", a: "No, I'm based in Nice, about twenty minutes away by train, and happy to meet you in Monaco. What counts is knowing the market and its rules: I work with Monaco businesses, in yachting in particular, and remotely too, in English or French." },
       ],
       guidesTitle: "Guides to go further",
+      webMonacoLink: "Custom web design in Monaco",
       seoLink: "The full SEO & GEO service",
     };
 
@@ -342,6 +344,12 @@ const jsonLd = {
             </a>
           </li>
         ))}
+        <li>
+          <a href={isFr ? "/creation-site-internet-monaco/" : "/en/web-design-monaco/"} class="link-card group">
+            <span class="text-[17px] font-medium leading-snug">{c.webMonacoLink}</span>
+            <span aria-hidden="true" class="text-[var(--color-accent)] transition-transform duration-300 group-hover:translate-x-1">→</span>
+          </a>
+        </li>
         <li>
           <a href={seo.path[lang]} class="link-card group">
             <span class="text-[17px] font-medium leading-snug">{c.seoLink}</span>
