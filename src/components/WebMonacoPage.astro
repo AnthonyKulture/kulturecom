@@ -1,0 +1,432 @@
+---
+// "Création de site sur-mesure à Monaco" landing page (FR + EN). Same build as
+// the SEO Monaco page: the packages and prices come from the web design page
+// (same source), and the Monaco facts match the Monaco guide.
+import type { Lang } from "~/i18n/ui";
+import CTA from "~/components/CTA.astro";
+import Eyebrow from "~/components/Eyebrow.astro";
+import { getPosts, postPath } from "~/lib/blog";
+import { getServicePage, offerPriceText } from "~/lib/service-pages";
+import { caseStudyPath } from "~/lib/case-studies";
+import { DELAY, PRICE, formatPrice } from "~/lib/facts";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const isFr = lang === "fr";
+const web = getServicePage("web", lang)!;
+const pathname = isFr ? "/creation-site-internet-monaco/" : "/en/web-design-monaco/";
+const seoMonacoPath = isFr ? "/consultant-seo-monaco/" : "/en/seo-consultant-monaco/";
+const canonical = new URL(pathname, Astro.site).toString();
+const homeUrl = new URL(isFr ? "/" : "/en/", Astro.site).toString();
+const webUrl = new URL(web.path[lang], Astro.site).toString();
+const eur = (k: keyof typeof PRICE): string => formatPrice(PRICE[k], lang);
+
+const offers = web.content.offers;
+
+// Guides that go deeper, by translationKey (the same articles in both languages).
+const GUIDE_KEYS = ["multilingue-riviera", "seo-monaco", "seo-immobilier-prestige"];
+const guides = (await getPosts(lang))
+  .filter((p) => GUIDE_KEYS.includes(p.data.translationKey))
+  .sort((a, b) => GUIDE_KEYS.indexOf(a.data.translationKey) - GUIDE_KEYS.indexOf(b.data.translationKey));
+
+const MONACO_TRIBUNE = "https://www.monaco-tribune.com/2026/04/monaco-compte-desormais-pres-de-150-nationalites-parmi-ses-residents/";
+
+const c = isFr
+  ? {
+      name: "Création de site internet sur-mesure à Monaco",
+      h1: ["Création de site sur-mesure", "à Monaco."],
+      lead: "Des sites créés à partir de votre maison, pas d'un modèle, pour une clientèle qui vient du monde entier : recherche de fond, direction artistique, design et animations sur-mesure, en français et en anglais, puis un code rapide qui les porte.",
+      facts: ["Identité de marque offerte", "Site bilingue français et anglais", `Site vitrine en ${DELAY.webShowcase.fr}`, "Rendez-vous à Monaco ou en visio"],
+      ctaStart: "Démarrer un projet",
+      callback: "Être rappelé",
+      whyTitle: "Un site pour une clientèle qui vient du monde entier",
+      why: [
+        "À Monaco, votre site est souvent le premier contact avec un client qui n'est pas encore là. Selon l'IMSEE, la Principauté comptait 38 857 résidents fin 2025, de 144 nationalités, et trois résidents sur quatre ne sont pas monégasques. Une bonne part de vos clients vous découvre depuis Londres, Milan ou Dubaï, sur un téléphone, souvent en anglais.",
+        "Ces clients comparent votre site à celui des grandes maisons qu'ils connaissent. Un modèle générique, une version anglaise traduite à la machine ou une page lente suffisent à faire douter d'une entreprise qui vend du haut de gamme.",
+        "Mon travail part de ce que vous êtes : pourquoi vos clients vous choisissent, ce qui vous distingue des autres adresses de la Principauté, le ton juste dans chaque langue. Le design, les animations et le code en découlent.",
+      ],
+      sourceLabel: "Les chiffres de l'IMSEE (Monaco Tribune, avril 2026)",
+      doTitle: "Ce que comprend un site sur-mesure",
+      do: [
+        { title: "Recherche et positionnement", body: "Échanges avec vous, étude de votre marché, de vos concurrents à Monaco et ailleurs, et de vos clients. J'en tire un message clair, dans chaque langue." },
+        { title: "Direction artistique", body: "Un univers visuel qui n'appartient qu'à vous : typographie, couleurs, images, rythme. L'identité de marque (logo, charte) est offerte avec le site." },
+        { title: "Écrit en deux langues, pas traduit", body: "Des pages françaises et anglaises rédigées chacune pour son lecteur, reliées par les balises hreflang. L'italien ou le russe s'ajoutent si une part réelle de vos clients vient de ces marchés." },
+        { title: "Design et animations", body: "Maquettes haute-fidélité et animations pensées page par page, au service du propos. Vous suivez l'avancement sur une préversion en ligne." },
+        { title: "Un code rapide qui vous appartient", body: "Développement sur-mesure (Astro, React, TypeScript), Core Web Vitals au vert, accessibilité WCAG AA. Nom de domaine en .mc ou en .com selon votre clientèle. Le code et les accès sont à vous à la livraison." },
+        { title: "Prêt pour Google et les IA", body: "SEO et visibilité IA de base inclus, pages prêtes avant vos temps forts (Grand Prix, Monaco Yacht Show), et 30 jours de suivi après la mise en ligne." },
+      ],
+      sectorsTitle: "Ce que le site doit faire, selon votre métier",
+      sectorsIntro: "Les besoins changent d'un secteur à l'autre. Voici ce que je prévois le plus souvent à Monaco.",
+      sectors: [
+        { title: "Yachting", body: "Pages de flotte ou de bateaux, demandes de charter et de vente en plusieurs langues, image à la hauteur des clients que vous visez." },
+        { title: "Immobilier de prestige", body: "Pages de biens et de quartiers, formulaires de visite, site multilingue qui ne dépend pas des portails pour exister." },
+        { title: "Hôtellerie et restauration", body: "Menus et chambres à jour, réservation directe, versions anglaise et italienne, pages prêtes avant le Grand Prix et la saison d'été." },
+        { title: "Banque et gestion de patrimoine", body: "Un site sobre et précis, sans promesse de rendement : la commercialisation de services financiers est réservée aux sociétés agréées par la CCAF. Les textes sont validés par votre conformité." },
+        { title: "Mode, joaillerie et création", body: "Une direction artistique forte, des images mises en valeur, une boutique en ligne si vous vendez à distance." },
+      ],
+      offersTitle: "Les formules",
+      offersNote: "Prix nets (TVA non applicable), confirmés par écrit avec le délai après un premier échange. Les projets plus lourds (boutique en ligne, plateforme, langues supplémentaires) sont chiffrés au cadrage.",
+      offersLink: "Le détail de chaque formule",
+      delay: "Délai",
+      proofTitle: "Des maisons haut de gamme",
+      proof: "Royal Yacht International, courtier en superyachts basé à Monaco, avec des relais de Londres à Dubaï et Miami : identité visuelle, site WordPress et socle SEO pensé pour une audience internationale.",
+      proofLink: "Voir l'étude de cas",
+      proofOthers: "Hors de la Principauté, Sun Beach House (villas de luxe) et Eden Rock Yacht Rental, à Saint-Barthélemy, m'ont confié leur identité et leur site.",
+      faqTitle: "Questions fréquentes",
+      faq: [
+        { q: "Combien coûte un site internet sur-mesure à Monaco ?", a: `Il n'y a pas de prix unique : il dépend du travail de recherche et de design, du nombre de pages et de langues, des animations, des fonctionnalités et des contenus à produire. Chez moi, un site une page sur-mesure coûte ${eur("webOnePage")} et se livre en ${DELAY.webOnePage.fr} ; un site vitrine de 5 à 8 pages avec outil d'édition démarre à ${eur("webShowcase")}, livré en ${DELAY.webShowcase.fr}. L'identité de marque est offerte. Prix nets, TVA non applicable.` },
+        { q: "Mon site doit-il être en anglais ?", a: "Pour la plupart des entreprises monégasques, oui : trois résidents sur quatre ne sont pas monégasques, et une grande partie de la clientèle vous découvre depuis l'étranger. La version anglaise doit être écrite pour un lecteur anglophone, pas traduite à la machine. Je l'inclus dès la conception, avec les balises hreflang qui indiquent à Google quelle langue servir à qui." },
+        { q: "Faut-il un nom de domaine en .mc ?", a: "Pas forcément. Le .mc est réservé aux entreprises qui ont leur siège ou un établissement à Monaco et aux titulaires d'une marque protégée à Monaco ; il indique à Google que le site vise la Principauté. Pour une clientèle internationale (yachting, immobilier, hôtellerie), un .com avec des versions française et anglaise reste le choix le plus simple, et le .mc peut rediriger vers lui." },
+        { q: "Pouvez-vous refaire notre site sans perdre notre référencement ?", a: "Oui. Je repense le site avec le même travail de recherche et de direction artistique, en gardant les pages et les adresses qui vous apportent des visites : redirections 301, contenus qui performent conservés, Search Console suivie après la mise en ligne." },
+        { q: "Pourrons-nous modifier le site nous-mêmes ?", a: "Oui. J'intègre un outil d'édition simple (Sanity, Strapi ou WordPress si votre équipe le connaît déjà) pour mettre à jour textes, photos et pages dans chaque langue. Le code source, les accès et la documentation vous appartiennent à la livraison." },
+        { q: "Êtes-vous installé à Monaco ?", a: "Non, je suis basé à Nice, à une vingtaine de minutes en train, et je viens volontiers vous rencontrer à Monaco. Je travaille avec des entreprises de la Principauté, dans le yachting notamment, et aussi à distance, en français ou en anglais." },
+      ],
+      guidesTitle: "Pour aller plus loin",
+      seoMonacoLink: "Consultant SEO & GEO à Monaco",
+      webLink: "Tout le service création de site",
+    }
+  : {
+      name: "Custom web design in Monaco",
+      h1: ["Custom web design", "in Monaco."],
+      lead: "Websites created from your house, not from a template, for a clientele that comes from all over the world: in-depth research, art direction, custom design and animation, in English and French, then fast code that carries them.",
+      facts: ["Brand identity included", "Bilingual English and French", `Showcase site in ${DELAY.webShowcase.en}`, "Meetings in Monaco or by video"],
+      ctaStart: "Start a project",
+      callback: "Get a call back",
+      whyTitle: "A website for a clientele from all over the world",
+      why: [
+        "In Monaco, your website is often the first contact with a client who isn't here yet. According to IMSEE, the Principality had 38,857 residents at the end of 2025, from 144 nationalities, and three residents in four are not Monegasque. Many of your clients find you from London, Milan or Dubai, on a phone, often in English.",
+        "These clients compare your site with those of the great houses they know. A generic template, a machine-translated English version or a slow page is enough to cast doubt on a business that sells at the high end.",
+        "My work starts from who you are: why your clients choose you, what sets you apart from other names in the Principality, the right tone in each language. Design, animation and code follow from that.",
+      ],
+      sourceLabel: "The IMSEE figures (Monaco Tribune, April 2026)",
+      doTitle: "What a custom website includes",
+      do: [
+        { title: "Research and positioning", body: "Conversations with you, a look at your market, your competitors in Monaco and elsewhere, and your clients. From that I draw a clear message, in each language." },
+        { title: "Art direction", body: "A visual world that belongs to you alone: typography, colors, imagery, rhythm. Brand identity (logo, guidelines) is included free with the site." },
+        { title: "Written in two languages, not translated", body: "English and French pages each written for their reader, linked with hreflang tags. Italian or Russian are added if a real share of your clients comes from those markets." },
+        { title: "Design and animation", body: "High-fidelity mockups and animation designed page by page, in service of the message. You follow progress on a live preview." },
+        { title: "Fast code you own", body: "Custom development (Astro, React, TypeScript), green Core Web Vitals, WCAG AA accessibility. A .mc or .com domain depending on your clientele. The code and access are yours on delivery." },
+        { title: "Ready for Google and AI", body: "Baseline SEO and AI visibility included, pages ready before your key dates (Grand Prix, Monaco Yacht Show), and 30 days of follow-up after launch." },
+      ],
+      sectorsTitle: "What the site needs to do, by trade",
+      sectorsIntro: "Needs change from one sector to the next. Here is what I most often plan for in Monaco.",
+      sectors: [
+        { title: "Yachting", body: "Fleet or yacht pages, charter and sales enquiries in several languages, an image that matches the clients you are after." },
+        { title: "Luxury real estate", body: "Property and neighbourhood pages, viewing request forms, a multilingual site that doesn't depend on the portals to exist." },
+        { title: "Hotels and restaurants", body: "Up-to-date menus and rooms, direct booking, English and Italian versions, pages ready before the Grand Prix and the summer season." },
+        { title: "Banking and wealth management", body: "A sober, precise site with no promise of returns: marketing financial services is reserved for companies authorised by the CCAF. Copy is approved by your compliance team." },
+        { title: "Fashion, jewellery and design", body: "A strong art direction, imagery shown at its best, an online shop if you sell remotely." },
+      ],
+      offersTitle: "Packages",
+      offersNote: "Net prices (no VAT charged), confirmed in writing with the timeline after a first call. Heavier builds (online shop, platform, extra languages) are quoted during scoping.",
+      offersLink: "Each package in detail",
+      delay: "Timeline",
+      proofTitle: "High-end houses",
+      proof: "Royal Yacht International, a superyacht broker based in Monaco with offices from London to Dubai and Miami: visual identity, WordPress website and an SEO foundation built for an international audience.",
+      proofLink: "See the case study",
+      proofOthers: "Outside the Principality, Sun Beach House (luxury villas) and Eden Rock Yacht Rental, in Saint-Barthélemy, trusted me with their identity and website.",
+      faqTitle: "Frequently asked questions",
+      faq: [
+        { q: "How much does a custom website cost in Monaco?", a: `There is no single price: it depends on the research and design work, the number of pages and languages, the animation, the features and the content to produce. With me, a custom one-page site costs ${eur("webOnePage")} and ships in ${DELAY.webOnePage.en}; a 5 to 8-page showcase site with an editing tool starts at ${eur("webShowcase")}, delivered in ${DELAY.webShowcase.en}. Brand identity is included free. Net prices, no VAT charged.` },
+        { q: "Does my site need to be in English?", a: "For most Monaco businesses, yes: three residents in four are not Monegasque, and much of the clientele finds you from abroad. The English version must be written for an English-speaking reader, not machine-translated. I build it in from the start, with the hreflang tags that tell Google which language to serve to whom." },
+        { q: "Do I need a .mc domain?", a: "Not necessarily. A .mc is reserved for businesses with their head office or an establishment in Monaco and for holders of a trademark protected in Monaco; it tells Google the site targets the Principality. For an international clientele (yachting, real estate, hospitality), a .com with English and French versions remains the simplest choice, and the .mc can redirect to it." },
+        { q: "Can you redesign our site without losing our rankings?", a: "Yes. I rethink the site with the same research and art direction work, keeping the pages and URLs that bring you visits: 301 redirects, top-performing content kept, Search Console monitored after launch." },
+        { q: "Will we be able to edit the site ourselves?", a: "Yes. I add a simple editing tool (Sanity, Strapi, or WordPress if your team already knows it) to update text, photos and pages in each language. The source code, access and documentation are yours on delivery." },
+        { q: "Are you based in Monaco?", a: "No, I'm based in Nice, about twenty minutes away by train, and happy to meet you in Monaco. I work with businesses in the Principality, in yachting in particular, and remotely too, in English or French." },
+      ],
+      guidesTitle: "Go further",
+      seoMonacoLink: "SEO & GEO consultant in Monaco",
+      webLink: "The full web design service",
+    };
+
+const h2 = "font-display text-[clamp(26px,2.8vw,40px)] leading-[1.15] text-[var(--color-ink)]";
+const sheet = (n: string, fr: string, en: string): string => (isFr ? `Planche ${n} · ${fr}` : `Sheet ${n} · ${en}`);
+
+// Structured data — Service + FAQPage + 3-level breadcrumb, joined to the
+// global graph (BaseLayout) by @id.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Service",
+      "@id": `${canonical}#service`,
+      "name": c.name,
+      "serviceType": "Web design and development",
+      "url": canonical,
+      "description": c.lead,
+      "provider": { "@id": `${Astro.site}#service` },
+      "areaServed": { "@type": "Country", "name": "Monaco", "sameAs": "https://www.wikidata.org/wiki/Q235" },
+      "isRelatedTo": { "@id": `${webUrl}#service` },
+      "isPartOf": { "@id": `${Astro.site}#website` },
+      "inLanguage": isFr ? "fr-FR" : "en-US",
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${canonical}#faq`,
+      "inLanguage": isFr ? "fr-FR" : "en-US",
+      "mainEntity": c.faq.map((f) => ({
+        "@type": "Question",
+        "name": f.q,
+        "acceptedAnswer": { "@type": "Answer", "text": f.a },
+      })),
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${canonical}#breadcrumb`,
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": isFr ? "Accueil" : "Home", "item": homeUrl },
+        { "@type": "ListItem", "position": 2, "name": web.content.name, "item": webUrl },
+        { "@type": "ListItem", "position": 3, "name": c.name, "item": canonical },
+      ],
+    },
+  ],
+};
+---
+
+<main id="main-content" class="bg-[var(--color-bg)] text-[var(--color-ink)]">
+
+  {/* ========== HERO ========== */}
+  <section class="px-4 pb-14 pt-24 sm:px-6 md:px-12 md:pb-20 md:pt-32">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <nav aria-label={isFr ? "Fil d'Ariane" : "Breadcrumb"} class="text-[15px] text-[var(--color-ink-muted)]">
+        <a href={isFr ? "/" : "/en/"} class="underline-offset-4 hover:underline">{isFr ? "Accueil" : "Home"}</a>
+        <span aria-hidden="true"> / </span>
+        <a href={web.path[lang]} class="underline-offset-4 hover:underline">{web.content.name}</a>
+        <span aria-hidden="true"> / </span>
+        <span aria-current="page" class="text-[var(--color-ink)]">{c.name}</span>
+      </nav>
+      <h1 data-vapor class="mt-5 max-w-[20ch] font-display text-[clamp(34px,4.4vw,60px)] leading-[1.08] text-balance">
+        <span>{c.h1[0]} </span><span class="text-[var(--color-ink-muted)]">{c.h1[1]}</span>
+      </h1>
+      <p class="mt-5 max-w-[60ch] text-[clamp(18px,1.5vw,21px)] leading-[1.5] text-[var(--color-ink-muted)]">{c.lead}</p>
+      <ul class="mt-7 flex flex-wrap gap-2 text-[15px]">
+        {c.facts.map((f, i) => <li class:list={["fact", i === 0 && "fact--accent"]}>{f}</li>)}
+      </ul>
+      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+        <a href="#contact" data-project-open="web" data-project-offer="1" class="btn btn-primary">{c.ctaStart} <span aria-hidden="true">→</span></a>
+        <button type="button" data-callback-open class="text-[16px] font-medium text-[var(--color-ink)] underline underline-offset-4 hover:text-[var(--color-accent)]">
+          {c.callback}
+        </button>
+      </div>
+    </div>
+  </section>
+
+  {/* ========== WHY MONACO IS DIFFERENT ========== */}
+  <section data-surface="tint" class="bg-[var(--color-bg)] px-4 py-16 sm:px-6 md:px-12 md:py-24">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <Eyebrow label={sheet("01", "Monaco", "Monaco")} class="mb-6 md:mb-8" />
+      <h2 class={h2}>{c.whyTitle}</h2>
+      <div class="mt-8 max-w-[68ch] space-y-5 text-[17px] leading-[1.65] md:text-[18px]">
+        {c.why.map((p) => <p>{p}</p>)}
+      </div>
+      <a href={MONACO_TRIBUNE} rel="noopener" class="mt-5 inline-flex items-center gap-2 text-[17px] text-[var(--color-accent)] underline underline-offset-4 hover:text-[var(--color-accent-strong)]">
+        {c.sourceLabel} <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+  {/* ========== WHAT I DO ========== */}
+  <section class="px-4 py-16 sm:px-6 md:px-12 md:py-24">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <Eyebrow label={sheet("02", "Méthode", "Method")} class="mb-6 md:mb-8" />
+      <h2 class={h2}>{c.doTitle}</h2>
+      <ol class="mt-8 grid gap-8 sm:grid-cols-2 md:mt-10 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-10">
+        {c.do.map((step, i) => (
+          <li class="border-t-2 border-[var(--color-accent)] pt-5">
+            <span class="font-display text-[18px] text-[var(--color-accent)]">{String(i + 1).padStart(2, "0")}</span>
+            <h3 class="mt-2 text-[19px] font-medium leading-snug md:text-[20px]">{step.title}</h3>
+            <p class="mt-2 text-[16px] leading-[1.55] text-[var(--color-ink-muted)]">{step.body}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  {/* ========== SECTORS ========== */}
+  <section data-surface="tint" class="bg-[var(--color-bg)] px-4 py-16 sm:px-6 md:px-12 md:py-24">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <Eyebrow label={sheet("03", "Secteurs", "Sectors")} class="mb-6 md:mb-8" />
+      <h2 class={h2}>{c.sectorsTitle}</h2>
+      <p class="mt-6 max-w-[64ch] text-[17px] leading-[1.65] md:text-[18px]">{c.sectorsIntro}</p>
+      <ul class="mt-8 grid gap-x-8 gap-y-6 sm:grid-cols-2 md:mt-10 lg:grid-cols-3">
+        {c.sectors.map((s) => (
+          <li class="border-t border-[var(--color-border)] pt-5">
+            <h3 class="text-[19px] font-medium leading-snug md:text-[20px]">{s.title}</h3>
+            <p class="mt-2 text-[16px] leading-[1.55] text-[var(--color-ink-muted)]">{s.body}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  {/* ========== PACKAGES (same source as the SEO & GEO page) ========== */}
+  <section id="formules" class="px-4 py-16 sm:px-6 md:px-12 md:py-24">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <Eyebrow label={sheet("04", "Formules", "Packages")} class="mb-6 md:mb-8" />
+      <h2 class={h2}>{c.offersTitle}</h2>
+      <p class="mt-3 max-w-[60ch] text-[16px] text-[var(--color-ink-muted)]">{c.offersNote}</p>
+      <ul class="mt-8 flex flex-col md:mt-10">
+        {offers.map((o) => (
+          <li class="grid gap-2 border-t border-[var(--color-border)] py-5 md:grid-cols-12 md:items-baseline md:gap-8">
+            <span class="text-[19px] font-medium md:col-span-5">{o.name}</span>
+            <span class="font-display text-[22px] text-[var(--color-accent)] md:col-span-3">{offerPriceText(o, lang)}</span>
+            <span class="text-[15px] text-[var(--color-ink-muted)] md:col-span-4">
+              {o.delay && `${c.delay}${isFr ? " : " : ": "}${o.delay}`}
+            </span>
+          </li>
+        ))}
+      </ul>
+      {web.content.offersPerk && <p class="mt-6 max-w-[64ch] text-[17px] leading-[1.6]">{web.content.offersPerk}</p>}
+      <a href={`${web.path[lang]}#formules`} class="mt-6 inline-flex items-center gap-2 text-[17px] text-[var(--color-accent)] underline underline-offset-4 hover:text-[var(--color-accent-strong)]">
+        {c.offersLink} <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+  {/* ========== PROOF ========== */}
+  <section class="px-4 pb-16 sm:px-6 md:px-12 md:pb-24">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <Eyebrow label={sheet("05", "Références", "References")} class="mb-6 md:mb-8" />
+      <h2 class={h2}>{c.proofTitle}</h2>
+      <div class="mt-6 max-w-[68ch] space-y-4 text-[17px] leading-[1.65] md:text-[18px]">
+        <p>
+          {c.proof}{" "}
+          <a href={caseStudyPath("royal-yacht-international", lang)} class="text-[var(--color-accent)] underline underline-offset-4 hover:text-[var(--color-accent-strong)]">{c.proofLink}</a>
+        </p>
+        <p>{c.proofOthers}</p>
+      </div>
+    </div>
+  </section>
+
+  {/* ========== FAQ ========== */}
+  <section data-surface="tint" class="bg-[var(--color-bg)] px-4 py-16 sm:px-6 md:px-12 md:py-24">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <Eyebrow label={sheet("06", "Questions", "Questions")} class="mb-6 md:mb-8" />
+    </div>
+    <div class="mx-auto grid w-full max-w-[var(--container-wide)] gap-8 md:grid-cols-12 md:gap-10">
+      <h2 class:list={[h2, "md:col-span-4"]}>{c.faqTitle}</h2>
+      <div class="md:col-span-8">
+        {c.faq.map((f) => (
+          <details class="qa">
+            <summary>
+              <h3 class="text-[18px] font-medium leading-snug md:text-[19px]">{f.q}</h3>
+              <span class="qa-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="pb-6">
+              <p class="max-w-[65ch] text-[17px] leading-[1.6] text-[var(--color-ink-muted)]">{f.a}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* ========== GUIDES + SERVICE ========== */}
+  <section class="px-4 pt-16 sm:px-6 md:px-12 md:pt-20">
+    <div class="mx-auto w-full max-w-[var(--container-wide)]">
+      <h2 class="text-[22px] font-medium">{c.guidesTitle}</h2>
+      <ul class="mt-4 grid gap-3 sm:grid-cols-2">
+        {guides.map((g) => (
+          <li>
+            <a href={postPath(g)} class="link-card group">
+              <span class="text-[17px] font-medium leading-snug">{g.data.title}</span>
+              <span aria-hidden="true" class="text-[var(--color-accent)] transition-transform duration-300 group-hover:translate-x-1">→</span>
+            </a>
+          </li>
+        ))}
+        <li>
+          <a href={seoMonacoPath} class="link-card group">
+            <span class="text-[17px] font-medium leading-snug">{c.seoMonacoLink}</span>
+            <span aria-hidden="true" class="text-[var(--color-accent)] transition-transform duration-300 group-hover:translate-x-1">→</span>
+          </a>
+        </li>
+        <li>
+          <a href={web.path[lang]} class="link-card group">
+            <span class="text-[17px] font-medium leading-snug">{c.webLink}</span>
+            <span aria-hidden="true" class="text-[var(--color-accent)] transition-transform duration-300 group-hover:translate-x-1">→</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <CTA lang={lang} need="web" />
+
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+</main>
+
+<style>
+  /* Same chips, FAQ rows and link cards as the service pages (ServicePage). */
+  .fact {
+    padding: 7px 14px;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+    color: var(--color-ink);
+  }
+  .fact--accent {
+    border-color: transparent;
+    background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+    color: var(--color-accent);
+    font-weight: 500;
+  }
+  #formules {
+    scroll-margin-top: 64px;
+  }
+  .qa {
+    border-bottom: 1px solid var(--color-border);
+  }
+  .qa summary {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 20px 0;
+    list-style: none;
+    cursor: pointer;
+  }
+  .qa summary::-webkit-details-marker {
+    display: none;
+  }
+  .qa-icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    margin-top: 6px;
+  }
+  .qa-icon::before,
+  .qa-icon::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: currentColor;
+    transition: transform 0.3s var(--ease-power3);
+  }
+  .qa-icon::after {
+    transform: rotate(90deg);
+  }
+  details[open] > summary .qa-icon::after {
+    transform: rotate(0deg);
+  }
+  .link-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    height: 100%;
+    padding: 18px 20px;
+    border: 1px solid var(--color-border);
+    color: var(--color-ink);
+    text-decoration: none;
+    transition: border-color 0.2s var(--ease-power3);
+  }
+  .link-card:hover {
+    border-color: color-mix(in srgb, var(--color-accent) 45%, transparent);
+  }
+</style>
