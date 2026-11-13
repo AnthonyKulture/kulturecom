@@ -20,9 +20,9 @@ librement : l'ordre de la liste est l'ordre de parution.
 - [x] SEO immobilier de prestige sur la Côte d'Azur → /blog/seo-immobilier-luxe-cote-azur/
 - [x] ChatGPT Ads pas à pas → /blog/campagne-chatgpt-ads-pas-a-pas/
 - [x] Bing Webmaster Tools, Copilot et ChatGPT → /blog/bing-webmaster-tools-copilot-chatgpt/
+- [x] Réservations directes hôtels et locations saisonnières → /blog/reservations-directes-hotel-cote-azur/
 
 ## À écrire
-- [ ] Hôtels et locations saisonnières de la Côte d'Azur : récupérer des réservations directes face à Booking et Airbnb (SEO + GEO)
 - [ ] Refonte de site sans perdre son référencement : redirections, migration, suivi (checklist)
 - [ ] Antibes, Juan-les-Pins et Sophia Antipolis : SEO local et B2B tech (deux marchés voisins, deux stratégies)
 - [ ] llms.txt : à quoi sert ce fichier, ce qu'en dit Google, et faut-il en mettre un en 2026
