@@ -1,0 +1,163 @@
+---
+lang: en
+slug: website-redesign-without-losing-seo
+translationKey: refonte-seo
+title: "Website redesign without losing SEO: redirects, migration and monitoring (checklist)"
+metaTitle: "Website redesign without losing SEO"
+description: "Website redesign without losing SEO: URL inventory, 301 redirects, Search Console, Bing and AI engines. The checklist a Nice freelancer uses on every redesign."
+keywords:
+  - website redesign without losing SEO
+  - website redesign SEO
+  - site migration SEO
+  - 301 redirects redesign
+  - website redesign Nice
+tags:
+  - SEO
+  - GEO
+pillar: seo
+pubDate: 2026-11-17
+draft: false
+---
+
+import ServiceCTA from "~/components/blog/ServiceCTA.astro";
+import Callout from "~/components/blog/Callout.astro";
+
+A website redesign without losing SEO comes down to one rule: every old URL that gets traffic or links must point, through a 301 redirect, to the new page that covers the same topic. Everything else (the inventory beforehand, the launch-day checks, several weeks of Search Console monitoring) exists so you miss none of those URLs and so Google, Bing and AI engines learn that the site has changed.
+
+I redesign WordPress and Wix sites for businesses in Nice, Cannes and Monaco, and the most common reason for a traffic drop after a redesign is well known: pages that ranked moved to a new address with no redirect. Here is the method I follow, in order.
+
+## Why does a redesign make rankings drop?
+
+Google ranks URLs, not businesses. When `/plumber-nice-west/` becomes `/services/plumbing/`, Google has no way of knowing it's the same page until someone tells it. The old address returns a 404 error, links from other sites lead nowhere, and the new page starts with no history.
+
+Other frequent causes:
+
+- content that disappears in the redesign (a long page cut down to three "cleaner" lines);
+- `title` tags and descriptions replaced with default values;
+- a `noindex` tag or a `robots.txt` block left over from the staging site;
+- internal links still pointing to old URLs and going through redirect chains;
+- a site that is slower than before.
+
+A redesign can also improve rankings, as long as these points are handled from the start rather than after launch.
+
+## What should you do before the redesign?
+
+The outcome is decided before the new site exists, with three inventories.
+
+### 1. List every current URL
+
+Pull the site's addresses from several sources, because none of them is complete on its own: the XML sitemap, a crawl (Screaming Frog is free up to 500 URLs), the Search Console "Pages" report and the CMS export. Google itself recommends combining sitemaps, server logs, the CMS and Search Console in [its site move guide](https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes).
+
+### 2. Find the pages that earn traffic
+
+In Search Console, export the pages with clicks and impressions over the last 16 months (the maximum history). Add the pages that receive external links. Those are the ones to protect first: for a restaurant in Vieux-Nice it's often the menu page; for a real estate agency in Cannes, a handful of neighbourhood pages.
+
+### 3. Take a snapshot of where you stand
+
+Write down your rankings on ten or so important searches ("electrician Nice", "villa rental Cannes", "lawyer Monaco"), the speed of the main pages and, for GEO, what ChatGPT, Perplexity and Gemini answer when asked your customers' questions. Without that baseline, you can't tell afterwards whether the redesign cost you anything. The prompt panel method is covered in the article on [measuring your visibility in ChatGPT](/en/blog/measure-ai-visibility-chatgpt/).
+
+## How do you build the redirect map?
+
+The redirect map is a two-column table: old URL, new URL. For the pages that earn traffic, each row is decided by hand.
+
+| Old URL | New URL | Case |
+|---|---|---|
+| `/plumber-nice-west/` | `/plumbing/nice-west/` | same content, new address: 301 |
+| `/our-services/` and `/what-we-do/` | `/services/` | two pages merged: 301 to the merged page |
+| `/summer-offer-2023/` | none | content removed with no equivalent: 404 or 410 |
+| `/?page_id=42` | `/contact/` | old WordPress technical URL: 301 |
+
+Google's rules, which I apply as they are:
+
+- Permanent server-side redirects. Google asks for 301 or 308 where possible. 302 and 307 are temporary: Google keeps showing the old URL and doesn't treat the redirect as a canonical signal, according to [its redirects page](https://developers.google.com/search/docs/crawling-indexing/301-redirects). JavaScript redirects are best avoided, because rendering can fail.
+- Straight to the final destination. Googlebot follows up to 10 hops, but Google advises keeping chains to 3 at most, ideally. If the site has been redesigned before, update the old redirects so they point to the new page instead of chaining.
+- No mass redirects to the homepage. A page removed with no equivalent should return 404 or 410, and Google advises against redirecting many old URLs to a single irrelevant page such as the homepage.
+- A single version of the domain. Pick one (for example `https://www.` with a trailing slash) and redirect every other variant to it.
+
+On a small brochure site the table takes an hour. On a site with 2,000 products or property listings, you work with rules (URL patterns) and check the 50 top-earning pages by hand.
+
+## Should you change domain name during a redesign?
+
+If you can avoid it, do. Changing the URL structure and the domain at the same time stacks two risks and makes any traffic drop hard to diagnose. When the change is necessary (a Monaco business moving from a `.fr` to a `.mc`, a renamed brand), Search Console has the Change of Address tool. According to [Search Console help](https://support.google.com/webmasters/answer/9370220), it is only for domain or subdomain moves, requires ownership of both properties, and Google keeps acting on it for 180 days.
+
+<ServiceCTA service="creation-site-internet" lang="en" text="I redesign your site with a complete redirect map and Search Console monitored after launch." />
+
+## What should you check on launch day?
+
+On launch day, I run through this list:
+
+1. Remove the `noindex` and `robots.txt` blocks inherited from staging (Google's guide reminds you of it; in my view it's the silliest and most expensive mistake).
+2. Test the redirects with the full list of old URLs: every row must return a 301 to the right page, in a single hop.
+3. Check that every new page has a self-referencing canonical tag, its `title`, its description and a single H1.
+4. Update internal links, the menu and the footer so they point straight to the new URLs.
+5. Update hreflang tags if the site has several languages: every version must reference the new URLs. More on this in the guide to [multilingual websites on the French Riviera](/en/blog/multilingual-website-french-riviera/).
+6. Check structured data (`LocalBusiness`, `Restaurant`, `FAQPage`…) with the Rich Results Test.
+7. Submit the new sitemap in Search Console.
+
+Google says that after a migration it temporarily crawls the new site more heavily than usual. If your hosting is modest, warn your host or upgrade the plan for a while.
+
+## How do you tell Bing, ChatGPT and other AI engines?
+
+Generative engines don't read your site live for every question: ChatGPT, Copilot and Perplexity rely on search indexes and on their own crawlers. If those indexes keep the old URLs, answers can cite a page that no longer exists.
+
+What I do for GEO at launch:
+
+- Bing Webmaster Tools: submit the new sitemap. Copilot runs on Bing's index, and ChatGPT search also goes through partner search providers. The guide to [Bing Webmaster Tools, Copilot and ChatGPT](/en/blog/bing-webmaster-tools-copilot-ai-visibility/) covers setup.
+- IndexNow: send the list of changed URLs. The [IndexNow FAQ](https://www.indexnow.org/faq) explicitly asks you to submit redirected URLs and those returning 404 or 410 as well, and a submission is shared across participating engines, Bing included.
+- `robots.txt`: make sure the new site doesn't block OAI-SearchBot, PerplexityBot or Bingbot by accident (some themes and firewalls block unknown bots).
+- Your `llms.txt` file, if you have one: replace the old addresses.
+- Your Google Business Profile: update the website, menu and booking links. Do the same on the directories and platforms that link to you (Pages Jaunes, TripAdvisor, TheFork, Booking), since AI engines read those sources too.
+
+## How long should you monitor after the redesign?
+
+Google warns that for a small to medium-sized site, most pages take a few weeks to move to their new address, and that ranking fluctuations are normal in the meantime. So I watch the site closely for at least a month, then more lightly.
+
+| When | What I check |
+|---|---|
+| Day 1 to 7 | 404 errors in Search Console and server logs, missing redirects to add |
+| Day 7 to 30 | "Pages" report (indexing of the new URLs), clicks and impressions of priority pages against the snapshot |
+| Day 30 to 90 | rankings on tracked searches, AI answers to the same prompt panel |
+| At least 1 year | redirects stay in place |
+
+That last point isn't up for debate: Google asks you to keep redirects "for as long as possible, generally at least 1 year". On my projects, they stay in place for good.
+
+## When should you redesign on the French Riviera?
+
+Even a well-prepared redesign can bring a few weeks of ranking wobble, so keep them away from your high season. A Cannes restaurant that lives off the Festival in May should launch early in the year. A boat rental company in Monaco will avoid the weeks before the Grand Prix or the Monaco Yacht Show. For a hotel in Nice, autumn leaves time for everything to settle before summer bookings.
+
+I'm based in Nice and can visit your premises in Cannes or Monaco during the project, and I also work remotely for businesses across France.
+
+## How much does a redesign that protects SEO cost?
+
+With me, a redesign follows the same work as a new build: research, art direction, design, then fast code. A 5 to 8-page showcase site starts at €1,690 (3 to 5 weeks), with brand identity included free. The redirect map, a controlled launch and Search Console monitoring are part of the project. Everything is on the [web development](/en/web-development/) page.
+
+If the site has already been redesigned and traffic has dropped, the starting point is the Google + AI visibility audit, free and delivered in 5 days. The fixes (missing redirects, indexing, tags, structured data) then go through the SEO & GEO compliance fix, from €390. The packages are on the [SEO & GEO](/en/seo-geo/) page.
+
+<ServiceCTA service="seo-geo" lang="en" />
+
+## Frequently asked questions
+
+### Does a website redesign always lose rankings?
+
+No. If every URL that matters is redirected with a 301 to an equivalent page, with content and tags at least as good, Google says fluctuations are normal during a migration and that most pages of a small or medium site move over within a few weeks. Lasting losses come from forgotten pages.
+
+### How long should you keep 301 redirects?
+
+At least a year according to Google, and ideally forever. External links and bookmarks keep targeting old addresses long after the redesign, and keeping a redirect costs next to nothing.
+
+### Should you keep the same URLs in a redesign?
+
+When they're clean and readable, yes: keeping the same URL means no redirect and no risk. Only change a URL if it's genuinely bad (technical parameters, missing keywords, inconsistent structure), and redirect it with a 301 when you do.
+
+### How do you know if a redesign hurt your SEO?
+
+Compare Search Console clicks and impressions page by page, before and after launch, over equivalent periods. A drop concentrated on a few old URLs almost always points to a missing redirect or a deleted page.
+
+<Callout title="Key takeaways">
+
+- Before the redesign: a full URL list, the pages that earn traffic (16 months of Search Console) and a snapshot of rankings and AI answers.
+- A page-by-page 301 redirect map, straight to the final destination, and 404 or 410 for what is really gone.
+- On launch day: remove `noindex`, test every old URL, submit the sitemap to Google and Bing, notify IndexNow, update your Google profile.
+- Monitor for at least a month and keep redirects for at least a year, ideally forever.
+
+</Callout>

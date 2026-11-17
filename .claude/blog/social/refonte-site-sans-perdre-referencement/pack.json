@@ -1,0 +1,72 @@
+{
+  "card": {
+    "kicker": "Refonte · SEO · Nice",
+    "title": "Refaire ton site sans *perdre Google*",
+    "subtitle": "Inventaire, redirections 301, jour J et suivi : la checklist pour garder ton trafic après une refonte."
+  },
+  "slides": [
+    {
+      "type": "cover",
+      "eyebrow": "Refonte de site",
+      "title": "Nouveau site, *plus de clients* sur Google ?",
+      "body": "Ce qui fait chuter le trafic après une refonte, et comment l'éviter."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "La cause n°1",
+      "title": "Google classe des *URL*.",
+      "body": "Ta page change d'adresse sans redirection : Google la perd, et les liens vers elle ne mènent plus nulle part."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Avant la refonte",
+      "title": "Liste *toutes* tes pages.",
+      "body": "Sitemap, crawl, Search Console : repère celles qui ont des clics. Ce sont elles qu'on protège en premier."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Les redirections",
+      "title": "Une 301, *en un seul saut*.",
+      "body": "Chaque ancienne URL vers la nouvelle page du même sujet. Pas tout vers l'accueil, et pas de chaîne."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Les IA aussi",
+      "title": "Préviens Bing et *ChatGPT*.",
+      "body": "Nouveau sitemap dans Bing Webmaster Tools, IndexNow, fiche Google à jour : sinon les IA citent une page morte."
+    },
+    {
+      "type": "list",
+      "eyebrow": "Le jour J",
+      "title": "Ta *checklist*",
+      "items": [
+        { "t": "Retirer le noindex", "sub": "Hérité de la préproduction" },
+        { "t": "Tester chaque ancienne URL", "sub": "Une 301 vers la bonne page" },
+        { "t": "Soumettre le sitemap", "sub": "Search Console et Bing" },
+        { "t": "Garder les redirections", "sub": "Au moins un an, selon Google" }
+      ]
+    },
+    {
+      "type": "cta",
+      "eyebrow": "Parlons-en",
+      "title": "Une refonte qui *garde ton trafic*.",
+      "body": "Le guide complet est en lien dans la bio.",
+      "cta": "DM « REFONTE » et on regarde ton site ensemble."
+    }
+  ],
+  "caption": "Tu prépares la refonte de ton site à Nice, Cannes ou Monaco ? Attention à ton référencement.\n\nLa première cause de chute après une refonte : des pages qui changent d'adresse sans redirection 301. Avant de mettre en ligne, liste tes URL, repère celles qui rapportent dans la Search Console et redirige chacune vers sa nouvelle page. Le jour J, retire le noindex et préviens Google, Bing et les IA.\n\nEnregistre ce post avant ta refonte, et envoie-le à quelqu'un qui refait son site. Le guide complet (refonte de site, SEO, redirections) est en lien dans la bio.",
+  "hashtags": [
+    "#seo",
+    "#refontesite",
+    "#redirection301",
+    "#siteinternet",
+    "#nice06"
+  ],
+  "stories": [
+    "Le visuel carré (card.jpg) avec un sticker lien vers https://anthonyprofit.com/blog/refonte-site-sans-perdre-referencement/ : « La checklist complète est ici ».",
+    "Sondage sur fond uni : « Tu as déjà refait ton site ? » Réponses : « Oui, et j'ai perdu du trafic » / « Pas encore ».",
+    "Slide 04 du carrousel (les redirections) avec le texte : « Tes anciennes URL, elles mènent où aujourd'hui ? »",
+    "Boîte à questions : « Ta question sur la refonte de ton site ? » (les réponses donnent les prochains sujets)."
+  ],
+  "reel": "Plan 1, texte à l'écran : « Refonte = trafic perdu ? ». Face caméra sur la promenade du Paillon à Nice : « Tu refais ton site ? Avant de mettre en ligne, fais une seule chose : la liste de toutes tes anciennes adresses de pages. Google classe des URL. Si ta page menu change d'adresse sans redirection 301, Google la perd, et ton trafic avec. Donc chaque ancienne URL renvoie vers sa nouvelle page, en un seul saut, et tu gardes ces redirections au moins un an. » Fin : « La checklist complète est en lien dans ma bio. »"
+}

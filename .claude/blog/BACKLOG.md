@@ -21,9 +21,9 @@ librement : l'ordre de la liste est l'ordre de parution.
 - [x] ChatGPT Ads pas à pas → /blog/campagne-chatgpt-ads-pas-a-pas/
 - [x] Bing Webmaster Tools, Copilot et ChatGPT → /blog/bing-webmaster-tools-copilot-chatgpt/
 - [x] Réservations directes hôtels et locations saisonnières → /blog/reservations-directes-hotel-cote-azur/
+- [x] Refonte de site sans perdre son référencement → /blog/refonte-site-sans-perdre-referencement/
 
 ## À écrire
-- [ ] Refonte de site sans perdre son référencement : redirections, migration, suivi (checklist)
 - [ ] Antibes, Juan-les-Pins et Sophia Antipolis : SEO local et B2B tech (deux marchés voisins, deux stratégies)
 - [ ] llms.txt : à quoi sert ce fichier, ce qu'en dit Google, et faut-il en mettre un en 2026
 - [ ] Contenu écrit par l'IA et SEO : ce que Google sanctionne vraiment (scaled content abuse) et comment bien s'en servir

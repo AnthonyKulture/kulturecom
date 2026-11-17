@@ -1,0 +1,163 @@
+---
+lang: fr
+slug: refonte-site-sans-perdre-referencement
+translationKey: refonte-seo
+title: "Refonte de site sans perdre son référencement : redirections, migration et suivi (checklist)"
+metaTitle: "Refonte de site sans perdre son référencement"
+description: "Refonte de site sans perdre son référencement : inventaire des URL, redirections 301, Search Console, Bing et IA. La checklist d'un freelance de Nice."
+keywords:
+  - refonte de site sans perdre son référencement
+  - refonte site internet SEO
+  - migration de site SEO
+  - redirections 301 refonte
+  - refonte site Nice
+tags:
+  - SEO
+  - GEO
+pillar: seo
+pubDate: 2026-11-17
+draft: false
+---
+
+import ServiceCTA from "~/components/blog/ServiceCTA.astro";
+import Callout from "~/components/blog/Callout.astro";
+
+Une refonte de site sans perdre son référencement repose sur une règle simple : chaque ancienne URL qui reçoit du trafic ou des liens doit renvoyer, par une redirection 301, vers la nouvelle page qui traite du même sujet. Le reste (inventaire avant, vérifications le jour J, suivi dans la Search Console pendant plusieurs semaines) sert à ne rater aucune de ces URL et à prévenir Google, Bing et les moteurs IA que le site a changé.
+
+Je refais des sites WordPress ou Wix pour des entreprises de Nice, Cannes et Monaco, et la cause la plus courante d'une chute de trafic après une refonte est connue : des pages bien classées ont changé d'adresse sans redirection. Voici la méthode que j'applique, dans l'ordre.
+
+## Pourquoi une refonte fait-elle chuter le référencement ?
+
+Google classe des URL, pas des entreprises. Quand `/plombier-nice-ouest/` devient `/services/plomberie/`, Google ne sait pas que c'est la même page tant que personne ne le lui dit. L'ancienne adresse renvoie une erreur 404, les liens que d'autres sites faisaient vers elle ne mènent plus nulle part, et la nouvelle page repart sans historique.
+
+Les autres causes fréquentes :
+
+- des contenus qui disparaissent pendant la refonte (un texte long réduit à trois lignes « plus design ») ;
+- des balises `title` et des descriptions remplacées par des valeurs par défaut ;
+- une balise `noindex` ou un blocage dans le `robots.txt`, laissés en place après la préproduction ;
+- des liens internes qui pointent encore vers les anciennes URL et passent par des chaînes de redirections ;
+- un site plus lent qu'avant.
+
+Une refonte peut aussi améliorer le référencement, à condition de traiter ces points dès le départ plutôt qu'après la mise en ligne.
+
+## Que faire avant la refonte ?
+
+Tout se joue avant que le nouveau site existe, avec trois inventaires.
+
+### 1. Lister toutes les URL actuelles
+
+Récupérez les adresses du site depuis plusieurs sources, parce qu'aucune n'est complète seule : le sitemap XML, un crawl du site (Screaming Frog est gratuit jusqu'à 500 URL), le rapport « Pages » de la Search Console et l'export du CMS. Google recommande lui-même de croiser sitemaps, journaux serveur, CMS et Search Console dans [son guide des migrations](https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes?hl=fr).
+
+### 2. Repérer les pages qui rapportent
+
+Dans la Search Console, exportez les pages qui ont des clics et des impressions sur les 16 derniers mois (la durée maximale de l'historique). Ajoutez les pages qui reçoivent des liens externes. Ce sont elles qu'il faut protéger en priorité : pour un restaurant du Vieux-Nice, c'est souvent la page menu ; pour une agence immobilière de Cannes, quelques pages de quartier.
+
+### 3. Faire un instantané de l'existant
+
+Notez vos positions sur une dizaine de requêtes importantes (« électricien Nice », « location villa Cannes », « avocat Monaco »), la vitesse des pages principales et, pour le GEO, ce que répondent ChatGPT, Perplexity et Gemini quand on leur pose les questions de vos clients. Sans ce point de départ, impossible de savoir après coup si la refonte a coûté quelque chose. La méthode du panel de questions est détaillée dans l'article sur la [mesure de la visibilité dans ChatGPT](/blog/mesurer-visibilite-ia-chatgpt/).
+
+## Comment construire le plan de redirections ?
+
+Le plan de redirections est un tableau à deux colonnes : ancienne URL, nouvelle URL. Chaque ligne se décide à la main pour les pages qui rapportent.
+
+| Ancienne URL | Nouvelle URL | Cas |
+|---|---|---|
+| `/plombier-nice-ouest/` | `/plomberie/nice-ouest/` | même contenu, nouvelle adresse : 301 |
+| `/nos-services/` et `/prestations/` | `/services/` | deux pages fusionnées : 301 vers la page fusionnée |
+| `/promo-ete-2023/` | aucune | contenu supprimé sans équivalent : 404 ou 410 |
+| `/?page_id=42` | `/contact/` | ancienne URL technique de WordPress : 301 |
+
+Les règles que donne Google, et que j'applique telles quelles :
+
+- Des redirections permanentes côté serveur. Google demande des 301 ou des 308 quand c'est possible. Les 302 et 307 sont temporaires : Google continue alors d'afficher l'ancienne URL et n'en fait pas un signal canonique, selon [sa page sur les redirections](https://developers.google.com/search/docs/crawling-indexing/301-redirects?hl=fr). Les redirections en JavaScript sont à éviter, car le rendu peut échouer.
+- Des redirections directes vers la destination finale. Googlebot suit jusqu'à 10 sauts, mais Google conseille d'en rester idéalement à 3 au maximum. Si votre site a déjà connu une refonte, mettez à jour les vieilles redirections pour qu'elles pointent vers la nouvelle page au lieu de s'enchaîner.
+- Pas de redirection en masse vers l'accueil. Une page supprimée sans équivalent doit renvoyer 404 ou 410, et Google déconseille de rediriger de nombreuses anciennes URL vers une seule page sans rapport, comme l'accueil.
+- Une seule version du domaine. Choisissez une seule version (par exemple `https://www.` avec barre finale) et redirigez toutes les autres vers elle.
+
+Sur un petit site vitrine, le tableau tient en une heure. Sur un site de 2 000 produits ou d'annonces immobilières, on travaille par règles (motifs d'URL) et on vérifie à la main les 50 pages qui rapportent le plus.
+
+## Faut-il changer de nom de domaine pendant une refonte ?
+
+Si vous pouvez l'éviter, évitez-le. Changer de structure d'URL et de domaine en même temps cumule deux risques, et rend le diagnostic difficile si le trafic baisse. Quand le changement est nécessaire (une entreprise monégasque qui passe d'un `.fr` à un `.mc`, une marque renommée), la Search Console propose l'outil de changement d'adresse. D'après [l'aide de la Search Console](https://support.google.com/webmasters/answer/9370220?hl=fr), il sert uniquement aux changements de domaine ou de sous-domaine, demande d'être propriétaire des deux propriétés, et Google le prend en compte pendant 180 jours.
+
+<ServiceCTA service="creation-site-internet" lang="fr" text="Je refais votre site avec un plan de redirections complet et la Search Console suivie après la mise en ligne." />
+
+## Quoi vérifier le jour de la mise en ligne ?
+
+Le jour J, je déroule cette liste :
+
+1. Retirer le `noindex` et les blocages du `robots.txt` hérités de la préproduction (Google le rappelle dans son guide, c'est l'erreur la plus bête et la plus coûteuse).
+2. Tester les redirections avec la liste complète des anciennes URL : chaque ligne doit répondre 301 vers la bonne page, en un seul saut.
+3. Vérifier que chaque nouvelle page a une balise canonique vers elle-même, son `title`, sa description et un seul H1.
+4. Mettre à jour les liens internes, le menu et le pied de page pour qu'ils pointent directement vers les nouvelles URL.
+5. Mettre à jour les balises hreflang si le site existe en plusieurs langues : elles doivent viser les nouvelles URL dans chaque version. Le sujet est développé dans le guide du [site multilingue sur la Côte d'Azur](/blog/site-multilingue-cote-azur-hreflang/).
+6. Contrôler les données structurées (`LocalBusiness`, `Restaurant`, `FAQPage`…) avec le test des résultats enrichis.
+7. Soumettre le nouveau sitemap dans la Search Console.
+
+Google indique qu'après une migration, il explore le nouveau site plus que d'habitude pendant un temps. Si votre hébergement est léger, prévenez votre hébergeur ou montez temporairement l'offre.
+
+## Comment prévenir Bing, ChatGPT et les autres moteurs IA ?
+
+Les moteurs génératifs ne lisent pas votre site en direct à chaque question : ChatGPT, Copilot ou Perplexity s'appuient sur des index de recherche et sur leurs propres robots. Si ces index gardent les anciennes URL, les réponses peuvent citer une page qui n'existe plus.
+
+Ce que je fais pour le GEO à la mise en ligne :
+
+- Bing Webmaster Tools : soumettre le nouveau sitemap. Copilot repose sur l'index de Bing, et la recherche de ChatGPT passe elle aussi par des moteurs partenaires. Le guide sur [Bing Webmaster Tools, Copilot et ChatGPT](/blog/bing-webmaster-tools-copilot-chatgpt/) explique l'inscription.
+- IndexNow : envoyer la liste des URL modifiées. La [FAQ d'IndexNow](https://www.indexnow.org/faq) demande explicitement de soumettre aussi les URL redirigées et celles qui renvoient 404 ou 410, et la notification est partagée entre les moteurs participants, dont Bing.
+- Le `robots.txt` : vérifier que le nouveau site n'interdit pas OAI-SearchBot, PerplexityBot ou Bingbot par accident (certains thèmes et pare-feu bloquent les robots inconnus).
+- Le fichier `llms.txt`, si vous en avez un : remplacer les anciennes adresses.
+- La fiche Google Business Profile : mettre à jour le lien du site, du menu et de la prise de rendez-vous. Même chose sur les annuaires et plateformes qui renvoient vers vous (Pages Jaunes, TripAdvisor, TheFork, Booking), parce que ce sont aussi des sources que lisent les IA.
+
+## Combien de temps surveiller après la refonte ?
+
+Google prévient que, pour un site petit ou moyen, il faut quelques semaines pour que la plupart des pages soient reprises sous leur nouvelle adresse, et que des fluctuations de positions sont normales pendant ce temps. Je suis donc le site de près pendant au moins un mois, puis plus légèrement.
+
+| Quand | Ce que je regarde |
+|---|---|
+| J+1 à J+7 | erreurs 404 dans la Search Console et les journaux serveur, redirections manquantes à ajouter |
+| J+7 à J+30 | rapport « Pages » (indexation des nouvelles URL), clics et impressions des pages prioritaires comparés à l'instantané |
+| J+30 à J+90 | positions sur les requêtes suivies, réponses des IA au même panel de questions |
+| Au moins 1 an | les redirections restent en place |
+
+Ce dernier point n'est pas négociable : Google demande de garder les redirections « aussi longtemps que possible, en général au moins un an ». Chez moi, elles restent indéfiniment.
+
+## Quand faire sa refonte sur la Côte d'Azur ?
+
+Même bien préparée, une refonte peut entraîner quelques semaines de flottement dans les positions. Mieux vaut ne pas les placer sur votre haute saison. Un restaurant de Cannes qui vit du Festival en mai a intérêt à mettre en ligne en début d'année. Un loueur de bateaux à Monaco évitera les semaines qui précèdent le Grand Prix ou le Monaco Yacht Show. Pour un hôtel à Nice, l'automne laisse le temps de tout stabiliser avant les réservations d'été.
+
+Je suis basé à Nice et je peux passer voir l'établissement à Cannes ou à Monaco pendant le projet, mais je travaille aussi à distance pour des entreprises partout en France.
+
+## Combien coûte une refonte qui protège le SEO ?
+
+Chez moi, la refonte suit le même travail qu'une création : recherche, direction artistique, design, puis code rapide. Un site vitrine de 5 à 8 pages démarre à 1 690 € (3 à 5 semaines), avec l'identité de marque offerte. Le plan de redirections, la mise en ligne contrôlée et le suivi de la Search Console font partie du projet. Tout est détaillé sur la page [création de site internet](/creation-site-internet/).
+
+Si le site a déjà été refait et que le trafic a baissé, le point de départ est l'audit visibilité Google + IA, gratuit et rendu en 5 jours. Les corrections (redirections manquantes, indexation, balises, données structurées) passent ensuite par la mise en conformité SEO & GEO, dès 390 €. Les formules sont sur la page [SEO & GEO](/seo-geo/).
+
+<ServiceCTA service="seo-geo" lang="fr" />
+
+## Questions fréquentes
+
+### Une refonte de site fait-elle forcément perdre des positions ?
+
+Non. Si chaque URL qui compte est redirigée en 301 vers une page équivalente, avec des contenus et des balises au moins aussi bons, Google indique que les fluctuations sont normales pendant la migration et que la plupart des pages d'un site petit ou moyen sont reprises en quelques semaines. Les pertes durables viennent des pages oubliées.
+
+### Combien de temps garder les redirections 301 ?
+
+Au moins un an selon Google, et idéalement pour toujours. Des liens externes et des favoris continuent de viser les anciennes adresses longtemps après la refonte, et garder une redirection ne coûte presque rien.
+
+### Faut-il garder les mêmes URL lors d'une refonte ?
+
+Quand elles sont propres et lisibles, oui : garder la même URL évite toute redirection et tout risque. On ne change une URL que si elle est vraiment mauvaise (paramètres techniques, mots-clés absents, structure incohérente), et on la redirige alors en 301.
+
+### Comment savoir si une refonte a fait baisser son référencement ?
+
+Comparez les clics et impressions de la Search Console page par page, avant et après la mise en ligne, sur des périodes équivalentes. Une chute concentrée sur quelques anciennes URL signale presque toujours une redirection manquante ou une page supprimée.
+
+<Callout title="À retenir">
+
+- Avant la refonte : liste complète des URL, pages qui rapportent (Search Console sur 16 mois) et instantané des positions et des réponses IA.
+- Un plan de redirections 301 page à page, directement vers la destination finale, et 404 ou 410 pour ce qui disparaît vraiment.
+- Le jour J : retirer le `noindex`, tester toutes les anciennes URL, soumettre le sitemap à Google et à Bing, notifier IndexNow, mettre à jour la fiche Google.
+- Surveiller au moins un mois et garder les redirections au moins un an, idéalement pour toujours.
+
+</Callout>

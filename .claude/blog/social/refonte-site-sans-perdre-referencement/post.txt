@@ -1,0 +1,20 @@
+LÉGENDE DU CARROUSEL
+
+Tu prépares la refonte de ton site à Nice, Cannes ou Monaco ? Attention à ton référencement.
+
+La première cause de chute après une refonte : des pages qui changent d'adresse sans redirection 301. Avant de mettre en ligne, liste tes URL, repère celles qui rapportent dans la Search Console et redirige chacune vers sa nouvelle page. Le jour J, retire le noindex et préviens Google, Bing et les IA.
+
+Enregistre ce post avant ta refonte, et envoie-le à quelqu'un qui refait son site. Le guide complet (refonte de site, SEO, redirections) est en lien dans la bio.
+
+#seo #refontesite #redirection301 #siteinternet #nice06
+
+STORIES
+
+1. Le visuel carré (card.jpg) avec un sticker lien vers https://anthonyprofit.com/blog/refonte-site-sans-perdre-referencement/ : « La checklist complète est ici ».
+2. Sondage sur fond uni : « Tu as déjà refait ton site ? » Réponses : « Oui, et j'ai perdu du trafic » / « Pas encore ».
+3. Slide 04 du carrousel (les redirections) avec le texte : « Tes anciennes URL, elles mènent où aujourd'hui ? »
+4. Boîte à questions : « Ta question sur la refonte de ton site ? » (les réponses donnent les prochains sujets).
+
+REEL (face caméra, 30 à 45 s)
+
+Plan 1, texte à l'écran : « Refonte = trafic perdu ? ». Face caméra sur la promenade du Paillon à Nice : « Tu refais ton site ? Avant de mettre en ligne, fais une seule chose : la liste de toutes tes anciennes adresses de pages. Google classe des URL. Si ta page menu change d'adresse sans redirection 301, Google la perd, et ton trafic avec. Donc chaque ancienne URL renvoie vers sa nouvelle page, en un seul saut, et tu gardes ces redirections au moins un an. » Fin : « La checklist complète est en lien dans ma bio. »
