@@ -4,6 +4,7 @@ import Footer from "~/components/Footer.astro";
 import Analytics from "~/components/Analytics.astro";
 import Consent from "~/components/Consent.astro";
 import MobileBar from "~/components/MobileBar.astro";
+import WhatsAppFloat from "~/components/WhatsAppFloat.astro";
 import CallbackDialog from "~/components/CallbackDialog.astro";
 import ProjectDialog from "~/components/ProjectDialog.astro";
 import GyroscopeCursor from "~/components/GyroscopeCursor.astro";
@@ -360,6 +361,7 @@ const jsonLd = { "@context": "https://schema.org", "@graph": graph };
     <slot />
     <Footer lang={lang} />
     <MobileBar lang={lang} />
+    <WhatsAppFloat lang={lang} />
     <CallbackDialog lang={lang} />
     <ProjectDialog lang={lang} />
     <Consent lang={lang} />
