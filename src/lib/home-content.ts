@@ -3,7 +3,7 @@ import { servicePagePath, type ServiceId } from "~/lib/service-pages";
 import { CALLBACK, COMMITMENT, CONTACT, DELAY, PRICE, formatPrice } from "~/lib/facts";
 
 /**
- * Copy for the home page (hero + 4 doors, proof, "Conçu. Codé. Cité.",
+ * Copy for the home page (hero + 4 doors, proof, the four services,
  * recent work, FAQ) and for the contact form / callback dialog used site-wide.
  * Positioning (2026-10-21): "Conçu, codé, cité" — one person who designs,
  * builds and makes the business visible, in Google and in AI answers.
@@ -51,8 +51,13 @@ export interface HomeContent {
   doorsLabel: string;
   doors: Door[];
   trustedBy: string;
-  pillars: { word: string; body: string }[];
-  pillarsTitle: string;
+  /** Section 2: the four services, each a word, one line and its page. */
+  servicesTitle: string;
+  services: { id: ServiceId; word: string; body: string }[];
+  servicesCta: string;
+  /** Over a starting price ("À partir de"), and over a free first step. */
+  servicesFrom: string;
+  servicesFree: string;
   compare: {
     /** Second part set in the accent colour. */
     title: [string, string];
@@ -140,12 +145,16 @@ export function getHomeContent(lang: Lang): HomeContent {
         { id: "brand", title: "Lancer ou moderniser ma marque", desc: "Logo et charte graphique" },
       ],
       trustedBy: "Ils m'ont confié leur image et leur visibilité",
-      pillarsTitle: "Un seul interlocuteur, du design jusqu'aux réponses des IA.",
-      pillars: [
-        { word: "Conçu.", body: "Un design sur-mesure, pensé pour votre marque et pour que vos visiteurs passent à l'action." },
-        { word: "Codé.", body: "Un code rapide et accessible, livré avec un score Lighthouse d'au moins 95 et des Core Web Vitals au vert." },
-        { word: "Cité.", body: "Une stratégie de contenus, une veille sur votre marché et un SEO solide dès la mise en ligne, pour être trouvé sur Google et cité par ChatGPT, Perplexity ou Gemini." },
+      servicesTitle: "Quatre services, un seul interlocuteur.",
+      services: [
+        { id: "web", word: "Sites.", body: "Un site sur-mesure et rapide, qui vous ressemble." },
+        { id: "seo", word: "Visibilité.", body: "Être trouvé sur Google et recommandé par ChatGPT." },
+        { id: "apps", word: "IA.", body: "Des outils qui vous rendent des heures chaque semaine." },
+        { id: "brand", word: "Marque.", body: "Un logo et une charte qui marquent les esprits." },
       ],
+      servicesCta: "Découvrir",
+      servicesFrom: "À partir de",
+      servicesFree: "Pour commencer",
       compare: {
         title: ["Freelance, agence ou plateforme :", "ce qui change pour vous"],
         lead: "Trois façons d'avoir un site professionnel. Voici ce que chacune implique, critère par critère.",
@@ -226,12 +235,16 @@ export function getHomeContent(lang: Lang): HomeContent {
       { id: "brand", title: "Launch or refresh my brand", desc: "Logo and style guide" },
     ],
     trustedBy: "Brands that trusted me with their image and visibility",
-    pillarsTitle: "One point of contact, from design to AI answers.",
-    pillars: [
-      { word: "Designed.", body: "A custom design, built around your brand and around getting your visitors to act." },
-      { word: "Built.", body: "Fast, accessible code, shipped with a Lighthouse score of 95 or more and green Core Web Vitals." },
-      { word: "Cited.", body: "A content strategy, a close watch on your market and solid SEO from launch day, to be found on Google and cited by ChatGPT, Perplexity or Gemini." },
+    servicesTitle: "Four services, one point of contact.",
+    services: [
+      { id: "web", word: "Websites.", body: "A custom, fast website that looks like you." },
+      { id: "seo", word: "Visibility.", body: "Be found on Google and recommended by ChatGPT." },
+      { id: "apps", word: "AI.", body: "Tools that give you back hours every week." },
+      { id: "brand", word: "Brand.", body: "A logo and a style guide people remember." },
     ],
+    servicesCta: "Explore",
+    servicesFrom: "From",
+    servicesFree: "To start",
     compare: {
       title: ["Freelancer, agency or platform:", "what changes for you"],
       lead: "Three ways to get a professional website. Here is what each one means for you, point by point.",

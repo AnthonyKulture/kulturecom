@@ -32,18 +32,23 @@
   // (as long as what it uncovers), then the water.
   const ARRIVE = { phone: 1.12, wide: 1.49 };
   const WATER = { phone: 0.34, wide: 0.26 };
-  // A pause once the last word (Cité) and its line are in, before the water:
-  // time to read it (longer on phones, where it comes last with the slide).
-  const READ = { phone: 0.45, wide: 0.1 };
+  // A pause once the last line is in, before the water: time to read the
+  // services (longer on phones, where the last comes with the slide).
+  const READ = { phone: 0.45, wide: 0.15 };
   const BAR = 112; // phones: the call bar at the foot of the screen, and a margin
   // Each part takes its time, however fast the page is scrolled (seconds,
   // either way): the way in, the water. The slide and the pause to read go
   // at the pace of an ordinary scroll (px a second), no faster, even when
   // the section is behind the scroll: each word stays on the screen long
-  // enough to be read (a short one too, where the slide is long), and the
-  // pause lasts what READ of such a scroll does.
-  const TIME = { arrive: 1.8, water: { phone: 1.4, wide: 1 } };
+  // enough to be read (a short one too, where the slide is long). The pause
+  // to read lasts at least TIME.read, however fast the page is scrolled: the
+  // four services are read before the water covers them (kept short: the
+  // theatre holds the screen for it, and the reader scrolls on meanwhile).
+  const TIME = { arrive: 1.8, read: 1.2, water: { phone: 1.4, wide: 1 } };
   const SCROLL = 600;
+  // Between one line's fade and the next's (shares of the way in): the six
+  // lines (label, title, four services) all in soon after it settles.
+  const STAGGER = 0.03;
 
   const canvas = document.querySelector<HTMLCanvasElement>("[data-waterfall-dots]");
   const stage = canvas?.closest<HTMLElement>("[data-approach]");
@@ -252,16 +257,21 @@
         }
         // Without the water it ends once all of it is in: the last line, the
         // slide, and the reader scrolls on from there.
+        // (The pause starts once the last line has faded in whole: see apply.)
+        const read0 = Math.max(tl.arrive * 0.9, (0.72 + Math.max(0, lines.length - 1) * STAGGER) * tl.arrive, tl.slide0 + tl.slide);
         if (water) {
           const pause = (phone ? READ.phone : READ.wide) * vh;
-          tl.water0 = Math.max(0.88 * tl.arrive, tl.slide0 + tl.slide) + pause;
+          tl.water0 = read0 + pause;
           tl.water1 = tl.water0 + (phone ? WATER.phone : WATER.wide) * vh;
         } else tl.water0 = tl.water1 = Math.max(tl.arrive, tl.slide0 + tl.slide);
         parts = [
           [0, tl.arrive * 0.9, tl.arrive / TIME.arrive],
-          [tl.arrive * 0.9, tl.water0, SCROLL],
+          [tl.arrive * 0.9, water ? read0 : tl.water0, SCROLL],
         ];
-        if (water) parts.push([tl.water0, tl.water1, (tl.water1 - tl.water0) / (phone ? TIME.water.phone : TIME.water.wide)]);
+        if (water) {
+          parts.push([read0, tl.water0, Math.min(SCROLL, (tl.water0 - read0) / TIME.read)]);
+          parts.push([tl.water0, tl.water1, (tl.water1 - tl.water0) / (phone ? TIME.water.phone : TIME.water.wide)]);
+        }
         if (on) fit();
         measured = true;
         return { end: tl.water1, len: Math.round(tl.water1 + 0.03 * vh), rest: tl.water0 };
@@ -290,7 +300,7 @@
         // all in once all of it is above the foot of the screen (and the
         // call bar), and each one goes under as the dots close over it.
         lines.forEach((l, i) => {
-          const fade = on ? smooth(0.58 + i * 0.045, 0.72 + i * 0.045, a) : 1;
+          const fade = on ? smooth(0.58 + i * STAGGER, 0.72 + i * STAGGER, a) : 1;
           let v = fade;
           if (on && tl.slide) v = Math.min(v, clamp01((svh - (phone ? BAR : 0) - (l.bottom - shift)) / 160 + 1));
           if (level > 0) v = Math.min(v, 1 - clamp01((l.bottom - shift - edge) / (band * 0.5)));

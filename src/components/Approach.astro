@@ -1,8 +1,10 @@
 ---
-// Section 2 of the home, "Conçu. Codé. Cité.": the theatre's second layer
+// Section 2 of the home, the four services: the theatre's second layer
 // (HomeContent.astro), right after the hero's dive.
 import type { Lang } from "~/i18n/ui";
 import { getHomeContent } from "~/lib/home-content";
+import { servicePagePath, type ServiceId } from "~/lib/service-pages";
+import { FREE_ENTRY, STARTING_PRICE, formatPrice } from "~/lib/facts";
 import Eyebrow from "~/components/Eyebrow.astro";
 import WaterfallDots from "~/components/WaterfallDots.astro";
 import WaterfallScene from "~/components/WaterfallScene.astro";
@@ -13,11 +15,21 @@ interface Props {
 
 const { lang } = Astro.props;
 const c = getHomeContent(lang);
+const cap = (text: string): string => text.charAt(0).toUpperCase() + text.slice(1);
+// Each service's entry point, from the shared price list: a free first step
+// ("Audit gratuit") or a starting price ("790 €").
+const entry = (id: ServiceId): { label: string; value: string } => {
+  const free = FREE_ENTRY[id];
+  if (free) return { label: c.servicesFree, value: cap(free[lang]) };
+  return { label: c.servicesFrom, value: formatPrice(STARTING_PRICE[id]!, lang) };
+};
 const sheet = (n: string, fr: string, en: string): string => (lang === "fr" ? `Planche ${n} · ${fr}` : `Sheet ${n} · ${en}`);
 ---
 
-{/* Conçu. Codé. Cité. — the waterfall drawing on the right, the manifesto
-    rows on the left (each word facing its line). A scroll sequence
+{/* The four services — the waterfall drawing on the right, one row per
+    service on the left (its number and word facing its line and entry
+    price, then a round arrow button to its page; the whole row is the
+    link). A scroll sequence
     (WaterfallDots.astro), played in the theatre where the hero's dive ended:
     it opens inside the hiker's backpack, pulls back to the waterfall, then
     the text comes in, each of the three words condensing out of vapor as
@@ -31,19 +43,36 @@ const sheet = (n: string, fr: string, en: string): string => (lang === "fr" ? `P
   <canvas class="flood" data-flood aria-hidden="true"></canvas>
   <div class="relative z-[1] mx-auto w-full max-w-[var(--container-wide)]" data-approach-content>
     <div data-seq-item>
-      <Eyebrow label={sheet("01", "Approche", "Approach")} class="mb-6 md:mb-8" />
+      <Eyebrow label={sheet("01", "Services", "Services")} class="mb-6 md:mb-8" />
     </div>
     <div class="grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-14">
       <figure class="approach-visual lg:order-2" aria-hidden="true">
         <WaterfallScene />
       </figure>
       <div>
-        <h2 data-seq-item class="max-w-[24ch] font-display text-title">{c.pillarsTitle}</h2>
-        <ol class="pillars mt-8 md:mt-12">
-          {c.pillars.map((p) => (
-            <li data-seq-item class="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] items-center gap-5 border-t border-[var(--color-ink)]/15 py-5 md:gap-8 md:py-7">
-              <span class="pillar-word inline-block font-display text-[var(--color-accent)]" data-vapor-seq>{p.word}</span>
-              <p class="text-body text-[var(--color-ink-muted)]">{p.body}</p>
+        <h2 data-seq-item class="max-w-[24ch] font-display text-title">{c.servicesTitle}</h2>
+        <ol class="services mt-8 md:mt-10">
+          {c.services.map((sv, n) => (
+            <li data-seq-item>
+              <a href={servicePagePath(sv.id, lang)} class="service">
+                <span class="service-name">
+                  <span class="service-index" aria-hidden="true">0{n + 1}</span>
+                  <span class="service-word font-display" data-vapor-seq>{sv.word.replace(/\.$/, "")}<span class="service-dot">.</span></span>
+                </span>
+                <span class="service-body">
+                  <span class="text-body text-[var(--color-ink-muted)]">{sv.body}</span>
+                  <span class="service-price">
+                    <span class="service-price-label">{entry(sv.id).label}</span>
+                    <span class="service-price-value">{entry(sv.id).value}</span>
+                  </span>
+                </span>
+                <span class="service-btn">
+                  <span class="service-btn-label">{c.servicesCta}</span>
+                  <span class="service-btn-icon" aria-hidden="true">
+                    <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
+                  </span>
+                </span>
+              </a>
             </li>
           ))}
         </ol>
@@ -99,9 +128,167 @@ const sheet = (n: string, fr: string, en: string): string => (lang === "fr" ? `P
       max-width: none;
     }
   }
-  /* The three words share the hero title's display size. */
-  .pillars :global(.pillar-word) {
-    font-size: var(--text-display);
+  /* ===== The services ===== One row per service, the whole row a link:
+     its number and word (in ink, the full stop in the accent), its line and
+     its entry price under it, then a round arrow button. Phones: the word
+     and the button on one line, the rest under them. */
+  .service {
+    --rule: color-mix(in srgb, var(--color-ink) 10%, transparent);
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "name btn" "body body";
+    align-items: center;
+    gap: 14px 16px;
+    padding: 20px 0 22px;
+    border-top: 1px solid var(--rule);
+    color: inherit;
+    text-decoration: none;
+    isolation: isolate;
+  }
+  .services li:last-child .service {
+    border-bottom: 1px solid var(--rule);
+  }
+  @media (min-width: 640px) {
+    .service {
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr) auto;
+      grid-template-areas: "name body btn";
+      column-gap: 24px;
+      padding: 18px 0;
+    }
+  }
+  /* A wash of the accent coming up under the row on hover. */
+  .service::before {
+    content: "";
+    position: absolute;
+    inset: 0 -16px;
+    z-index: -1;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--color-accent) 7%, transparent), transparent 85%);
+    opacity: 0;
+    transition: opacity 0.6s var(--ease-power3);
+  }
+  .service-name {
+    grid-area: name;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .service-index {
+    font-family: var(--font-label);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: var(--color-ink-subtle);
+    font-variant-numeric: tabular-nums;
+  }
+  .service :global(.service-word) {
+    align-self: flex-start;
+    display: inline-block;
+    font-size: clamp(30px, 3.1vw, 48px);
     line-height: 1;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+    transition: transform 0.6s var(--ease-power3);
+  }
+  .service :global(.service-dot) {
+    color: var(--color-accent);
+  }
+  .service-body {
+    grid-area: body;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  /* The entry price: a small label over the amount, quiet but legible. */
+  .service-price {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 8px;
+    white-space: nowrap;
+  }
+  .service-price-label {
+    font-family: var(--font-label);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-ink-subtle);
+  }
+  .service-price-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  /* The button: a round arrow (its label beside it on phones only, where
+     there is room on the word's line). */
+  .service-btn {
+    grid-area: btn;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .service-btn-label {
+    font-family: var(--font-label);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+  @media (min-width: 640px) {
+    .service-btn-label {
+      display: none;
+    }
+  }
+  .service-btn-icon {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+    color: var(--color-accent);
+    transition:
+      background-color 0.4s var(--ease-power3),
+      color 0.4s var(--ease-power3),
+      transform 0.5s var(--ease-power3);
+  }
+  .service-btn-icon svg {
+    transition: transform 0.5s var(--ease-power3);
+  }
+  .service:hover::before,
+  .service:focus-visible::before {
+    opacity: 1;
+  }
+  .service:hover :global(.service-word),
+  .service:focus-visible :global(.service-word) {
+    transform: translateX(6px);
+  }
+  .service:hover .service-btn-icon,
+  .service:focus-visible .service-btn-icon {
+    background: var(--color-accent);
+    color: #ffffff;
+    transform: scale(1.06);
+  }
+  .service:hover .service-btn-icon svg,
+  .service:focus-visible .service-btn-icon svg {
+    transform: translateX(2px);
+  }
+  .service:active .service-btn-icon {
+    transform: scale(0.96);
+  }
+  .service:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .service::before,
+    .service :global(.service-word),
+    .service-btn-icon,
+    .service-btn-icon svg {
+      transition: none;
+    }
   }
 </style>
