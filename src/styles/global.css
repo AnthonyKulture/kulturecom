@@ -44,7 +44,7 @@
     "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
 
   /* Type scale — four sizes only, used everywhere on the home page:
-     display (hero title, the three manifesto words, the rating), title
+     display (hero title, the four service words, the rating), title
      (section headings), body (all running text, answers, buttons) and small
      (uppercase labels, meta). Hierarchy beyond that comes from weight and
      colour, not from another size. Classes: text-display, text-title,
