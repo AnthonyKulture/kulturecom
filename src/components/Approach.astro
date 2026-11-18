@@ -15,6 +15,7 @@ interface Props {
 
 const { lang } = Astro.props;
 const c = getHomeContent(lang);
+const cap = (text: string): string => text.charAt(0).toUpperCase() + text.slice(1);
 const sheet = (n: string, fr: string, en: string): string => (lang === "fr" ? `Planche ${n} · ${fr}` : `Sheet ${n} · ${en}`);
 ---
 
@@ -46,12 +47,12 @@ const sheet = (n: string, fr: string, en: string): string => (lang === "fr" ? `P
           {c.services.map((sv) => (
             <li data-seq-item>
               <a href={servicePagePath(sv.id, lang)} class="service">
-                <span class="service-head">
-                  <span class="service-word font-display text-[var(--color-accent)]" data-vapor-seq>{sv.word}</span>
-                  <span class="service-price">{fromPrice(sv.id, lang)}</span>
-                </span>
+                <span class="service-word font-display" data-vapor-seq>{sv.word.replace(/\.$/, "")}<span class="service-dot">.</span></span>
                 <span class="service-body text-body text-[var(--color-ink-muted)]">{sv.body}</span>
-                <span class="service-btn">{c.servicesCta}<span aria-hidden="true" class="service-arrow">→</span></span>
+                <span class="service-aside">
+                  <span class="service-price">{cap(fromPrice(sv.id, lang) ?? "")}</span>
+                  <span class="service-btn">{c.servicesCta}<span aria-hidden="true" class="service-arrow">→</span></span>
+                </span>
               </a>
             </li>
           ))}
@@ -109,13 +110,13 @@ const sheet = (n: string, fr: string, en: string): string => (lang === "fr" ? `P
     }
   }
   /* ===== The services ===== One row per service, the whole row a link:
-     the word (the hero title's display size) facing its line, its starting
-     price and its button. Phones: the word above the rest. */
+     the word (the hero title's display size, in ink, its full stop in the
+     accent), its line, then its starting price over its button. Phones: one
+     above the other, the price and the button side by side at the foot. */
   .service {
     position: relative;
     display: grid;
-    grid-template-areas: "head" "body" "btn";
-    justify-items: start;
+    grid-template-areas: "word" "body" "aside";
     gap: 10px;
     padding: 18px 0;
     border-top: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
@@ -126,45 +127,43 @@ const sheet = (n: string, fr: string, en: string): string => (lang === "fr" ? `P
   .services li:last-child .service {
     border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
   }
-  /* Tablets: the word and its price facing the line and the button. */
+  /* Tablets: the word facing its line, the price and the button under it. */
   @media (min-width: 640px) {
     .service {
       grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-      grid-template-areas: "head body" "head btn";
+      grid-template-areas: "word body" "word aside";
       align-items: center;
       column-gap: 32px;
       row-gap: 12px;
       padding: 20px 0;
     }
   }
-  /* Wide screens (half the page): all on one row, the button at its end. */
-  @media (min-width: 1024px) {
+  /* Wide screens (half the page, once it has room for three columns): all
+     on one row, the price over the button at its end. */
+  @media (min-width: 1280px) {
     .service {
-      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr) auto;
-      grid-template-areas: "head body btn";
+      grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr) auto;
+      grid-template-areas: "word body aside";
       column-gap: 24px;
-      padding: 18px 0;
-    }
-  }
-  .service-head {
-    grid-area: head;
-    display: flex;
-    width: 100%;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 6px 16px;
-  }
-  @media (min-width: 640px) {
-    .service-head {
-      flex-direction: column;
-      align-items: flex-start;
+      padding: 16px 0;
     }
   }
   .service-body {
     grid-area: body;
   }
-  .service-btn {
-    grid-area: btn;
+  .service-aside {
+    grid-area: aside;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  @media (min-width: 1280px) {
+    .service-aside {
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
   }
   /* A wash of the accent sweeping in under the row on hover. */
   .service::before {
@@ -178,18 +177,27 @@ const sheet = (n: string, fr: string, en: string): string => (lang === "fr" ? `P
     transition: transform 0.5s var(--ease-power3);
   }
   .service :global(.service-word) {
+    grid-area: word;
+    justify-self: start;
     display: inline-block;
     font-size: var(--text-display);
     line-height: 1;
+    color: var(--color-ink);
     transition: transform 0.5s var(--ease-power3);
   }
-  .service-price {
-    font-family: var(--font-label);
-    font-size: var(--text-small);
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+  .service :global(.service-dot) {
     color: var(--color-accent);
+  }
+  /* The price, a tag in the accent: apart from the word, read at a glance. */
+  .service-price {
+    display: inline-block;
+    padding: 3px 10px;
+    background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+    white-space: nowrap;
+    color: var(--color-accent-strong);
   }
   .service-btn {
     display: inline-flex;
