@@ -1,0 +1,136 @@
+---
+import type { Lang } from "~/i18n/ui";
+import { getFormContent } from "~/lib/home-content";
+import { CONTACT } from "~/lib/facts";
+
+// Floating WhatsApp button, bottom right on every page: opens a chat with
+// the message of the contact block (CTA.astro). It comes in once the reader
+// has scrolled a little (on the home, the hero's logos sit in that corner),
+// steps aside while the cookie banner (same corner) or the menu is up, and on
+// phones rises above the action bar when it is there (MobileBar.astro).
+// Clicks count as leads: Analytics.astro tracks every wa.me link.
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const f = getFormContent(lang);
+const href = `https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(f.whatsappMessage)}`;
+const label = lang === "fr" ? "Écrire sur WhatsApp" : "Message me on WhatsApp";
+---
+
+<a href={href} target="_blank" rel="noopener noreferrer" class="wa-float" data-wa-float data-visible="false" aria-label={label}>
+  <svg aria-hidden="true" viewBox="0 0 32 32" width="28" height="28" fill="currentColor">
+    <path d="M16.04 3C8.86 3 3.03 8.82 3.03 16c0 2.29.6 4.53 1.74 6.5L3 29l6.68-1.75A12.95 12.95 0 0 0 16.04 29C23.2 29 29 23.18 29 16S23.2 3 16.04 3Zm0 23.8c-1.98 0-3.92-.53-5.61-1.53l-.4-.24-3.96 1.04 1.06-3.86-.26-.4A10.76 10.76 0 0 1 5.22 16c0-5.96 4.85-10.8 10.82-10.8 5.96 0 10.8 4.84 10.8 10.8 0 5.96-4.84 10.8-10.8 10.8Zm5.93-8.08c-.32-.16-1.92-.95-2.22-1.06-.3-.11-.51-.16-.73.16-.22.32-.84 1.06-1.03 1.27-.19.22-.38.24-.7.08-.33-.16-1.37-.5-2.6-1.6-.97-.86-1.62-1.92-1.81-2.25-.19-.32-.02-.5.14-.66.15-.15.33-.38.49-.57.16-.19.21-.32.32-.54.11-.22.05-.4-.03-.57-.08-.16-.73-1.76-1-2.4-.26-.64-.53-.55-.73-.56h-.62c-.22 0-.57.08-.86.4-.3.32-1.13 1.1-1.13 2.7 0 1.59 1.16 3.13 1.32 3.35.16.21 2.28 3.48 5.52 4.88.77.33 1.37.53 1.84.68.77.25 1.48.21 2.03.13.62-.09 1.92-.79 2.19-1.54.27-.76.27-1.4.19-1.54-.08-.14-.3-.22-.62-.38Z" />
+  </svg>
+  <span class="wa-float-tip" aria-hidden="true">{label}</span>
+</a>
+
+<style>
+  .wa-float {
+    position: fixed;
+    right: 20px;
+    bottom: calc(20px + env(safe-area-inset-bottom));
+    z-index: 85;
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #25d366; /* WhatsApp green: the button is read at a glance */
+    color: #ffffff;
+    box-shadow:
+      0 10px 28px -10px rgba(13, 27, 22, 0.45),
+      0 2px 6px rgba(13, 27, 22, 0.12);
+    opacity: 0;
+    transform: translateY(12px) scale(0.9);
+    visibility: hidden;
+    transition:
+      opacity 0.3s var(--ease-power3),
+      transform 0.45s var(--ease-power3),
+      bottom 0.45s var(--ease-power3),
+      visibility 0s 0.45s;
+  }
+  .wa-float[data-visible="true"] {
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+    transition:
+      opacity 0.4s var(--ease-power3),
+      transform 0.55s var(--ease-power3),
+      bottom 0.45s var(--ease-power3),
+      visibility 0s;
+  }
+  .wa-float:hover {
+    transform: scale(1.06);
+  }
+  .wa-float:active {
+    transform: scale(0.96);
+  }
+  .wa-float:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+  /* Phones: just above the action bar while it is up. */
+  @media (max-width: 767px) {
+    .wa-float {
+      right: 14px;
+      bottom: calc(14px + env(safe-area-inset-bottom));
+      width: 52px;
+      height: 52px;
+    }
+    :root:has([data-mobile-bar][data-visible="true"]) .wa-float {
+      bottom: calc(10px + 58px + 12px + env(safe-area-inset-bottom));
+    }
+  }
+  /* Its label, on hover, where a pointer can show it. */
+  .wa-float-tip {
+    position: absolute;
+    right: calc(100% + 12px);
+    top: 50%;
+    padding: 6px 12px;
+    background: var(--color-ink);
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    color: #ffffff;
+    opacity: 0;
+    transform: translate(6px, -50%);
+    transition:
+      opacity 0.25s var(--ease-power3),
+      transform 0.35s var(--ease-power3);
+    pointer-events: none;
+  }
+  @media (hover: hover) {
+    .wa-float:hover .wa-float-tip,
+    .wa-float:focus-visible .wa-float-tip {
+      opacity: 1;
+      transform: translate(0, -50%);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .wa-float,
+    .wa-float[data-visible="true"],
+    .wa-float-tip {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const button = document.querySelector<HTMLElement>("[data-wa-float]");
+  if (button) {
+    const consent = document.querySelector<HTMLElement>("[data-consent-banner]");
+    const root = document.documentElement;
+    const update = (): void => {
+      const scrolled = window.scrollY > 80;
+      const consentUp = !!consent && !consent.hidden;
+      const menuOpen = root.dataset.menuOpen === "true";
+      button.dataset.visible = String(scrolled && !consentUp && !menuOpen);
+    };
+    if (consent) new MutationObserver(update).observe(consent, { attributes: true, attributeFilter: ["hidden"] });
+    new MutationObserver(update).observe(root, { attributes: true, attributeFilter: ["data-menu-open"] });
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+  }
+</script>
