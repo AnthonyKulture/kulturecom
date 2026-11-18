@@ -3,8 +3,8 @@
 // (HomeContent.astro), right after the hero's dive.
 import type { Lang } from "~/i18n/ui";
 import { getHomeContent } from "~/lib/home-content";
-import { servicePagePath } from "~/lib/service-pages";
-import { fromPrice } from "~/lib/facts";
+import { servicePagePath, type ServiceId } from "~/lib/service-pages";
+import { FREE_ENTRY, STARTING_PRICE, formatPrice } from "~/lib/facts";
 import Eyebrow from "~/components/Eyebrow.astro";
 import WaterfallDots from "~/components/WaterfallDots.astro";
 import WaterfallScene from "~/components/WaterfallScene.astro";
@@ -16,12 +16,20 @@ interface Props {
 const { lang } = Astro.props;
 const c = getHomeContent(lang);
 const cap = (text: string): string => text.charAt(0).toUpperCase() + text.slice(1);
+// Each service's entry point, from the shared price list: a free first step
+// ("Audit gratuit") or a starting price ("790 €").
+const entry = (id: ServiceId): { label: string; value: string } => {
+  const free = FREE_ENTRY[id];
+  if (free) return { label: c.servicesFree, value: cap(free[lang]) };
+  return { label: c.servicesFrom, value: formatPrice(STARTING_PRICE[id]!, lang) };
+};
 const sheet = (n: string, fr: string, en: string): string => (lang === "fr" ? `Planche ${n} · ${fr}` : `Sheet ${n} · ${en}`);
 ---
 
 {/* The four services — the waterfall drawing on the right, one row per
-    service on the left (its word facing its line, its starting price and a
-    button to its page; the whole row is the link). A scroll sequence
+    service on the left (its number and word facing its line and entry
+    price, then a round arrow button to its page; the whole row is the
+    link). A scroll sequence
     (WaterfallDots.astro), played in the theatre where the hero's dive ended:
     it opens inside the hiker's backpack, pulls back to the waterfall, then
     the text comes in, each of the three words condensing out of vapor as
@@ -44,14 +52,25 @@ const sheet = (n: string, fr: string, en: string): string => (lang === "fr" ? `P
       <div>
         <h2 data-seq-item class="max-w-[24ch] font-display text-title">{c.servicesTitle}</h2>
         <ol class="services mt-8 md:mt-10">
-          {c.services.map((sv) => (
+          {c.services.map((sv, n) => (
             <li data-seq-item>
               <a href={servicePagePath(sv.id, lang)} class="service">
-                <span class="service-word font-display" data-vapor-seq>{sv.word.replace(/\.$/, "")}<span class="service-dot">.</span></span>
-                <span class="service-body text-body text-[var(--color-ink-muted)]">{sv.body}</span>
-                <span class="service-aside">
-                  <span class="service-price">{cap(fromPrice(sv.id, lang) ?? "")}</span>
-                  <span class="service-btn">{c.servicesCta}<span aria-hidden="true" class="service-arrow">→</span></span>
+                <span class="service-name">
+                  <span class="service-index" aria-hidden="true">0{n + 1}</span>
+                  <span class="service-word font-display" data-vapor-seq>{sv.word.replace(/\.$/, "")}<span class="service-dot">.</span></span>
+                </span>
+                <span class="service-body">
+                  <span class="text-body text-[var(--color-ink-muted)]">{sv.body}</span>
+                  <span class="service-price">
+                    <span class="service-price-label">{entry(sv.id).label}</span>
+                    <span class="service-price-value">{entry(sv.id).value}</span>
+                  </span>
+                </span>
+                <span class="service-btn">
+                  <span class="service-btn-label">{c.servicesCta}</span>
+                  <span class="service-btn-icon" aria-hidden="true">
+                    <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
+                  </span>
                 </span>
               </a>
             </li>
@@ -110,133 +129,155 @@ const sheet = (n: string, fr: string, en: string): string => (lang === "fr" ? `P
     }
   }
   /* ===== The services ===== One row per service, the whole row a link:
-     the word (the hero title's display size, in ink, its full stop in the
-     accent), its line, then its starting price over its button. Phones: one
-     above the other, the price and the button side by side at the foot. */
+     its number and word (in ink, the full stop in the accent), its line and
+     its entry price under it, then a round arrow button. Phones: the word
+     and the button on one line, the rest under them. */
   .service {
+    --rule: color-mix(in srgb, var(--color-ink) 10%, transparent);
     position: relative;
     display: grid;
-    grid-template-areas: "word" "body" "aside";
-    gap: 10px;
-    padding: 18px 0;
-    border-top: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "name btn" "body body";
+    align-items: center;
+    gap: 14px 16px;
+    padding: 20px 0 22px;
+    border-top: 1px solid var(--rule);
     color: inherit;
     text-decoration: none;
     isolation: isolate;
   }
   .services li:last-child .service {
-    border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+    border-bottom: 1px solid var(--rule);
   }
-  /* Tablets: the word facing its line, the price and the button under it. */
   @media (min-width: 640px) {
     .service {
-      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-      grid-template-areas: "word body" "word aside";
-      align-items: center;
-      column-gap: 32px;
-      row-gap: 12px;
-      padding: 20px 0;
-    }
-  }
-  /* Wide screens (half the page, once it has room for three columns): all
-     on one row, the price over the button at its end. */
-  @media (min-width: 1280px) {
-    .service {
-      grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr) auto;
-      grid-template-areas: "word body aside";
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr) auto;
+      grid-template-areas: "name body btn";
       column-gap: 24px;
-      padding: 16px 0;
+      padding: 18px 0;
     }
   }
-  .service-body {
-    grid-area: body;
-  }
-  .service-aside {
-    grid-area: aside;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-  }
-  @media (min-width: 1280px) {
-    .service-aside {
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 8px;
-    }
-  }
-  /* A wash of the accent sweeping in under the row on hover. */
+  /* A wash of the accent coming up under the row on hover. */
   .service::before {
     content: "";
     position: absolute;
     inset: 0 -16px;
     z-index: -1;
-    background: color-mix(in srgb, var(--color-accent) 6%, transparent);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.5s var(--ease-power3);
+    background: linear-gradient(90deg, color-mix(in srgb, var(--color-accent) 7%, transparent), transparent 85%);
+    opacity: 0;
+    transition: opacity 0.6s var(--ease-power3);
+  }
+  .service-name {
+    grid-area: name;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .service-index {
+    font-family: var(--font-label);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: var(--color-ink-subtle);
+    font-variant-numeric: tabular-nums;
   }
   .service :global(.service-word) {
-    grid-area: word;
-    justify-self: start;
+    align-self: flex-start;
     display: inline-block;
-    font-size: var(--text-display);
+    font-size: clamp(30px, 3.1vw, 48px);
     line-height: 1;
+    letter-spacing: -0.01em;
     color: var(--color-ink);
-    transition: transform 0.5s var(--ease-power3);
+    transition: transform 0.6s var(--ease-power3);
   }
   .service :global(.service-dot) {
     color: var(--color-accent);
   }
-  /* The price, a tag in the accent: apart from the word, read at a glance. */
-  .service-price {
-    display: inline-block;
-    padding: 3px 10px;
-    background: color-mix(in srgb, var(--color-accent) 10%, transparent);
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 1.5;
-    white-space: nowrap;
-    color: var(--color-accent-strong);
-  }
-  .service-btn {
-    display: inline-flex;
-    white-space: nowrap;
-    align-items: center;
+  .service-body {
+    grid-area: body;
+    display: flex;
+    flex-direction: column;
     gap: 10px;
-    padding: 8px 8px 8px 14px;
-    border: 1px solid color-mix(in srgb, var(--color-ink) 20%, transparent);
-    font-size: 14px;
-    font-weight: 500;
-    transition:
-      background-color 0.3s,
-      border-color 0.3s,
-      color 0.3s;
   }
-  .service-arrow {
-    display: inline-grid;
+  /* The entry price: a small label over the amount, quiet but legible. */
+  .service-price {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 8px;
+    white-space: nowrap;
+  }
+  .service-price-label {
+    font-family: var(--font-label);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-ink-subtle);
+  }
+  .service-price-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  /* The button: a round arrow (its label beside it on phones only, where
+     there is room on the word's line). */
+  .service-btn {
+    grid-area: btn;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .service-btn-label {
+    font-family: var(--font-label);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+  @media (min-width: 640px) {
+    .service-btn-label {
+      display: none;
+    }
+  }
+  .service-btn-icon {
+    display: grid;
     place-items: center;
-    width: 22px;
-    height: 22px;
-    transition: transform 0.4s var(--ease-power3);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+    color: var(--color-accent);
+    transition:
+      background-color 0.4s var(--ease-power3),
+      color 0.4s var(--ease-power3),
+      transform 0.5s var(--ease-power3);
+  }
+  .service-btn-icon svg {
+    transition: transform 0.5s var(--ease-power3);
   }
   .service:hover::before,
   .service:focus-visible::before {
-    transform: scaleX(1);
+    opacity: 1;
   }
   .service:hover :global(.service-word),
   .service:focus-visible :global(.service-word) {
-    transform: translateX(8px);
+    transform: translateX(6px);
   }
-  .service:hover .service-btn,
-  .service:focus-visible .service-btn {
-    border-color: var(--color-accent);
+  .service:hover .service-btn-icon,
+  .service:focus-visible .service-btn-icon {
     background: var(--color-accent);
     color: #ffffff;
+    transform: scale(1.06);
   }
-  .service:hover .service-arrow,
-  .service:focus-visible .service-arrow {
-    transform: translateX(3px);
+  .service:hover .service-btn-icon svg,
+  .service:focus-visible .service-btn-icon svg {
+    transform: translateX(2px);
+  }
+  .service:active .service-btn-icon {
+    transform: scale(0.96);
   }
   .service:focus-visible {
     outline: 2px solid var(--color-accent);
@@ -245,7 +286,8 @@ const sheet = (n: string, fr: string, en: string): string => (lang === "fr" ? `P
   @media (prefers-reduced-motion: reduce) {
     .service::before,
     .service :global(.service-word),
-    .service-arrow {
+    .service-btn-icon,
+    .service-btn-icon svg {
       transition: none;
     }
   }

@@ -55,6 +55,9 @@ export interface HomeContent {
   servicesTitle: string;
   services: { id: ServiceId; word: string; body: string }[];
   servicesCta: string;
+  /** Over a starting price ("À partir de"), and over a free first step. */
+  servicesFrom: string;
+  servicesFree: string;
   compare: {
     /** Second part set in the accent colour. */
     title: [string, string];
@@ -150,6 +153,8 @@ export function getHomeContent(lang: Lang): HomeContent {
         { id: "brand", word: "Marque.", body: "Un logo et une charte qui marquent les esprits." },
       ],
       servicesCta: "Découvrir",
+      servicesFrom: "À partir de",
+      servicesFree: "Pour commencer",
       compare: {
         title: ["Freelance, agence ou plateforme :", "ce qui change pour vous"],
         lead: "Trois façons d'avoir un site professionnel. Voici ce que chacune implique, critère par critère.",
@@ -238,6 +243,8 @@ export function getHomeContent(lang: Lang): HomeContent {
       { id: "brand", word: "Brand.", body: "A logo and a style guide people remember." },
     ],
     servicesCta: "Explore",
+    servicesFrom: "From",
+    servicesFree: "To start",
     compare: {
       title: ["Freelancer, agency or platform:", "what changes for you"],
       lead: "Three ways to get a professional website. Here is what each one means for you, point by point.",
