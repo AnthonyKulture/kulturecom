@@ -15,6 +15,7 @@ export interface ProjectEntry {
   image: string;
   num: string;
   video?: string;
+  cardVideo?: string;
 }
 
 /**
@@ -38,5 +39,6 @@ export function getProjects(t: Translations): ProjectEntry[] {
     image: c.image,
     num: c.num,
     video: c.video,
+    cardVideo: c.cardVideo,
   }));
 }

@@ -12,6 +12,7 @@ export interface ClientLogo {
 }
 
 export const CLIENT_LOGOS: ClientLogo[] = [
+  { id: "oqoo", name: "Oqoo & Co", w: 84, h: 54 },
   { id: "edenrock", name: "Eden Rock Yacht Rental", w: 132, h: 40 },
   { id: "royalyacht", name: "Royal Yacht International", w: 163, h: 31 },
   { id: "sunbeach", name: "Sun Beach House", w: 67, h: 58 },

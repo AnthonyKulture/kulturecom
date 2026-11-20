@@ -23,6 +23,8 @@ export interface CaseStudyMeta {
   image: string;
   /** Optional hero video. */
   video?: string;
+  /** Optional video for the homepage card only (WorkCards.astro); `image` is its poster. */
+  cardVideo?: string;
   /** Canonical https URL of the live client site — a real outbound entity link. */
   liveUrl: string;
   /** On-page position label. */
@@ -34,6 +36,7 @@ export const CASE_STUDIES: CaseStudyMeta[] = [
     slug: "oqoo-and-co",
     key: "project8",
     image: "/hero-slides/oqoo.webp",
+    cardVideo: "/videos/oqoo-hero.mp4",
     liveUrl: "https://oqooandco.com",
     num: "01",
   },

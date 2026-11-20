@@ -716,7 +716,7 @@ const faqLd = {
     const words = [...work.querySelectorAll<HTMLElement>("[data-in-word]")];
     const cards = [...cardList.querySelectorAll<HTMLElement>("[data-card]")].map((el) => {
       const media = el.querySelector<HTMLElement>("[data-card-media]");
-      return { el, media, img: media?.querySelector<HTMLElement>("img") ?? null, text: el.querySelector<HTMLElement>("[data-card-text]"), in: false };
+      return { el, media, img: media?.querySelector<HTMLElement>("img, video") ?? null, text: el.querySelector<HTMLElement>("[data-card-text]"), in: false };
     });
     // What comes in, and when (shares of the entrance): [element, from, to,
     // kind, card]. All of it in by the end. The words start faint and
