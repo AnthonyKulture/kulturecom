@@ -35,7 +35,7 @@ export const CASE_STUDIES: CaseStudyMeta[] = [
   {
     slug: "oqoo-and-co",
     key: "project8",
-    image: "/hero-slides/oqoo.webp",
+    image: "/hero-slides/oqoo-consulting.webp",
     cardVideo: "/videos/oqoo-hero.mp4",
     liveUrl: "https://oqooandco.com",
     num: "01",
