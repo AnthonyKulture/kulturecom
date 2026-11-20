@@ -15,3 +15,9 @@ pnpm-debug.log*
 
 # Local reference/skill pack, not part of the site source
 3d-scroll-website-skill-pack/
+
+# Documents de travail internes (prospection, stratégie) : jamais dans le dépôt public
+.claude/blog/social/barometre-chatgpt-commerces-nice/diffusion.md
+.claude/blog/social/barometre-chatgpt-commerces-nice/envois-harvey.json
+.claude/blog/social/barometre-chatgpt-commerces-nice/verifier-adresses.py
+PLAN-VISIBILITE-IA-*.md
