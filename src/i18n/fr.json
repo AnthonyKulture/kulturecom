@@ -180,6 +180,27 @@
     "project7.result": "Un site qui montre l'atelier dans toute sa largeur, de la création au service, et une boutique en ligne qui vend la collection, les kits et les patrons au-delà de Cannes.",
     "project7.stack": "WordPress · WooCommerce",
     "project7.role_meta": "Conception et développement WordPress / WooCommerce",
-    "project7.link": "ckatelier.com"
+    "project7.link": "ckatelier.com",
+    "project8.title": "Oqoo & Co",
+    "project8.headline": "Le site master d'un groupe suisse-belge de merchandising",
+    "project8.client": "Oqoo & Co · Suisse, Belgique, France · 2026",
+    "project8.tag": "Astro · GSAP · 4 langues · SEO/GEO",
+    "project8.problem": "Faire passer un groupe de merchandising pour ce qu'il est : un partenaire qui mène un projet de bout en bout, pas un catalogue d'objets.",
+    "project8.summary": "Direction artistique, site master en quatre langues, SEO/GEO et journal publié deux fois par semaine pour un groupe de merchandising de marque.",
+    "project8.metric": "CH · BE · FR · oqooandco.com",
+    "project8.subtitle": "Direction artistique · Web Design · Développement · Motion · 4 langues · SEO/GEO · Accompagnement en cours",
+    "project8.context.label": "Le contexte",
+    "project8.context": "Oqoo & Co est un groupe basé en Suisse et en Belgique, présent aussi en France, qui conçoit, produit et livre le merchandising des marques : textile, objets, packaging premium, tote bags fabriqués en Suisse, barter, conseil pour l'événementiel et les boutiques. Le groupe avait déjà cinq sites de vente en ligne (oqoo.ch, oqoo.be, oqooeco.ch, oqooeco.be, swisstotebag.ch). Il lui manquait le site qui chapeaute le tout et parle aux directions de la communication, aux agences événementielles et aux services achats.",
+    "project8.challenge.label": "Le défi",
+    "project8.challenge": "Sur ce marché, presque tous les sites ressemblent à des catalogues de stylos. Il fallait montrer qu'Oqoo accompagne un projet de l'idée à la livraison, sur trois pays, avec un site assez soigné pour rassurer un grand compte qui prépare un appel d'offres. Sans fiche produit, sans prix, et avec une règle tenue du début à la fin : une affirmation sans preuve se supprime. Le tout en français, en anglais, en allemand pour la Suisse et en néerlandais pour la Belgique, et visible sur Google comme dans les réponses des IA dès l'ouverture.",
+    "project8.role.label": "Mon rôle",
+    "project8.role": "Le site entier, en binôme avec le designer du groupe. J'ai proposé les directions artistiques et mis en œuvre celle retenue, « Pastille » : papier, encre et beiges tirés de la charte du client, typographies de la marque auto-hébergées. J'ai conçu et développé le site, réglé chaque animation, monté la vidéo du hero, écrit les quatre versions linguistiques, mené deux audits SEO/GEO, préparé l'hébergement en Suisse et mis en place le suivi. L'accompagnement continue après l'ouverture.",
+    "project8.approach.label": "L'approche",
+    "project8.approach": "Une page d'accueil qui s'ouvre sur le logo puis sur une vidéo de seize plans tirés des expertises, et six pages expertise bâties sur un même gabarit : merchandising, merchandising premium, packaging, consulting événementiel et boutique, Swiss made tote bag, barter. Astro, TypeScript et CSS sans framework d'interface, un seul moteur d'animation (GSAP), et un budget tenu : moins de 100 Ko de JavaScript au chargement, Lighthouse mobile à 94 sur l'accueil. Une page par marché (Suisse, Belgique, France) plutôt qu'une copie du site par pays. Côté visibilité : données structurées, hreflang entre les quatre langues, llms.txt généré depuis les données du site, FAQ qui donnent d'abord le fait général sourcé puis l'offre. Un journal de 21 articles à l'ouverture, nourri depuis par une routine qui en publie deux par semaine. Pour convertir : formulaire qualifiant, chat en direct, WhatsApp et newsletter reliée à Brevo.",
+    "project8.result.label": "Le résultat",
+    "project8.result": "oqooandco.com est en ligne depuis le 16 novembre 2026, deux mois après le premier commit, hébergé chez Infomaniak en Suisse. Le second audit SEO/GEO, juste avant l'ouverture, est passé de 61 à 77/100. Et le travail continue : deux articles par semaine, un bilan chaque lundi (Search Console, Analytics, Bing), puis les pages par secteur et les témoignages clients prévus pour la suite.",
+    "project8.stack": "Astro · TypeScript · CSS natif · GSAP · Infomaniak · Brevo · SEO/GEO en continu",
+    "project8.role_meta": "Direction artistique, design, dev, motion, SEO/GEO — accompagnement en cours",
+    "project8.link": "oqooandco.com"
   }
 }

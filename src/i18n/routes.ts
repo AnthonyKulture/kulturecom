@@ -64,7 +64,7 @@ export const routes: Record<string, RouteMeta> = {
     pageType: "CollectionPage",
     title: `Projets — études de cas web, design & SEO | Anthony Profit`,
     description:
-      "Sélection de projets : Surly, Sun Beach House, Royal Yacht International, Eden Rock, Movida, AlexAlu, CK Atelier. Identité, développement sur-mesure et SEO/GEO. Des preuves, pas des promesses.",
+      "Sélection de projets : Oqoo & Co, Surly, Sun Beach House, Royal Yacht International, Eden Rock, Movida, AlexAlu, CK Atelier. Identité, développement sur-mesure et SEO/GEO. Des preuves, pas des promesses.",
   },
   "/contact/": {
     lang: "fr",
@@ -173,6 +173,14 @@ export const routes: Record<string, RouteMeta> = {
   },
 
   // ---- FR · études de cas ----
+  "/projets/oqoo-and-co/": {
+    lang: "fr",
+    alt: "/en/work/oqoo-and-co/",
+    crumb: "Oqoo & Co",
+    title: `Oqoo & Co — merchandising de marque | Étude de cas Astro & SEO`,
+    description:
+      "Étude de cas Oqoo & Co : direction artistique, site master Astro en quatre langues, SEO/GEO et journal pour un groupe de merchandising basé en Suisse et en Belgique.",
+  },
   "/projets/surly/": {
     lang: "fr",
     alt: "/en/work/surly/",
@@ -255,7 +263,7 @@ export const routes: Record<string, RouteMeta> = {
     pageType: "CollectionPage",
     title: `Work — web, design & SEO case studies | Anthony Profit`,
     description:
-      "Selected projects: Surly, Sun Beach House, Royal Yacht International, Eden Rock, Movida, AlexAlu, CK Atelier. Identity, custom development and SEO/GEO. Proof, not promises.",
+      "Selected projects: Oqoo & Co, Surly, Sun Beach House, Royal Yacht International, Eden Rock, Movida, AlexAlu, CK Atelier. Identity, custom development and SEO/GEO. Proof, not promises.",
   },
   "/en/contact/": {
     lang: "en",
@@ -403,6 +411,14 @@ export const routes: Record<string, RouteMeta> = {
     title: `Movida — bar-restaurant in Nice | WordPress & SEO case study`,
     description:
       "Movida case study: WordPress site, maintenance and local SEO for a festive bar-restaurant on the Promenade des Anglais in Nice. A site the team runs itself.",
+  },
+  "/en/work/oqoo-and-co/": {
+    lang: "en",
+    alt: "/projets/oqoo-and-co/",
+    crumb: "Oqoo & Co",
+    title: `Oqoo & Co — brand merchandise | Astro & SEO case study`,
+    description:
+      "Oqoo & Co case study: art direction, a four-language Astro flagship site, SEO/GEO and a journal for a brand merchandise group based in Switzerland and Belgium.",
   },
   "/en/work/alexalu/": {
     lang: "en",

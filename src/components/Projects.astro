@@ -12,7 +12,7 @@ const { lang } = Astro.props;
 const t = ui[lang];
 
 // Shared with ProjectsMobile.astro via src/lib/projects-data.ts (single source
-// of truth). Display order: Surly → Eden Rock → Sun Beach House → Royal Yacht → Movida → AlexAlu → CK Atelier.
+// of truth). Display order: Oqoo & Co → Surly → Eden Rock → Sun Beach House → Royal Yacht → Movida → AlexAlu → CK Atelier.
 const projects = getProjects(t);
 const total = String(projects.length).padStart(2, "0");
 
