@@ -180,6 +180,27 @@
     "project7.result": "A site that shows the workshop in its full breadth, from design to service, and an online shop that sells the collection, kits and patterns beyond Cannes.",
     "project7.stack": "WordPress · WooCommerce",
     "project7.role_meta": "WordPress / WooCommerce design and development",
-    "project7.link": "ckatelier.com"
+    "project7.link": "ckatelier.com",
+    "project8.title": "Oqoo & Co",
+    "project8.headline": "The flagship site of a Swiss-Belgian brand merchandise group",
+    "project8.client": "Oqoo & Co · Switzerland, Belgium, France · 2026",
+    "project8.tag": "Astro · GSAP · 4 languages · SEO/GEO",
+    "project8.problem": "Show a merchandise group for what it is: a partner that runs a project end to end, not a catalogue of items.",
+    "project8.summary": "Art direction, a flagship site in four languages, SEO/GEO and a journal published twice a week for a brand merchandise group.",
+    "project8.metric": "CH · BE · FR · oqooandco.com",
+    "project8.subtitle": "Art direction · Web design · Development · Motion · 4 languages · SEO/GEO · Ongoing engagement",
+    "project8.context.label": "Context",
+    "project8.context": "Oqoo & Co is a group based in Switzerland and Belgium, also active in France, that designs, produces and delivers brand merchandise: apparel, objects, premium packaging, Swiss-made tote bags, barter, and consulting for events and retail. The group already ran five online stores (oqoo.ch, oqoo.be, oqooeco.ch, oqooeco.be, swisstotebag.ch). What it lacked was the site above them all, one that speaks to communications directors, event agencies and procurement teams.",
+    "project8.challenge.label": "The challenge",
+    "project8.challenge": "In this market, nearly every site looks like a catalogue of pens. The site had to show that Oqoo takes a project from idea to delivery across three countries, with enough polish to reassure a large account preparing a tender. No product pages, no prices, and one rule kept from start to finish: a claim without proof gets cut. All of it in French, English, German for Switzerland and Dutch for Belgium, and visible on Google and in AI answers from launch day.",
+    "project8.role.label": "My role",
+    "project8.role": "The whole site, working alongside the group's designer. I proposed the art directions and built the one chosen, \"Pastille\": paper, ink and beiges taken from the client's brand guidelines, with the brand's own typefaces self-hosted. I designed and developed the site, tuned every animation, edited the hero video, wrote the four language versions, ran two SEO/GEO audits, prepared hosting in Switzerland and set up tracking. The work continues after launch.",
+    "project8.approach.label": "Approach",
+    "project8.approach": "A homepage that opens on the logo, then on a sixteen-shot video drawn from the areas of expertise, and six expertise pages built on one shared template: merchandising, premium merchandising, packaging, event and retail consulting, Swiss-made tote bags, barter. Astro, TypeScript and CSS with no UI framework, a single animation engine (GSAP), and a strict budget: under 100 KB of JavaScript on load, a Lighthouse mobile score of 94 on the homepage. One page per market (Switzerland, Belgium, France) rather than a copy of the site for each country. For visibility: structured data, hreflang across the four languages, an llms.txt generated from the site's own data, FAQs that give the sourced general fact first and the offer second. A journal of 21 articles at launch, fed since by a routine that publishes two a week. To convert: a qualifying form, live chat, WhatsApp and a newsletter connected to Brevo.",
+    "project8.result.label": "Outcome",
+    "project8.result": "oqooandco.com went live on 16 November 2026, two months after the first commit, hosted by Infomaniak in Switzerland. The second SEO/GEO audit, just before launch, went from 61 to 77/100. And the work carries on: two articles a week, a report every Monday (Search Console, Analytics, Bing), then sector pages and client testimonials planned next.",
+    "project8.stack": "Astro · TypeScript · native CSS · GSAP · Infomaniak · Brevo · ongoing SEO/GEO",
+    "project8.role_meta": "Art direction, design, dev, motion, SEO/GEO — ongoing engagement",
+    "project8.link": "oqooandco.com"
   }
 }

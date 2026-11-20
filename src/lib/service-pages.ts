@@ -98,12 +98,12 @@ export const SERVICE_PAGES: ServicePageMeta[] = [
   {
     id: "web",
     path: { fr: "/creation-site-internet/", en: "/en/web-development/" },
-    proofSlugs: ["alexalu", "surly", "sun-beach-house"],
+    proofSlugs: ["oqoo-and-co", "alexalu", "sun-beach-house"],
   },
   {
     id: "seo",
     path: { fr: "/seo-geo/", en: "/en/seo-geo/" },
-    proofSlugs: ["sun-beach-house", "royal-yacht-international", "eden-rock-yacht-rental"],
+    proofSlugs: ["oqoo-and-co", "sun-beach-house", "royal-yacht-international"],
   },
   {
     id: "brand",
