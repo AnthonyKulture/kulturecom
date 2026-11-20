@@ -103,7 +103,7 @@ export const SERVICE_PAGES: ServicePageMeta[] = [
   {
     id: "seo",
     path: { fr: "/seo-geo/", en: "/en/seo-geo/" },
-    proofSlugs: ["oqoo-and-co", "sun-beach-house", "royal-yacht-international"],
+    proofSlugs: ["oqoo-and-co", "adaly-yacht", "sun-beach-house"],
   },
   {
     id: "brand",

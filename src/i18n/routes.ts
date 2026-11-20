@@ -64,7 +64,7 @@ export const routes: Record<string, RouteMeta> = {
     pageType: "CollectionPage",
     title: `Projets — études de cas web, design & SEO | Anthony Profit`,
     description:
-      "Sélection de projets : Oqoo & Co, Surly, Sun Beach House, Royal Yacht International, Eden Rock, Movida, AlexAlu, CK Atelier. Identité, développement sur-mesure et SEO/GEO. Des preuves, pas des promesses.",
+      "Sélection de projets : Oqoo & Co, Adaly Yacht, Surly, Sun Beach House, Royal Yacht International, Eden Rock, Movida, AlexAlu, CK Atelier. Identité, développement sur-mesure et SEO/GEO. Des preuves, pas des promesses.",
   },
   "/contact/": {
     lang: "fr",
@@ -173,13 +173,21 @@ export const routes: Record<string, RouteMeta> = {
   },
 
   // ---- FR · études de cas ----
+  "/projets/adaly-yacht/": {
+    lang: "fr",
+    alt: "/en/work/adaly-yacht/",
+    crumb: "Adaly Yacht",
+    title: `Adaly Yacht — gestion et vente de yachts | Étude de cas`,
+    description:
+      "Étude de cas Adaly Yacht : refonte Astro bilingue, catalogue de bateaux sur Sanity et suivi SEO/GEO pour une société de yachting entre Nice et Monaco.",
+  },
   "/projets/oqoo-and-co/": {
     lang: "fr",
     alt: "/en/work/oqoo-and-co/",
     crumb: "Oqoo & Co",
     title: `Oqoo & Co — merchandising de marque | Étude de cas Astro & SEO`,
     description:
-      "Étude de cas Oqoo & Co : direction artistique, site master Astro en quatre langues, SEO/GEO et journal pour un groupe de merchandising basé en Suisse et en Belgique.",
+      "Étude de cas Oqoo & Co : direction artistique, site Astro en quatre langues, SEO/GEO et journal pour un groupe de merchandising basé en Suisse et en Belgique.",
   },
   "/projets/surly/": {
     lang: "fr",
@@ -263,7 +271,7 @@ export const routes: Record<string, RouteMeta> = {
     pageType: "CollectionPage",
     title: `Work — web, design & SEO case studies | Anthony Profit`,
     description:
-      "Selected projects: Oqoo & Co, Surly, Sun Beach House, Royal Yacht International, Eden Rock, Movida, AlexAlu, CK Atelier. Identity, custom development and SEO/GEO. Proof, not promises.",
+      "Selected projects: Oqoo & Co, Adaly Yacht, Surly, Sun Beach House, Royal Yacht International, Eden Rock, Movida, AlexAlu, CK Atelier. Identity, custom development and SEO/GEO. Proof, not promises.",
   },
   "/en/contact/": {
     lang: "en",
@@ -411,6 +419,14 @@ export const routes: Record<string, RouteMeta> = {
     title: `Movida — bar-restaurant in Nice | WordPress & SEO case study`,
     description:
       "Movida case study: WordPress site, maintenance and local SEO for a festive bar-restaurant on the Promenade des Anglais in Nice. A site the team runs itself.",
+  },
+  "/en/work/adaly-yacht/": {
+    lang: "en",
+    alt: "/projets/adaly-yacht/",
+    crumb: "Adaly Yacht",
+    title: `Adaly Yacht — yacht management & brokerage | Case study`,
+    description:
+      "Adaly Yacht case study: bilingual Astro redesign, a Sanity-run boat listing and long-term SEO/GEO for a yachting company between Nice and Monaco.",
   },
   "/en/work/oqoo-and-co/": {
     lang: "en",

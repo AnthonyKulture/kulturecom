@@ -6,18 +6,18 @@ type Translations = (typeof ui)[Lang];
 /**
  * Single source of truth for the case-study pages AND the project grid.
  *
- * Maps each on-page POSITION to its project ENTITY key (project1..project8 in
+ * Maps each on-page POSITION to its project ENTITY key (project1..project9 in
  * the i18n files), its hero asset, the canonical URL of the live client site,
  * and the display number. `projects-data.ts` builds the homepage/work grid from
  * this same list, so the slug ↔ asset ↔ order mapping can never drift between
  * the grid and the detail pages.
  *
- * Display order: Oqoo & Co → Surly → Eden Rock → Sun Beach House → Royal Yacht → Movida → AlexAlu → CK Atelier.
+ * Display order: Oqoo & Co → Adaly Yacht → Surly → Eden Rock → Sun Beach House → Royal Yacht → Movida → AlexAlu → CK Atelier.
  */
 export interface CaseStudyMeta {
   /** URL slug — stable across locales (/projets/<slug>/ ↔ /en/work/<slug>/). */
   slug: string;
-  /** i18n entity key (project1..project8) the deep fields are read from. */
+  /** i18n entity key (project1..project9) the deep fields are read from. */
   key: string;
   /** Hero image (also the video poster when `video` is set). */
   image: string;
@@ -38,53 +38,60 @@ export const CASE_STUDIES: CaseStudyMeta[] = [
     num: "01",
   },
   {
+    slug: "adaly-yacht",
+    key: "project9",
+    image: "/hero-slides/adaly-yacht.webp",
+    liveUrl: "https://adaly-yacht.com",
+    num: "02",
+  },
+  {
     slug: "surly",
     key: "project1",
     image: "/hero-slides/surly-superman.webp",
     liveUrl: "https://surly.fr",
-    num: "02",
+    num: "03",
   },
   {
     slug: "eden-rock-yacht-rental",
     key: "project5",
     image: "/hero-slides/eden-rock.webp",
     liveUrl: "https://edenrockyachtrental.com",
-    num: "03",
+    num: "04",
   },
   {
     slug: "sun-beach-house",
     key: "project3",
     image: "/hero-slides/sunbeachhouse.webp",
     liveUrl: "https://www.sun-beach-house.com",
-    num: "04",
+    num: "05",
   },
   {
     slug: "royal-yacht-international",
     key: "project4",
     image: "/hero-slides/royal-yacht.avif",
     liveUrl: "https://royalyachtinternational.com",
-    num: "05",
+    num: "06",
   },
   {
     slug: "movida",
     key: "project2",
     image: "/hero-slides/movida-neon.webp",
     liveUrl: "https://movida.today",
-    num: "06",
+    num: "07",
   },
   {
     slug: "alexalu",
     key: "project6",
     image: "/hero-slides/alexalu.webp",
     liveUrl: "https://alexalu.com",
-    num: "07",
+    num: "08",
   },
   {
     slug: "ck-atelier",
     key: "project7",
     image: "/hero-slides/ck-atelier.webp",
     liveUrl: "https://www.ckatelier.com",
-    num: "08",
+    num: "09",
   },
 ];
 
