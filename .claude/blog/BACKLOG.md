@@ -22,9 +22,9 @@ librement : l'ordre de la liste est l'ordre de parution.
 - [x] Bing Webmaster Tools, Copilot et ChatGPT → /blog/bing-webmaster-tools-copilot-chatgpt/
 - [x] Réservations directes hôtels et locations saisonnières → /blog/reservations-directes-hotel-cote-azur/
 - [x] Refonte de site sans perdre son référencement → /blog/refonte-site-sans-perdre-referencement/
+- [x] Antibes, Juan-les-Pins et Sophia Antipolis : SEO local et B2B tech → /blog/seo-antibes-sophia-antipolis/
 
 ## À écrire
-- [ ] Antibes, Juan-les-Pins et Sophia Antipolis : SEO local et B2B tech (deux marchés voisins, deux stratégies)
 - [ ] llms.txt : à quoi sert ce fichier, ce qu'en dit Google, et faut-il en mettre un en 2026
 - [ ] Contenu écrit par l'IA et SEO : ce que Google sanctionne vraiment (scaled content abuse) et comment bien s'en servir
 - [ ] Yachting et charter (Monaco, Antibes, Cannes) : SEO international et visibilité dans les réponses IA

@@ -1,0 +1,66 @@
+{
+  "card": {
+    "kicker": "SEO · Antibes et Sophia",
+    "title": "Deux marchés voisins, *deux stratégies* SEO",
+    "subtitle": "SEO local à Juan-les-Pins, SEO B2B à la technopole : ce qui change, et par où commencer."
+  },
+  "slides": [
+    {
+      "type": "cover",
+      "eyebrow": "SEO · Antibes et Sophia",
+      "title": "Antibes et Sophia, *pas le même SEO*",
+      "body": "Deux marchés voisins, deux façons de trouver des clients."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Antibes, Juan-les-Pins",
+      "title": "Ton client cherche *sur la carte*.",
+      "body": "« Plombier Antibes », « restaurant Juan-les-Pins plage » : la fiche Google passe avant ton site."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Sophia Antipolis",
+      "title": "Ton client B2B *compare longtemps*.",
+      "body": "Un ingénieur repère, son manager compare, les achats valident. Il te faut une page par service, en français et en anglais."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Le piège",
+      "title": "Pas de fiche Google *en coworking vide*.",
+      "body": "Google refuse les bureaux virtuels, et le coworking seulement si tu y reçois des clients avec du personnel présent."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Les IA",
+      "title": "51 % commencent *par un chatbot*.",
+      "body": "Acheteurs de logiciels B2B qui démarrent par une IA plus souvent que par Google (G2, mars 2026)."
+    },
+    {
+      "type": "list",
+      "eyebrow": "Par où commencer",
+      "title": "Ta *checklist*",
+      "items": [
+        { "t": "Une catégorie Google précise", "sub": "« Glacier » plutôt que « Restaurant »" },
+        { "t": "Des pages de quartier utiles", "sub": "Vieil Antibes, Cap d'Antibes, pas des clones" },
+        { "t": "Une page par service B2B", "sub": "Avec une version anglaise" },
+        { "t": "La même description partout", "sub": "Site, LinkedIn, annuaires, presse" }
+      ]
+    },
+    {
+      "type": "cta",
+      "eyebrow": "Parlons-en",
+      "title": "Visible sur Maps *et dans les IA*.",
+      "body": "Le guide complet est en lien dans la bio.",
+      "cta": "DM « ANTIBES » et on regarde ta visibilité ensemble."
+    }
+  ],
+  "caption": "Ton entreprise à Antibes sort-elle sur Google Maps quand on cherche ton métier à Juan-les-Pins ?\n\nÀ Antibes, le SEO local se joue sur la fiche Google, les avis et des pages de quartier vraiment différentes. À Sophia Antipolis, c'est du SEO B2B : une page par service, une version anglaise, et la même description sur ton site, LinkedIn et les annuaires pour que ChatGPT te retrouve.\n\nEnregistre ce post, et envoie-le à quelqu'un qui bosse à la technopole. Le guide complet (SEO Antibes, SEO Sophia Antipolis, IA) est en lien dans la bio.",
+  "hashtags": ["#seo", "#seolocal", "#seob2b", "#geo", "#antibes"],
+  "stories": [
+    "Le visuel carré (card.jpg) avec un sticker lien vers https://anthonyprofit.com/blog/seo-antibes-sophia-antipolis/ : « Le guide complet est ici ».",
+    "Sondage sur fond uni : « Tes clients te trouvent plutôt… » Réponses : « Sur Google Maps » / « Sur LinkedIn ou ChatGPT ».",
+    "Slide 04 du carrousel (le piège du coworking) avec le texte : « Ta fiche Google est à l'adresse d'un coworking ? Vérifie que tu y reçois vraiment des clients. »",
+    "Boîte à questions : « Ta question sur le SEO à Antibes ou à Sophia ? » (les réponses donnent les prochains sujets)."
+  ],
+  "reel": "Plan 1, texte à l'écran : « Antibes ou Sophia ? ». Face caméra sur le front de mer de Juan-les-Pins, près de la Pinède Gould : « Si tu bosses à Sophia Antipolis dans un coworking, attention à ta fiche Google. Google refuse les bureaux virtuels, et il n'accepte un coworking que si tu y reçois des clients avec quelqu'un sur place aux horaires d'ouverture. Sinon, passe en zone desservie, adresse masquée, et mets ton énergie dans tes pages par service et ta page LinkedIn. C'est là que tes clients B2B, et ChatGPT, vont te chercher. » Fin : « Le guide complet est en lien dans ma bio. »"
+}
