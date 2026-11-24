@@ -55,8 +55,12 @@ export async function sendLead(payload: Record<string, unknown>): Promise<boolea
   }
 }
 
-export const trackLead = (method: string, need?: string): void => {
-  window.gtag?.("event", "generate_lead", need ? { method, need } : { method });
+export const trackLead = (method: string, need?: string, foundVia?: string): void => {
+  window.gtag?.("event", "generate_lead", {
+    method,
+    ...(need ? { need } : {}),
+    ...(foundVia ? { found_via: foundVia } : {}),
+  });
 };
 
 export function initLeadForms(): void {
@@ -189,6 +193,7 @@ function initForm(form: HTMLFormElement): void {
       email: value("email"),
       phone: value("phone"),
       message: value("message"),
+      found_via: value("found_via"),
       website: value("website"),
       elapsed: Date.now() - startedAt,
     });
@@ -196,7 +201,7 @@ function initForm(form: HTMLFormElement): void {
     submitLabel.textContent = s.submit;
     form.dataset.done = "";
     const panel = form.querySelector<HTMLElement>(ok ? "[data-lf-success]" : "[data-lf-error]")!;
-    if (ok) trackLead("form", need);
+    if (ok) trackLead("form", need, value("found_via"));
     else fillFallback();
     panel.hidden = false;
     panel.setAttribute("tabindex", "-1");

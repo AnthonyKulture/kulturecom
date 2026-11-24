@@ -1,6 +1,7 @@
 ---
 import type { Lang } from "~/i18n/ui";
 import { getFormContent } from "~/lib/home-content";
+import { FOUND_VIA } from "~/lib/project-form";
 import { CONTACT } from "~/lib/facts";
 import Eyebrow from "~/components/Eyebrow.astro";
 import GoogleRating from "~/components/GoogleRating.astro";
@@ -21,6 +22,7 @@ interface Props {
 
 const { lang, headingLevel = 2, need, form = false } = Astro.props;
 const f = getFormContent(lang);
+const found = FOUND_VIA[lang];
 const Heading = `h${headingLevel}` as "h1" | "h2";
 const contactHref = lang === "fr" ? "/contact/" : "/en/contact/";
 
@@ -138,6 +140,13 @@ const clientStrings = {
               <label for="lf-message">{f.message}</label>
               <textarea id="lf-message" name="message" rows="2" maxlength="1000" aria-describedby="lf-message-hint"></textarea>
               <p id="lf-message-hint" class="lf-hint">{f.messageHint}</p>
+            </div>
+            <div class="lf-field sm:col-span-2">
+              <label for="lf-found">{found.q}</label>
+              <select id="lf-found" name="found_via">
+                <option value="">{found.placeholder}</option>
+                {found.choices.map((ch) => <option value={ch.value}>{ch.label}</option>)}
+              </select>
             </div>
           </div>
           <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
@@ -359,6 +368,7 @@ const clientStrings = {
     color: var(--color-ink-muted);
   }
   .lf-field input,
+  .lf-field select,
   .lf-field textarea {
     width: 100%;
     padding: 10px 0;
@@ -374,6 +384,7 @@ const clientStrings = {
     resize: vertical;
   }
   .lf-field input:focus,
+  .lf-field select:focus,
   .lf-field textarea:focus {
     border-color: var(--color-accent);
     outline: none;

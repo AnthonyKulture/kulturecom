@@ -59,6 +59,15 @@ const TIMELINES: Record<string, string> = {
 };
 const CHANNELS: Record<string, string> = { email: "E-mail", phone: "Téléphone", whatsapp: "WhatsApp" };
 
+// "Comment m'avez-vous trouvé ?" (FOUND_VIA in src/lib/project-form.ts).
+const FOUND_VIA: Record<string, string> = {
+  google: "Google (recherche ou Maps)",
+  ai: "ChatGPT ou une autre IA",
+  social: "Instagram ou un réseau social",
+  referral: "Recommandation, bouche-à-oreille",
+  other: "Autre",
+};
+
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const PHONE_RE = /^\+?[\d\s().-]{6,20}$/;
 
@@ -97,6 +106,7 @@ export async function onRequestPost({ request, env }: { request: Request; env: E
   const offerId = clean(data.offer, 80).replace(/\s+/g, " ");
   const offer = offerId === "advice" ? "Ne sait pas, à conseiller" : offerId;
   const channel = CHANNELS[clean(data.channel, 20)];
+  const foundVia = FOUND_VIA[clean(data.found_via, 20)];
 
   // A project needs a first name and a way to reply: an e-mail, or a phone
   // number for those who chose a call or WhatsApp in the guided form.
@@ -145,6 +155,7 @@ export async function onRequestPost({ request, env }: { request: Request; env: E
           ...(channel ? [`Répondre par : ${channel}`] : []),
           `E-mail : ${email || "non renseigné"}`,
           `Téléphone : ${phone || "non renseigné"}`,
+          `M'a trouvé via : ${foundVia ?? "non renseigné"}`,
           "",
           "Message :",
           message || "(aucun)",

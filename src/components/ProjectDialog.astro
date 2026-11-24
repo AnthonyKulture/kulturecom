@@ -1,6 +1,6 @@
 ---
 import type { Lang } from "~/i18n/ui";
-import { getProjectContent } from "~/lib/project-form";
+import { FOUND_VIA, getProjectContent } from "~/lib/project-form";
 import { CONTACT } from "~/lib/facts";
 import GoogleRating from "~/components/GoogleRating.astro";
 
@@ -17,6 +17,7 @@ interface Props {
 
 const { lang } = Astro.props;
 const c = getProjectContent(lang);
+const found = FOUND_VIA[lang];
 
 const labels = (choices: { value: string; label: string }[]) => Object.fromEntries(choices.map((ch) => [ch.value, ch.label]));
 const choiceSteps = [
@@ -188,6 +189,13 @@ const sumRows = ["need", "detail", "when", "offer", "name", "contact"] as const;
         <div class="pf-step" data-step="recap">
           <h2 class="pf-q" tabindex="-1" data-pf-focus>{c.recap[0]}<span data-pf-name></span>{c.recap[1]}</h2>
           <dl class="pf-recap" data-pf-recap></dl>
+          <div class="pf-field">
+            <label for="pf-found">{found.q}</label>
+            <select id="pf-found" name="found_via" class="pf-input pf-input--select">
+              <option value="">{found.placeholder}</option>
+              {found.choices.map((ch) => <option value={ch.value}>{ch.label}</option>)}
+            </select>
+          </div>
           <div class="pf-field" data-pf-note>
             <label for="pf-note">{c.note.q}</label>
             <textarea id="pf-note" name="note" rows="2" maxlength="1000" class="pf-input pf-input--area" aria-describedby="pf-note-hint"></textarea>
@@ -761,6 +769,12 @@ const sumRows = ["need", "detail", "when", "offer", "name", "contact"] as const;
     border-color: #9f2f2d;
     box-shadow: 0 1px 0 #9f2f2d;
   }
+  .pf-input--select {
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    font-weight: 400;
+    cursor: pointer;
+  }
   .pf-input--area {
     min-height: 96px;
     padding: 12px 14px;
@@ -1106,11 +1120,12 @@ const sumRows = ["need", "detail", "when", "offer", "name", "contact"] as const;
         email: byEmail ? val("email") : "",
         phone: byEmail ? "" : val("phone"),
         message: n === "other" ? val("message") : val("note"),
+        found_via: val("found_via"),
         website: val("website"),
         elapsed: Date.now() - startedAt,
       });
       sync();
-      if (ok) trackLead("project_form", n);
+      if (ok) trackLead("project_form", n, val("found_via"));
       else fallback();
       finish(ok ? "done" : "error");
     };

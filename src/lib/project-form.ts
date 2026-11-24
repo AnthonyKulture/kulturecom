@@ -365,3 +365,34 @@ export function getProjectContent(lang: Lang): ProjectContent {
     whatsappMessage: "Hi Anthony, I have a project to discuss.",
   };
 }
+
+/**
+ * "How did you find me?", optional, asked on the guided form's recap and on
+ * the /contact/ form. Sent to /api/lead as `found_via` (its French labels
+ * live in functions/api/lead.ts: change both together) and to GA4 on
+ * `generate_lead`, to count the leads that AI assistants send.
+ */
+export const FOUND_VIA: Record<Lang, { q: string; placeholder: string; choices: Choice[] }> = {
+  fr: {
+    q: "Comment m'avez-vous trouvé ?",
+    placeholder: "Facultatif",
+    choices: [
+      { value: "google", label: "Google (recherche ou Maps)" },
+      { value: "ai", label: "ChatGPT ou une autre IA" },
+      { value: "social", label: "Instagram ou un réseau social" },
+      { value: "referral", label: "Recommandation, bouche-à-oreille" },
+      { value: "other", label: "Autre" },
+    ],
+  },
+  en: {
+    q: "How did you find me?",
+    placeholder: "Optional",
+    choices: [
+      { value: "google", label: "Google (search or Maps)" },
+      { value: "ai", label: "ChatGPT or another AI" },
+      { value: "social", label: "Instagram or social media" },
+      { value: "referral", label: "A recommendation, word of mouth" },
+      { value: "other", label: "Other" },
+    ],
+  },
+};
