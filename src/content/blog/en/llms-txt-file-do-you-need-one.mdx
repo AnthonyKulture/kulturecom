@@ -1,0 +1,164 @@
+---
+lang: en
+slug: llms-txt-file-do-you-need-one
+translationKey: llms-txt
+title: "The llms.txt file: what it does, what Google says, and whether you need one in 2026"
+metaTitle: "llms.txt: do you need one in 2026?"
+description: "Does an llms.txt file help your SEO or your visibility in ChatGPT? What Google, Ahrefs and SE Ranking say, and when it's worth adding one on the Riviera."
+keywords:
+  - llms.txt
+  - llms.txt file
+  - llms.txt SEO
+  - llms.txt Google
+  - llms.txt GEO
+tags:
+  - GEO
+  - SEO
+  - AI
+pillar: seo
+pubDate: 2026-11-24
+draft: false
+---
+
+import ServiceCTA from "~/components/blog/ServiceCTA.astro";
+import Callout from "~/components/blog/Callout.astro";
+
+An **llms.txt** file is a short Markdown file at the root of a website that summarizes its content for language models and AI agents. As of November 2026, it does nothing for your Google rankings or your citations in ChatGPT: Google says it ignores the file, and two large studies found no effect.
+
+I still publish an llms.txt on this site, and I add one to the sites I deliver, because it takes half an hour and one specific audience already reads it. Below is what each player says, the numbers we have, and the rule I use to decide, whether you run a restaurant in Old Nice, an agency in Cannes or a software company in Sophia Antipolis.
+
+## What is an llms.txt file?
+
+llms.txt is a format proposed on 3 September 2024 by Jeremy Howard on [llmstxt.org](https://llmstxt.org/). It starts from a simple observation: a web page is full of menus, scripts and ads, and a model reading it with a limited context window wastes effort sorting through them. The file hands it a short, clean version of the site, with links to what matters.
+
+It isn't an official standard (no standards body has adopted it), and it isn't a control file either. **robots.txt** tells crawlers what they may crawl; **sitemap.xml** lists the URLs to index; llms.txt introduces the site, much like an About page written for a machine. It allows and blocks nothing.
+
+## What does an llms.txt look like?
+
+The specification requires one element only: a `#` heading with the site's name. The rest is recommended, in this order:
+
+| Element | Purpose |
+|---|---|
+| `# Site name` | The only required element |
+| `> Summary` | A Markdown blockquote saying what the site does in one or two sentences |
+| Free paragraphs | Useful context: area, languages, contact, prices |
+| `##` sections | Lists of links formatted as `- [Name](URL): description` |
+| `## Optional` | Secondary links an agent can skip when it's short on room |
+
+The specification also suggests serving a Markdown version of each important page, at the same address with `.md` appended. That's the heaviest part, and the least followed.
+
+For a fictional concierge service in Cannes, a minimal file fits in a few lines:
+
+```markdown
+# Croisette Concierge
+
+> Private concierge in Cannes: villa management, transfers and bookings
+> during the Film Festival, MIPIM and Cannes Lions. Bilingual English-French team.
+
+Area: Cannes, Le Cannet, Mougins. Contact: contact@example.com
+
+## Services
+- [Villa management](https://example.com/villa-management/): cleaning, linen, check-in
+- [Event concierge](https://example.com/events/): transfers, tables, hosts
+
+## Optional
+- [Legal notice](https://example.com/legal/)
+```
+
+You can see a real, longer version on [this site](https://anthonyprofit.com/llms.txt): services, prices, case studies and guides, in French and English.
+
+## What does Google say about llms.txt?
+
+Google has settled the question in writing. Its optimization guide for AI features in Search, published on [Search Central](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide) in May 2026, says you don't need to create new machine-readable files, AI text files, markup or Markdown to appear in Google Search, "as Google Search itself doesn't use them." It adds that creating one "will neither harm nor help your site's visibility or rankings in Google Search," and it lists "creating unnecessary AI text files (like llms.txt)" among the tactics you can ignore.
+
+That covers AI Overviews and AI Mode too, since both draw on Google's index. I made the same point in the guide to [AI Overviews for local businesses](/en/blog/google-ai-overviews-ai-mode-local-business/): to be cited, a page has to be indexed and eligible for a snippet, nothing more.
+
+Google's spokespeople had been saying so for a while. In April 2025, on Reddit, John Mueller wrote that, as far as he knew, none of the AI services had said they were using llms.txt, and that server logs showed they didn't even check for it. In August 2025, Gary Illyes compared it on Bluesky to the 1990s keywords meta tag, which Google stopped using long ago.
+
+The one nuance comes from Chrome. Lighthouse 13.3, released in May 2026, has an "Agentic Browsing" category that checks for llms.txt. The [audit documentation](https://developer.chrome.com/docs/lighthouse/agentic-browsing/llms-txt) calls it an emerging convention: a missing file (a 404) marks the audit "not applicable," since the file is optional, and only a server error gets flagged. The audit is about agents browsing a site, not about Google rankings.
+
+## Do ChatGPT, Perplexity and Claude read llms.txt?
+
+None of these services has said it uses llms.txt to pick its sources, and the data points the same way.
+
+| Study | Sample | Finding |
+|---|---|---|
+| [Ahrefs](https://ahrefs.com/blog/llmstxt-study/), June 2026 | 137,210 domains, May 2026 logs | 28% had a valid llms.txt; 97% of those files got zero requests in the month |
+| [SE Ranking](https://seranking.com/blog/llms-txt/), October 2026 | about 300,000 domains | 10.13% had the file; no measurable link with how often AI systems cite them |
+
+In the Ahrefs study, 96% of requests to llms.txt files came from bots, and the top visitors were SEO audit tools (21.7% of requests), not answer engines. AI search crawlers such as OAI-SearchBot (OpenAI) and PerplexityBot made up only about 1% of requests. Among named AI bots, GPTBot and Claude-Code came first.
+
+SE Ranking tested the file in a statistical model that predicts citations: removing the llms.txt variable made the model slightly more accurate, a sign that having the file didn't help predict which sites get cited.
+
+So if you want to be recommended when someone asks ChatGPT for "a good osteopath in Nice" or "a wedding caterer in Èze," llms.txt won't help you today.
+
+## Who actually reads llms.txt?
+
+Its regular readers are coding agents: Claude-Code in the Ahrefs data, and more broadly the development assistants that fetch an API's documentation before writing code. That's where the format works, which is why documentation sites adopted it first. Stripe, Cloudflare and Anthropic each publish an llms.txt at the root of their docs (I checked them this month).
+
+On the Riviera, that mostly concerns software companies and Sophia Antipolis startups with an API, technical documentation or an integration to offer. For them, a well-kept llms.txt (plus `.md` versions of the doc pages) helps client developers who work with an agent. For a hotel in Monaco or a plumber in Saint-Laurent-du-Var, the benefit is small.
+
+## Should you add an llms.txt to your site in 2026?
+
+I recommend one when it's quick to make and someone will keep it current, and I'd skip it if it pulls you away from what works. A wrong file is worse than none, because it hands an agent a price or an address that's out of date.
+
+| Your situation | My advice |
+|---|---|
+| Shop, restaurant, trade or practice in Nice, Cannes or Monaco | Optional. Start with the Google profile, robots.txt and service pages |
+| A clean brochure site, updated once or twice a year | Yes, half an hour of work, updated along with the site |
+| Software company, API, technical documentation | Yes, with `.md` versions of the doc pages |
+| A site nobody manages | No: a stale file misleads agents |
+
+If you make one, a few rules:
+
+1. Put it at the root (`/llms.txt`), as plain text, with no redirect or server error.
+2. Write a factual summary: trade, town, area served, languages, contact.
+3. Use the same details as your site and Google profile: same prices, same address, same phone number.
+4. Link the pages that answer your customers' questions, not every page on the site.
+5. Update it whenever a price, offer or URL changes, and put the date at the top.
+
+## What matters more than llms.txt for GEO?
+
+GEO, or *Generative Engine Optimization*, is the work of getting cited in AI answers. The levers with a known effect are less exotic than a file:
+
+- let the crawlers that feed the answers (OAI-SearchBot for ChatGPT, PerplexityBot, Bingbot for Copilot) through your robots.txt and firewall, as covered in the guides on [Bing and Copilot](/en/blog/bing-webmaster-tools-copilot-ai-visibility/) and on [Perplexity](/en/blog/get-cited-by-perplexity/);
+- pages that answer a specific question in their first sentences, naming the neighbourhood or town where it's relevant;
+- a complete Google Business Profile, which Google itself names as a way to be visible in its AI answers;
+- the same name, address and phone number everywhere, and mentions in sources AI systems read (local press, guides, reputable directories).
+
+Then measure, with a panel of questions asked every month: that's the method in the guide to [measuring your visibility in ChatGPT](/en/blog/measure-ai-visibility-chatgpt/).
+
+<ServiceCTA service="seo-geo" lang="en" />
+
+## How I handle it for clients
+
+I add an llms.txt to the sites I deliver and to the SEO & GEO compliance fix, and I present it for what it is: a business card for agents, not a ranking lever. It doesn't replace robots.txt, structured data or work on the content.
+
+The Google + AI visibility audit is free and delivered in 5 days: among other things, it checks that AI crawlers can read your site. The SEO & GEO compliance fix (from €390, in 1 to 2 weeks) fixes what the audit found, llms.txt included. The SEO & GEO follow-up (from €490 a month, 3 months minimum) takes care of content and measurement over time. Everything is on the [SEO & GEO](/en/seo-geo/) page. I work from Nice with businesses in Cannes, Monaco and across the Riviera, and remotely anywhere in France.
+
+## Frequently asked questions
+
+### Does llms.txt improve Google rankings?
+
+No. Google's Search Central guide says Google Search ignores these files: they neither harm nor help rankings, AI Overviews and AI Mode included.
+
+### Does ChatGPT use the llms.txt file?
+
+OpenAI hasn't said it uses it to choose sources. In the June 2026 Ahrefs study, AI search crawlers, OAI-SearchBot among them, accounted for about 1% of requests to these files.
+
+### What's the difference between llms.txt and robots.txt?
+
+robots.txt allows or blocks crawling of a site. llms.txt controls nothing: it summarizes the site and lists its important pages for language models.
+
+### Can an llms.txt hurt my site?
+
+Not its rankings, according to Google. The real risk is a stale file that gives an agent an old price, an old address or broken links.
+
+<Callout title="Key takeaways">
+
+- llms.txt is a Markdown summary of a site for AI, proposed in September 2024. It's neither a standard nor a control file.
+- Google Search ignores it, AI features included, and the Ahrefs and SE Ranking studies measured no effect on citations.
+- Its real readers are coding agents: useful for technical documentation, optional for a local business.
+- To be cited by ChatGPT or Perplexity in Nice, Cannes or Monaco, your Google profile, crawler access and pages that answer questions matter far more.
+
+</Callout>

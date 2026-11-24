@@ -1,0 +1,66 @@
+{
+  "card": {
+    "kicker": "GEO · Nice",
+    "title": "Le llms.txt ne te fera pas *citer par ChatGPT*",
+    "subtitle": "Ce qu'en disent Google, Ahrefs et SE Ranking, et quand ce fichier vaut quand même la peine."
+  },
+  "slides": [
+    {
+      "type": "cover",
+      "eyebrow": "GEO · Nice",
+      "title": "Ton llms.txt sert-il *à quelque chose* ?",
+      "body": "Le fichier que tout le monde ajoute pour les IA, vu de près."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Le fichier",
+      "title": "Un résumé de ton site *pour les IA*.",
+      "body": "Du Markdown à la racine, proposé en septembre 2024. Il ne bloque ni n'autorise rien, contrairement au robots.txt."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Google",
+      "title": "Google Search *l'ignore*.",
+      "body": "Son guide Search Central (mai 2026) le dit : il ne nuit pas et n'aide pas, AI Overviews et AI Mode compris."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Les chiffres",
+      "title": "97 % des fichiers *jamais demandés*.",
+      "body": "Ahrefs, 137 210 domaines, mai 2026. SE Ranking ne trouve aucun lien avec les citations des IA."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Qui le lit",
+      "title": "Surtout les *agents de code*.",
+      "body": "Utile pour une doc technique à Sophia Antipolis. Facultatif pour un resto du Vieux-Nice."
+    },
+    {
+      "type": "list",
+      "eyebrow": "Ce qui compte plus",
+      "title": "Ta *checklist* GEO",
+      "items": [
+        { "t": "Laisse passer les robots des IA", "sub": "OAI-SearchBot, PerplexityBot, Bingbot" },
+        { "t": "Une fiche Google complète", "sub": "Google la cite pour ses réponses IA" },
+        { "t": "Des pages qui répondent vite", "sub": "La réponse dès les premières phrases" },
+        { "t": "Les mêmes infos partout", "sub": "Nom, adresse, téléphone, prix" }
+      ]
+    },
+    {
+      "type": "cta",
+      "eyebrow": "Parlons-en",
+      "title": "Être cité, *pour de vrai*.",
+      "body": "Le guide complet est en lien dans la bio.",
+      "cta": "DM « LLMS » et on regarde ce que les IA lisent de ton site."
+    }
+  ],
+  "caption": "Tu as ajouté un llms.txt pour être cité par ChatGPT à Nice ?\n\nGoogle dit que Google Search l'ignore, AI Overviews compris. Dans l'étude Ahrefs de juin 2026, 97 % de ces fichiers n'ont reçu aucune requête en un mois. Ses vrais lecteurs, ce sont les agents de code.\n\nPour ton GEO à Nice, Cannes ou Monaco, la fiche Google, l'accès des robots et des pages qui répondent comptent bien plus.\n\nEnregistre ce post avant de refaire ton site, et envoie-le à quelqu'un qui pense que le llms.txt suffit. Le guide complet est en lien dans la bio.",
+  "hashtags": ["#seo", "#geo", "#chatgpt", "#referencementnaturel", "#nice06"],
+  "stories": [
+    "Le visuel carré (card.jpg) avec un sticker lien vers https://anthonyprofit.com/blog/llms-txt-faut-il-en-mettre-un/ : « Le guide complet est ici ».",
+    "Sondage sur fond uni : « Ton site a un llms.txt ? » Réponses : « Oui » / « C'est quoi ? ».",
+    "Slide 04 du carrousel (les chiffres) avec le texte : « 97 % des llms.txt jamais demandés en un mois (Ahrefs). Surpris ? »",
+    "Boîte à questions : « Ta question sur ChatGPT, Perplexity ou Google et ton site ? »"
+  ],
+  "reel": "Plan 1, texte à l'écran : « Ton llms.txt, inutile ? ». Face caméra sur la Promenade des Anglais : « Beaucoup de sites ajoutent un fichier llms.txt pour être cités par ChatGPT. Google dit noir sur blanc que Google Search l'ignore. Et Ahrefs a regardé 137 210 domaines : 97 % de ces fichiers n'ont reçu aucune requête en un mois. Si tu veux être recommandé par les IA à Nice, vérifie d'abord que ton robots.txt laisse passer OAI-SearchBot et PerplexityBot, et que ta fiche Google est complète. » Fin : « Le guide complet est en lien dans ma bio. »"
+}

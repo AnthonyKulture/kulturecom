@@ -1,0 +1,164 @@
+---
+lang: fr
+slug: llms-txt-faut-il-en-mettre-un
+translationKey: llms-txt
+title: "Fichier llms.txt : à quoi il sert, ce qu'en dit Google, et faut-il en mettre un en 2026"
+metaTitle: "llms.txt : faut-il en mettre un en 2026 ?"
+description: "Le fichier llms.txt aide-t-il votre SEO ou votre visibilité dans ChatGPT ? Ce qu'en disent Google, Ahrefs et SE Ranking, et quand il vaut la peine à Nice."
+keywords:
+  - llms.txt
+  - fichier llms.txt
+  - llms.txt SEO
+  - llms.txt Google
+  - llms.txt GEO
+tags:
+  - GEO
+  - SEO
+  - IA
+pillar: seo
+pubDate: 2026-11-24
+draft: false
+---
+
+import ServiceCTA from "~/components/blog/ServiceCTA.astro";
+import Callout from "~/components/blog/Callout.astro";
+
+Le fichier **llms.txt** est un petit fichier Markdown placé à la racine d'un site pour résumer son contenu à l'intention des modèles de langage et des agents IA. En novembre 2026, il n'améliore ni votre classement Google ni vos citations dans ChatGPT : Google dit qu'il l'ignore, et deux grandes études n'ont mesuré aucun effet.
+
+Je publie quand même un llms.txt sur ce site, et j'en ajoute sur les sites que je livre, parce qu'il coûte une demi-heure et qu'un public précis le lit déjà. Voici ce que dit chaque acteur, les chiffres disponibles, et ma règle pour décider, que vous soyez un restaurant du Vieux-Nice, une agence de Cannes ou un éditeur de logiciel à Sophia Antipolis.
+
+## Qu'est-ce que le fichier llms.txt ?
+
+Le llms.txt est une proposition de format publiée le 3 septembre 2024 par Jeremy Howard sur [llmstxt.org](https://llmstxt.org/). L'idée part d'un constat simple : une page web est pleine de menus, de scripts et de publicités, et un modèle qui doit la lire avec une fenêtre de contexte limitée perd du temps à trier. Le fichier lui donne une version courte et propre du site, avec les liens vers ce qui compte.
+
+Ce n'est pas une norme officielle (aucun organisme de standardisation ne l'a adoptée) et ce n'est pas un fichier de contrôle. Le **robots.txt** dit aux robots ce qu'ils ont le droit d'explorer ; le **sitemap.xml** liste les URL à indexer ; le llms.txt, lui, présente le site comme le ferait une page « À propos » écrite pour une machine. Il n'autorise ni ne bloque rien.
+
+## À quoi ressemble un llms.txt ?
+
+La spécification impose un seul élément : un titre `#` avec le nom du site. Le reste est recommandé, dans cet ordre :
+
+| Élément | Rôle |
+|---|---|
+| `# Nom du site` | Seul élément obligatoire |
+| `> Résumé` | Une citation Markdown qui dit en une ou deux phrases ce que fait le site |
+| Paragraphes libres | Le contexte utile : zone, langues, contact, prix |
+| Sections `##` | Des listes de liens au format `- [Nom](URL): description` |
+| `## Optional` | Les liens secondaires qu'un agent peut sauter s'il manque de place |
+
+La spécification propose aussi de servir une version Markdown de chaque page importante, à la même adresse suivie de `.md`. C'est la partie la plus lourde, et la moins suivie.
+
+Pour une conciergerie fictive installée à Cannes, un fichier minimal tiendrait en quelques lignes :
+
+```markdown
+# Conciergerie Croisette
+
+> Conciergerie privée à Cannes : gestion de villas, transferts et réservations
+> pendant le Festival, le MIPIM et Cannes Lions. Équipe bilingue français-anglais.
+
+Zone : Cannes, Le Cannet, Mougins. Contact : contact@exemple.fr
+
+## Services
+- [Gestion de villas](https://exemple.fr/gestion-villas/): ménage, linge, check-in
+- [Conciergerie événements](https://exemple.fr/evenements/): transferts, tables, hôtesses
+
+## Optional
+- [Mentions légales](https://exemple.fr/mentions-legales/)
+```
+
+Vous pouvez voir une version réelle et plus longue sur [ce site](https://anthonyprofit.com/llms.txt) : services, prix, études de cas, guides, en français et en anglais.
+
+## Que dit Google du fichier llms.txt ?
+
+Google a tranché, et par écrit. Son guide d'optimisation pour les fonctions d'IA de la recherche, publié sur [Search Central](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide) en mai 2026, indique qu'il n'est pas nécessaire de créer des fichiers lisibles par les machines, des fichiers texte pour l'IA ou du Markdown pour apparaître dans Google Search, parce que Google Search ne les utilise pas. Le même guide précise qu'en créer un ne nuit pas et n'aide pas, puisque Google Search les ignore, et il range la création de fichiers texte IA inutiles, llms.txt en tête, parmi les tactiques à laisser de côté.
+
+Cette position couvre aussi les AI Overviews et l'AI Mode, qui puisent dans l'index de Google. Je l'expliquais dans le guide sur [les AI Overviews pour les entreprises locales](/blog/ai-overviews-ai-mode-google-entreprises-locales/) : pour être cité, une page doit être indexée et éligible à un extrait, rien de plus.
+
+Les porte-parole de Google disaient déjà la même chose. En avril 2025, sur Reddit, John Mueller écrivait qu'à sa connaissance aucun service d'IA n'avait annoncé utiliser le llms.txt, et qu'on voyait dans les journaux serveur que les robots ne le demandaient même pas. En août 2025, Gary Illyes faisait sur Bluesky le parallèle avec la balise meta keywords des années 1990, que Google ignore depuis longtemps.
+
+Seule nuance, côté Chrome cette fois. Lighthouse 13.3, sorti en mai 2026, contient une catégorie « Agentic Browsing » qui vérifie le llms.txt. La [documentation de l'audit](https://developer.chrome.com/docs/lighthouse/agentic-browsing/llms-txt) le décrit comme une convention émergente : si le fichier est absent (erreur 404), l'audit est marqué « non applicable », puisque le fichier reste facultatif ; seule une erreur serveur est signalée. Cet audit concerne les agents qui naviguent sur un site, pas le classement dans Google.
+
+## ChatGPT, Perplexity et Claude lisent-ils le llms.txt ?
+
+Aucun de ces services n'a annoncé utiliser le llms.txt pour choisir ses sources. Les données vont dans le même sens.
+
+| Étude | Échantillon | Résultat |
+|---|---|---|
+| [Ahrefs](https://ahrefs.com/blog/llmstxt-study/), juin 2026 | 137 210 domaines, journaux de mai 2026 | 28 % avaient un llms.txt valide ; 97 % de ces fichiers n'ont reçu aucune requête dans le mois |
+| [SE Ranking](https://seranking.com/blog/llms-txt/), octobre 2026 | environ 300 000 domaines | 10,13 % avaient le fichier ; aucun lien mesurable avec la fréquence des citations par les IA |
+
+Dans l'étude Ahrefs, 96 % des requêtes vers les llms.txt venaient de robots, et les premiers visiteurs étaient des outils d'audit SEO (21,7 % des requêtes), pas des moteurs de réponse. Les robots de recherche des IA, comme OAI-SearchBot (OpenAI) ou PerplexityBot, ne pesaient qu'environ 1 % des requêtes. Parmi les robots IA nommés, GPTBot et Claude-Code arrivaient en tête.
+
+SE Ranking a testé le fichier dans un modèle statistique qui prédit les citations : retirer la variable llms.txt rendait le modèle légèrement plus précis, signe que sa présence n'aidait pas à prévoir quels sites sont cités.
+
+Si vous voulez être recommandé quand quelqu'un demande à ChatGPT « un bon ostéopathe à Nice Nord » ou « un traiteur pour un mariage à Èze », le llms.txt ne vous aidera pas aujourd'hui.
+
+## Qui lit vraiment le llms.txt ?
+
+Ses lecteurs réguliers sont les agents de code : Claude-Code dans l'étude Ahrefs, et plus largement les assistants de développement qui vont chercher la documentation d'une API avant d'écrire du code. C'est pour eux que le format marche, et c'est pour ça que les sites de documentation l'ont adopté en premier : Stripe, Cloudflare et Anthropic publient chacun un llms.txt à la racine de leur documentation (je les ai consultés ce mois-ci).
+
+Sur la Côte d'Azur, ça concerne surtout les éditeurs de logiciels et les startups de Sophia Antipolis qui ont une API, une documentation technique ou une intégration à proposer. Pour eux, un llms.txt bien tenu (et les versions `.md` des pages de documentation) aide les développeurs clients qui travaillent avec un agent. Pour un hôtel de Monaco ou un plombier de Saint-Laurent-du-Var, l'intérêt est faible.
+
+## Faut-il mettre un llms.txt sur son site en 2026 ?
+
+Je conseille d'en mettre un quand il se fait vite et que quelqu'un le tiendra à jour, et de s'en passer s'il vous détourne de ce qui marche. Un fichier faux est pire qu'aucun fichier, parce qu'il donne à un agent un prix ou une adresse qui ne sont plus les bons.
+
+| Votre situation | Mon conseil |
+|---|---|
+| Commerce, restaurant, artisan, cabinet à Nice, Cannes ou Monaco | Facultatif. Passez d'abord par la fiche Google, le robots.txt et les pages services |
+| Site vitrine déjà propre, mis à jour une ou deux fois par an | Oui, une demi-heure de travail, à mettre à jour avec le site |
+| Éditeur de logiciel, API, documentation technique | Oui, avec les versions `.md` des pages de documentation |
+| Site dont personne ne gère le contenu | Non : un fichier périmé induit les agents en erreur |
+
+Si vous en créez un, quelques règles :
+
+1. Placez-le à la racine (`/llms.txt`), en texte brut, sans redirection ni erreur serveur.
+2. Écrivez un résumé factuel : métier, ville, zone desservie, langues, contact.
+3. Reprenez les mêmes informations que sur le site et la fiche Google : mêmes prix, même adresse, même téléphone.
+4. Liez les pages qui répondent aux questions de vos clients, pas toutes les pages du site.
+5. Mettez-le à jour à chaque changement de prix, d'offre ou d'URL, et notez la date en tête.
+
+## Qu'est-ce qui compte plus que le llms.txt pour le GEO ?
+
+Le GEO, ou *Generative Engine Optimization*, consiste à se faire citer dans les réponses des IA. Les leviers qui ont un effet connu sont moins exotiques qu'un fichier :
+
+- laisser passer les robots qui alimentent les réponses (OAI-SearchBot pour ChatGPT, PerplexityBot, Bingbot pour Copilot) dans le robots.txt et le pare-feu, comme je le détaille dans les guides sur [Bing et Copilot](/blog/bing-webmaster-tools-copilot-chatgpt/) et sur [Perplexity](/blog/etre-cite-par-perplexity/) ;
+- des pages qui répondent à une question précise dès les premières phrases, avec le quartier ou la commune quand c'est pertinent ;
+- une fiche Google Business Profile complète, que Google cite lui-même comme moyen d'être visible dans ses réponses IA ;
+- les mêmes nom, adresse et téléphone partout, et des mentions dans des sources que les IA lisent (presse locale, guides, annuaires sérieux).
+
+Puis mesurer, avec un panel de questions posées chaque mois : c'est la méthode du guide pour [mesurer sa visibilité dans ChatGPT](/blog/mesurer-visibilite-ia-chatgpt/).
+
+<ServiceCTA service="seo-geo" lang="fr" />
+
+## Comment je m'en occupe pour mes clients
+
+Je mets un llms.txt sur les sites que je livre et dans la mise en conformité SEO & GEO, en le présentant pour ce qu'il est : une carte de visite pour les agents, pas un levier de classement. Il ne remplace ni le robots.txt, ni les données structurées, ni le travail sur les contenus.
+
+L'audit de visibilité Google + IA est gratuit et livré en 5 jours : il vérifie, entre autres, que les robots des IA peuvent lire votre site. La mise en conformité SEO & GEO (dès 390 €, en 1 à 2 semaines) corrige ce que l'audit a relevé, llms.txt compris. Le suivi SEO & GEO (dès 490 € par mois, 3 mois minimum) prend en charge les contenus et la mesure dans la durée. Tout est détaillé sur la page [SEO & GEO](/seo-geo/). Je travaille depuis Nice avec des entreprises de Cannes, de Monaco et du reste de la Côte d'Azur, et à distance partout en France.
+
+## Questions fréquentes
+
+### Le llms.txt améliore-t-il le référencement Google ?
+
+Non. Google écrit dans son guide Search Central que Google Search ignore ces fichiers : ils ne nuisent pas et n'aident pas au classement, AI Overviews et AI Mode compris.
+
+### ChatGPT utilise-t-il le fichier llms.txt ?
+
+OpenAI n'a pas annoncé l'utiliser pour choisir ses sources. Dans l'étude Ahrefs de juin 2026, les robots de recherche des IA, dont OAI-SearchBot, représentaient environ 1 % des requêtes vers ces fichiers.
+
+### Quelle différence entre llms.txt et robots.txt ?
+
+Le robots.txt autorise ou interdit l'exploration d'un site par les robots. Le llms.txt ne contrôle rien : il résume le site et liste ses pages importantes pour les modèles de langage.
+
+### Un llms.txt peut-il nuire à mon site ?
+
+Pas à son classement, selon Google. Le vrai risque est un fichier périmé, qui donnerait à un agent un ancien prix, une ancienne adresse ou des liens cassés.
+
+<Callout title="À retenir">
+
+- Le llms.txt est un résumé Markdown du site pour les IA, proposé en septembre 2024. Ce n'est ni une norme ni un fichier de contrôle.
+- Google Search l'ignore, IA comprises, et les études Ahrefs et SE Ranking ne mesurent aucun effet sur les citations.
+- Ses vrais lecteurs sont les agents de code : utile pour une documentation technique, facultatif pour un commerce local.
+- Pour être cité par ChatGPT ou Perplexity à Nice, Cannes ou Monaco, la fiche Google, l'accès des robots et des pages qui répondent comptent bien plus.
+
+</Callout>

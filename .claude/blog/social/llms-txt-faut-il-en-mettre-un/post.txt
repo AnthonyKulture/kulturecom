@@ -1,0 +1,22 @@
+LÉGENDE DU CARROUSEL
+
+Tu as ajouté un llms.txt pour être cité par ChatGPT à Nice ?
+
+Google dit que Google Search l'ignore, AI Overviews compris. Dans l'étude Ahrefs de juin 2026, 97 % de ces fichiers n'ont reçu aucune requête en un mois. Ses vrais lecteurs, ce sont les agents de code.
+
+Pour ton GEO à Nice, Cannes ou Monaco, la fiche Google, l'accès des robots et des pages qui répondent comptent bien plus.
+
+Enregistre ce post avant de refaire ton site, et envoie-le à quelqu'un qui pense que le llms.txt suffit. Le guide complet est en lien dans la bio.
+
+#seo #geo #chatgpt #referencementnaturel #nice06
+
+STORIES
+
+1. Le visuel carré (card.jpg) avec un sticker lien vers https://anthonyprofit.com/blog/llms-txt-faut-il-en-mettre-un/ : « Le guide complet est ici ».
+2. Sondage sur fond uni : « Ton site a un llms.txt ? » Réponses : « Oui » / « C'est quoi ? ».
+3. Slide 04 du carrousel (les chiffres) avec le texte : « 97 % des llms.txt jamais demandés en un mois (Ahrefs). Surpris ? »
+4. Boîte à questions : « Ta question sur ChatGPT, Perplexity ou Google et ton site ? »
+
+REEL (face caméra, 30 à 45 s)
+
+Plan 1, texte à l'écran : « Ton llms.txt, inutile ? ». Face caméra sur la Promenade des Anglais : « Beaucoup de sites ajoutent un fichier llms.txt pour être cités par ChatGPT. Google dit noir sur blanc que Google Search l'ignore. Et Ahrefs a regardé 137 210 domaines : 97 % de ces fichiers n'ont reçu aucune requête en un mois. Si tu veux être recommandé par les IA à Nice, vérifie d'abord que ton robots.txt laisse passer OAI-SearchBot et PerplexityBot, et que ta fiche Google est complète. » Fin : « Le guide complet est en lien dans ma bio. »
