@@ -127,9 +127,9 @@ export const routes: Record<string, RouteMeta> = {
     lang: "fr",
     alt: "/en/seo-geo/",
     crumb: "SEO & GEO",
-    title: `Consultant SEO, GEO & ChatGPT Ads à Nice | Anthony Profit`,
+    title: `Référencement SEO, GEO & Ads à Nice | Anthony Profit`,
     description:
-      `SEO et GEO à Nice : être trouvé sur Google et cité par ChatGPT. Audit de visibilité gratuit, mise en conformité dès ${fr("seo")}, suivi mensuel, Google Ads et ChatGPT Ads.`,
+      `Référencement naturel à Nice : être trouvé sur Google et cité par ChatGPT. Audit de visibilité gratuit, mise en conformité dès ${fr("seo")}, suivi mensuel, Google Ads et ChatGPT Ads.`,
   },
   "/consultant-geo-nice/": {
     lang: "fr",

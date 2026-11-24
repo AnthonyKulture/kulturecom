@@ -231,14 +231,14 @@ const CONTENT: Record<ServiceId, Record<Lang, ServicePageContent>> = {
     fr: {
       name: "SEO & GEO",
       eyebrow: "Service · Visibilité",
-      h1Lines: ["Stratégie", "SEO & GEO."],
-      lead: "Être trouvé sur Google, cité par ChatGPT et les autres IA, puis accélérer avec Google Ads et ChatGPT Ads. Ça commence par un audit gratuit : vous savez où vous en êtes avant de dépenser un euro.",
+      h1Lines: ["Référencement", "SEO & GEO à Nice."],
+      lead: "Le référencement naturel de votre entreprise à Nice et sur la Côte d'Azur : être trouvé sur Google, cité par ChatGPT et les autres IA, puis accélérer avec Google Ads et ChatGPT Ads. Ça commence par un audit gratuit : vous savez où vous en êtes avant de dépenser un euro.",
       intro: [
         "Le SEO ne se résume plus à Google. ChatGPT, Perplexity, Gemini et les AI Overviews répondent désormais aux questions de vos clients en citant des sources. Le GEO (Generative Engine Optimization) consiste à structurer votre site pour qu'il soit cité, pas seulement listé.",
         "Le parcours est simple. L'audit gratuit fait l'état des lieux : ce qui bloque votre site, ce que vos clients cherchent, qui est cité à votre place dans les IA. Ensuite, deux options : je corrige tout en une fois (la mise en conformité), ou je prends en charge votre visibilité chaque mois (le suivi, qui inclut l'audit approfondi et toutes les corrections).",
         "Le suivi, c'est de la stratégie et de l'exécution : les requêtes et les questions qui rapportent, un plan éditorial, des contenus rédigés ou optimisés, une veille concurrentielle, et des corrections techniques au fil de l'eau. On pilote sur des chiffres : positions, trafic, contacts, citations dans les IA.",
-        "La publicité vient en dernier, pour accélérer ce qui marche déjà. Google Ads vous place en tête des recherches dès la première semaine. ChatGPT Ads, ouvert aux annonceurs en France depuis fin août 2026, affiche votre annonce juste sous la réponse de ChatGPT, marquée « sponsorisé », sans influencer son contenu. Le GEO vous fait citer dans la réponse, ChatGPT Ads vous place juste en dessous.",
-        "Basé à Nice, j'accompagne des marques en France et à l'international, du référencement local à la visibilité internationale.",
+        "La publicité vient en dernier, pour accélérer ce qui marche déjà. Google Ads (l'ancien AdWords) vous place en tête des recherches dès la première semaine. ChatGPT Ads, ouvert aux annonceurs en France depuis fin août 2026, affiche votre annonce juste sous la réponse de ChatGPT, marquée « sponsorisé », sans influencer son contenu. Le GEO vous fait citer dans la réponse, ChatGPT Ads vous place juste en dessous.",
+        "Basé à Nice, je m'occupe du référencement local d'entreprises de Nice, Cannes, Antibes et Monaco, et j'accompagne des marques en France et à l'international.",
       ],
       includesTitle: "Ce qui est inclus",
       includes: [
@@ -292,14 +292,14 @@ const CONTENT: Record<ServiceId, Record<Lang, ServicePageContent>> = {
     en: {
       name: "SEO & GEO",
       eyebrow: "Service · Visibility",
-      h1Lines: ["SEO & GEO", "strategy."],
-      lead: "Get found on Google, cited by ChatGPT and other AI, then speed up with Google Ads and ChatGPT Ads. It starts with a free audit: you know where you stand before spending a cent.",
+      h1Lines: ["SEO & GEO", "consultant in Nice."],
+      lead: "Search visibility for your business in Nice and on the French Riviera: get found on Google, cited by ChatGPT and other AI, then speed up with Google Ads and ChatGPT Ads. It starts with a free audit: you know where you stand before spending a cent.",
       intro: [
         "SEO is no longer just Google. ChatGPT, Perplexity, Gemini and AI Overviews now answer your customers' questions by citing sources. GEO (Generative Engine Optimization) structures your site to be cited, not just listed.",
         "The path is simple. The free audit takes stock: what holds your site back, what your customers search for, who gets cited instead of you in AI answers. Then two options: I fix everything in one go (the compliance fix), or I take care of your visibility every month (the follow-up, which includes the in-depth audit and every fix).",
         "The follow-up is strategy and execution: the searches and questions that pay, an editorial plan, content written or optimized, competitor watch, and technical fixes as they come. We steer on numbers: rankings, traffic, leads, AI citations.",
-        "Ads come last, to speed up what already works. Google Ads puts you at the top of searches from the first week. ChatGPT Ads, open to advertisers in France since late August 2026, shows your ad right below ChatGPT's answer, labeled “sponsored”, without influencing its content. GEO gets you cited in the answer, ChatGPT Ads places you right below it.",
-        "Based in Nice, I work with brands across France and internationally — from local search to international visibility.",
+        "Ads come last, to speed up what already works. Google Ads (formerly AdWords) puts you at the top of searches from the first week. ChatGPT Ads, open to advertisers in France since late August 2026, shows your ad right below ChatGPT's answer, labeled “sponsored”, without influencing its content. GEO gets you cited in the answer, ChatGPT Ads places you right below it.",
+        "Based in Nice, I handle local search for businesses in Nice, Cannes, Antibes and Monaco, and work with brands across France and internationally.",
       ],
       includesTitle: "What's included",
       includes: [
