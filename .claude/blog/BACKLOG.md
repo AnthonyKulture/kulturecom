@@ -24,9 +24,9 @@ librement : l'ordre de la liste est l'ordre de parution.
 - [x] Refonte de site sans perdre son référencement → /blog/refonte-site-sans-perdre-referencement/
 - [x] Antibes, Juan-les-Pins et Sophia Antipolis : SEO local et B2B tech → /blog/seo-antibes-sophia-antipolis/
 - [x] llms.txt : à quoi sert ce fichier, ce qu'en dit Google, et faut-il en mettre un en 2026 → /blog/llms-txt-faut-il-en-mettre-un/
+- [x] Contenu écrit par l'IA et SEO : ce que Google sanctionne vraiment (scaled content abuse) → /blog/contenu-ia-seo-google-sanctions/
 
 ## À écrire
-- [ ] Contenu écrit par l'IA et SEO : ce que Google sanctionne vraiment (scaled content abuse) et comment bien s'en servir
 - [ ] Yachting et charter (Monaco, Antibes, Cannes) : SEO international et visibilité dans les réponses IA
 - [ ] Trouver les mots-clés locaux de ses clients à Nice : méthode et outils gratuits
 - [ ] Core Web Vitals en 2026 : leur poids réel sur le SEO et comment les mesurer sur un site niçois

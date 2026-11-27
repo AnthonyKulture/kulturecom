@@ -1,0 +1,66 @@
+{
+  "card": {
+    "kicker": "SEO et IA · Nice",
+    "title": "Google ne punit pas *l'IA*, il punit la masse",
+    "subtitle": "Ce que vise vraiment la règle scaled content abuse, et comment écrire avec l'IA sans risque."
+  },
+  "slides": [
+    {
+      "type": "cover",
+      "eyebrow": "SEO et IA · Nice",
+      "title": "ChatGPT écrit tes pages. *Google va te punir ?*",
+      "body": "Ce que dit vraiment la règle de Google, textes à l'appui."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "La règle",
+      "title": "Google vise *la masse*, pas l'outil.",
+      "body": "Le scaled content abuse : beaucoup de pages faites pour grimper sur Google, sans valeur pour le lecteur, « quelle que soit la façon dont elles sont créées »."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Les études",
+      "title": "Pas de pénalité IA, mais *un handicap*.",
+      "body": "Ahrefs 2026 : 82,2 % des pages du top 3 contiennent moins de 50 % d'IA. Les pages très IA sont moins indexées."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Le piège local",
+      "title": "Quinze pages ville *identiques*.",
+      "body": "« Plombier Cagnes-sur-Mer », « plombier Saint-Laurent-du-Var » au nom près : tu risques le doorway abuse de Google."
+    },
+    {
+      "type": "statement",
+      "eyebrow": "Les IA",
+      "title": "Même règle dans *les AI Overviews*.",
+      "body": "Google l'écrit : produire des pages en masse pour manipuler ses réponses IA enfreint la même politique."
+    },
+    {
+      "type": "list",
+      "eyebrow": "Bien s'en servir",
+      "title": "Ta *méthode*",
+      "items": [
+        { "t": "Pars d'un fait que toi seul as", "sub": "Tes prix, tes délais, tes quartiers" },
+        { "t": "L'IA pour le plan et le premier jet", "sub": "Jamais pour les chiffres" },
+        { "t": "Relis tout ce que Google lit", "sub": "Titre, meta, Schema.org, textes alt" },
+        { "t": "Signe et traduis avec relecture", "sub": "Pas de faux auteur" }
+      ]
+    },
+    {
+      "type": "cta",
+      "eyebrow": "Parlons-en",
+      "title": "L'IA t'aide, *tes faits te classent*.",
+      "body": "Le guide complet est en lien dans la bio.",
+      "cta": "DM « IA » et on regarde tes pages ensemble."
+    }
+  ],
+  "caption": "Tu fais écrire les pages de ton site à Nice par ChatGPT et tu as peur que Google te pénalise ?\n\nGoogle ne sanctionne pas le contenu IA en tant que tel. Sa règle vise le scaled content abuse : des pages produites en masse pour le SEO, sans valeur pour ton client, qu'elles viennent d'une IA ou d'un humain. Le vrai piège à Nice, Cannes ou Monaco, ce sont les pages ville copiées au nom près et les traductions automatiques non relues.\n\nEnregistre ce post avant ta prochaine page, et envoie-le à quelqu'un qui publie des articles IA à la chaîne. Le guide complet (contenu IA, SEO, AI Overviews) est en lien dans la bio.",
+  "hashtags": ["#seo", "#contenuia", "#referencementnaturel", "#chatgpt", "#nice06"],
+  "stories": [
+    "Le visuel carré (card.jpg) avec un sticker lien vers https://anthonyprofit.com/blog/contenu-ia-seo-google-sanctions/ : « Le guide complet est ici ».",
+    "Sondage sur fond uni : « Tu écris tes pages avec l'IA ? » Réponses : « Oui, et je relis » / « Oui, direct en ligne ».",
+    "Slide 04 du carrousel (le piège local) avec le texte : « Tu as combien de pages ville presque identiques sur ton site ? »",
+    "Boîte à questions : « Ta question sur l'IA et le référencement de ton site ? » (les réponses donnent les prochains sujets)."
+  ],
+  "reel": "Plan 1, texte à l'écran : « Google punit l'IA ? ». Face caméra sur la Promenade des Anglais à Nice : « On me demande souvent si Google pénalise les textes écrits par ChatGPT. Sa règle vise autre chose : les pages produites en masse sans valeur pour le lecteur, peu importe qui les écrit. Le piège que je vois le plus ici, ce sont les pages ville copiées au nom près, plombier Cagnes, plombier Saint-Laurent, même texte. Une page par ville, seulement si elle dit quelque chose de propre à la ville. » Fin : « Le guide complet est en lien dans ma bio. »"
+}
