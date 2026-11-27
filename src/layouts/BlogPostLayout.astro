@@ -140,7 +140,7 @@ const updatedStr = d.updatedDate ? formatDate(d.updatedDate, lang) : null;
     id="main-content"
     class="bg-[var(--color-bg)] text-[var(--color-ink)] px-4 pt-28 pb-24 sm:px-6 sm:pt-36 md:px-12 md:pt-44"
   >
-    <article class="mx-auto w-full max-w-[660px]">
+    <article class="mx-auto w-full max-w-[680px]">
       {/* Breadcrumb */}
       <nav
         aria-label={isFr ? "Fil d'Ariane" : "Breadcrumb"}
@@ -202,7 +202,7 @@ const updatedStr = d.updatedDate ? formatDate(d.updatedDate, lang) : null;
             </p>
             <ol class="flex flex-col gap-1.5">
               {toc.map((h, i) => (
-                <li class="flex gap-3 text-[15px] leading-snug">
+                <li class="flex gap-3 text-[15px] leading-snug sm:text-[17px]">
                   <span class="font-label text-[var(--color-ink-subtle)]">
                     {String(i + 1).padStart(2, "0")}
                   </span>
@@ -255,7 +255,7 @@ const updatedStr = d.updatedDate ? formatDate(d.updatedDate, lang) : null;
         <p class="font-display text-[clamp(22px,3vw,34px)] leading-[1] tracking-[-0.03em]">
           {labels.ctaTitle}
         </p>
-        <p class="mt-3 max-w-[46ch] text-[clamp(17px,1.1vw,18px)] leading-[1.6] text-[var(--color-ink-muted)]">
+        <p class="mt-3 max-w-[46ch] text-[17px] leading-[1.6] text-[var(--color-ink-muted)] sm:text-[18px]">
           {labels.ctaLead}
         </p>
         <a
@@ -305,12 +305,19 @@ const updatedStr = d.updatedDate ? formatDate(d.updatedDate, lang) : null;
   /* === Blog article prose ===
      Long-form reading layer for MDX output. Brand-aligned: display headings,
      serif-italic accents via <em>, mono for code. Headings carry scroll-margin
-     so the fixed nav doesn't cover them on TOC anchor jumps. */
+     so the fixed nav doesn't cover them on TOC anchor jumps.
+     Measure: 20px Geist in the 680px column is ~73 characters per line
+     (65–75 is the long-form range); 18px on phones. */
   .prose-blog {
     font-family: var(--font-sans);
-    font-size: clamp(17px, 1.2vw, 19px);
-    line-height: 1.7;
+    font-size: 18px;
+    line-height: 1.65;
     color: var(--color-ink);
+  }
+  @media (min-width: 640px) {
+    .prose-blog {
+      font-size: 20px;
+    }
   }
   .prose-blog > :first-child {
     margin-top: 0;
@@ -328,7 +335,7 @@ const updatedStr = d.updatedDate ? formatDate(d.updatedDate, lang) : null;
   .prose-blog h3 {
     font-family: var(--font-sans);
     font-weight: 500;
-    font-size: clamp(18px, 1.5vw, 22px);
+    font-size: 1.2em;
     line-height: 1.25;
     margin-top: 2.25rem;
     margin-bottom: 0.6rem;
@@ -336,7 +343,7 @@ const updatedStr = d.updatedDate ? formatDate(d.updatedDate, lang) : null;
     color: var(--color-ink);
   }
   .prose-blog p {
-    margin-bottom: 1.4rem;
+    margin-bottom: 1.25em;
   }
   /* Scope link styling to TEXT containers only. A bare `.prose-blog a` rule
      (specificity 0,1,1) outranks the Tailwind `text-[…]` utilities (0,1,0) on
@@ -363,7 +370,7 @@ const updatedStr = d.updatedDate ? formatDate(d.updatedDate, lang) : null;
   }
   .prose-blog ul,
   .prose-blog ol {
-    margin: 0 0 1.4rem;
+    margin: 0 0 1.25em;
     padding-left: 1.4rem;
   }
   .prose-blog ul {
@@ -427,6 +434,16 @@ const updatedStr = d.updatedDate ? formatDate(d.updatedDate, lang) : null;
   }
   .prose-blog :is(th, td):last-child {
     padding-right: 0;
+  }
+  /* On wide screens, tables of three columns or more break out of the text
+     column, centred on it, so their columns get room. Two-column tables
+     (label + value) stay in the column. */
+  @media (min-width: 1024px) {
+    .prose-blog table:has(th:nth-child(3)) {
+      --table-w: min(920px, 100vw - 7rem);
+      width: var(--table-w);
+      margin-inline: calc((100% - var(--table-w)) / 2);
+    }
   }
   @media (max-width: 640px) {
     .prose-blog table {
